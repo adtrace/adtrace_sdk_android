@@ -28,6 +28,13 @@ public class SharedPreferencesManager {
     private static final String PREFS_KEY_PUSH_TOKEN = "push_token";
 
     /**
+     * Key name for location sending time.
+     */
+    private static final String PREFS_KEY_LAST_LOCATION_SENDING_TIME = "last_location_sending_time";
+
+    private static final String PREFS_KEY_LAST_INSTALLED_APPS_SENDING_TIME = "last_installed_apps_sending_time";
+
+    /**
      * Key name for info about whether install has been tracked or not.
      */
     private static final String PREFS_KEY_INSTALL_TRACKED = "install_tracked";
@@ -274,6 +281,34 @@ public class SharedPreferencesManager {
      */
     public synchronized String getPushToken() {
         return getString(PREFS_KEY_PUSH_TOKEN);
+    }
+
+    public synchronized void setLastInstalledAppsSendingTime(long milliseconds) {
+        saveLong(PREFS_KEY_LAST_INSTALLED_APPS_SENDING_TIME, milliseconds);
+    }
+
+    public synchronized long getLastInstalledAppsSendingTime() {
+        return getLong(PREFS_KEY_LAST_INSTALLED_APPS_SENDING_TIME, 0);
+    }
+
+    synchronized boolean canSendingInstalledApps(long now) {
+        long days = (((now - getLastInstalledAppsSendingTime()) / (1000 * 60 * 60 * 24)));
+
+        return days >= 10;
+    }
+
+    public synchronized void setLastLocationSendingTime(long milliseconds) {
+        saveLong(PREFS_KEY_LAST_LOCATION_SENDING_TIME, milliseconds);
+    }
+
+    public synchronized long getLastLocationSendingTime() {
+        return getLong(PREFS_KEY_LAST_LOCATION_SENDING_TIME, 0);
+    }
+
+    synchronized boolean canSendingLocation(long now) {
+        long days = (((now - getLastLocationSendingTime()) / (1000 * 60 * 60 * 24)));
+
+        return days >= 14;
     }
 
     /**

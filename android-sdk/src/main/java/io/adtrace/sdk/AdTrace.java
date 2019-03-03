@@ -31,7 +31,7 @@ public class AdTrace {
      */
     public static synchronized AdTraceInstance getDefaultInstance() {
         @SuppressWarnings("unused")
-        String VERSION = "!SDK-VERSION-STRING!:io.adtrace:sdk-android:1.0.1";
+        String VERSION = "!SDK-VERSION-STRING!:io.adtrace:sdk-android:0.0.3";
 
         if (defaultInstance == null) {
             defaultInstance = new AdTraceInstance();
@@ -138,6 +138,11 @@ public class AdTrace {
     public static void setOfflineMode(boolean enabled) {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
         adTraceInstance.setOfflineMode(enabled);
+    }
+
+    public static void enableLocation(boolean enabled) {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.enableLocation(enabled);
     }
 
     /**

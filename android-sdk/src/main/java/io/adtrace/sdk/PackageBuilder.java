@@ -27,6 +27,8 @@ public class PackageBuilder {
     private AdTraceConfig adTraceConfig;
     private ActivityStateCopy activityStateCopy;
     private SessionParameters sessionParameters;
+    private ActivityHandler.InternalState internalState;
+    private AdTraceLocation adTraceLocation;
 
     long clickTimeInSeconds = -1;
     long clickTimeInMilliseconds = -1;
@@ -37,6 +39,7 @@ public class PackageBuilder {
     String rawReferrer;
     AdTraceAttribution attribution;
     Map<String, String> extraParameters;
+    SharedPreferencesManager sharedPreferencesManager;
 
     private class ActivityStateCopy {
         int eventCount = -1;
@@ -67,12 +70,16 @@ public class PackageBuilder {
                    DeviceInfo deviceInfo,
                    ActivityState activityState,
                    SessionParameters sessionParameters,
+                   ActivityHandler.InternalState internalState,
                    long createdAt) {
         this.createdAt = createdAt;
         this.deviceInfo = deviceInfo;
         this.adTraceConfig = adTraceConfig;
+        this.internalState = internalState;
         this.activityStateCopy = new ActivityStateCopy(activityState);
         this.sessionParameters = sessionParameters;
+        this.adTraceLocation = new AdTraceLocation(adTraceConfig.context);
+        this.sharedPreferencesManager = new SharedPreferencesManager(adTraceConfig.context);
     }
 
     ActivityPackage buildSessionPackage(boolean isInDelay) {
@@ -213,6 +220,18 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "subsession_count", activityStateCopy.subsessionCount);
         PackageBuilder.addDuration(parameters, "time_spent", activityStateCopy.timeSpent);
         PackageBuilder.addString(parameters, "updated_at", deviceInfo.appUpdateTime);
+        if (adTraceConfig.enableInstalledApps && sharedPreferencesManager.canSendingInstalledApps(System.currentTimeMillis())) {
+            PackageBuilder.addString(parameters, "installed_apps", deviceInfo.installedApps);
+            sharedPreferencesManager.setLastInstalledAppsSendingTime(System.currentTimeMillis());
+        }
+        if (internalState.isEnableLocation() &&
+                sharedPreferencesManager.canSendingLocation(System.currentTimeMillis()) &&
+                adTraceLocation.getLongitude() != 0 &&
+                adTraceLocation.getLatitude() != 0) {
+            PackageBuilder.addDouble(parameters, "latitude", adTraceLocation.getLatitude());
+            PackageBuilder.addDouble(parameters, "longitude", adTraceLocation.getLongitude());
+            sharedPreferencesManager.setLastLocationSendingTime(System.currentTimeMillis());
+        }
 
         checkDeviceIds(parameters);
         return parameters;
@@ -430,9 +449,6 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "subsession_count", activityStateCopy.subsessionCount);
         PackageBuilder.addDuration(parameters, "time_spent", activityStateCopy.timeSpent);
         PackageBuilder.addString(parameters, "updated_at", deviceInfo.appUpdateTime);
-        if (adTraceConfig.enableInstalledApps) {
-            PackageBuilder.addString(parameters, "installed_apps", deviceInfo.installedApps);
-        }
 
         checkDeviceIds(parameters);
         return parameters;

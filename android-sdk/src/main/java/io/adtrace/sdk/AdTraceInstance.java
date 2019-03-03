@@ -27,6 +27,8 @@ public class AdTraceInstance {
      */
     private boolean startOffline = false;
 
+    private boolean enableLocation = false;
+
     /**
      * ActivityHandler instance.
      */
@@ -195,6 +197,14 @@ public class AdTraceInstance {
             this.startOffline = enabled;
         } else {
             activityHandler.setOfflineMode(enabled);
+        }
+    }
+
+    public void enableLocation(final boolean enabled) {
+        if (!checkActivityHandler(enabled, "location enabled", "location disabled")) {
+            this.enableLocation = enabled;
+        } else {
+            activityHandler.enableLocation(enabled);
         }
     }
 

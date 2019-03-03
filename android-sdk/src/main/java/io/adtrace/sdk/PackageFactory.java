@@ -21,10 +21,11 @@ public class PackageFactory {
     private static final String ADTRACE_PREFIX = "adtrace_";
 
     public static ActivityPackage buildReftagSdkClickPackage(final String rawReferrer,
-                                                              final long clickTime,
-                                                              final ActivityState activityState,
-                                                              final AdTraceConfig adTraceConfig,
-                                                              final DeviceInfo deviceInfo,
+                                                             final long clickTime,
+                                                             final ActivityState activityState,
+                                                             final AdTraceConfig adTraceConfig,
+                                                             final DeviceInfo deviceInfo,
+                                                             final ActivityHandler.InternalState internalState,
                                                               final SessionParameters sessionParameters) {
         if (rawReferrer == null || rawReferrer.length() == 0) {
             return null;
@@ -57,6 +58,7 @@ public class PackageFactory {
                 activityState,
                 adTraceConfig,
                 deviceInfo,
+                internalState,
                 sessionParameters);
 
         if (clickPackageBuilder == null) {
@@ -73,10 +75,11 @@ public class PackageFactory {
     }
 
     public static ActivityPackage buildDeeplinkSdkClickPackage(final Uri url,
-                                                              final long clickTime,
-                                                              final ActivityState activityState,
-                                                              final AdTraceConfig adTraceConfig,
-                                                              final DeviceInfo deviceInfo,
+                                                               final long clickTime,
+                                                               final ActivityState activityState,
+                                                               final AdTraceConfig adTraceConfig,
+                                                               final DeviceInfo deviceInfo,
+                                                               final ActivityHandler.InternalState internalState,
                                                               final SessionParameters sessionParameters) {
         if (url == null) {
             return null;
@@ -100,6 +103,7 @@ public class PackageFactory {
                 activityState,
                 adTraceConfig,
                 deviceInfo,
+                internalState,
                 sessionParameters);
 
         if (clickPackageBuilder == null) {
@@ -120,6 +124,7 @@ public class PackageFactory {
                                                                       final ActivityState activityState,
                                                                       final AdTraceConfig adTraceConfig,
                                                                       final DeviceInfo deviceInfo,
+                                                                      final ActivityHandler.InternalState internalState,
                                                                       final SessionParameters sessionParameters) {
         if (installReferrer == null || installReferrer.length() == 0) {
             return null;
@@ -132,6 +137,7 @@ public class PackageFactory {
                 deviceInfo,
                 activityState,
                 sessionParameters,
+                internalState,
                 now);
 
         if (clickPackageBuilder == null) {
@@ -152,6 +158,7 @@ public class PackageFactory {
             final ActivityState activityState,
             final AdTraceConfig adTraceConfig,
             final DeviceInfo deviceInfo,
+            final ActivityHandler.InternalState internalState,
             final SessionParameters sessionParameters) {
         if (queryList == null) {
             return null;
@@ -183,6 +190,7 @@ public class PackageFactory {
                 deviceInfo,
                 activityState,
                 sessionParameters,
+                internalState,
                 now);
 
         builder.extraParameters = queryStringParameters;

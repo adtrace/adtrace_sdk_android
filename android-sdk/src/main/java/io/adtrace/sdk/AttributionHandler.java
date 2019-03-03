@@ -240,6 +240,7 @@ public class AttributionHandler implements IAttributionHandler {
                 activityHandler.getDeviceInfo(),
                 activityHandler.getActivityState(),
                 activityHandler.getSessionParameters(),
+                activityHandler.getInternalState(),
                 now);
         ActivityPackage activityPackage = packageBuilder.buildAttributionPackage(lastInitiatedBy);
         lastInitiatedBy = null;

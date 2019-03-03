@@ -133,6 +133,11 @@ public class ActivityHandler implements IActivityHandler {
         boolean firstLaunch;
         boolean sessionResponseProcessed;
         boolean firstSdkStart;
+        boolean enableLocation;
+
+        public boolean isEnableLocation() {
+            return enableLocation;
+        }
 
         public boolean isEnabled() {
             return enabled;
@@ -216,6 +221,8 @@ public class ActivityHandler implements IActivityHandler {
         internalState.sessionResponseProcessed = false;
         // does not have first start by default
         internalState.firstSdkStart = false;
+
+        internalState.enableLocation = false;
 
         executor.submit(new Runnable() {
             @Override
@@ -373,6 +380,16 @@ public class ActivityHandler implements IActivityHandler {
             @Override
             public void run() {
                 setOfflineModeI(offline);
+            }
+        });
+    }
+
+    @Override
+    public void enableLocation(final boolean enabled) {
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                enableLocationI(enabled);
             }
         });
     }
@@ -1014,7 +1031,7 @@ public class ActivityHandler implements IActivityHandler {
         activityState.eventCount++;
         updateActivityStateI(now);
 
-        PackageBuilder eventBuilder = new PackageBuilder(adTraceConfig, deviceInfo, activityState, sessionParameters, now);
+        PackageBuilder eventBuilder = new PackageBuilder(adTraceConfig, deviceInfo, activityState, sessionParameters, internalState, now);
         ActivityPackage eventPackage = eventBuilder.buildEventPackage(event, internalState.isInDelayedStart());
         packageHandler.addPackage(eventPackage);
 
@@ -1369,6 +1386,31 @@ public class ActivityHandler implements IActivityHandler {
 
     }
 
+    private void enableLocationI(boolean enabled) {
+        // compare with the internal state
+        if (!hasChangedStateI(internalState.isEnableLocation(), enabled,
+                "AdTrace already in offline mode",
+                "AdTrace already in online mode")) {
+            return;
+        }
+
+        internalState.enableLocation = enabled;
+
+        if (internalState.hasFirstSdkStartNotOcurred()) {
+            updateStatusI(enabled,
+                    "Handlers will start paused due to SDK being offline",
+                    "Handlers will still start as paused",
+                    "Handlers will start as active due to SDK being online");
+            return;
+        }
+
+        updateStatusI(enabled,
+                "Pausing handlers to put SDK offline mode",
+                "Handlers remain paused",
+                "Resuming handlers to put SDK in online mode");
+
+    }
+
     private boolean hasChangedStateI(boolean previousState, boolean newState,
                                      String trueMessage, String falseMessage)
     {
@@ -1449,6 +1491,7 @@ public class ActivityHandler implements IActivityHandler {
                 activityState,
                 adTraceConfig,
                 deviceInfo,
+                internalState,
                 sessionParameters);
 
         sdkClickHandler.sendSdkClick(sdkClickPackage);
@@ -1470,6 +1513,7 @@ public class ActivityHandler implements IActivityHandler {
                 activityState,
                 adTraceConfig,
                 deviceInfo,
+                internalState,
                 sessionParameters);
 
         if (sdkClickPackage == null) {
@@ -1554,7 +1598,7 @@ public class ActivityHandler implements IActivityHandler {
 
     private void transferSessionPackageI(long now) {
         PackageBuilder builder = new PackageBuilder(adTraceConfig, deviceInfo, activityState,
-                sessionParameters, now);
+                sessionParameters, internalState, now);
         ActivityPackage sessionPackage = builder.buildSessionPackage(internalState.isInDelayedStart());
         packageHandler.addPackage(sessionPackage);
         packageHandler.sendFirstPackage();
@@ -1818,7 +1862,7 @@ public class ActivityHandler implements IActivityHandler {
         writeActivityStateI();
 
         long now = System.currentTimeMillis();
-        PackageBuilder infoPackageBuilder = new PackageBuilder(adTraceConfig, deviceInfo, activityState, sessionParameters, now);
+        PackageBuilder infoPackageBuilder = new PackageBuilder(adTraceConfig, deviceInfo, activityState, sessionParameters, internalState, now);
 
         ActivityPackage infoPackage = infoPackageBuilder.buildInfoPackage(Constants.PUSH);
         packageHandler.addPackage(infoPackage);
@@ -1843,7 +1887,7 @@ public class ActivityHandler implements IActivityHandler {
         writeActivityStateI();
 
         long now = System.currentTimeMillis();
-        PackageBuilder gdprPackageBuilder = new PackageBuilder(adTraceConfig, deviceInfo, activityState, sessionParameters, now);
+        PackageBuilder gdprPackageBuilder = new PackageBuilder(adTraceConfig, deviceInfo, activityState, sessionParameters, internalState, now);
 
         ActivityPackage gdprPackage = gdprPackageBuilder.buildGdprPackage();
         packageHandler.addPackage(gdprPackage);

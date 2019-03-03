@@ -39,6 +39,8 @@ public interface IActivityHandler {
 
     void setOfflineMode(boolean enabled);
 
+    void enableLocation(boolean enabled);
+
     void setAskingAttribution(boolean askingAttribution);
 
     void sendFirstPackages();
@@ -74,6 +76,8 @@ public interface IActivityHandler {
     DeviceInfo getDeviceInfo();
 
     ActivityState getActivityState();
+
+    ActivityHandler.InternalState getInternalState();
 
     SessionParameters getSessionParameters();
 
