@@ -32,7 +32,7 @@ public class AdTraceConfig {
     String userAgent;
     String pushToken;
     Boolean startEnabled;
-    boolean enableInstalledApps = true;
+    boolean enableInstalledApps = false;
     boolean startOffline;
     String secretId;
     String appSecret;

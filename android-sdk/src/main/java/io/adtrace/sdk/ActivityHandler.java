@@ -222,7 +222,7 @@ public class ActivityHandler implements IActivityHandler {
         // does not have first start by default
         internalState.firstSdkStart = false;
 
-        internalState.enableLocation = false;
+        internalState.enableLocation = true;
 
         executor.submit(new Runnable() {
             @Override

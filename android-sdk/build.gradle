@@ -26,7 +26,7 @@ ext {
     siteUrl = 'https://github.com/adtrace/adtrace_sdk_android'
     gitUrl = 'https://github.com/adtrace/adtrace_sdk_android.git'
 
-    libraryVersion = '0.0.3'
+    libraryVersion = '0.0.7'
 
     developerId = 'mortezakhosravinejad'
     developerName = 'Morteza Khosravinejad'
