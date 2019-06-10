@@ -26,7 +26,7 @@ ext {
     siteUrl = 'https://github.com/adtrace/adtrace_sdk_android'
     gitUrl = 'https://github.com/adtrace/adtrace_sdk_android.git'
 
-    libraryVersion = '0.0.7'
+    libraryVersion = '0.0.8'
 
     developerId = 'mortezakhosravinejad'
     developerName = 'Morteza Khosravinejad'
@@ -49,7 +49,7 @@ android {
         versionCode 1
         versionName "1.0.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
@@ -69,10 +69,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.2.0-alpha05'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha04'
 }
 
 
@@ -156,3 +156,12 @@ bintray {
         }
     }
 }
+
+//task createJar(type: Jar, dependsOn: 'assembleRelease') {
+//    from ('/home/morteza/Android/adtrace/github/adtrace_sdk_android/android-sdk/build/intermediates/intermediate-jars/release/')
+//    into ('libs/')
+//    include ('classes.jar')
+//    rename ('classes.jar', 'newjar.jar')
+//}
+//
+//createJar.dependsOn(build)

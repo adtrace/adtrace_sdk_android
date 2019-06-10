@@ -17,7 +17,7 @@ public interface Constants {
     String GDPR_URL = "https://gdpr.adtrace.io";
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    String CLIENT_SDK = "android0.0.7";
+    String CLIENT_SDK = "android0.0.8";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";

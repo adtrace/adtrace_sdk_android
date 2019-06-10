@@ -19,7 +19,6 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
       * [API level between 9 and 13](#session-tracking-api9)
    * [AdTrace logging](#adtrace-logging)
    * [Build your app](#build-the-app)
-   * [Location](#location)
 * [Additional features](#additional-features)
    * [Event tracking](#event-tracking)
       * [Track revenue](#revenue-tracking)
@@ -66,7 +65,7 @@ These are the minimal steps required to integrate the AdTrace SDK into your Andr
 If you are using Maven, add the following to your `build.gradle` file:
 
 ```
-implementation 'io.adtrace:android-sdk:0.0.8'
+implementation 'io.adtrace:android-sdk:0.0.6'
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 
@@ -96,8 +95,6 @@ Please add the following permissions, which the AdTrace SDK needs, if they are n
 ```xml
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!--optional-->
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!--optional-->
 ```
 
 If you are **not targeting the Google Play Store**, please also add the following permission:
@@ -220,14 +217,6 @@ String environment = AdTraceConfig.ENVIRONMENT_PRODUCTION;
 
 We use this environment to distinguish between real traffic and test traffic from test devices. It is imperative that you keep this value meaningful at all times.
 
-To increase the accuracy and security in fraud detection, you can enable or disable the sending of installed applications on user's device as follows:
-
-```java
-config.enableSendInstalledApps(true);
-```
-**Note**: This option is disabled by default.
-
-
 ### <a id="session-tracking"></a>Session tracking
 
 **Note**: This step is **really important** and please **make sure that you implement it properly in your app**. By implementing it, you will enable proper session tracking by the AdTrace SDK in your app.
@@ -330,15 +319,6 @@ config.setLogLevel(LogLevel.SUPRESS);
 
 AdTrace.onCreate(config);
 ```
-
-### <a id="location"></a>Location
-Another way to increase the accuracy and security of fraud detection is to check the user's location. You can enable or disable this feature by using the following method.
-
-```java
-AdTrace.enableLocation(true);
-```
-**Note**: This option is enabled by default. But in case the location-based permissions are not granted, location data will not be sent to the server.
-
 
 ### <a id="build-the-app"></a>Build your app
 

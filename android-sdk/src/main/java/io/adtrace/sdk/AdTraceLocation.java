@@ -1,6 +1,7 @@
 package io.adtrace.sdk;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +9,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
 
 public class AdTraceLocation extends Service {
 
@@ -28,9 +30,16 @@ public class AdTraceLocation extends Service {
         getLocation();
     }
 
+    @SuppressLint("MissingPermission")
     public void getLocation() {
 
         try {
+
+            if (ActivityCompat.checkSelfPermission(mContext,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -40,10 +49,6 @@ public class AdTraceLocation extends Service {
                 provider_info = LocationManager.NETWORK_PROVIDER;
 
                 if (provider_info!=null && !provider_info.isEmpty()) {
-                    if (ActivityCompat.checkSelfPermission(mContext,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(provider_info);
                         updateCoordinates();

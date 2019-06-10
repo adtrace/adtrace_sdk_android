@@ -15,8 +15,11 @@ public class GlobalApplication extends Application {
 
 
         String appToken = "abcdef123456";
-        String environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
+        String environment = AdTraceConfig.ENVIRONMENT_PRODUCTION;
         AdTraceConfig config = new AdTraceConfig(this, appToken, environment);
+
+        config.setAppSecret(1, 1200034776, 234989146, 608530464, 1281717387);
+
         AdTrace.onCreate(config);
 
         registerActivityLifecycleCallbacks(new AdTraceLifecycleCallbacks());
