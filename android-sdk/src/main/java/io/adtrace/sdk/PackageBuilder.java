@@ -186,7 +186,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "country", deviceInfo.country);
         PackageBuilder.addString(parameters, "cpu_type", deviceInfo.abi);
         PackageBuilder.addDateInMilliseconds(parameters, "created_at", createdAt);
-        PackageBuilder.addString(parameters, "default_tracker", adTraceConfig.defaultTracker);
+//        PackageBuilder.addString(parameters, "default_tracker", adTraceConfig.defaultTracker);
         PackageBuilder.addBoolean(parameters, "device_known", adTraceConfig.deviceKnown);
         PackageBuilder.addString(parameters, "device_manufacturer", deviceInfo.deviceManufacturer);
         PackageBuilder.addString(parameters, "device_name", deviceInfo.deviceName);
@@ -290,6 +290,7 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "event_count", activityStateCopy.eventCount);
         PackageBuilder.addBoolean(parameters, "event_buffering_enabled", adTraceConfig.eventBufferingEnabled);
         PackageBuilder.addString(parameters, "event_token", event.eventToken);
+        PackageBuilder.addString(parameters, "event_value", event.eventValue);
         PackageBuilder.addString(parameters, "fb_id", deviceInfo.fbAttributionId);
         PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(contentResolver));
         PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(contentResolver));
@@ -401,6 +402,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "app_token", adTraceConfig.appToken);
         PackageBuilder.addString(parameters, "app_version", deviceInfo.appVersion);
         PackageBuilder.addBoolean(parameters, "attribution_deeplink", true);
+        PackageBuilder.addString(parameters, "default_tracker", adTraceConfig.defaultTracker);
         PackageBuilder.addMapJson(parameters, "callback_params", this.sessionParameters.callbackParameters);
         PackageBuilder.addDateInMilliseconds(parameters, "click_time", clickTimeInMilliseconds);
         PackageBuilder.addDateInSeconds(parameters, "click_time", clickTimeInSeconds);

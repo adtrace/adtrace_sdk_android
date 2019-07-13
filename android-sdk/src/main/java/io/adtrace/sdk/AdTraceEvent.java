@@ -14,6 +14,7 @@ public class AdTraceEvent {
     Map<String, String> partnerParameters;
     String orderId;
     String callbackId;
+    String eventValue;
 
     private static ILogger logger = AdTraceFactory.getLogger();
 
@@ -28,6 +29,14 @@ public class AdTraceEvent {
 
         this.revenue = revenue;
         this.currency = currency;
+    }
+
+    public void setEventValue(String value) {
+        if (value == null || value.equals("")) {
+            logger.error("Missing Event Value");
+            return;
+        }
+        this.eventValue = value;
     }
 
     public void addCallbackParameter(String key, String value) {
