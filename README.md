@@ -652,7 +652,7 @@ Upon receiving this information, AdTrace will erase the user's data and the AdTr
 
 ### <a id="sdk-signature"></a>SDK signature
 
-An account manager must activate the AdTrace SDK signature. Contact AdTrace support (support@adtrace.io) if you are interested in using this feature.
+An account manager must activate the AdTrace SDK signature. Contact AdTrace support (info@adtrace.io) if you are interested in using this feature.
 
 If the SDK signature has already been enabled on your account and you have access to App Secrets in your AdTrace Dashboard, please use the method below to integrate the SDK signature into your app.
 
