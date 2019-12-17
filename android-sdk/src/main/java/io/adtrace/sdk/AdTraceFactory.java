@@ -114,7 +114,7 @@ public class AdTraceFactory {
 
     public static BackoffStrategy getPackageHandlerBackoffStrategy() {
         if (packageHandlerBackoffStrategy == null) {
-            return BackoffStrategy.LONG_WAIT;
+            return BackoffStrategy.NORMAL_WAIT;
         }
         return packageHandlerBackoffStrategy;
     }
