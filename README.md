@@ -1,3 +1,5 @@
+English | [فارسی](./README-PER.md)
+
 ## Summary
 
 This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [adtrace.io].
