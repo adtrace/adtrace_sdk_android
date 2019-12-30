@@ -1,12 +1,12 @@
 [English](./README.md) | فارسی
 
-## <div dir="rtl">خلاصه</div>
+## <div dir="rtl" align='right'>خلاصه</div>
 
-<div dir="rtl">
+<div dir="rtl" align='right'>
 SDK اندروید ادتریس. شما برای اطلاعات بیشتر میتوانید به <a href="adtrace.io">adtrace.io</a>  مراجعه کنید.
 </div>
 
-## <div dir="rtl">پیاده سازی</div>
+## <div dir="rtl" align='right'>پیاده سازی</div>
 
 * [Basic integration](#basic-integration)
    * [Add the SDK to your project](#sdk-add)
@@ -1017,6 +1017,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 [android-purchase-verification]:  http://adtrace.io
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMzIwMjI2MzEsLTEzNTAyOTIzOTldfQ
-==
+eyJoaXN0b3J5IjpbMTk3MjE3MTA3OSwtMTMzMjAyMjYzMSwtMT
+M1MDI5MjM5OV19
 -->
