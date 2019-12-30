@@ -1,6 +1,6 @@
 [English](./README.md) | فارسی
-
-## Summary
+<div dir="rtl"></div>
+## <div dir="rtl">خلاصه</div>
 
 This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [adtrace.io].
 
