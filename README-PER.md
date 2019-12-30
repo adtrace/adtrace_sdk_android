@@ -1,4 +1,4 @@
-[English](./README.md) | [فارسی](./README-PER.md)
+[English](./README.md) | فارسی
 
 ## Summary
 
