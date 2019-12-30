@@ -1,8 +1,11 @@
 [English](./README.md) | فارسی
-<div dir="rtl"></div>
+
 ## <div dir="rtl">خلاصه</div>
 
 This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [adtrace.io].
+<div dir="rtl">
+SDK اندروید ادتریس. شما برای اطلاعات بیشتر میتوانید به <a href="adtrace.io">adtrace.io</a>  مراجعه کنید.
+</div>
 
 ## Table of contents
 
@@ -1014,3 +1017,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 [android-purchase-verification]:  http://adtrace.io
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTEzNTAyOTIzOTldfQ==
+-->
