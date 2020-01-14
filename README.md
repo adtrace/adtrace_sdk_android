@@ -148,8 +148,6 @@ Also, make sure that you have paid attention to the [Proguard settings](#sdk-pro
 -keep public class com.android.installreferrer.** { *; }
 ```
 
-This feature is supported if you are using **AdTrace SDK v4.12.0 or above**.
-
 #### <a id="gps-intent"></a>Google Play Store intent
 
 The Google Play Store `INSTALL_REFERRER` intent should be captured with a broadcast receiver. If you are **not using your own broadcast receiver** to receive the `INSTALL_REFERRER` intent, add the following `receiver` tag inside the `application` tag in your `AndroidManifest.xml`.
@@ -168,10 +166,6 @@ The Google Play Store `INSTALL_REFERRER` intent should be captured with a broadc
 We use this broadcast receiver to retrieve the install referrer and pass it to our backend.
 
 If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, follow [these instructions][referrer] to add the AdTrace broadcast receiver.
-
-### <a id="sdk-integrate"></a>Integrate the SDK into your app
-
-To start with, we'll set up basic session tracking.
 
 ### <a id="basic-setup"></a>Basic setup
 
@@ -1014,5 +1008,5 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 [android-purchase-verification]:  http://adtrace.io
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTY3ODM4NzE1MF19
+eyJoaXN0b3J5IjpbMTcyNDcwNTM2OSwxNjc4Mzg3MTUwXX0=
 -->
