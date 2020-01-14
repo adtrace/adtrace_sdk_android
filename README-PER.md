@@ -892,10 +892,10 @@ protected void onNewIntent(Intent intent) {
 }
 ```
 
-## <div id="troubleshooting" dir="rtl" align='right'>Troubleshooting</div>
+## <div id="troubleshooting" dir="rtl" align='right'>عیب یابی</div>
 
 
-### <div id="ts-session-failed" dir="rtl" align='right'>I'm seeing the "Session failed (Ignoring too frequent session. ...)" error.</div>
+### <div id="ts-session-failed" dir="rtl" align='right'>خطا "Session failed (Ignoring too frequent session. ...)"</div>
 
 This error typically occurs when testing installs. Uninstalling and reinstalling the app is not enough to trigger a new install. The servers will determine that the SDK has lost its locally aggregated session data and ignore the erroneous message, given the information available on the servers about the device.
 
@@ -925,7 +925,7 @@ http://app.adtrace.io/forget_device?app_token={yourAppToken}&android_id={android
 
 When the device is forgotten, the link just returns `Forgot device`. If the device was already forgotten or the values were incorrect, the link returns `Device not found`.
 
-### <div id="ts-broadcast-receiver" dir="rtl" align='right'>Is my broadcast receiver capturing the install referrer?</div>
+### <div id="ts-broadcast-receiver" dir="rtl" align='right'>آیا broadcast receiver اطلاعات نصب را دریافت میکند؟</div>
 
 If you followed the instructions in the [guide](#broadcast_receiver), the broadcast receiver should be configured to send the install referrer to our SDK and to our servers.
 
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgxNzQwNzM4MSwyNjg1MDcxMzIsLTE1OT
+eyJoaXN0b3J5IjpbLTQ5NDQxMzE2MCwyNjg1MDcxMzIsLTE1OT
 UxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4NDE2LC0xNDg2MzQ5
 NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMzk5XX0=
 -->
