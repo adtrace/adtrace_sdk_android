@@ -715,8 +715,7 @@ String adid = AdTrace.getAdid();
 ```
 **Note**: Information about **adid** is available after app installation has been tracked by the AdTrace backend. From that moment on, AdTrace SDK has information about your device **adid** and you can access it with this method. So, **it is not possible** to access **adid** value before the SDK has been initialised and installation of your app was tracked successfully.
 
-### <a id="user-attribution"></a>User attribution
-### <div id="di-adid" dir="rtl" align='right'>AdTrace device identifier</div>
+### <div id="user-attribution" dir="rtl" align='right'>User attribution</div>
 
 Like described in [attribution callback section](#attribution-callback), this callback get triggered providing you info about new attribution when ever it changes. In case you want to access info about your user's current attribution when ever you need it, you can make a call to following method of the `AdTrace` instance:
 
@@ -726,7 +725,7 @@ AdTraceAttribution attribution = AdTrace.getAttribution();
 
 **Note**: Information about current attribution is available after app installation has been tracked by the AdTrace backend and attribution callback has been initially triggered. From that moment on, AdTrace SDK has information about your user's attribution and you can access it with this method. So, **it is not possible** to access user's attribution value before the SDK has been initialized and attribution callback has been initially triggered.
 
-### <a id="push-token"></a>Push token
+### <div id="push-token" dir="rtl" align='right'>Push token</div>
 
 Push tokens are used for Audience Builder and client callbacks, and they are required for uninstall and reinstall tracking.
 
@@ -744,7 +743,7 @@ We still support the previous signature of the same method:
 AdTrace.setPushToken(pushNotificationsToken);
 ```
 
-### <a id="pre-installed-trackers"></a>Pre-installed trackers
+### <div id="pre-installed-trackers" dir="rtl" align='right'>Pre-installed trackers</div>
 
 If you want to use the AdTrace SDK to recognize users whose devices came with your app pre-installed, follow these steps.
 
@@ -765,11 +764,12 @@ If you want to use the AdTrace SDK to recognize users whose devices came with yo
     Default tracker: 'abc123'
     ```
 
-### <a id="deeplinking"></a>Deep linking
+### <div id="deeplinking" dir="rtl" align='right'>Deep linking</div>
 
 If you are using an AdTrace tracker URL with the option to deep link into your app, there is the possibility to get information about the deep link URL and its content. Hitting the URL can happen when the user has your app already installed (standard deep linking scenario) or if they don't have the app on their device (deferred deep linking scenario). In the standard deep linking scenario, the Android platform natively offers the possibility for you to get the information about the deep link content. The deferred deep linking scenario is something which the Android platform doesn't support out of the box, and, in this case, the AdTrace SDK will offer you the mechanism you need to get the information about the deep link content.
 
-### <a id="deeplinking-standard"></a>Standard deep linking scenario
+### <div id="deeplinking-standard" dir="rtl" align='right'>Standard deep linking scenario</div>
+
 
 If a user has your app installed and you want it to launch after hitting an AdTrace tracker URL with the `deep_link` parameter in it, you need to enable deep linking in your app. This is done by choosing a desired **unique scheme name** and assigning it to the Activity you want to launch once your app opens following a user clicking on the tracker URL. This is set in the `AndroidManifest.xml`. You need to add the `intent-filter` section to your desired Activity definition in the manifest file and assign an `android:scheme` property value with the desired scheme name:
 
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1MTU3MDMzMzIsMTM5NDk4MDEwNywtNT
-QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
-MjkyMzk5XX0=
+eyJoaXN0b3J5IjpbMTYxNDgwMTY5NSwxMzk0OTgwMTA3LC01ND
+EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
+OTIzOTldfQ==
 -->
