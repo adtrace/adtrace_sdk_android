@@ -59,11 +59,11 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
    * [آیا می توانم هنگام راه اندازی برنامه رویدادی را ایجاد کنم؟](#ts-event-at-launch)
 * [لایسنس](#license)
 
-## <div id="basic-integration" dir="rtl" align='right'></div>
+## <div id="basic-integration" dir="rtl" align='right'>تنظیمات اولیه</div>
 
 These are the minimal steps required to integrate the AdTrace SDK into your Android project. We are going to assume that you use Android Studio for your Android development and target an Android API level 9 (Gingerbread) or later.
 
-### <div id="sdk-add" dir="rtl" align='right'>Add the SDK to your project</div>
+### <div id="sdk-add" dir="rtl" align='right'>اضافه کردن SDK</div>
 
 If you are using Maven, add the following to your `build.gradle` file:
 
@@ -897,8 +897,7 @@ protected void onNewIntent(Intent intent) {
 ## <div id="troubleshooting" dir="rtl" align='right'>Troubleshooting</div>
 
 
-### <a id=""></a>I'm seeing the "Session failed (Ignoring too frequent session. ...)" error.
-### <div id="ts-session-failed" dir="rtl" align='right'>Troubleshooting</div>
+### <div id="ts-session-failed" dir="rtl" align='right'>I'm seeing the "Session failed (Ignoring too frequent session. ...)" error.</div>
 
 This error typically occurs when testing installs. Uninstalling and reinstalling the app is not enough to trigger a new install. The servers will determine that the SDK has lost its locally aggregated session data and ignore the erroneous message, given the information available on the servers about the device.
 
@@ -928,7 +927,7 @@ http://app.adtrace.io/forget_device?app_token={yourAppToken}&android_id={android
 
 When the device is forgotten, the link just returns `Forgot device`. If the device was already forgotten or the values were incorrect, the link returns `Device not found`.
 
-### <a id="ts-broadcast-receiver"></a>Is my broadcast receiver capturing the install referrer?
+### <div id="ts-broadcast-receiver" dir="rtl" align='right'>Is my broadcast receiver capturing the install referrer?</div>
 
 If you followed the instructions in the [guide](#broadcast_receiver), the broadcast receiver should be configured to send the install referrer to our SDK and to our servers.
 
@@ -983,7 +982,7 @@ public void onFireIntentClick(View v) {
 
 Feel free to alter second parameter of `putExtra` method with content of your choice.
 
-### <a id="ts-event-at-launch"></a>Can I trigger an event at application launch?
+### <div id="ts-event-at-launch" dir="rtl" align='right'>Can I trigger an event at application launch?</div>
 
 Not how you might intuitively think. The `onCreate` method on the global `Application` class is called not only at application launch, but also when a system or application event is captured by the app.
 
@@ -1019,7 +1018,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyMDM5OTU2MTEsMTM5NDk4MDEwNywtNT
+eyJoaXN0b3J5IjpbLTE1OTUxMzE2NzksMTM5NDk4MDEwNywtNT
 QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
 MjkyMzk5XX0=
 -->
