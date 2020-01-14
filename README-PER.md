@@ -273,7 +273,7 @@ config.enableSendInstalledApps(true);
       }
     ```
 
-### <a id="session-tracking-api9"></a>API level between 9 and 13
+### <div id="session-tracking-api9" dir="rtl" align='right'>API level between 9 and 13</div>
 
 If your app `minSdkVersion` in gradle is between `9` and `13`, consider updating it to at least `14` to simplify the integration process in the long term. Consult the official Android [dashboard][android-dashboard] to know the latest market share of the major versions.
 
@@ -304,7 +304,7 @@ public class YourActivity extends Activity {
 
 Repeat these steps for **every** Activity of your app. Don't forget these steps when you create new Activities in the future. Depending on your coding style you might want to implement this in a common superclass of all your Activities.
 
-### <a id="adtrace-logging"></a>AdTrace Logging
+### <div id="adtrace-logging" dir="rtl" align='right'>AdTrace Logging</div>
 
 You can increase or decrease the amount of logs that you see during testing by calling `setLogLevel` on your `AdTraceConfig` instance with one of the following parameters:
 
@@ -330,7 +330,8 @@ config.setLogLevel(LogLevel.SUPRESS);
 AdTrace.onCreate(config);
 ```
 
-### <a id="location"></a>Location
+### <div id="location" dir="rtl" align='right'>Location</div>
+
 Another way to increase the accuracy and security of fraud detection is to check the user's location. You can enable or disable this feature by using the following method.
 
 ```java
@@ -338,7 +339,7 @@ AdTrace.enableLocation(true);
 ```
 **Note**: This option is enabled by default. But in case the location-based permissions are not granted, location data will not be sent to the server.
 
-### <a id="build-the-app"></a>Build your app
+### <div id="build-the-app" dir="rtl" align='right'>Build your app</div>
 
 Build and run your Android app. In your `LogCat` viewer you can set the filter `tag:AdTrace` to hide all other logs. After your app has launched you should see the following AdTrace log: `Install tracked`.
 
@@ -1009,7 +1010,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgxNTgyOTAxLDEzOTQ5ODAxMDcsLTU0MT
-I1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5
-MjM5OV19
+eyJoaXN0b3J5IjpbLTE3MjQ4NTE2OTEsMTM5NDk4MDEwNywtNT
+QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
+MjkyMzk5XX0=
 -->
