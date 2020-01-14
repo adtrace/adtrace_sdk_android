@@ -136,7 +136,7 @@ In order to correctly attribute an install of your app to its source, AdTrace ne
 
 **Important**: The Google Play Referrer API is newly introduced by Google with the express purpose of providing a more reliable and secure way of obtaining install referrer information and to aid attribution providers in the fight against click injection. It is **strongly advised** that you support this in your application. The Google Play Store intent is a less secure way of obtaining install referrer information. It will continue to exist in parallel with the new Google Play Referrer API temporarily, but it is set to be deprecated in future.
 
-### <div id="gpr-api" dir="rtl" align='right'>Google Play Referrer API</div>
+### <div id="gpr-api" dir="rtl" align='right'>تنظیمات Google Play Referrer API</div>
 
 In order to support this in your app, please make sure that you have followed the [Add the SDK to your project](#sdk-add) chapter properly and that you have following line added to your `build.gradle` file:
 
@@ -150,9 +150,7 @@ Also, make sure that you have paid attention to the [Proguard settings](#sdk-pro
 -keep public class com.android.installreferrer.** { *; }
 ```
 
-This feature is supported if you are using **AdTrace SDK v4.12.0 or above**.
-
-### <div id="gps-intent" dir="rtl" align='right'>Google Play Store intent</div>
+### <div id="gps-intent" dir="rtl" align='right'>تنظیمات Google Play Store intent</div>
 
 
 The Google Play Store `INSTALL_REFERRER` intent should be captured with a broadcast receiver. If you are **not using your own broadcast receiver** to receive the `INSTALL_REFERRER` intent, add the following `receiver` tag inside the `application` tag in your `AndroidManifest.xml`.
@@ -172,7 +170,7 @@ We use this broadcast receiver to retrieve the install referrer and pass it to o
 
 If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, follow [these instructions][referrer] to add the AdTrace broadcast receiver.
 
-### <div id="basic-setup" dir="rtl" align='right'>Basic setup</div>
+### <div id="basic-setup" dir="rtl" align='right'>پیاده سازی SDK</div>
 
 We recommend using a global android [Application][android_application] class to initialize the SDK. If you don't have one in your app already, follow these steps:
 
@@ -227,7 +225,7 @@ config.enableSendInstalledApps(true);
 ```
 **Note**: This option is disabled by default.
 
-### <div id="session-tracking" dir="rtl" align='right'>Session tracking</div>
+### <div id="session-tracking" dir="rtl" align='right'>رصد Session</div>
 
 **Note**: This step is **really important** and please **make sure that you implement it properly in your app**. By implementing it, you will enable proper session tracking by the AdTrace SDK in your app.
 
@@ -1018,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjIyMzc4NjU0LC0xNTk1MTMxNjc5LDEzOT
-Q5ODAxMDcsLTU0MTI1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAy
-MjYzMSwtMTM1MDI5MjM5OV19
+eyJoaXN0b3J5IjpbLTUyMTM0OTc0MSwtMTU5NTEzMTY3OSwxMz
+k0OTgwMTA3LC01NDEyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIw
+MjI2MzEsLTEzNTAyOTIzOTldfQ==
 -->
