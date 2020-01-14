@@ -630,9 +630,7 @@ Conversely, you can deactivate offline mode by calling `setOfflineMode` with `fa
 
 Unlike disabling tracking, this setting is **not remembered** between sessions. This means that the SDK is in online mode whenever it is started, even if the app was terminated in offline mode.
 
-### <div id="offline-mode" dir="rtl" align='right'>Offline mode</div>
-
-### <a id=""></a>Event buffering
+### <div id="event-buffering" dir="rtl" align='right'>Event buffering</div>
 
 If your app makes heavy use of event tracking, you might want to delay some HTTP requests in order to send them in one batch every minute. You can enable event buffering with your `AdTraceConfig` instance:
 
@@ -642,7 +640,7 @@ config.setEventBufferingEnabled(true);
 AdTrace.onCreate(config);
 ```
 
-### <a id="gdpr-forget-me"></a>GDPR right to be forgotten
+### <div id="gdpr-forget-me" dir="rtl" align='right'>GDPR right to be forgotten</div>
 
 In accordance with article 17 of the EU's General Data Protection Regulation (GDPR), you can notify AdTrace when a user has exercised their right to be forgotten. Calling the following method will instruct the AdTrace SDK to communicate the user's choice to be forgotten to the AdTrace backend:
 
@@ -652,7 +650,8 @@ AdTrace.gdprForgetMe(context);
 
 Upon receiving this information, AdTrace will erase the user's data and the AdTrace SDK will stop tracking the user. No requests from this device will be sent to AdTrace in the future.
 
-### <a id="sdk-signature"></a>SDK signature
+### <div id="sdk-signature" dir="rtl" align='right'>SDK signature</div>
+
 
 An account manager must activate the AdTrace SDK signature. Contact AdTrace support (info@adtrace.io) if you are interested in using this feature.
 
@@ -666,7 +665,8 @@ config.setAppSecret(secretId, info1, info2, info3, info4);
 AdTrace.onCreate(config);
 ```
 
-### <a id="background-tracking"></a>Background tracking
+### <div id="background-tracking" dir="rtl" align='right'>Background tracking</div>
+
 
 The default behaviour of the AdTrace SDK is to pause sending HTTP requests while the app is in the background. You can change this in your `AdTraceConfig` instance:
 
@@ -676,9 +676,11 @@ config.setSendInBackground(true);
 AdTrace.onCreate(config);
 ```
 
-### <a id="device-ids"></a>Device IDs
+### <div id="device-ids" dir="rtl" align='right'>Device IDs</div>
+
 
 The AdTrace SDK offers you possibility to obtain some of the device identifiers.
+
 
 ### <a id="di-gps-adid"></a>Google Play Services advertising identifier
 
@@ -1014,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MjcyNzMwNzUsMTM5NDk4MDEwNywtNT
+eyJoaXN0b3J5IjpbLTE1NjQ1Njk4MjUsMTM5NDk4MDEwNywtNT
 QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
 MjkyMzk5XX0=
 -->
