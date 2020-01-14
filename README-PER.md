@@ -43,9 +43,9 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
    * [SDK امضا](#sdk-signature)
    * [رصد در پس زمینه](#background-tracking)
    * [شناسنامه دستگاه](#device-ids)
-      * [Google Play Services شنا](#di-gps-adid)
-      * [Amazon advertising identifier](#di-amz-adid)
-      * [AdTrace device identifier](#di-adid)
+      * [Google Play Services شناسه تبلیغاتی](#di-gps-adid)
+      * [Amazon شناسه تبلیغاتی](#di-amz-adid)
+      * [AdTrace شناسه](#di-adid)
    * [User attribution](#user-attribution)
    * [Push token](#push-token)
    * [Pre-installed trackers](#pre-installed-trackers)
@@ -1006,7 +1006,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQzMDIwODU0NywxMzk0OTgwMTA3LC01ND
+eyJoaXN0b3J5IjpbMTc5Mjc0OTUyMSwxMzk0OTgwMTA3LC01ND
 EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
 OTIzOTldfQ==
 -->
