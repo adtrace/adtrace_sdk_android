@@ -545,8 +545,7 @@ The listener function will be called after the SDK receives the final attributio
 
 If any value is unavailable, it will default to `null`.
 
-### <a id=""></a>Session and event callbacks
-### <div id="attribution-callback" dir="rtl" align='right'>Attribution callback</div>
+### <div id="session-event-callbacks" dir="rtl" align='right'>Session and event callbacks</div>
 
 You can register a listener to be notified when events or sessions are tracked. There are four listeners: one for tracking successful events, one for tracking failed events, one for tracking successful sessions and one for tracking failed sessions. You can add any number of listeners after creating the `AdTraceConfig` object:
 
@@ -606,7 +605,8 @@ And both event and session failed objects also contain:
 
 - `boolean willRetry` indicates that will be an attempt to resend the package at a later time.
 
-### <a id="disable-tracking"></a>Disable tracking
+### <div id="disable-tracking" dir="rtl" align='right'>Disable tracking</div>
+
 
 You can disable the AdTrace SDK from tracking any activities of the current device by calling `setEnabled` with parameter `false`. **This setting is remembered between sessions**.
 
@@ -616,7 +616,7 @@ AdTrace.setEnabled(false);
 
 You can check if the AdTrace SDK is currently enabled by calling the function `isEnabled`. It is always possible to activatе the AdTrace SDK by invoking `setEnabled` with the enabled parameter as `true`.
 
-### <a id="offline-mode"></a>Offline mode
+### <div id="offline-mode" dir="rtl" align='right'>Offline mode</div>
 
 You can put the AdTrace SDK in offline mode to suspend transmission to our servers, while retaining tracked data to be sent later. While in offline mode, all information is saved in a file, so be careful not to trigger too many events while in offline mode.
 
@@ -630,7 +630,9 @@ Conversely, you can deactivate offline mode by calling `setOfflineMode` with `fa
 
 Unlike disabling tracking, this setting is **not remembered** between sessions. This means that the SDK is in online mode whenever it is started, even if the app was terminated in offline mode.
 
-### <a id="event-buffering"></a>Event buffering
+### <div id="offline-mode" dir="rtl" align='right'>Offline mode</div>
+
+### <a id=""></a>Event buffering
 
 If your app makes heavy use of event tracking, you might want to delay some HTTP requests in order to send them in one batch every minute. You can enable event buffering with your `AdTraceConfig` instance:
 
@@ -1012,7 +1014,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTAzNDE2NTE1MiwxMzk0OTgwMTA3LC01ND
-EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
-OTIzOTldfQ==
+eyJoaXN0b3J5IjpbLTE2MjcyNzMwNzUsMTM5NDk4MDEwNywtNT
+QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
+MjkyMzk5XX0=
 -->
