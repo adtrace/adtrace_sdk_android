@@ -343,11 +343,12 @@ AdTrace.enableLocation(true);
 
 Build and run your Android app. In your `LogCat` viewer you can set the filter `tag:AdTrace` to hide all other logs. After your app has launched you should see the following AdTrace log: `Install tracked`.
 
-### <div id="build-the-app" dir="rtl" align='right'>Additional Features</div>
+## <div id="additional-features" dir="rtl" align='right'>Additional Features</div>
 
 Once you have integrated the AdTrace SDK into your project, you can take advantage of the following features.
 
-### <a id="event-tracking"></a>Event tracking
+### <div id="event-tracking" dir="rtl" align='right'>Event tracking</div>
+
 
 You can use AdTrace to track any event in your app. Suppose you want to track every tap on a button. You would have to create a new event token in your [dashboard]. Let's say that event token is `abc123`. In your button's `onClick` method you could then add the following lines to track the click:
 
@@ -356,7 +357,7 @@ AdTraceEvent event = new AdTraceEvent("abc123");
 AdTrace.trackEvent(event);
 ```
 
-### <a id="revenue-tracking"></a>Revenue tracking
+### <div id="revenue-tracking" dir="rtl" align='right'>Revenue tracking</div>
 
 If your users can generate revenue by tapping on advertisements or making in-app purchases you can track those revenues with events. Lets say a tap is worth one Euro cent. You could then track the revenue event like this:
 
@@ -372,7 +373,7 @@ When you set a currency token, AdTrace will automatically convert the incoming r
 
 You can read more about revenue and event tracking in the [event tracking guide][event-tracking].
 
-### <a id="revenue-deduplication"></a>Revenue deduplication
+### <div id="revenue-deduplication" dir="rtl" align='right'>Revenue deduplication</div>
 
 You can also add an optional order ID to avoid tracking duplicate revenues. The last ten order IDs are remembered, and revenue events with duplicate order IDs are skipped. This is especially useful for in-app purchase tracking. You can see an  example below.
 
@@ -385,7 +386,8 @@ event.setOrderId("{OrderId}");
 AdTrace.trackEvent(event);
 ```
 
-### <a id="callback-parameters"></a>Callback parameters
+### <a id=""></a>Callback parameters
+### <div id="revenue-deduplication" dir="rtl" align='right'>Revenue deduplication</div>
 
 You can register a callback URL for your events in your [dashboard]. We will send a GET request to that URL whenever the event is tracked. You can add callback parameters to that event by calling `addCallbackParameter` to the event instance before tracking it. We will then append these parameters to your callback URL.
 
@@ -1010,7 +1012,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1MjI5MDg4NDcsMTM5NDk4MDEwNywtNT
-QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
-MjkyMzk5XX0=
+eyJoaXN0b3J5IjpbLTQ5Mjc1NDk3OCwxMzk0OTgwMTA3LC01ND
+EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
+OTIzOTldfQ==
 -->
