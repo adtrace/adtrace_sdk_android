@@ -337,15 +337,15 @@ AdTrace.enableLocation(true);
 ```
 **Note**: This option is enabled by default. But in case the location-based permissions are not granted, location data will not be sent to the server.
 
-### <div id="build-the-app" dir="rtl" align='right'>Build your app</div>
+### <div id="build-the-app" dir="rtl" align='right'>ساختن برنامه</div>
 
 Build and run your Android app. In your `LogCat` viewer you can set the filter `tag:AdTrace` to hide all other logs. After your app has launched you should see the following AdTrace log: `Install tracked`.
 
-## <div id="additional-features" dir="rtl" align='right'>ساختن برنامه</div>
+## <div id="additional-features" dir="rtl" align='right'>ویژگی های دیگر</div>
 
 Once you have integrated the AdTrace SDK into your project, you can take advantage of the following features.
 
-### <div id="event-tracking" dir="rtl" align='right'>Event tracking</div>
+### <div id="event-tracking" dir="rtl" align='right'>رصد Event</div>
 
 
 You can use AdTrace to track any event in your app. Suppose you want to track every tap on a button. You would have to create a new event token in your [dashboard]. Let's say that event token is `abc123`. In your button's `onClick` method you could then add the following lines to track the click:
@@ -355,7 +355,7 @@ AdTraceEvent event = new AdTraceEvent("abc123");
 AdTrace.trackEvent(event);
 ```
 
-### <div id="revenue-tracking" dir="rtl" align='right'>Revenue tracking</div>
+### <div id="revenue-tracking" dir="rtl" align='right'>رصد Revenue</div>
 
 If your users can generate revenue by tapping on advertisements or making in-app purchases you can track those revenues with events. Lets say a tap is worth one Euro cent. You could then track the revenue event like this:
 
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY5NTQwNTAwNywtMTU5NTEzMTY3OSwxMz
+eyJoaXN0b3J5IjpbMTI5MDA1OTYzOSwtMTU5NTEzMTY3OSwxMz
 k0OTgwMTA3LC01NDEyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIw
 MjI2MzEsLTEzNTAyOTIzOTldfQ==
 -->
