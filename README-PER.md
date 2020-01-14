@@ -55,8 +55,8 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
       * [Reattribution via deep links](#deeplinking-reattribution)
 * [عیب یابی](#troubleshooting)
    * ["Session failed (Ignoring too frequent session. ...)" خطا](#ts-session-failed)
-   * [میکن](#ts-broadcast-receiver)
-   * [Can I trigger an event at application launch?](#ts-event-at-launch)
+   * [اطلاعات نصب را دریافت میکند؟ broadcast receiver آیا](#ts-broadcast-receiver)
+   * [آیا می توانم هنگام راه اندازی برنامه رویدادی را ایجاد کنم؟](#ts-event-at-launch)
 * [License](#license)
 
 ## <a id="basic-integration"></a>Basic integration
@@ -1006,7 +1006,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAyNTk4MTM2NSwxMzk0OTgwMTA3LC01ND
+eyJoaXN0b3J5IjpbMTUyNTk0OTc0OSwxMzk0OTgwMTA3LC01ND
 EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
 OTIzOTldfQ==
 -->
