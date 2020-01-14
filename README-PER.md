@@ -172,8 +172,7 @@ We use this broadcast receiver to retrieve the install referrer and pass it to o
 
 If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, follow [these instructions][referrer] to add the AdTrace broadcast receiver.
 
-### <a id="basic-setup"></a>Basic setup
-
+### <div id="basic-setup" dir="rtl" align='right'>Basic setup</div>
 
 We recommend using a global android [Application][android_application] class to initialize the SDK. If you don't have one in your app already, follow these steps:
 
@@ -227,11 +226,12 @@ To increase the accuracy and security in fraud detection, you can enable or disa
 config.enableSendInstalledApps(true);
 ```
 **Note**: This option is disabled by default.
-### <a id="session-tracking"></a>Session tracking
+
+### <div id="session-tracking" dir="rtl" align='right'>Session tracking</div>
 
 **Note**: This step is **really important** and please **make sure that you implement it properly in your app**. By implementing it, you will enable proper session tracking by the AdTrace SDK in your app.
 
-### <a id="session-tracking-api14"></a>API level 14 and higher
+### <div id="session-tracking-api14" dir="rtl" align='right'>API level 14 and higher</div>
 
 - Add a private class that implements the `ActivityLifecycleCallbacks` interface. If you don't have access to this interface, your app is targeting an Android API level inferior to 14. You will have to update manually each Activity by following these [instructions](#session-tracking-api9). If you had `AdTrace.onResume` and `AdTrace.onPause` calls on each Activity of your app before, you should remove them.
 - Edit the `onActivityResumed(Activity activity)` method and add a call to `AdTrace.onResume()`. Edit the
@@ -1009,7 +1009,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTE1MTMyMDMxLDEzOTQ5ODAxMDcsLTU0MT
+eyJoaXN0b3J5IjpbLTgxNTgyOTAxLDEzOTQ5ODAxMDcsLTU0MT
 I1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5
 MjM5OV19
 -->
