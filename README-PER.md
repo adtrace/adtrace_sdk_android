@@ -407,7 +407,7 @@ It should be mentioned that we support a variety of placeholders like `{gps_adid
 
 You can read more about using URL callbacks, including a full list of available values, in our [callbacks guide][callbacks-guide].
 
-### <div id="partner-parameters" dir="rtl" align='right'>Partner parameters</div>
+### <div id="partner-parameters" dir="rtl" align='right'>پارامترهای Partner</div>
 
 You can also add parameters to be transmitted to network partners, which have been activated in your AdTrace dashboard.
 
@@ -422,7 +422,7 @@ AdTrace.trackEvent(event);
 
 You can read more about special partners and these integrations in our [guide to special partners][special-partners].
 
-### <div id="callback-id" dir="rtl" align='right'>پارامترهای Partner</div>
+### <div id="callback-id" dir="rtl" align='right'>Callback شناسایی</div>
 
 You can also add custom string identifier to each event you want to track. This identifier will later be reported in event success and/or event failure callbacks to enable you to keep track on which event was successfully tracked or not. You can set this identifier by calling the `setCallbackId` method on your `AdTraceEvent` instance:
 
@@ -432,7 +432,7 @@ event.setCallbackId("Your-Custom-Id");
 AdTrace.trackEvent(event);
 ```
 
-### <div id="session-parameters" dir="rtl" align='right'>شناسایی Callback</div>
+### <div id="session-parameters" dir="rtl" align='right'></div>
 
 Some parameters are saved to be sent in every **event** and **session** of the AdTrace SDK. Once you have added any of these parameters, you don't need to add them every time, since they will be saved locally. If you add the same parameter twice, there will be no effect.
 
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTAyNzMxMzgwLC0xNTk1MTMxNjc5LDEzOT
+eyJoaXN0b3J5IjpbMjY4NTA3MTMyLC0xNTk1MTMxNjc5LDEzOT
 Q5ODAxMDcsLTU0MTI1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAy
 MjYzMSwtMTM1MDI5MjM5OV19
 -->
