@@ -343,7 +343,7 @@ AdTrace.enableLocation(true);
 
 Build and run your Android app. In your `LogCat` viewer you can set the filter `tag:AdTrace` to hide all other logs. After your app has launched you should see the following AdTrace log: `Install tracked`.
 
-## Additional Features
+### <div id="build-the-app" dir="rtl" align='right'>Additional Features</div>
 
 Once you have integrated the AdTrace SDK into your project, you can take advantage of the following features.
 
@@ -1010,7 +1010,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3MjQ4NTE2OTEsMTM5NDk4MDEwNywtNT
+eyJoaXN0b3J5IjpbLTE1MjI5MDg4NDcsMTM5NDk4MDEwNywtNT
 QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
 MjkyMzk5XX0=
 -->
