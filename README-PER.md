@@ -53,9 +53,9 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
       * [Standard deep linking scenario](#deeplinking-standard)
       * [Deferred deep linking scenario](#deeplinking-deferred)
       * [Reattribution via deep links](#deeplinking-reattribution)
-* [عیب یاب](#troubleshooting)
-   * [I'm seeing the "Session failed (Ignoring too frequent session. ...)" error](#ts-session-failed)
-   * [Is my broadcast receiver capturing the install referrer?](#ts-broadcast-receiver)
+* [عیب یابی](#troubleshooting)
+   * ["Session failed (Ignoring too frequent session. ...)" خطا](#ts-session-failed)
+   * [میکن](#ts-broadcast-receiver)
    * [Can I trigger an event at application launch?](#ts-event-at-launch)
 * [License](#license)
 
@@ -1006,7 +1006,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzk2MjgwMTYxLDEzOTQ5ODAxMDcsLTU0MT
-I1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5
-MjM5OV19
+eyJoaXN0b3J5IjpbMjAyNTk4MTM2NSwxMzk0OTgwMTA3LC01ND
+EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
+OTIzOTldfQ==
 -->
