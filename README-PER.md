@@ -8,8 +8,8 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
 
 ## <div dir="rtl" >پیاده سازی</div>
 
-* [Basic integration](#basic-integration)
-   * [Add the SDK to your project](#sdk-add)
+* [تنظیمات اولیه](#basic-integration)
+   * [SDK اضافه کردن](#sdk-add)
    * [Add Google Play Services](#sdk-gps)
    * [Add permissions](#sdk-permissions)
    * [Proguard settings](#sdk-proguard)
@@ -1017,6 +1017,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 [android-purchase-verification]:  http://adtrace.io
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLT
-EzNTAyOTIzOTldfQ==
+eyJoaXN0b3J5IjpbMjE0MDcxNTQ2NSwtMTQ4NjM0OTYyNSwtMT
+MzMjAyMjYzMSwtMTM1MDI5MjM5OV19
 -->
