@@ -17,14 +17,14 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
       * [Google Play Referrer API تنظیمات](#gpr-api)
       * [Google Play Store intent تنظیمات](#gps-intent)
    * [SDK پیاده سازی](#basic-setup)
-   * [Session رصد](#session-tracking)
+   * [رصد نشست](#session-tracking)
       * [API level 14 and higher](#session-tracking-api14)
       * [API level between 9 and 13](#session-tracking-api9)
    * [Log انواع](#adtrace-logging)
    * [ساختن برنامه](#build-the-app)
    * [موقعیت یابی](#location)
 * [ویژگی های دیگر](#additional-features)
-   * [Event رصد](#event-tracking)
+   * [رصد رویداد](#event-tracking)
       * [Track revenue](#revenue-tracking)
       * [تکراری Revenue ممانعت از](#revenue-deduplication)
       * [Callback پارامترهای](#callback-parameters)
@@ -46,7 +46,7 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
       * [Google Play Services شناسه تبلیغاتی](#di-gps-adid)
       * [Amazon شناسه تبلیغاتی](#di-amz-adid)
       * [AdTrace شناسه](#di-adid)
-   * [User attribution](#user-attribution)
+   * [اتریبیوشن کاربر](#user-attribution)
    * [Push token](#push-token)
    * [Pre-installed trackers](#pre-installed-trackers)
    * [Deep linking](#deeplinking)
@@ -1006,7 +1006,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc5Mjc0OTUyMSwxMzk0OTgwMTA3LC01ND
-EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
-OTIzOTldfQ==
+eyJoaXN0b3J5IjpbMzc1NzI0NTkyLDEzOTQ5ODAxMDcsLTU0MT
+I1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5
+MjM5OV19
 -->
