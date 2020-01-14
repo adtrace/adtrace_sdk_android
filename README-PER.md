@@ -464,8 +464,7 @@ If you wish to remove all keys and their corresponding values from the session c
 AdTrace.resetSessionCallbackParameters();
 ```
 
-### <a id="session-partner-parameters"></a>Session partner parameters
-### <div id="session-callback-parameters" dir="rtl" align='right'>Session callback parameters</div>
+### <div id="session-partner-parameters" dir="rtl" align='right'>Session partner parameters</div>
 
 In the same way that there are [session callback parameters](#session-callback-parameters) sent in every event or session of the AdTrace SDK, there is also session partner parameters.
 
@@ -491,7 +490,7 @@ If you wish to remove all keys and their corresponding values from the session p
 AdTrace.resetSessionPartnerParameters();
 ```
 
-### <a id="delay-start"></a>Delay start
+### <div id="delay-start" dir="rtl" align='right'>Delay start</div>
 
 Delaying the start of the AdTrace SDK allows your app some time to obtain session parameters, such as unique identifiers, to be sent on install.
 
@@ -505,7 +504,7 @@ In this case, this will make the AdTrace SDK not send the initial install sessio
 
 **The maximum delay start time of the AdTrace SDK is 10 seconds**.
 
-### <a id="attribution-callback"></a>Attribution callback
+### <div id="attribution-callback" dir="rtl" align='right'>Attribution callback</div>
 
 You can register a listener to be notified of tracker attribution changes. Due to the different sources considered for attribution, this information can not be provided synchronously. The simplest way is to create a single anonymous listener:
 
@@ -546,7 +545,8 @@ The listener function will be called after the SDK receives the final attributio
 
 If any value is unavailable, it will default to `null`.
 
-### <a id="session-event-callbacks"></a>Session and event callbacks
+### <a id=""></a>Session and event callbacks
+### <div id="attribution-callback" dir="rtl" align='right'>Attribution callback</div>
 
 You can register a listener to be notified when events or sessions are tracked. There are four listeners: one for tracking successful events, one for tracking failed events, one for tracking successful sessions and one for tracking failed sessions. You can add any number of listeners after creating the `AdTraceConfig` object:
 
@@ -1012,7 +1012,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyMTIxMzEyNDcsMTM5NDk4MDEwNywtNT
-QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
-MjkyMzk5XX0=
+eyJoaXN0b3J5IjpbMTAzNDE2NTE1MiwxMzk0OTgwMTA3LC01ND
+EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
+OTIzOTldfQ==
 -->
