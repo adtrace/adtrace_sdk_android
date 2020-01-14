@@ -42,7 +42,7 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
    * [GDPR right to be forgotten](#gdpr-forget-me)
    * [SDK امضا](#sdk-signature)
    * [رصد در پس زمینه](#background-tracking)
-   * [شناسنامه دستگاه](#device-ids)
+   * [شناسه دستگاه](#device-ids)
       * [Google Play Services شناسه تبلیغاتی](#di-gps-adid)
       * [Amazon شناسه تبلیغاتی](#di-amz-adid)
       * [شناسه ادتریس](#di-adid)
@@ -679,7 +679,7 @@ AdTrace.onCreate(config);
 
 The AdTrace SDK offers you possibility to obtain some of the device identifiers.
 
-### <div id="di-gps-adid" dir="rtl" align='right'>Google Play Services advertising identifier</div>
+### <div id="di-gps-adid" dir="rtl" align='right'>شناسه تبلیغاتی Google Play Services</div>
 
 Certain services (such as Google Analytics) require you to coordinate Device and Client IDs in order to prevent duplicate reporting.
 
@@ -696,7 +696,7 @@ AdTrace.getGoogleAdId(this, new OnDeviceIdsRead() {
 
 Inside the method `onGoogleAdIdRead` of the `OnDeviceIdsRead` instance, you will have access to Google Advertising ID as the variable `googleAdId`.
 
-### <div id="di-amz-adid" dir="rtl" align='right'>Amazon advertising identifier</div>
+### <div id="di-amz-adid" dir="rtl" align='right'>شناسه تبلیغاتی Amazon</div>
 
 If you need to obtain the Amazon Advertising ID, you can make a call to following method on `AdTrace` instance:
 
@@ -704,7 +704,7 @@ If you need to obtain the Amazon Advertising ID, you can make a call to followin
 String amazonAdId = AdTrace.getAmazonAdId(context);
 ```
 
-### <div id="di-adid" dir="rtl" align='right'>AdTrace device identifier</div>
+### <div id="di-adid" dir="rtl" align='right'>شناسه ادتریس</div>
 
 For each device with your app installed on it, AdTrace backend generates unique **AdTrace device identifier** (**adid**). In order to obtain this identifier, you can make a call to following method on `AdTrace` instance:
 
@@ -713,7 +713,7 @@ String adid = AdTrace.getAdid();
 ```
 **Note**: Information about **adid** is available after app installation has been tracked by the AdTrace backend. From that moment on, AdTrace SDK has information about your device **adid** and you can access it with this method. So, **it is not possible** to access **adid** value before the SDK has been initialised and installation of your app was tracked successfully.
 
-### <div id="user-attribution" dir="rtl" align='right'>User attribution</div>
+### <div id="user-attribution" dir="rtl" align='right'>اتریبوشن کاربر</div>
 
 Like described in [attribution callback section](#attribution-callback), this callback get triggered providing you info about new attribution when ever it changes. In case you want to access info about your user's current attribution when ever you need it, you can make a call to following method of the `AdTrace` instance:
 
@@ -741,7 +741,7 @@ We still support the previous signature of the same method:
 AdTrace.setPushToken(pushNotificationsToken);
 ```
 
-### <div id="pre-installed-trackers" dir="rtl" align='right'>Pre-installed trackers</div>
+### <div id="pre-installed-trackers" dir="rtl" align='right'>trackers از پیش نصب شده</div>
 
 If you want to use the AdTrace SDK to recognize users whose devices came with your app pre-installed, follow these steps.
 
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQyNTIwMzM0MSwyNjg1MDcxMzIsLTE1OT
+eyJoaXN0b3J5IjpbLTgxNzQwNzM4MSwyNjg1MDcxMzIsLTE1OT
 UxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4NDE2LC0xNDg2MzQ5
 NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMzk5XX0=
 -->
