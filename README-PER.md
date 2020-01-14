@@ -371,7 +371,7 @@ When you set a currency token, AdTrace will automatically convert the incoming r
 
 You can read more about revenue and event tracking in the [event tracking guide][event-tracking].
 
-### <div id="revenue-deduplication" dir="rtl" align='right'>Revenue deduplication</div>
+### <div id="revenue-deduplication" dir="rtl" align='right'>ممانعت از Revenue تکراری </div>
 
 You can also add an optional order ID to avoid tracking duplicate revenues. The last ten order IDs are remembered, and revenue events with duplicate order IDs are skipped. This is especially useful for in-app purchase tracking. You can see an  example below.
 
@@ -384,7 +384,7 @@ event.setOrderId("{OrderId}");
 AdTrace.trackEvent(event);
 ```
 
-### <div id="callback-parameters" dir="rtl" align='right'>Callback parameters</div>
+### <div id="callback-parameters" dir="rtl" align='right'>پارامترهای Callback</div>
 
 You can register a callback URL for your events in your [dashboard]. We will send a GET request to that URL whenever the event is tracked. You can add callback parameters to that event by calling `addCallbackParameter` to the event instance before tracking it. We will then append these parameters to your callback URL.
 
@@ -422,7 +422,7 @@ AdTrace.trackEvent(event);
 
 You can read more about special partners and these integrations in our [guide to special partners][special-partners].
 
-### <div id="callback-id" dir="rtl" align='right'>Callback identifier</div>
+### <div id="callback-id" dir="rtl" align='right'>پارامترهای Partner</div>
 
 You can also add custom string identifier to each event you want to track. This identifier will later be reported in event success and/or event failure callbacks to enable you to keep track on which event was successfully tracked or not. You can set this identifier by calling the `setCallbackId` method on your `AdTraceEvent` instance:
 
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI5MDA1OTYzOSwtMTU5NTEzMTY3OSwxMz
-k0OTgwMTA3LC01NDEyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIw
-MjI2MzEsLTEzNTAyOTIzOTldfQ==
+eyJoaXN0b3J5IjpbLTE4MTc4MjA4MzMsLTE1OTUxMzE2NzksMT
+M5NDk4MDEwNywtNTQxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMy
+MDIyNjMxLC0xMzUwMjkyMzk5XX0=
 -->
