@@ -26,8 +26,7 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
 * [ویژگی های دیگر](#additional-features)
    * [Event رصد](#event-tracking)
       * [Track revenue](#revenue-tracking)
-      * [Revenue ممانعت](#revenue-deduplication)
-      * [In-App Purchase verification](#iap-verification)
+      * [تکراری Revenue ممانعت از](#revenue-deduplication)
       * [Callback parameters](#callback-parameters)
       * [Partner parameters](#partner-parameters)
       * [Callback identifier](#callback-id)
@@ -381,10 +380,6 @@ event.setRevenue(0.01, "EUR");
 event.setOrderId("{OrderId}");
 AdTrace.trackEvent(event);
 ```
-
-### <a id="iap-verification"></a>In-App Purchase verification
-
-If you want to check the validity of In-App Purchases made in your app using Purchase Verification, AdTrace's server side receipt verification tool, then check out our Android purchase SDK to read more about it [here][android-purchase-verification].
 
 ### <a id="callback-parameters"></a>Callback parameters
 
@@ -1010,8 +1005,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [google_play_services]:           http://developer.android.com/google/play-services/setup.html
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
-[android-purchase-verification]:  http://adtrace.io
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM2NTY5NjA4OSwtNTQxMjU4NDE2LC0xND
+eyJoaXN0b3J5IjpbLTk3NDYxNzMzNCwtNTQxMjU4NDE2LC0xND
 g2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMzk5XX0=
 -->
