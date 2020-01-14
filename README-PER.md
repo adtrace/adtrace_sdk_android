@@ -59,7 +59,7 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
    * [آیا می توانم هنگام راه اندازی برنامه رویدادی را ایجاد کنم؟](#ts-event-at-launch)
 * [لایسنس](#license)
 
-## <a id="basic-integration"></a>Basic integration
+## <div id="basic-integration" dir="rtl" align='right'>خلاصه</div>
 
 These are the minimal steps required to integrate the AdTrace SDK into your Android project. We are going to assume that you use Android Studio for your Android development and target an Android API level 9 (Gingerbread) or later.
 
@@ -1006,7 +1006,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MzIyMjU3NzcsMTM5NDk4MDEwNywtNT
+eyJoaXN0b3J5IjpbLTEyNTI1NTA4NTQsMTM5NDk4MDEwNywtNT
 QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
 MjkyMzk5XX0=
 -->
