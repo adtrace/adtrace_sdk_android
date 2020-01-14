@@ -18,7 +18,7 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
       * [Google Play Store intent تنظیمات](#gps-intent)
    * [SDK پیاده سازی](#basic-setup)
    * [Session رصد](#session-tracking)
-      * [](#session-tracking-api14)
+      * [API level 14 and higher](#session-tracking-api14)
       * [API level between 9 and 13](#session-tracking-api9)
    * [AdTrace logging](#adtrace-logging)
    * [Build your app](#build-the-app)
@@ -1012,6 +1012,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 [android-purchase-verification]:  http://adtrace.io
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA2MTkwMTI1MywtNTQxMjU4NDE2LC0xND
-g2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMzk5XX0=
+eyJoaXN0b3J5IjpbLTE1NDAxMDc0NjgsLTU0MTI1ODQxNiwtMT
+Q4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5MjM5OV19
 -->
