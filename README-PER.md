@@ -30,11 +30,11 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
       * [Callback پارامترهای](#callback-parameters)
       * [Partner پارامترهای](#partner-parameters)
       * [Callback شناسایی](#callback-id)
-   * [Session پارامترهای](#session-parameters)
-      * [Session callback پارامترهای](#session-callback-parameters)
-      * [Session partner پارامترهای](#session-partner-parameters)
+   * [پارامترهای نشست](#session-parameters)
+      * [callback پارامترهای](#session-callback-parameters)
+      * [partner پارامترهای](#session-partner-parameters)
       * [شروع با تاخیر](#delay-start)
-   * [Attribution callback](#attribution-callback)
+   * [callback اتریبیوشن](#attribution-callback)
    * [Session and event callbacks](#session-event-callbacks)
    * [غیرفعال نمودن رصد](#disable-tracking)
    * [حالت آفلاین](#offline-mode)
@@ -1006,7 +1006,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzQ2MzQ0NjY2LDEzOTQ5ODAxMDcsLTU0MT
-I1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5
-MjM5OV19
+eyJoaXN0b3J5IjpbMTkxNzAwOTg3MCwxMzk0OTgwMTA3LC01ND
+EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
+OTIzOTldfQ==
 -->
