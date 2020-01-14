@@ -12,7 +12,7 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
    * [SDK اضافه کردن](#sdk-add)
    * [Google Play Services اضافه کردن](#sdk-gps)
    * [اضافه کردن دسترسی ها](#sdk-permissions)
-   * [Progaurd تنظیمات ](#sdk-proguard)
+   * [Progaurd تنظیمات](#sdk-proguard)
    * [Install referrer تنظیمات](#install-referrer)
       * [Google Play Referrer API تنظیمات](#gpr-api)
       * [Google Play Store intent تنظیمات](#gps-intent)
@@ -72,7 +72,7 @@ implementation 'io.adtrace:android-sdk:1.0.1'
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 
-### <div id="sdk-gps" dir="rtl" align='right'>Add Google Play Services</div>
+### <div id="sdk-gps" dir="rtl" align='right'>اضافه کردن Google Play Services</div>
 
 Since the 1st of August of 2014, apps in the Google Play Store must use the [Google Advertising ID][google_ad_id] to uniquely identify devices. To allow the AdTrace SDK to use the Google Advertising ID, you must integrate the [Google Play Services][google_play_services]. If you haven't done this yet, follow these steps:
 
@@ -91,7 +91,7 @@ Since the 1st of August of 2014, apps in the Google Play Store must use the [Goo
                android:value="@integer/google_play_services_version" />
     ```
 
-### <div id="sdk-permissions" dir="rtl" align='right'>Add permissions</div>
+### <div id="sdk-permissions" dir="rtl" align='right'>اضافه کردن دسترسی ها</div>
 
 Please add the following permissions, which the AdTrace SDK needs, if they are not already present in your `AndroidManifest.xml` file:
 
@@ -108,7 +108,7 @@ If you are **not targeting the Google Play Store**, please also add the followin
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 ```
 
-### <div id="sdk-proguard" dir="rtl" align='right'>Proguard settings</div>
+### <div id="sdk-proguard" dir="rtl" align='right'>تنظیمات Progaurd</div>
 
 
 If you are using Proguard, add these lines to your Proguard file:
@@ -130,7 +130,7 @@ If you are using Proguard, add these lines to your Proguard file:
 
 If you are **not targeting the Google Play Store**, you can remove the `com.google.android.gms` rules.
 
-### <div id="install-referrer" dir="rtl" align='right'>Install referrer</div>
+### <div id="install-referrer" dir="rtl" align='right'>تنظیمات Install referrer</div>
 
 In order to correctly attribute an install of your app to its source, AdTrace needs information about the **install referrer**. This can be obtained by using the **Google Play Referrer API** or by catching the **Google Play Store intent** with a broadcast receiver.
 
@@ -1018,7 +1018,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1OTUxMzE2NzksMTM5NDk4MDEwNywtNT
-QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
-MjkyMzk5XX0=
+eyJoaXN0b3J5IjpbMjIyMzc4NjU0LC0xNTk1MTMxNjc5LDEzOT
+Q5ODAxMDcsLTU0MTI1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAy
+MjYzMSwtMTM1MDI5MjM5OV19
 -->
