@@ -57,7 +57,6 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
    * ["Session failed (Ignoring too frequent session. ...)" خطا](#ts-session-failed)
    * [اطلاعات نصب را دریافت میکند؟ broadcast receiver آیا](#ts-broadcast-receiver)
    * [آیا می توانم هنگام راه اندازی برنامه رویدادی را ایجاد کنم؟](#ts-event-at-launch)
-* [لایسنس](#license)
 
 ## <div id="basic-integration" dir="rtl" align='right'>تنظیمات اولیه</div>
 
@@ -980,7 +979,7 @@ public void onFireIntentClick(View v) {
 
 Feel free to alter second parameter of `putExtra` method with content of your choice.
 
-### <div id="ts-event-at-launch" dir="rtl" align='right'>Can I trigger an event at application launch?</div>
+### <div id="ts-event-at-launch" dir="rtl" align='right'>آیا می توانم هنگام راه اندازی برنامه رویدادی را ایجاد کنم؟</div>
 
 Not how you might intuitively think. The `onCreate` method on the global `Application` class is called not only at application launch, but also when a system or application event is captured by the app.
 
@@ -1016,7 +1015,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ5NDQxMzE2MCwyNjg1MDcxMzIsLTE1OT
-UxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4NDE2LC0xNDg2MzQ5
-NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMzk5XX0=
+eyJoaXN0b3J5IjpbMTQ1NTI5NjUxLDI2ODUwNzEzMiwtMTU5NT
+EzMTY3OSwxMzk0OTgwMTA3LC01NDEyNTg0MTYsLTE0ODYzNDk2
+MjUsLTEzMzIwMjI2MzEsLTEzNTAyOTIzOTldfQ==
 -->
