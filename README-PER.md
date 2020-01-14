@@ -386,8 +386,7 @@ event.setOrderId("{OrderId}");
 AdTrace.trackEvent(event);
 ```
 
-### <a id=""></a>Callback parameters
-### <div id="revenue-deduplication" dir="rtl" align='right'>Revenue deduplication</div>
+### <div id="callback-parameters" dir="rtl" align='right'>Callback parameters</div>
 
 You can register a callback URL for your events in your [dashboard]. We will send a GET request to that URL whenever the event is tracked. You can add callback parameters to that event by calling `addCallbackParameter` to the event instance before tracking it. We will then append these parameters to your callback URL.
 
@@ -410,7 +409,7 @@ It should be mentioned that we support a variety of placeholders like `{gps_adid
 
 You can read more about using URL callbacks, including a full list of available values, in our [callbacks guide][callbacks-guide].
 
-### <a id="partner-parameters"></a>Partner parameters
+### <div id="partner-parameters" dir="rtl" align='right'>Partner parameters</div>
 
 You can also add parameters to be transmitted to network partners, which have been activated in your AdTrace dashboard.
 
@@ -425,7 +424,7 @@ AdTrace.trackEvent(event);
 
 You can read more about special partners and these integrations in our [guide to special partners][special-partners].
 
-### <a id="callback-id"></a>Callback identifier
+### <div id="callback-id" dir="rtl" align='right'>Callback identifier</div>
 
 You can also add custom string identifier to each event you want to track. This identifier will later be reported in event success and/or event failure callbacks to enable you to keep track on which event was successfully tracked or not. You can set this identifier by calling the `setCallbackId` method on your `AdTraceEvent` instance:
 
@@ -435,13 +434,13 @@ event.setCallbackId("Your-Custom-Id");
 AdTrace.trackEvent(event);
 ```
 
-### <a id="session-parameters"></a>Set up session parameters
+### <div id="session-parameters" dir="rtl" align='right'>Set up session parameters</div>
 
 Some parameters are saved to be sent in every **event** and **session** of the AdTrace SDK. Once you have added any of these parameters, you don't need to add them every time, since they will be saved locally. If you add the same parameter twice, there will be no effect.
 
 These session parameters can be called before the AdTrace SDK is launched to make sure they are sent even on install. If you need to send them with an install, but can only obtain the needed values after launch, it's possible to [delay](#delay-start) the first launch of the AdTrace SDK to allow this behaviour.
 
-### <a id="session-callback-parameters"></a>Session callback parameters
+### <div id="session-callback-parameters" dir="rtl" align='right'>Session callback parameters</div>
 
 The same callback parameters that are registered for [events](#callback-parameters) can be also saved to be sent in every  event or session of the AdTrace SDK.
 
@@ -466,6 +465,7 @@ AdTrace.resetSessionCallbackParameters();
 ```
 
 ### <a id="session-partner-parameters"></a>Session partner parameters
+### <div id="session-callback-parameters" dir="rtl" align='right'>Session callback parameters</div>
 
 In the same way that there are [session callback parameters](#session-callback-parameters) sent in every event or session of the AdTrace SDK, there is also session partner parameters.
 
@@ -1012,7 +1012,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ5Mjc1NDk3OCwxMzk0OTgwMTA3LC01ND
-EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
-OTIzOTldfQ==
+eyJoaXN0b3J5IjpbLTEyMTIxMzEyNDcsMTM5NDk4MDEwNywtNT
+QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
+MjkyMzk5XX0=
 -->
