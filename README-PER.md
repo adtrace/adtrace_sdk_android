@@ -832,7 +832,8 @@ protected void onNewIntent(Intent intent) {
 }
 ```
 
-### <a id="deeplinking-deferred"></a>Deferred deep linking scenario
+### <div id="deeplinking-deferred" dir="rtl" align='right'>Deferred deep linking scenario</div>
+
 
 The deferred deep linking scenario occurs when a user clicks on an AdTrace tracker URL with a `deep_link` parameter in it, but does not have the app installed on the device at click time. After that, the user will be redirected to the Play Store to download and install your app. After opening it for the first time, the `deep_link` parameter content will be delivered to your app.
 
@@ -861,7 +862,7 @@ Once the AdTrace SDK receives the information about the deep link content from t
 
 If you return `true`, we will launch it and the exact same scenario which is described in the [Standard deep linking scenario chapter](#deeplinking-standard) will happen. If you do not want the SDK to launch the Activity, you can return `false` from this listener, and, based on the deep link content, decide on your own what to do next in your app.
 
-### <a id="deeplinking-reattribution"></a>Reattribution via deep links
+### <div id="deeplinking-reattribution" dir="rtl" align='right'>Reattribution via deep links</div>
 
 AdTrace enables you to run re-engagement campaigns through deep links. For more information on how to do that, please check our [official docs][reattribution-with-deeplinks].
 
@@ -893,9 +894,11 @@ protected void onNewIntent(Intent intent) {
 }
 ```
 
-## <a id="troubleshooting"></a>Troubleshooting
+## <div id="troubleshooting" dir="rtl" align='right'>Troubleshooting</div>
 
-### <a id="ts-session-failed"></a>I'm seeing the "Session failed (Ignoring too frequent session. ...)" error.
+
+### <a id=""></a>I'm seeing the "Session failed (Ignoring too frequent session. ...)" error.
+### <div id="ts-session-failed" dir="rtl" align='right'>Troubleshooting</div>
 
 This error typically occurs when testing installs. Uninstalling and reinstalling the app is not enough to trigger a new install. The servers will determine that the SDK has lost its locally aggregated session data and ignore the erroneous message, given the information available on the servers about the device.
 
@@ -1016,7 +1019,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTYxNDgwMTY5NSwxMzk0OTgwMTA3LC01ND
-EyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAy
-OTIzOTldfQ==
+eyJoaXN0b3J5IjpbLTEyMDM5OTU2MTEsMTM5NDk4MDEwNywtNT
+QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
+MjkyMzk5XX0=
 -->
