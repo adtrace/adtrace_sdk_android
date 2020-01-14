@@ -432,13 +432,13 @@ event.setCallbackId("Your-Custom-Id");
 AdTrace.trackEvent(event);
 ```
 
-### <div id="session-parameters" dir="rtl" align='right'>Set up session parameters</div>
+### <div id="session-parameters" dir="rtl" align='right'>شناسایی Callback</div>
 
 Some parameters are saved to be sent in every **event** and **session** of the AdTrace SDK. Once you have added any of these parameters, you don't need to add them every time, since they will be saved locally. If you add the same parameter twice, there will be no effect.
 
 These session parameters can be called before the AdTrace SDK is launched to make sure they are sent even on install. If you need to send them with an install, but can only obtain the needed values after launch, it's possible to [delay](#delay-start) the first launch of the AdTrace SDK to allow this behaviour.
 
-### <div id="session-callback-parameters" dir="rtl" align='right'>Session callback parameters</div>
+### <div id="session-callback-parameters" dir="rtl" align='right'>پارامترهای Session</div>
 
 The same callback parameters that are registered for [events](#callback-parameters) can be also saved to be sent in every  event or session of the AdTrace SDK.
 
@@ -462,7 +462,7 @@ If you wish to remove all keys and their corresponding values from the session c
 AdTrace.resetSessionCallbackParameters();
 ```
 
-### <div id="session-partner-parameters" dir="rtl" align='right'>Session partner parameters</div>
+### <div id="session-partner-parameters" dir="rtl" align='right'>پارامترهای Session callback</div>
 
 In the same way that there are [session callback parameters](#session-callback-parameters) sent in every event or session of the AdTrace SDK, there is also session partner parameters.
 
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MTc4MjA4MzMsLTE1OTUxMzE2NzksMT
-M5NDk4MDEwNywtNTQxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMy
-MDIyNjMxLC0xMzUwMjkyMzk5XX0=
+eyJoaXN0b3J5IjpbNTAyNzMxMzgwLC0xNTk1MTMxNjc5LDEzOT
+Q5ODAxMDcsLTU0MTI1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAy
+MjYzMSwtMTM1MDI5MjM5OV19
 -->
