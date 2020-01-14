@@ -171,10 +171,6 @@ We use this broadcast receiver to retrieve the install referrer and pass it to o
 
 If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, follow [these instructions][referrer] to add the AdTrace broadcast receiver.
 
-### <a id="sdk-integrate"></a>Integrate the SDK into your app
-
-To start with, we'll set up basic session tracking.
-
 ### <a id="basic-setup"></a>Basic setup
 
 We recommend using a global android [Application][android_application] class to initialize the SDK. If you don't have one in your app already, follow these steps:
@@ -1016,6 +1012,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 [android-purchase-verification]:  http://adtrace.io
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzQwMTM1NTA4LC0xNDg2MzQ5NjI1LC0xMz
-MyMDIyNjMxLC0xMzUwMjkyMzk5XX0=
+eyJoaXN0b3J5IjpbLTU0MTI1ODQxNiwtMTQ4NjM0OTYyNSwtMT
+MzMjAyMjYzMSwtMTM1MDI5MjM5OV19
 -->
