@@ -57,7 +57,6 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
    * [I'm seeing the "Session failed (Ignoring too frequent session. ...)" error](#ts-session-failed)
    * [Is my broadcast receiver capturing the install referrer?](#ts-broadcast-receiver)
    * [Can I trigger an event at application launch?](#ts-event-at-launch)
-* [License](#license)
 
 ## <a id="basic-integration"></a>Basic integration
 
@@ -1014,3 +1013,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 [android-purchase-verification]:  http://adtrace.io
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbMTY3ODM4NzE1MF19
+-->
