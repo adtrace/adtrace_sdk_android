@@ -603,7 +603,7 @@ And both event and session failed objects also contain:
 
 - `boolean willRetry` indicates that will be an attempt to resend the package at a later time.
 
-### <div id="disable-tracking" dir="rtl" align='right'>Disable tracking</div>
+### <div id="disable-tracking" dir="rtl" align='right'>غیرفعال نمودن رصد</div>
 
 
 You can disable the AdTrace SDK from tracking any activities of the current device by calling `setEnabled` with parameter `false`. **This setting is remembered between sessions**.
@@ -614,7 +614,7 @@ AdTrace.setEnabled(false);
 
 You can check if the AdTrace SDK is currently enabled by calling the function `isEnabled`. It is always possible to activatе the AdTrace SDK by invoking `setEnabled` with the enabled parameter as `true`.
 
-### <div id="offline-mode" dir="rtl" align='right'>Offline mode</div>
+### <div id="offline-mode" dir="rtl" align='right'>حالت آفلاین</div>
 
 You can put the AdTrace SDK in offline mode to suspend transmission to our servers, while retaining tracked data to be sent later. While in offline mode, all information is saved in a file, so be careful not to trigger too many events while in offline mode.
 
@@ -628,7 +628,7 @@ Conversely, you can deactivate offline mode by calling `setOfflineMode` with `fa
 
 Unlike disabling tracking, this setting is **not remembered** between sessions. This means that the SDK is in online mode whenever it is started, even if the app was terminated in offline mode.
 
-### <div id="event-buffering" dir="rtl" align='right'>Event buffering</div>
+### <div id="event-buffering" dir="rtl" align='right'>Event بافرکردن</div>
 
 If your app makes heavy use of event tracking, you might want to delay some HTTP requests in order to send them in one batch every minute. You can enable event buffering with your `AdTraceConfig` instance:
 
@@ -648,7 +648,7 @@ AdTrace.gdprForgetMe(context);
 
 Upon receiving this information, AdTrace will erase the user's data and the AdTrace SDK will stop tracking the user. No requests from this device will be sent to AdTrace in the future.
 
-### <div id="sdk-signature" dir="rtl" align='right'>SDK signature</div>
+### <div id="sdk-signature" dir="rtl" align='right'>SDK امضا</div>
 
 
 An account manager must activate the AdTrace SDK signature. Contact AdTrace support (info@adtrace.io) if you are interested in using this feature.
@@ -663,7 +663,7 @@ config.setAppSecret(secretId, info1, info2, info3, info4);
 AdTrace.onCreate(config);
 ```
 
-### <div id="background-tracking" dir="rtl" align='right'>Background tracking</div>
+### <div id="background-tracking" dir="rtl" align='right'>رصد در پس زمینه</div>
 
 
 The default behaviour of the AdTrace SDK is to pause sending HTTP requests while the app is in the background. You can change this in your `AdTraceConfig` instance:
@@ -674,7 +674,7 @@ config.setSendInBackground(true);
 AdTrace.onCreate(config);
 ```
 
-### <div id="device-ids" dir="rtl" align='right'>Device IDs</div>
+### <div id="device-ids" dir="rtl" align='right'>شناسه دستگاه</div>
 
 
 The AdTrace SDK offers you possibility to obtain some of the device identifiers.
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ1MzI4MTk4MywyNjg1MDcxMzIsLTE1OT
+eyJoaXN0b3J5IjpbMTQyNTIwMzM0MSwyNjg1MDcxMzIsLTE1OT
 UxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4NDE2LC0xNDg2MzQ5
 NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMzk5XX0=
 -->
