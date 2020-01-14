@@ -681,8 +681,7 @@ AdTrace.onCreate(config);
 
 The AdTrace SDK offers you possibility to obtain some of the device identifiers.
 
-
-### <a id="di-gps-adid"></a>Google Play Services advertising identifier
+### <div id="di-gps-adid" dir="rtl" align='right'>Google Play Services advertising identifier</div>
 
 Certain services (such as Google Analytics) require you to coordinate Device and Client IDs in order to prevent duplicate reporting.
 
@@ -699,7 +698,7 @@ AdTrace.getGoogleAdId(this, new OnDeviceIdsRead() {
 
 Inside the method `onGoogleAdIdRead` of the `OnDeviceIdsRead` instance, you will have access to Google Advertising ID as the variable `googleAdId`.
 
-### <a id="di-amz-adid"></a>Amazon advertising identifier
+### <div id="di-amz-adid" dir="rtl" align='right'>Amazon advertising identifier</div>
 
 If you need to obtain the Amazon Advertising ID, you can make a call to following method on `AdTrace` instance:
 
@@ -707,7 +706,7 @@ If you need to obtain the Amazon Advertising ID, you can make a call to followin
 String amazonAdId = AdTrace.getAmazonAdId(context);
 ```
 
-### <a id="di-adid"></a>AdTrace device identifier
+### <div id="di-adid" dir="rtl" align='right'>AdTrace device identifier</div>
 
 For each device with your app installed on it, AdTrace backend generates unique **AdTrace device identifier** (**adid**). In order to obtain this identifier, you can make a call to following method on `AdTrace` instance:
 
@@ -717,6 +716,7 @@ String adid = AdTrace.getAdid();
 **Note**: Information about **adid** is available after app installation has been tracked by the AdTrace backend. From that moment on, AdTrace SDK has information about your device **adid** and you can access it with this method. So, **it is not possible** to access **adid** value before the SDK has been initialised and installation of your app was tracked successfully.
 
 ### <a id="user-attribution"></a>User attribution
+### <div id="di-adid" dir="rtl" align='right'>AdTrace device identifier</div>
 
 Like described in [attribution callback section](#attribution-callback), this callback get triggered providing you info about new attribution when ever it changes. In case you want to access info about your user's current attribution when ever you need it, you can make a call to following method of the `AdTrace` instance:
 
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1NjQ1Njk4MjUsMTM5NDk4MDEwNywtNT
+eyJoaXN0b3J5IjpbLTE1MTU3MDMzMzIsMTM5NDk4MDEwNywtNT
 QxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUw
 MjkyMzk5XX0=
 -->
