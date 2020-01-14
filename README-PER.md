@@ -23,8 +23,8 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
    * [Log انواع](#adtrace-logging)
    * [ساختن برنامه](#build-the-app)
    * [موقعیت یابی](#location)
-* [ویژگی های ](#additional-features)
-   * [Event tracking](#event-tracking)
+* [ویژگی های دیگر](#additional-features)
+   * [Event رصد](#event-tracking)
       * [Track revenue](#revenue-tracking)
       * [Revenue deduplication](#revenue-deduplication)
       * [In-App Purchase verification](#iap-verification)
@@ -1012,6 +1012,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 [android-purchase-verification]:  http://adtrace.io
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNzE2NzY2MzksLTU0MTI1ODQxNiwtMT
-Q4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5MjM5OV19
+eyJoaXN0b3J5IjpbMTcwNzU3NDI4OCwtNTQxMjU4NDE2LC0xND
+g2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMzk5XX0=
 -->
