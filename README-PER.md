@@ -20,7 +20,7 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
    * [Session رصد](#session-tracking)
       * [API level 14 and higher](#session-tracking-api14)
       * [API level between 9 and 13](#session-tracking-api9)
-   * [Log انواع](#adtrace-logging)
+   * [لاگ ادتریس](#adtrace-logging)
    * [ساختن برنامه](#build-the-app)
    * [موقعیت یابی](#location)
 * [ویژگی های دیگر](#additional-features)
@@ -1016,7 +1016,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUyMTM0OTc0MSwtMTU5NTEzMTY3OSwxMz
-k0OTgwMTA3LC01NDEyNTg0MTYsLTE0ODYzNDk2MjUsLTEzMzIw
-MjI2MzEsLTEzNTAyOTIzOTldfQ==
+eyJoaXN0b3J5IjpbLTEzNDQ0OTYyNjQsLTE1OTUxMzE2NzksMT
+M5NDk4MDEwNywtNTQxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMy
+MDIyNjMxLC0xMzUwMjkyMzk5XX0=
 -->
