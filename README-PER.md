@@ -80,7 +80,10 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 ### <div id="sdk-gps" dir="rtl" align='right'>اضافه کردن Google Play Services</div>
 
 <div id="sdk-add" dir="rtl" align='right'>
-از زمان 1 آگوست 2014
+از زمان 1 آگوست 2014، برنامه های داخل گوگل پلی بایستی از 
+<a href="" >
+شناسه تبلیغاتی گوگل
+</a>
 </div>
 Since the 1st of August of 2014, apps in the Google Play Store must use the [Google Advertising ID][google_ad_id] to uniquely identify devices. To allow the AdTrace SDK to use the Google Advertising ID, you must integrate the [Google Play Services][google_play_services]. If you haven't done this yet, follow these steps:
 
@@ -1024,8 +1027,8 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY5MjQ0NTc2MSwtMTg1NTc1Nzg1NiwyNj
-g1MDcxMzIsLTE1OTUxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4
-NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMz
-k5XX0=
+eyJoaXN0b3J5IjpbLTE5NTM4NTc2ODUsLTE4NTU3NTc4NTYsMj
+Y4NTA3MTMyLC0xNTk1MTMxNjc5LDEzOTQ5ODAxMDcsLTU0MTI1
+ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5Mj
+M5OV19
 -->
