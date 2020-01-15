@@ -62,6 +62,9 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
 
 These are the minimal steps required to integrate the AdTrace SDK into your Android project. We are going to assume that you use Android Studio for your Android development and target an Android API level 9 (Gingerbread) or later.
 <div id="sdk-add" dir="rtl" align='right'>
+ادتریس برای ارتباط با اپلیکیشن شما نیاز به موارد ضروری زیر دارد.
+
+در
 </div>
 
 ### <div id="sdk-add" dir="rtl" align='right'>اضافه کردن SDK</div>
@@ -1021,8 +1024,8 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNzk2NzIyNjUsLTE4NTU3NTc4NTYsMj
-Y4NTA3MTMyLC0xNTk1MTMxNjc5LDEzOTQ5ODAxMDcsLTU0MTI1
-ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5Mj
-M5OV19
+eyJoaXN0b3J5IjpbMjE3NDEzNTcsLTE4NTU3NTc4NTYsMjY4NT
+A3MTMyLC0xNTk1MTMxNjc5LDEzOTQ5ODAxMDcsLTU0MTI1ODQx
+NiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5MjM5OV
+19
 -->
