@@ -64,7 +64,7 @@ These are the minimal steps required to integrate the AdTrace SDK into your Andr
 
 ### <div id="sdk-add" dir="rtl" align='right'>اضافه کردن SDK</div>
 
-<div id="sdk-add" dir="rtl" align='right'>If you are using Maven, add the following to your `build.gradle` file:</div>
+<div id="sdk-add" dir="rtl" align='right'>If you are using Maven, add the following to your <code>build.gradle</code> file:</div>
 
 ```
 implementation 'io.adtrace:android-sdk:1.0.1'
@@ -1015,7 +1015,8 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4NTU3NTc4NTYsMjY4NTA3MTMyLC0xNT
-k1MTMxNjc5LDEzOTQ5ODAxMDcsLTU0MTI1ODQxNiwtMTQ4NjM0
-OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5MjM5OV19
+eyJoaXN0b3J5IjpbLTgxNzkxNzU3OSwtMTg1NTc1Nzg1NiwyNj
+g1MDcxMzIsLTE1OTUxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4
+NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMz
+k5XX0=
 -->
