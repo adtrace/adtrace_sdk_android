@@ -81,14 +81,10 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 
 <div dir="rtl" align='right'>
 از زمان 1 آگوست 2014، برنامه های داخل گوگل پلی بایستی از 
-<a href="" >
-شناسه تبلیغاتی گوگل 
-</a>
+<a href="" >شناسه تبلیغاتی گوگل </a>
 برای شناسایی دستگاه ها استفاده کنند.
 برای اینکه به ادتریس اجازه دهید از شناسه تبلیغاتی استفاده کند، شما بایستی 
-<a href="" >
-سرویس های گوگل پلی
-</a>
+<a href="" >سرویس های گوگل پلی</a>
  را پیاده سازی کنید. اگر قبلا انجام نداده اید، مراحل زیر را دنبال کنید:
 </div>
 
@@ -1042,8 +1038,8 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4NDgyNjgxOTYsLTE4NTU3NTc4NTYsMj
-Y4NTA3MTMyLC0xNTk1MTMxNjc5LDEzOTQ5ODAxMDcsLTU0MTI1
-ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5Mj
-M5OV19
+eyJoaXN0b3J5IjpbLTE2NDc3Mzk0MzYsLTE4NDgyNjgxOTYsLT
+E4NTU3NTc4NTYsMjY4NTA3MTMyLC0xNTk1MTMxNjc5LDEzOTQ5
+ODAxMDcsLTU0MTI1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMj
+YzMSwtMTM1MDI5MjM5OV19
 -->
