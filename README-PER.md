@@ -60,11 +60,8 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
 
 ## <div id="basic-integration" dir="rtl" align='right'>تنظیمات اولیه</div>
 
-These are the minimal steps required to integrate the AdTrace SDK into your Android project. We are going to assume that you use Android Studio for your Android development and target an Android API level 9 (Gingerbread) or later.
 <div id="sdk-add" dir="rtl" align='right'>
-ادتریس برای ارتباط با اپلیکیشن شما نیاز به موارد ضروری زیر دارد.
-
-در
+ادتریس برای ارتباط با اپلیکیشن شما نیاز به موارد ضروری زیر دارد. درنظر داشته باشید که حداقل API مورد نیاز 9 میباشد.
 </div>
 
 ### <div id="sdk-add" dir="rtl" align='right'>اضافه کردن SDK</div>
@@ -82,6 +79,9 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 
 ### <div id="sdk-gps" dir="rtl" align='right'>اضافه کردن Google Play Services</div>
 
+<div id="sdk-add" dir="rtl" align='right'>
+از زمان 1 آگوست 2014
+</div>
 Since the 1st of August of 2014, apps in the Google Play Store must use the [Google Advertising ID][google_ad_id] to uniquely identify devices. To allow the AdTrace SDK to use the Google Advertising ID, you must integrate the [Google Play Services][google_play_services]. If you haven't done this yet, follow these steps:
 
 - Open the `build.gradle` file of your app and find the `dependencies` block. Add the following line:
@@ -1024,8 +1024,8 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjE3NDEzNTcsLTE4NTU3NTc4NTYsMjY4NT
-A3MTMyLC0xNTk1MTMxNjc5LDEzOTQ5ODAxMDcsLTU0MTI1ODQx
-NiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5MjM5OV
-19
+eyJoaXN0b3J5IjpbLTY5MjQ0NTc2MSwtMTg1NTc1Nzg1NiwyNj
+g1MDcxMzIsLTE1OTUxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4
+NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMz
+k5XX0=
 -->
