@@ -85,9 +85,12 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 شناسه تبلیغاتی گوگل 
 </a>
 برای شناسایی دستگاه ها استفاده کنند.
-برای اینکه به ادتریس اجازه دهید از شناسه تبلیغاتی استفاده کند، شما بایستی Google Play Services را پیاده سازی کنید. اگر قبلا انجام نداده اید، مراحل زیر را دنبال کنید:
+برای اینکه به ادتریس اجازه دهید از شناسه تبلیغاتی استفاده کند، شما بایستی 
+<a href="" >
+سرویس های گوگل پلی
+</a>
+ را پیاده سازی کنید. اگر قبلا انجام نداده اید، مراحل زیر را دنبال کنید:
 </div>
-Since the 1st of August of 2014, apps in the Google Play Store must use the [Google Advertising ID][google_ad_id] to uniquely identify devices. To allow the AdTrace SDK to use the Google Advertising ID, you must integrate the [Google Play Services][google_play_services]. If you haven't done this yet, follow these steps:
 
 - Open the `build.gradle` file of your app and find the `dependencies` block. Add the following line:
 
@@ -1029,8 +1032,8 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUyNDQyMzc2NCwtMTg1NTc1Nzg1NiwyNj
-g1MDcxMzIsLTE1OTUxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4
-NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMz
-k5XX0=
+eyJoaXN0b3J5IjpbMjQ4MzQyMTM0LC0xODU1NzU3ODU2LDI2OD
+UwNzEzMiwtMTU5NTEzMTY3OSwxMzk0OTgwMTA3LC01NDEyNTg0
+MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAyOTIzOT
+ldfQ==
 -->
