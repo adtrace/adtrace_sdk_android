@@ -66,7 +66,7 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
 
 ### <div id="sdk-add" dir="rtl" align='right'>اضافه کردن SDK</div>
 
-<div id="sdk-add" dir="rtl" align='right'>
+<div dir="rtl" align='right'>
 موارد زیر را به 
 <code>build.gradle</code>
 خود اضافه کنید.
@@ -79,7 +79,7 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 
 ### <div id="sdk-gps" dir="rtl" align='right'>اضافه کردن Google Play Services</div>
 
-<div id="sdk-add" dir="rtl" align='right'>
+<div dir="rtl" align='right'>
 از زمان 1 آگوست 2014، برنامه های داخل گوگل پلی بایستی از 
 <a href="" >
 شناسه تبلیغاتی گوگل 
@@ -90,6 +90,10 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 سرویس های گوگل پلی
 </a>
  را پیاده سازی کنید. اگر قبلا انجام نداده اید، مراحل زیر را دنبال کنید:
+</div>
+
+<div dir="rtl" align='right'>
+
 </div>
 
 - Open the `build.gradle` file of your app and find the `dependencies` block. Add the following line:
@@ -1032,8 +1036,8 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjQ4MzQyMTM0LC0xODU1NzU3ODU2LDI2OD
-UwNzEzMiwtMTU5NTEzMTY3OSwxMzk0OTgwMTA3LC01NDEyNTg0
-MTYsLTE0ODYzNDk2MjUsLTEzMzIwMjI2MzEsLTEzNTAyOTIzOT
-ldfQ==
+eyJoaXN0b3J5IjpbMTI4MTExNzgwNSwtMTg1NTc1Nzg1NiwyNj
+g1MDcxMzIsLTE1OTUxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4
+NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMz
+k5XX0=
 -->
