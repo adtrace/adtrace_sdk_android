@@ -96,10 +96,8 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 <ul>
 <li>
 در فایل 
-<code>
-build.gradle
-</code> 
-
+<code>build.gradle</code>
+س
 </li>
 </ul>
 </div>
@@ -1044,8 +1042,8 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgzMDAyNzI4MSwtMTg1NTc1Nzg1NiwyNj
-g1MDcxMzIsLTE1OTUxMzE2NzksMTM5NDk4MDEwNywtNTQxMjU4
-NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNjMxLC0xMzUwMjkyMz
-k5XX0=
+eyJoaXN0b3J5IjpbLTE4NDgyNjgxOTYsLTE4NTU3NTc4NTYsMj
+Y4NTA3MTMyLC0xNTk1MTMxNjc5LDEzOTQ5ODAxMDcsLTU0MTI1
+ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMjYzMSwtMTM1MDI5Mj
+M5OV19
 -->
