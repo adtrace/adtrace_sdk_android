@@ -96,7 +96,7 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 و در قسمت 
 <code>dependencies</code>
 خط زیر را اضافه کنید:
-<pre dir="ltr" align= 'right'><code>    implementation 'com.google.android.gms:play-services-analytics:16.0.4'</code></pre>
+<pre><code dir="ltr" align= 'left'>    implementation 'com.google.android.gms:play-services-analytics:16.0.4'</code></pre>
 </li>
 </ul>
 </div>
@@ -1041,8 +1041,8 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTY5MDMxMDIxOCwtMTg0ODI2ODE5NiwtMT
-g1NTc1Nzg1NiwyNjg1MDcxMzIsLTE1OTUxMzE2NzksMTM5NDk4
-MDEwNywtNTQxMjU4NDE2LC0xNDg2MzQ5NjI1LC0xMzMyMDIyNj
-MxLC0xMzUwMjkyMzk5XX0=
+eyJoaXN0b3J5IjpbLTE0NjA1ODU0MDksLTE4NDgyNjgxOTYsLT
+E4NTU3NTc4NTYsMjY4NTA3MTMyLC0xNTk1MTMxNjc5LDEzOTQ5
+ODAxMDcsLTU0MTI1ODQxNiwtMTQ4NjM0OTYyNSwtMTMzMjAyMj
+YzMSwtMTM1MDI5MjM5OV19
 -->
