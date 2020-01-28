@@ -66,7 +66,7 @@ These are the minimal steps required to integrate the AdTrace SDK into your Andr
 If you are using Maven, add the following to your `build.gradle` file:
 
 ```
-implementation 'io.adtrace:android-sdk:1.0.1'
+implementation 'io.adtrace:android-sdk:1.0.2'
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 

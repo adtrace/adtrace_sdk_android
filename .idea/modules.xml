@@ -5,9 +5,11 @@
       <module fileurl="file://$PROJECT_DIR$/Projects-adtrace_sdk_android.iml" filepath="$PROJECT_DIR$/Projects-adtrace_sdk_android.iml" />
       <module fileurl="file://$PROJECT_DIR$/adtrace_sdk_android.iml" filepath="$PROJECT_DIR$/adtrace_sdk_android.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-sdk/adtrace_sdk_android-android-sdk.iml" filepath="$PROJECT_DIR$/android-sdk/adtrace_sdk_android-android-sdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/adtrace_sdk_android-app.iml" filepath="$PROJECT_DIR$/app/adtrace_sdk_android-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-sdk/android-sdk.iml" filepath="$PROJECT_DIR$/android-sdk/android-sdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example-app-java/app.iml" filepath="$PROJECT_DIR$/example-app-java/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example-app-java/example-app-java.iml" filepath="$PROJECT_DIR$/example-app-java/example-app-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example-app-webbridge/example-app-webbridge.iml" filepath="$PROJECT_DIR$/example-app-webbridge/example-app-webbridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sdk-plugin-webbridge/sdk-plugin-webbridge.iml" filepath="$PROJECT_DIR$/sdk-plugin-webbridge/sdk-plugin-webbridge.iml" />
     </modules>
   </component>
 </project>
