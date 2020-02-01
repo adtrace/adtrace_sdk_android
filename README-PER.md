@@ -72,8 +72,8 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
 خود اضافه کنید.
 </div>
 
-```
-implementation 'io.adtrace:android-sdk:1.0.1'
+```gradle
+implementation 'io.adtrace:android-sdk:1.0.2'
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 
@@ -103,7 +103,7 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 
 - Open the `build.gradle` file of your app and find the `dependencies` block. Add the following line:
 
-    ```
+    ```gradle
     implementation 'com.google.android.gms:play-services-analytics:16.0.4'
     ```
 
@@ -165,7 +165,7 @@ In order to correctly attribute an install of your app to its source, AdTrace ne
 
 In order to support this in your app, please make sure that you have followed the [Add the SDK to your project](#sdk-add) chapter properly and that you have following line added to your `build.gradle` file:
 
-```
+```gradle
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 

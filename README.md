@@ -16,6 +16,8 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
       * [Google Play Store intent](#gps-intent)
    * [Integrate the SDK into your app](#sdk-integrate)
    * [Basic setup](#basic-setup)
+      * [Native App SDK](#basic-setup-native)
+      * [Web Views SDK](#basic-setup-web)
    * [Session tracking](#session-tracking)
       * [API level 14 and higher](#session-tracking-api14)
       * [API level between 9 and 13](#session-tracking-api9)
@@ -66,10 +68,17 @@ These are the minimal steps required to integrate the AdTrace SDK into your Andr
 
 If you are using Maven, add the following to your `build.gradle` file:
 
-```
-implementation 'io.adtrace:android-sdk:1.0.1'
+```gradle
+implementation 'io.adtrace:android-sdk:1.0.2'
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
+
+If you would prefer to use the AdTrace SDK inside web views in your app, please include this additional dependency as well:
+
+```gradle
+implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.2'
+```
+
 
 ### <a id="sdk-gps"></a>Add Google Play Services
 
@@ -77,7 +86,7 @@ Since the 1st of August of 2014, apps in the Google Play Store must use the [Goo
 
 - Open the `build.gradle` file of your app and find the `dependencies` block. Add the following line:
 
-    ```
+    ```gradle
     implementation 'com.google.android.gms:play-services-analytics:16.0.4'
     ```
 
@@ -138,7 +147,7 @@ In order to correctly attribute an install of your app to its source, AdTrace ne
 
 In order to support this in your app, please make sure that you have followed the [Add the SDK to your project](#sdk-add) chapter properly and that you have following line added to your `build.gradle` file:
 
-```
+```gradle
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 
@@ -168,6 +177,11 @@ We use this broadcast receiver to retrieve the install referrer and pass it to o
 If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, follow [these instructions][referrer] to add the AdTrace broadcast receiver.
 
 ### <a id="basic-setup"></a>Basic setup
+
+If you are integrating the SDK into a native app, follow the directions for a [Native App SDK](#basic-setup-native).
+If you are integrating the SDK for usage inside web views, please follow the directions for a [Web Views SDK](#basic-setup-web) below.
+
+#### <a id="basic-setup-native"></a>Native App SDK
 
 We recommend using a global android [Application][android_application] class to initialize the SDK. If you don't have one in your app already, follow these steps:
 
@@ -221,6 +235,75 @@ To increase the accuracy and security in fraud detection, you can enable or disa
 config.enableSendInstalledApps(true);
 ```
 **Note**: This option is disabled by default.
+
+#### <a id="basic-setup-web"></a>Web Views SDK
+
+After you have obtained the reference to your `WebView` object:
+
+- Call `webView.getSettings().setJavaScriptEnabled(true)`, to enable Javascript in the web view
+- Start the default instance of `AdTraceBridgeInstance` by calling `AdTraceBridge.registerAndGetInstance(getApplication(), webview)`
+- This will also register the AdTrace bridge as a Javascript Interface to the web view
+
+After these steps, your activity should look like this:
+
+```java
+public class MainActivity extends Activity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        WebView webView = (WebView) findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebViewClient(new WebViewClient());
+
+        AdTraceBridge.registerAndGetInstance(getApplication(), webview);
+        try {
+            webView.loadUrl("file:///android_asset/AdTraceExample-WebView.html");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+After you complete this step, you will have successfully added the AdTrace bridge to your app. The Javascript bridge is now enabled to communicate between AdTrace's native Android SDK and your page, which will be loaded in the web view.
+
+In your HTML file, import the AdTrace Javascript files which are located in the root of the [assets folder][android-webbridge-asset]. If your HTML file is there as well, import them like this:
+
+```html
+<script type="text/javascript" src="adtrace.js"></script>
+<script type="text/javascript" src="adtrace_event.js"></script>
+<script type="text/javascript" src="adtrace_config.js"></script>
+```
+
+Once you add your references to the Javascript files, use them in your HTML file to initialise the AdTrace SDK:
+
+```js
+let yourAppToken = '{YourAppToken}';
+let environment = AdTraceConfig.EnvironmentSandbox;
+let adtraceConfig = new AdTraceConfig(yourAppToken, environment);
+
+AdTrace.onCreate(adtraceConfig);
+```
+
+Replace `{YourAppToken}` with your app token. You can find this in your [dashboard].
+
+Next, set your `environment` to the corresponding value, depending on whether you are still testing or are in production mode:
+
+```js
+let environment = AdTraceConfig.EnvironmentSandbox;
+let environment = AdTraceConfig.EnvironmentProduction;
+```
+
+**Important:** This value should be set to `AdTraceConfig.ENVIRONMENT_SANDBOX` if and only if you or someone else is testing your app. Make sure to set the environment to `AdTraceConfig.ENVIRONMENT_PRODUCTION` before you publish the app. Set it back to `AdTraceConfig.ENVIRONMENT_SANDBOX` when you start developing and testing it again.
+
+We use this environment to distinguish between real traffic and test traffic from test devices. It is imperative that you keep this value meaningful at all times.
+
+To increase the accuracy and security in fraud detection, you can enable or disable the sending of installed applications on user's device as follows:
+
+
 ### <a id="session-tracking"></a>Session tracking
 
 **Note**: This step is **really important** and please **make sure that you implement it properly in your app**. By implementing it, you will enable proper session tracking by the AdTrace SDK in your app.
@@ -1007,6 +1090,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [activity_resume_pause]:          doc/activity_resume_pause.md
 [reattribution-with-deeplinks]:   https://docs.adtrace.io/en/deeplinking/#manually-appending-attribution-data-to-a-deep-link
 [android-purchase-verification]:  http://adtrace.io
+[android-webbridge-asset]:        https://github.com/adtrace/adtrace_sdk_android/tree/master/android-sdk-plugin-webbridge/src/main/assets
 <!--stackedit_data:
 eyJoaXN0b3J5IjpbMTcyNDcwNTM2OSwxNjc4Mzg3MTUwXX0=
 -->
