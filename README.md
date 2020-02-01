@@ -15,7 +15,7 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
    * [Integrate the SDK into your app](#sdk-integrate)
    * [Basic setup](#basic-setup)
       * [Native App SDK](#basic-setup-native)
-      * [Web Views SDK](#basic-setup-web)
+      * [Web View SDK](#basic-setup-web)
    * [Session tracking](#session-tracking)
       * [API level 14 and higher](#session-tracking-api14)
       * [API level between 9 and 13](#session-tracking-api9)
@@ -177,7 +177,7 @@ If you are already using a different broadcast receiver for the `INSTALL_REFERRE
 ### <a id="basic-setup"></a>Basic setup
 
 If you are integrating the SDK into a native app, follow the directions for a [Native App SDK](#basic-setup-native).
-If you are integrating the SDK for usage inside web views, please follow the directions for a [Web Views SDK](#basic-setup-web) below.
+If you are integrating the SDK for usage inside web views, please follow the directions for a [Web View SDK](#basic-setup-web) below.
 
 #### <a id="basic-setup-native"></a>Native App SDK
 
@@ -234,7 +234,7 @@ config.enableSendInstalledApps(true);
 ```
 **Note**: This option is disabled by default.
 
-#### <a id="basic-setup-web"></a>Web Views SDK
+#### <a id="basic-setup-web"></a>Web View SDK
 
 After you have obtained the reference to your `WebView` object:
 
