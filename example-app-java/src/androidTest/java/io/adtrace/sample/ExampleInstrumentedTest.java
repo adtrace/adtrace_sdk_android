@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("io.adtrace.sdk", appContext.getPackageName());
+        assertEquals("io.adtrace.example", appContext.getPackageName());
     }
 }

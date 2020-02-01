@@ -7,13 +7,14 @@ subprojects {
 ext {
     // Android config.
     coreMinSdkVersion = 9
-    coreCompileSdkVersion = 29
-    coreTargetSdkVersion = 29
-    coreVersionName = '1.0.2'  //append -SNAPSHOT for snapshot version
+    coreCompileSdkVersion = 28
+    coreTargetSdkVersion = 28
+    coreVersionName = '1.0.2'
     defaultVersionCode = 102
 
-    // POM.
-    adjustGroupId = 'com.adjust.sdk'
+    // Other config
+    adtraceGroupId = 'io.adtrace'
+    bintrayRepository = 'adtrace-test'
 }
 
 buildscript {

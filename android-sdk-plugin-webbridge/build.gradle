@@ -15,11 +15,11 @@ buildscript {
 
 ext {
     bintrayRepo = rootProject.ext.bintrayRepository
-    bintrayName = 'android-sdk'
+    bintrayName = 'android-sdk-plugin-webbridge'
 
     publishedGroupId = rootProject.ext.adtraceGroupId
-    libraryName = 'android-sdk'
-    artifact = 'android-sdk'
+    libraryName = 'android-sdk-plugin-webbridge'
+    artifact = 'android-sdk-plugin-webbridge'
 
     libraryDescription = 'AdTrace android SDK'
 
@@ -37,10 +37,8 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
-
 android {
     compileSdkVersion rootProject.ext.coreCompileSdkVersion
-
 
     defaultConfig {
         minSdkVersion rootProject.ext.coreMinSdkVersion
@@ -64,10 +62,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
+    compileOnly project(':android-sdk')
 }
-
 
 group = publishedGroupId
 version = libraryVersion
@@ -149,12 +145,3 @@ bintray {
         }
     }
 }
-
-//task createJar(type: Jar, dependsOn: 'assembleRelease') {
-//    from ('/home/morteza/Android/adtrace/github/adtrace_sdk_android/android-sdk/build/intermediates/intermediate-jars/release/')
-//    into ('libs/')
-//    include ('classes.jar')
-//    rename ('classes.jar', 'newjar.jar')
-//}
-//
-//createJar.dependsOn(build)
