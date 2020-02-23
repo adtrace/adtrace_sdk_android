@@ -1,7 +1,3 @@
-
-
-
-
 ## Summary
 
 This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [adtrace.io].
@@ -77,6 +73,7 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
 
 ### Testing and troubleshooting
 
+   * [How can I reset Google Play store advertising identifier?](#ts-reset-gps-ad-id)
    * [I'm seeing the "Session failed (Ignoring too frequent session. ...)" error](#ts-session-failed)
    * [Is my broadcast receiver capturing the install referrer?](#ts-broadcast-receiver)
    * [Can I trigger an event at application launch?](#ts-event-at-launch)
@@ -1810,7 +1807,12 @@ Upon receiving this information, AdTrace will erase the user's data and the AdTr
 
 Please note that even when testing, this decision is permanent. It **is not** reversible.
 
-## <a id="troubleshooting"></a>Troubleshooting
+## Testing and troubleshooting
+
+### <a id="ts-reset-gps-ad-id"></a>How can I reset Google Play store advertising identifier?
+
+Please follow [this instruction][reset-google-ad-id] to reset Google Play Store advertising identifier. 
+
 
 ### <a id="ts-session-failed"></a>I'm seeing the "Session failed (Ignoring too frequent session. ...)" error.
 
@@ -1918,6 +1920,7 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [maven]:                          http://maven.org
 [releases]:                       https://github.com/adtrace/adtrace_sdk_android/releases
 [referrer]:                       doc/english/multiple-receivers.md
+[reset-google-ad-id]:             doc/english/reset-google-ad-id.md
 [google_ad_id]:                   https://support.google.com/googleplay/android-developer/answer/6048248?hl=en
 [new-referrer-api]:               https://developer.android.com/google/play/installreferrer/library.html
 [application_name]:               http://developer.android.com/guide/topics/manifest/application-element.html#nm
