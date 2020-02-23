@@ -30,7 +30,7 @@ After opening app, press **Advertising ID** button in `Login` or `Main` page:
 <tr>
 <td>
 
-![Reset Google Ad Id main page](https://github.com/adtrace/adtrace_sdk_android/blob/master/doc/assets/reset-ad-id-app-1-main-tutorial.jpg)
+![Reset Google Ad Id main page](https://github.com/adtrace/adtrace_sdk_android/blob/master/doc/assets/reset-ad-id-app-1-main-tutorial.jpeg)
 
 </td>
 </tr>
@@ -57,8 +57,3 @@ Then press **Reset advertising id**:
 
 [adtrace-app-google-play-link]: https://play.google.com/store/apps/details?id=io.fearefull.adtrace_app
 [adtrace-app-cafe-bazaar-link]: https://cafebazaar.ir/app/io.fearefull.adtrace_app
-[reset-ad-id-3-tutorial]:   doc/assets/reset-ad-id-3-tutorial.jpg
-[reset-ad-id-app-1-login-tutorial]:   doc/assets/reset-ad-id-app-1-login-tutorial.jpg
-[reset-ad-id-app-1-main-tutorial]:   doc/assets/reset-ad-id-app-1-main-tutorial.jpg
-[reset-ad-id-app-2-tutorial]:   doc/assets/reset-ad-id-app-2-tutorial.jpg
-[reset-ad-id-manual-1-tutorial]:   doc/assets/reset-ad-id-manual-1-tutorial.jpg
