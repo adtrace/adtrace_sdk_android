@@ -1,6 +1,7 @@
 
 
 
+
 ## Summary
 
 This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [adtrace.io].
@@ -49,6 +50,7 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
       * [Event callback parameters](#cp-ep-callback)
       * [Event partner parameters](#cp-ep-partner)
       * [Event callback identifier](#cp-ep-id)
+      * [Event value](#cp-ep-value)
    * [Session parameters](#cp-sp)
       * [Session callback parameters](#cp-sp-callback)
       * [Session partner parameters](#cp-sp-partner)
@@ -878,6 +880,43 @@ AdTrace.trackEvent(adtraceEvent);
 ```js
 let adtraceEvent = new AdTraceEvent('abc123');
 adtraceEvent.setCallbackId('Your-Custom-Id');
+AdTrace.trackEvent(adtraceEvent);
+```
+</td>
+</tr>
+</table>
+
+### <a id="cp-ep-value"></a>Event value
+
+You can also add custom string value to event. You can set this value by calling the `setEventValue` method on your `AdTraceEvent` instance:
+
+<table>
+<tr>
+<td>
+<b>Native App SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```java
+AdTraceEvent adtraceEvent = new AdTraceEvent("abc123");
+adtraceEvent.setEventValue("Your-Value");
+AdTrace.trackEvent(adtraceEvent);
+```
+</td>
+</tr>
+<tr>
+<td>
+<b>Web View SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+let adtraceEvent = new AdTraceEvent('abc123');
+adtraceEvent.setEventValue('Your-Value');
 AdTrace.trackEvent(adtraceEvent);
 ```
 </td>
