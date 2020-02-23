@@ -49,11 +49,11 @@ Enter **Google** settings.
 
 Press **Ads** button:
 
-![Reset Google Ad Id](https://github.com/adtrace/adtrace_sdk_android/blob/master/doc/assets/reset-ad-id-manual-1-tutorial)
+![Reset Google Ad Id](https://github.com/adtrace/adtrace_sdk_android/blob/master/doc/assets/reset-ad-id-manual-1-tutorial.jpg)
 
 Then press **Reset advertising id**:
 
-![Reset Google Ad Id](https://github.com/adtrace/adtrace_sdk_android/blob/master/doc/assets/reset-ad-id-3-tutorial)
+![Reset Google Ad Id](https://github.com/adtrace/adtrace_sdk_android/blob/master/doc/assets/reset-ad-id-3-tutorial.jpg)
 
 [adtrace-app-google-play-link]: https://play.google.com/store/apps/details?id=io.fearefull.adtrace_app
 [adtrace-app-cafe-bazaar-link]: https://cafebazaar.ir/app/io.fearefull.adtrace_app
