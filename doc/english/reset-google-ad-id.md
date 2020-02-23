@@ -38,7 +38,7 @@ After opening app, press **Advertising ID** button in `Login` or `Main` page:
 
 Then press **Reset advertising id**:
 
-![Reset Google Ad Id](https://github.com/adtrace/adtrace_sdk_android/blob/master/doc/assets/reset-ad-id-3-tutorial)
+![Reset Google Ad Id](https://github.com/adtrace/adtrace_sdk_android/blob/master/doc/assets/reset-ad-id-3-tutorial.jpg)
 
 
 ## <a id="solution-2"></a>Manual
