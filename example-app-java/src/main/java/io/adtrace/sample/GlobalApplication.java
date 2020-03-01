@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import io.adtrace.sdk.AdTrace;
 import io.adtrace.sdk.AdTraceConfig;
+import io.adtrace.sdk.LogLevel;
 
 public class GlobalApplication extends Application {
 
@@ -14,9 +15,16 @@ public class GlobalApplication extends Application {
         super.onCreate();
 
         String appToken = "psfzgt48knum";
-        String environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
+        String environment;
+
+        if (BuildConfig.DEBUG) {
+            environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
+        }
+        else {
+            environment = AdTraceConfig.ENVIRONMENT_PRODUCTION;
+        }
         AdTraceConfig adTraceConfig = new AdTraceConfig(this, appToken, environment);
-        adTraceConfig.setLogLevel(io.adtrace.sdk.LogLevel.VERBOSE);
+        adTraceConfig.setLogLevel(LogLevel.VERBOSE);
         adTraceConfig.enableSendInstalledApps(true);
         AdTrace.onCreate(adTraceConfig);
 
