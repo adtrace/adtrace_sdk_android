@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import io.adtrace.sdk.AdTrace;
 import io.adtrace.sdk.AdTraceConfig;
-import io.adtrace.sdk.AdTraceEvent;
-import io.adtrace.sdk.LogLevel;
 
 public class GlobalApplication extends Application {
 
@@ -15,18 +13,14 @@ public class GlobalApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        AdTraceEvent afterEvent = new AdTraceEvent("re4ty1");
-        String appToken = "6nr32h36sq7y";
+        String appToken = "psfzgt48knum";
         String environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
-        AdTraceConfig config = new AdTraceConfig(this, appToken, environment);
-        config.setLogLevel(LogLevel.VERBOSE);
-
-        AdTrace.onCreate(config);
-        AdTrace.trackEvent(afterEvent);
+        AdTraceConfig adTraceConfig = new AdTraceConfig(this, appToken, environment);
+        adTraceConfig.setLogLevel(io.adtrace.sdk.LogLevel.VERBOSE);
+        adTraceConfig.enableSendInstalledApps(true);
+        AdTrace.onCreate(adTraceConfig);
 
         registerActivityLifecycleCallbacks(new AdTraceLifecycleCallbacks());
-
-
     }
 
     private static final class AdTraceLifecycleCallbacks implements ActivityLifecycleCallbacks {
