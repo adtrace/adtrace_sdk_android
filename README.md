@@ -1154,7 +1154,7 @@ adtraceConfig.setDelayStart(5.5);
 <tr>
 <td>
 
-```java
+```js
 adtraceConfig.setDelayStart(5.5);
 ```
 </td>
