@@ -1,90 +1,141 @@
-English | [فارسی][per-readme]
+<div dir="rtl" align='right'>فارسی | <a href="../../README.md">English</a></div>
 
-## Summary
+## <div dir="rtl" align='right'>خلاصه</div>
 
-This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [adtrace.io].
+<div dir="rtl" align='right'>
+SDK اندروید ادتریس. شما برای اطلاعات بیشتر میتوانید به <a href="adtrace.io">adtrace.io</a>  مراجعه کنید.
+</div>
 
-## Table of contents
+## <div dir="rtl" align='right'>فهرست محتوا</div>
 
-### Quick start
+### <div dir="rtl" align='right'>پیاده سازی فوری</div>
 
-   * [Getting started](#qs-getting-started)
-      * [Add the SDK to your project](#qs-add-sdk)
-      * [Add Google Play Services](#qs-add-gps)
-      * [Add permissions](#qs-add-permissions)
-        * [Proguard settings](#qs-proguard-settings)
-        * [Install referrer](#qs-ir)
-           * [Google Play Referrer API](#qs-ir-gpr-api)
-           * [Google Play Store intent](#qs-ir-gps-intent)
-   * [Integrate the SDK into your app](#qs-integ-sdk)
-      * [Basic setup](#qs-integ-basic-setup)
-         * [Native App SDK](#qs-integ-basic-setup-native)
-         * [Web View SDK](#qs-integ-basic-setup-web)
-      * [Session tracking](#qs-integ-session-tracking)
-         * [API level 14 and higher](#qs-integ-session-tracking-api14)
-         * [API level between 9 and 13](#qs-integ-session-tracking-api9)
-      * [SDK signature](#qs-sdk-signature)
-      * [AdTrace logging](#qs-adtrace-logging)
-      * [Build your app](#qs-build-the-app)
+<div dir="rtl" align='right'>
+<ul>
+  <li><a href="#qs-getting-started">شروع پیاده سازی</a>
+  <ul>
+    <li><a href="#qs-add-sdk">افزودن SDK به پروژه</a></li>
+    <li><a href="#qs-add-gps">افزودن سرویس های گوگل پلی</a></li>
+    <li><a href="#qs-add-permissions">افزودن مجوزها</a>
+    <ul>
+      <li><a href="#qs-proguard-settings">تنظیمات Proguard</a></li>
+      <li><a href="#qs-ir">تنظیمات Install referrer</a>
+          <ul>
+            <li><a href="#qs-ir-gpr-api">Google Play Referrer API</a></li>
+            <li><a href="#qs-ir-gps-intent">Google Play Store intent</a></li>
+        </ul>
+      </li>
+    </ul>
+    </li>
+  </ul>
+  <li><a href="#qs-integ-sdk">پیاده سازی SDK داخل برنامه</a>
+    <ul>
+      <li><a href="#qs-integ-basic-setup">راه اندازی اولیه</a></li>
+      <ul>
+        <li><a href="#qs-integ-basic-setup-native">Native App SDK</a></li>
+        <li><a href="#qs-integ-basic-setup-web">Web View SDK</a></li>
+      </ul>
+      <li><a href="#qs-integ-session-tracking">ردیابی نشست </a></li>
+      <ul>
+        <li><a href="#qs-integ-session-tracking-api14"> API بالاتر از 14</a></li>
+        <li><a href="#qs-integ-session-tracking-api9">API بین 9 و 13</a></li>
+      </ul>
+      <li><a href="#qs-sdk-signature">امضا SDK</a></li>                 
+      <li><a href="#qs-adtrace-logging">لاگ ادتریس</a></li>
+      <li><a href="#qs-build-the-app">ساخت برنامه</a></li>
+    </ul>
+    </li>
+  </ul>
+  </li>
+</ul>
+</div>
 
-### Deep linking
+### <div dir="rtl" align='right'>لینک دهی عمیق</div>
 
-   * [Deep linking overview](#dl-overview)
-   * [Standard deep linking scenario](#dl-standard)
-   * [Deferred deep linking scenario](#dl-deferred)
-   * [Reattribution via deep links](#dl-reattribution)
+<div dir="rtl" align='right'>
+<ul>
+  <li><a href="#dl-overview">نمای کلی لینک دهی عمیق</a></li>                  
+  <li><a href="#dl-standard">سناریو لینک دهی عمیق استاندار</a></li>
+  <li><a href="#dl-deferred">سناریو لینک دهی عمیق به تعویق افتاده</a></li>
+  <li><a href="#dl-reattribution">اتریبیوت مجدد از طریق لینک عمیق</a></li>
+</ul>
+</div>
 
-### Event tracking
+### <div dir="rtl" align='right'>ردیابی رویداد</div>
 
-   * [Track event](#et-track-event)
-   * [Track revenue](#et-track-revenue)
-   * [Revenue deduplication](#et-revenue-deduplication)
+<div dir="rtl" align='right'>
+<ul>
+  <li><a href="#et-track-event">ردیابی رویداد معمولی</a></li>                 
+  <li><a href="#et-track-revenue">ردیابی رویداد درآمدی</a></li>
+  <li><a href="#et-revenue-deduplication">جلوگیری از تکرار رویداد درآمدی</a></li>
+</ul>
+</div>
 
-### Custom parameters
+### <div dir="rtl" align='right'>پارامترهای سفارشی</div>
 
-   * [Custom parameters overview](#cp-overview)
-   * [Event parameters](#cp-ep)
-      * [Event callback parameters](#cp-ep-callback)
-      * [Event partner parameters](#cp-ep-partner)
-      * [Event callback identifier](#cp-ep-id)
-      * [Event value](#cp-ep-value)
-   * [Session parameters](#cp-sp)
-      * [Session callback parameters](#cp-sp-callback)
-      * [Session partner parameters](#cp-sp-partner)
-      * [Delay start](#cp-sp-delay-start)
+<div dir="rtl" align='right'>
+<ul>
+  <li><a href="#cp-overview">نمای کلی پارامترهای سفارشی</a></li>
+  <li><a href="#cp-ep">پارامترهای رویداد</a>
+    <ul>
+      <li><a href="#cp-ep-callback">پارامترهای callback رویداد</a></li>                 
+      <li><a href="#cp-ep-partner">پارامترهای partner رویداد</a></li>
+      <li><a href="#cp-ep-id">شناسه callback رویداد</a></li>
+      <li><a href="#cp-ep-value">مقدار رویداد</a></li>
+    </ul>
+  </li>                 
+  <li><a href="#cp-sp" >پارامترهای نشست</a>
+    <ul>
+      <li><a href="#cp-sp-callback">پارامترهای callback نشست</a></li>                 
+      <li><a href="#cp-sp-partner">پارامترهای partner نشست</a></li>
+      <li><a href="#cp-sp-delay-start">شروع با تاخیر</a></li>
+    </ul>
+  </li>
+</ul>
+</div>
 
-### Additional features
+### <div dir="rtl" align='right'>ویژگی های بیشتر</div>
 
-   * [Push token (uninstall tracking)](#af-push-token)
-   * [Attribution callback](#af-attribution-callback)
-   * [Session and event callbacks](#af-session-event-callbacks)
-   * [User attribution](#af-user-attribution)
-   * [Send installed apps](#af-send-installed-apps)
-   * [Device IDs](#af-di)
-      * [Google Play Services advertising identifier](#af-di-gps-adid)
-      * [Amazon advertising identifier](#af-di-amz-adid)
-      * [AdTrace device identifier](#af-di-adid)
-   * [Pre-installed trackers](#af-pre-installed-trackers)
-   * [Offline mode](#af-offline-mode)
-   * [Disable tracking](#af-disable-tracking)
-   * [Event buffering](#af-event-buffering)
-   * [Background tracking](#af-background-tracking)
-   * [Location](#af-location)
-   * [GDPR right to be forgotten](#af-gdpr-forget-me)
+<div dir="rtl" align='right'>
+<ul>
+  <li><a href="#af-push-token">توکن push (ردیابی تعداد حذف برنامه)</a></li> 
+  <li><a href="#af-attribution-callback">callback اتریبیوشن</a></li>
+  <li><a href="#af-session-event-callbacks">callback های رویداد و نشست</a></li>
+  <li><a href="#af-user-attribution">اتریبیوشن کاربر</a></li>                 
+  <li><a href="#af-send-installed-apps">ارسال برنامه های نصب شده دستگاه</a></li>                  
+  <li><a href="#af-di">شناسه های دستگاه</a>
+    <ul>
+      <li><a href="#af-di-gps-adid">شناسه تبلیغات سرویس های گوگل پلی</a></li>                 
+      <li><a href="#af-di-amz-adid">شناسه تبلیغات آمازون</a></li>
+      <li><a href="#af-di-adid">شناسه دستگاه ادتریس</a></li>
+    </ul>
+  </li>                 
+  <li><a href="#af-pre-installed-trackers">ردیابی قبل از نصب</a></li>                 
+  <li><a href="#af-offline-mode">حالت آفلاین</a></li>                 
+  <li><a href="#af-disable-tracking">غیرفعال کردن ردیابی</a></li>                 
+  <li><a href="#af-event-buffering">بافرکردن رویدادها</a></li>                  
+  <li><a href="#af-background-tracking">ردیابی در پس زمینه</a></li>                 
+  <li><a href="#af-location">موقعیت مکانی</a></li>                  
+  <li><a href="#af-gdpr-forget-me">GPDR</a></li>                  
+</ul>
+</div>
 
-### Testing and troubleshooting
+### <div dir="rtl" align='right'>تست و عیب یابی</div>
 
-   * [How can I reset Google Play store advertising identifier?](#ts-reset-gps-ad-id)
-   * [I'm seeing the "Session failed (Ignoring too frequent session. ...)" error](#ts-session-failed)
-   * [Is my broadcast receiver capturing the install referrer?](#ts-broadcast-receiver)
-   * [Can I trigger an event at application launch?](#ts-event-at-launch)
+<div dir="rtl" align='right'>
+<ul>
+  <li><a href="#ts-reset-gps-ad-id">چگونه میتوانم شناسه تبلیغات سرویس گوگل را ریست کنم؟</a></li>                  
+  <li><a href="#ts-session-failed">من ارور "Session failed (Ignoring too frequent session. ...)" را مشاهده میکنم.</a></li>
+  <li><a href="#ts-broadcast-receiver">آیا broadcast receiver من اطلاعات install referrer را دریافت میکند؟</a></li>
+  <li><a href="#ts-event-at-launch">آیا می توانم هنگام راه اندازی برنامه اقدام به ایجاد یک رویداد کنم؟</a></li>
+</ul>
+</div>
 
-
-## <a id="qs-getting-started"></a>Getting started
+## <div id="qs-getting-started" dir="rtl" align='right'>شروع پیاده سازی</div>
 
 These are the minimal steps required to integrate the AdTrace SDK into your Android project. We are going to assume that you use Android Studio for your Android development and target an Android API level **9 (Gingerbread)** or later.
 
-### <a id="qs-add-sdk"></a>Add the SDK to your project
+### <div id="qs-add-sdk" dir="rtl" align='right'>افزودن SDK به پروژه</div>
 
 If you are using Maven, add the following to your `build.gradle` file:
 
@@ -99,7 +150,7 @@ If you would prefer to use the AdTrace SDK inside web views in your app, please 
 implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.2'
 ```
 
-### <a id="qs-add-gps"></a>Add Google Play Services
+### <div id="qs-add-gps" dir="rtl" align='right'>افزودن سرویس های گوگل پلی</div>
 
 Since the 1st of August of 2014, apps in the Google Play Store must use the [Google Advertising ID][google_ad_id] to uniquely identify devices. To enable the Google Advertising ID for our SDK, you must integrate [Google Play Services][google_play_services]. If you haven't done this yet, please add dependency to the Google Play Services library by adding the following dependecy to your `dependencies` block of app's `build.gradle` file:
 
@@ -109,8 +160,7 @@ implementation 'com.google.android.gms:play-services-analytics:16.0.4'
 
 **Note**: The AdTrace SDK is not tied to any specific version of the `play-services-analytics` part of the Google Play Services library, so feel free to always use the latest version of it (or whichever you might need).
 
-
-### <a id="qs-add-permissions"></a>Add permissions
+### <div id="qs-add-permissions" dir="rtl" align='right'>افزودن مجوزها</div>
 
 Please add the following permissions, which the AdTrace SDK needs, if they are not already present in your `AndroidManifest.xml` file:
 
@@ -127,7 +177,7 @@ If you are **not targeting the Google Play Store**, please also add the followin
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 ```
 
-### <a id="qs-proguard-settings"></a>Proguard settings
+### <div id="qs-proguard-settings" dir="rtl" align='right'>تنظیمات Proguard</div>
 
 If you are using Proguard, add these lines to your Proguard file:
 
@@ -148,13 +198,13 @@ If you are using Proguard, add these lines to your Proguard file:
 
 If you are **not targeting the Google Play Store**, you can remove the `com.google.android.gms` rules.
 
-### <a id="qs-ir"></a>Install referrer
+### <div id="qs-ir" dir="rtl" align='right'>تنظیمات Install referrer</div>
 
 In order to correctly attribute an install of your app to its source, AdTrace needs information about the **install referrer**. This can be obtained by using the **Google Play Referrer API** or by catching the **Google Play Store intent** with a broadcast receiver.
 
 **Important**: The Google Play Referrer API is newly introduced by Google with the express purpose of providing a more reliable and secure way of obtaining install referrer information and to aid attribution providers in the fight against click injection. It is **strongly advised** that you support this in your application. The Google Play Store intent is a less secure way of obtaining install referrer information. It will continue to exist in parallel with the new Google Play Referrer API temporarily, but it is set to be deprecated in future.
 
-#### <a id="qs-ir-gpr-api"></a>Google Play Referrer API
+#### <div id="qs-ir-gpr-api" dir="rtl" align='right'>Google Play Referrer API</div>
 
 In order to support this in your app, please make sure that you have followed the [Add the SDK to your project](#sdk-add) chapter properly and that you have following line added to your `build.gradle` file:
 
@@ -168,7 +218,7 @@ Also, make sure that you have paid attention to the [Proguard settings](#sdk-pro
 -keep public class com.android.installreferrer.** { *; }
 ```
 
-#### <a id="qs-ir-gps-intent"></a>Google Play Store intent
+#### <div id="qs-ir-gps-intent" dir="rtl" align='right'>Google Play Store intent</div>
 
 **Note**: Google has [announced](https://android-developers.googleblog.com/2019/11/still-using-installbroadcast-switch-to.html) deprecation of `INSTALL_REFERRER` intent usage to deliver referrer information as of March 1st 2020. If you are using this way of accessing referrer information, please migrate to [Google Play Referrer API](#gpr-api) approach.
 
@@ -189,16 +239,16 @@ We use this broadcast receiver to retrieve the install referrer and pass it to o
 
 If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, follow [these instructions][referrer] to add the AdTrace broadcast receiver.
 
-### <a id="qs-integ-sdk"></a>Integrate the SDK into your app
+### <div id="qs-integ-sdk" dir="rtl" align='right'>پیاده سازی SDK داخل برنامه</div>
 
 First, we'll set up basic session tracking.
 
-### <a id="qs-integ-basic-setup"></a>Basic setup
+### <div id="qs-integ-basic-setup" dir="rtl" align='right'>راه اندازی اولیه</div>
 
 If you are integrating the SDK into a native app, follow the directions for a [Native App SDK](#basic-setup-native).
 If you are integrating the SDK for usage inside web views, please follow the directions for a [Web View SDK](#basic-setup-web) below.
 
-#### <a id="qs-integ-basic-setup-native"></a>Native App SDK
+#### <div id="qs-integ-basic-setup-native" dir="rtl" align='right'>Native App SDK</div>
 
 We recommend using a global android [Application][android_application] class to initialize the SDK. If you don't have one in your app already, follow these steps:
 
@@ -246,7 +296,7 @@ String environment = AdTraceConfig.ENVIRONMENT_PRODUCTION;
 
 We use this environment to distinguish between real traffic and test traffic from test devices. It is imperative that you keep this value meaningful at all times.
 
-#### <a id="qs-integ-basic-setup-web"></a>Web View SDK
+#### <div id="qs-integ-basic-setup-web" dir="rtl" align='right'>Web View SDK</div>
 
 After you have obtained the reference to your `WebView` object:
 
@@ -313,12 +363,11 @@ We use this environment to distinguish between real traffic and test traffic fro
 
 To increase the accuracy and security in fraud detection, you can enable or disable the sending of installed applications on user's device as follows:
 
-
-### <a id="qs-integ-session-tracking"></a>Session tracking
+### <div id="qs-integ-session-tracking" dir="rtl" align='right'>ردیابی نشست</div>
 
 **Note**: This step is **really important** and please **make sure that you implement it properly in your app**. By implementing it, you will enable proper session tracking by the AdTrace SDK in your app.
 
-### <a id="qs-integ-session-tracking-api14"></a>API level 14 and higher
+### <div id="qs-integ-session-tracking-api14" dir="rtl" align='right'>API بالاتر از 14</div>
 
 - Add a private class that implements the `ActivityLifecycleCallbacks` interface. If you don't have access to this interface, your app is targeting an Android API level inferior to 14. You will have to update manually each Activity by following these [instructions](#session-tracking-api9). If you had `AdTrace.onResume` and `AdTrace.onPause` calls on each Activity of your app before, you should remove them.
 - Edit the `onActivityResumed(Activity activity)` method and add a call to `AdTrace.onResume()`. Edit the
@@ -360,7 +409,7 @@ To increase the accuracy and security in fraud detection, you can enable or disa
       }
     ```
 
-### <a id="qs-integ-session-tracking-api9"></a>API level between 9 and 13
+### <div id="qs-integ-session-tracking-api9" dir="rtl" align='right'>API بین 9 و 13</div>
 
 If your app `minSdkVersion` in gradle is between `9` and `13`, consider updating it to at least `14` to simplify the integration process in the long term. Consult the official Android [dashboard][android-dashboard] to know the latest market share of the major versions.
 
@@ -391,7 +440,7 @@ public class YourActivity extends Activity {
 
 Repeat these steps for **every Activity** of your app. Don't forget these steps when you create new Activities in the future. Depending on your coding style you might want to implement this in a common superclass of all your Activities.
 
-### <a id="qs-sdk-signature"></a>SDK signature
+### <div id="qs-sdk-signature" dir="rtl" align='right'>امضا SDK</div>
 
 An account manager must activate the AdTrace SDK signature. Contact AdTrace support (info@adtrace.io) if you are interested in using this feature.
 
@@ -399,6 +448,7 @@ If the SDK signature has already been enabled on your account and you have acces
 
 An App Secret is set by calling `setAppSecret` on your `AdTraceConfig` instance:
 
+<br/>
 <table>
 <tr>
 <td>
@@ -432,7 +482,7 @@ AdTrace.onCreate(adtraceConfig);
 </tr>
 </table>
 
-### <a id="qs-adtrace-logging"></a>AdTrace Logging
+### <div id="qs-adtrace-logging" dir="rtl" align='right'>لاگ ادتریس</div>
 
 You can increase or decrease the amount of logs that you see during testing by calling `setLogLevel` on your `AdTraceConfig` instance with one of the following parameters:
 
@@ -515,18 +565,17 @@ AdTrace.onCreate(adtraceConfig);
 </tr>
 </table>
 
-
-### <a id="qs-build-the-app"></a>Build your app
+### <div id="qs-build-the-app" dir="rtl" align='right'>ساخت برنامه</div>
 
 Build and run your Android app. In your `LogCat` viewer you can set the filter `tag:AdTrace` to hide all other logs. After your app has launched you should see the following AdTrace log: `Install tracked`.
 
-## Deep linking
+## <div dir="rtl" align='right'>Deep linking</div>
 
-### <a id="dl-overview"></a>Deep linking Overview
+### <div id="dl-overview" dir="rtl" align='right'>نمای کلی لینک دهی عمیق</div>
 
 If you are using an AdTrace tracker URL with the option to deep link into your app, there is the possibility to get information about the deep link URL and its content. Hitting the URL can happen when the user has your app already installed (standard deep linking scenario) or if they don't have the app on their device (deferred deep linking scenario). In the standard deep linking scenario, the Android platform natively offers the possibility for you to get the information about the deep link content. The deferred deep linking scenario is something which the Android platform doesn't support out of the box, and, in this case, the AdTrace SDK will offer you the mechanism you need to get the information about the deep link content.
 
-### <a id="dl-standard"></a>Standard deep linking scenario
+### <div id="dl-standard" dir="rtl" align='right'>سناریو لینک دهی عمیق استاندار</div>
 
 If a user has your app installed and you want it to launch after hitting an AdTrace tracker URL with the `deep_link` parameter in it, you need to enable deep linking in your app. This is done by choosing a desired **unique scheme name** and assigning it to the Activity you want to launch once your app opens following a user clicking on the tracker URL. This is set in the `AndroidManifest.xml`. You need to add the `intent-filter` section to your desired Activity definition in the manifest file and assign an `android:scheme` property value with the desired scheme name:
 
@@ -589,14 +638,13 @@ protected void onNewIntent(Intent intent) {
 }
 ```
 
-
-### <a id="dl-deferred"></a>Deferred deep linking scenario
+### <div id="dl-deferred" dir="rtl" align='right'>سناریو لینک دهی عمیق به تعویق افتاده</div>
 
 Deferred deeplinking scenario occurs when a user clicks on an AdTrace tracker URL with a `deep_link` parameter contained in it, but does not have the app installed on the device at click time. When the user clicks the URL, they will be redirected to the Play Store to download and install your app. After opening it for the first time, `deep_link` parameter content will be delivered to your app.
 
 The AdTrace SDK opens the deferred deep link by default. There is no extra configuration needed.
 
-#### Deferred deep linking callback
+#### <div dir="rtl" align='right'>Deferred deep linking callback</div>
 
 If you wish to control if the AdTrace SDK will open the deferred deep link, you can do it with a callback method in the config object.
 
@@ -668,7 +716,7 @@ Remember that if you do not set the callback, **the AdTrace SDK will always atte
 </tr>
 </table>
 
-### <a id="dl-reattribution"></a>Reattribution via deep links
+### <div id="dl-reattribution" dir="rtl" align='right'>اتریبیوت مجدد از طریق لینک عمیق</div>
 
 AdTrace enables you to run re-engagement campaigns through deep links.
 
@@ -706,9 +754,9 @@ protected void onNewIntent(Intent intent) {
 AdTrace.appWillOpenUrl(deeplinkUrl);
 ```
 
-## Event tracking
+## <div dir="rtl" align='right'>Event tracking</div>
 
-### <a id="et-track-event"></a>Track event
+### <div id="et-track-event" dir="rtl" align='right'>ردیابی رویداد معمولی</div>
 
 You can use AdTrace to track any event in your app. Suppose you want to track every tap on a button. You would have to create a new event token in your [dashboard]. Let's say that event token is `abc123`. In your button's `onClick` method you could then add the following lines to track the click:
 
@@ -717,7 +765,7 @@ AdTraceEvent event = new AdTraceEvent("abc123");
 AdTrace.trackEvent(event);
 ```
 
-### <a id="et-track-revenue"></a>Track revenue
+### <div id="et-track-revenue" dir="rtl" align='right'>ردیابی رویداد درآمدی</div>
 
 If your users can generate revenue by tapping on advertisements or making in-app purchases you can track those revenues with events. Lets say a tap is worth one Euro cent. You could then track the revenue event like this:
 
@@ -731,7 +779,7 @@ This can be combined with callback parameters of course.
 
 When you set a currency token, AdTrace will automatically convert the incoming revenues into a reporting revenue of your choice.
 
-### <a id="et-revenue-deduplication"></a>Revenue deduplication
+### <div id="et-revenue-deduplication" dir="rtl" align='right'>جلوگیری از تکرار رویداد درآمدی</div>
 
 You can also add an optional order ID to avoid tracking duplicate revenues. The last ten order IDs are remembered, and revenue events with duplicate order IDs are skipped. This is especially useful for in-app purchase tracking. You can see an  example below.
 
@@ -744,17 +792,17 @@ event.setOrderId("{OrderId}");
 AdTrace.trackEvent(event);
 ```
 
-## Custom parameters
+## <div dir="rtl" align='right'>Custom parameters</div>
 
-### <a id="cp-overview"></a>Custom parameters overview
+### <div id="cp-overview" dir="rtl" align='right'>نمای کلی پارامترهای سفارشی</div>
 
 In addition to the data points the AdTrace SDK collects by default, you can use the AdTrace SDK to track and add as many custom values as you need (user IDs, product IDs, etc.) to the event or session. Custom parameters are only available as raw data and will **not** appear in your AdTrace dashboard.
 
 You should use **callback parameters** for the values you collect for your own internal use, and **partner parameters** for those you share with external partners. If a value (e.g. product ID) is tracked both for internal use and external partner use, we recommend you track it with both callback and partner parameters.
 
-### <a id="cp-ep"></a>Event parameters
+### <div id="cp-ep" dir="rtl" align='right'>پارامترهای رویداد</div>
 
-### <a id="cp-ep-callback"></a>Event callback parameters
+### <div id="cp-ep-callback" dir="rtl" align='right'>پارامترهای callback رویداد</div>
 
 You can register a callback URL for your events in your [dashboard]. We will send a GET request to that URL whenever the event is tracked. You can add callback parameters to that event by calling `addCallbackParameter` to the event instance before tracking it. We will then append these parameters to your callback URL.
 
@@ -802,7 +850,7 @@ In this case we would track the event and send a request to:
 http://www.example.com/callback?key=value&foo=bar
 ```
 
-### <a id="cp-ep-partner"></a>Event partner parameters
+### <div id="cp-ep-partner" dir="rtl" align='right'>پارامترهای partner رویداد</div>
 
 You can also add parameters to be transmitted to network partners, which have been activated in your AdTrace dashboard.
 
@@ -843,7 +891,7 @@ AdTrace.trackEvent(adtraceEvent);
 </tr>
 </table>
 
-### <a id="cp-ep-id"></a>Event callback identifier
+### <div id="cp-ep-id" dir="rtl" align='right'>شناسه callback رویداد</div>
 
 You can also add custom string identifier to each event you want to track. This identifier will later be reported in event success and/or event failure callbacks to enable you to keep track on which event was successfully tracked or not. You can set this identifier by calling the `setCallbackId` method on your `AdTraceEvent` instance:
 
@@ -880,7 +928,7 @@ AdTrace.trackEvent(adtraceEvent);
 </tr>
 </table>
 
-### <a id="cp-ep-value"></a>Event value
+### <div id="cp-ep-value" dir="rtl" align='right'>مقدار رویداد</div>
 
 You can also add custom string value to event. You can set this value by calling the `setEventValue` method on your `AdTraceEvent` instance:
 
@@ -917,13 +965,13 @@ AdTrace.trackEvent(adtraceEvent);
 </tr>
 </table>
 
-### <a id="cp-sp"></a>Session parameters
+### <div id="cp-sp" dir="rtl" align='right'>پارامترهای نشست</div>
 
 Session parameters are saved locally and sent in every **event** and **session** of the AdTrace SDK. When you add any of these parameters, we will save them so you don't need to add them every time. Adding the same parameter twice will have no effect.
 
 These session parameters can be called before the AdTrace SDK is launched (to make sure they are sent on install). If you need to send them with an install, but can only obtain the needed values after launch, it's possible to [delay](#cp-sp-delay-start) the first launch of the AdTrace SDK to allow for this behavior.
 
-### <a id="cp-sp-callback"></a>Session callback parameters
+### <div id="cp-sp-callback" dir="rtl" align='right'>پارامترهای callback نشست</div>
 
 You can save any callback parameters registered for [events](#cp-ep-callback) to be sent in every event or session of the AdTrace SDK.
 
@@ -1022,7 +1070,7 @@ AdTrace.resetSessionCallbackParameters();
 </tr>
 </table>
 
-### <a id="cp-sp-partner"></a>Session partner parameters
+### <div id="cp-sp-partner" dir="rtl" align='right'>پارامترهای partner نشست</div>
 
 In the same way that [session callback parameters](#cp-sp-callback) are sent in every event or session of the AdTrace SDK, there are also session partner parameters.
 
@@ -1123,7 +1171,7 @@ AdTrace.resetSessionPartnerParameters();
 </tr>
 </table>
 
-### <a id="cp-sp-delay-start"></a>Delay start
+### <div id="cp-sp-delay-start" dir="rtl" align='right'>شروع با تاخیر</div>
 
 Delaying the start of the AdTrace SDK allows your app some time to obtain session parameters (such as unique identifiers) to be sent on install.
 
@@ -1162,11 +1210,12 @@ In this example, this will prevent the AdTrace SDK from sending the initial inst
 
 **The maximum delay start time of the AdTrace SDK is 10 seconds**.
 
-## Additional Features
+## <div dir="rtl" align='right'>ویژگی های بیشتر</div>
+
 
 Once you have integrated the AdTrace SDK into your project, you can take advantage of the following features:
 
-### <a id="af-push-token"></a>Push token (uninstall tracking)
+### <div id="af-push-token" dir="rtl" align='right'>توکن push (ردیابی تعداد حذف برنامه)</div>
 
 Push tokens are used for Audience Builder and client callbacks; they are also required for uninstall and reinstall tracking.
 
@@ -1204,7 +1253,7 @@ AdTrace.setPushToken(pushNotificationsToken);
 </tr>
 </table>
 
-### <a id="af-attribution-callback"></a>Attribution callback
+### <div id="af-attribution-callback" dir="rtl" align='right'>callback اتریبیوشن</div>
 
 You can register a listener to be notified of tracker attribution changes. Due to the different sources we consider for attribution, we cannot provide this information synchronously.
 
@@ -1263,7 +1312,7 @@ The listener function is called after the SDK receives the final attribution dat
 - `clickLabel` the click label string of the current attribution.
 - `adid` the AdTrace device identifier string.
 
-### <a id="af-session-event-callbacks"></a>Session and event callbacks
+### <div id="af-session-event-callbacks" dir="rtl" align='right'>callback های رویداد و نشست</div>
 
 You can register a listener to be notified when events or sessions are tracked. There are four listeners: one for tracking successful events, one for tracking failed events, one for tracking successful sessions, and one for tracking failed sessions. Add as many listeners as you need after creating the config object like so:
 
@@ -1358,7 +1407,7 @@ And both event and session failed objects also contain:
 
 - `willRetry` boolean which indicates whether there will be a later attempt to resend the package.
 
-### <a id="af-user-attribution"></a>User attribution
+### <div id="af-user-attribution" dir="rtl" align='right'>اتریبیوشن کاربر</div>
 
 Like we described in the [attribution callback section](#af-attribution-callback), this callback is triggered whenever the attribution information changes. Access your user's current attribution information whenever you need it by making a call to the following method of the `AdTrace` instance:
 
@@ -1393,7 +1442,7 @@ let attribution = AdTrace.getAttribution();
 
 **Note**: Current attribution information is only available after our backend tracks the app install and triggers the attribution callback. **It is not possible** to access a user's attribution value before the SDK has been initialized and the attribution callback has been triggered.
 
-### <a id="af-send-installed-apps"></a>Send installed apps
+### <div id="af-send-installed-apps" dir="rtl" align='right'>ارسال برنامه های نصب شده دستگاه</div>
 
 To increase the accuracy and security in fraud detection, you can enable or disable the sending of installed applications on user's device as follows:
 
@@ -1430,11 +1479,11 @@ adtraceConfig.setEnableSendInstalledApps(true);
 
 **Note**: This option is **disabled** by default.
 
-### <a id="af-di"></a>Device IDs
+### <div id="af-di" dir="rtl" align='right'>شناسه های دستگاه</div>
 
 The AdTrace SDK offers you the possibility to obtain device identifiers.
 
-### <a id="af-di-gps-adid"></a>Google Play Services Advertising Identifier
+### <div id="af-di-gps-adid" dir="rtl" align='right'>شناسه تبلیغات سرویس های گوگل پلی</div>
 
 Certain services (such as Google Analytics) require you to coordinate advertising IDs and client IDs in order to prevent duplicate reporting.
 
@@ -1476,7 +1525,7 @@ AdTrace.getGoogleAdId(function(googleAdId) {
 </tr>
 </table>
 
-### <a id="af-di-amz-adid"></a>Amazon advertising identifier
+### <div id="af-di-amz-adid" dir="rtl" align='right'>شناسه تبلیغات آمازون</div>
 
 If you need to obtain the Amazon Advertising ID, call the following method on `AdTrace` instance:
 
@@ -1509,7 +1558,7 @@ let amazonAdId = AdTrace.getAmazonAdId();
 </tr>
 </table>
 
-### <a id="af-di-adid"></a>AdTrace device identifier
+### <div id="af-di-adid" dir="rtl" align='right'>شناسه دستگاه ادتریس</div>
 
 For each device with your app installed on it, our backend generates a unique **AdTrace device identifier** (known as an **adid**). In order to obtain this identifier, call the following method on `AdTrace` instance:
 
@@ -1544,7 +1593,7 @@ let adid = AdTrace.getAdid();
 
 **Note**: Information about the **adid** is only available after our backend tracks the app instal. **It is not possible** to access the **adid** value before the SDK has been initialized and the installation of your app has been successfully tracked.
 
-### <a id="af-pre-installed-trackers"></a>Pre-installed trackers
+### <div id="af-pre-installed-trackers" dir="rtl" align='right'>ردیابی قبل از نصب</div>
 
 If you want to use the AdTrace SDK to recognize users whose devices came with your app pre-installed, follow these steps:
 
@@ -1588,7 +1637,7 @@ If you want to use the AdTrace SDK to recognize users whose devices came with yo
   Default tracker: 'abc123'
   ```
 
-### <a id="af-offline-mode"></a>Offline mode
+### <div id="af-offline-mode" dir="rtl" align='right'>حالت آفلاین</div>
 
 You can put the AdTrace SDK in offline mode to suspend transmission to our servers (while retaining tracked data to be sent later). While in offline mode, all information is saved in a file. Please be careful not to trigger too many events while in offline mode.
 
@@ -1627,8 +1676,7 @@ Conversely, you can deactivate offline mode by calling `setOfflineMode` with `fa
 
 Unlike disabling tracking, this setting is **not remembered** between sessions. This means the SDK is in online mode whenever it starts, even if the app was terminated in offline mode.
 
-
-### <a id="af-disable-tracking"></a>Disable tracking
+### <div id="af-disable-tracking" dir="rtl" align='right'>غیرفعال کردن ردیابی</div>
 
 You can disable the AdTrace SDK from tracking any activities of the current device by calling `setEnabled` with parameter `false`. **This setting is remembered between sessions**.
 
@@ -1663,7 +1711,7 @@ AdTrace.setEnabled(false);
 
 You can check to see if the AdTrace SDK is currently enabled by calling the function `isEnabled`. It is always possible to activatе the AdTrace SDK by invoking `setEnabled` with the enabled parameter as `true`.
 
-### <a id="af-event-buffering"></a>Event buffering
+### <div id="af-event-buffering" dir="rtl" align='right'>بافرکردن رویدادها</div>
 
 If your app makes heavy use of event tracking, you might want to delay some network requests in order to send them in one batch every minute. You can enable event buffering with your config instance:
 
@@ -1696,7 +1744,7 @@ adtraceConfig.setEventBufferingEnabled(true);
 </tr>
 </table>
 
-### <a id="af-background-tracking"></a>Background tracking
+### <div id="af-background-tracking" dir="rtl" align='right'>ردیابی در پس زمینه</div>
 
 The default behaviour of the AdTrace SDK is to pause sending network requests while the app is in the background. You can change this in your config instance:
 
@@ -1729,8 +1777,8 @@ adtraceConfig.setSendInBackground(true);
 </tr>
 </table>
 
+### <div id="af-location" dir="rtl" align='right'>موقعیت مکانی</div>
 
-### <a id="af-location"></a>Location
 Another way to increase the accuracy and security of fraud detection is to check the user's location. You can enable or disable this feature by using the following method.
 
 <table>
@@ -1766,8 +1814,7 @@ AdTrace.enableLocation(true);
 
 **Note**: This option is **enabled** by default. But in case the location-based permissions are not granted, location data will not be sent to the server.
 
-
-### <a id="af-gdpr-forget-me"></a>GDPR right to be forgotten
+### <div id="af-gdpr-forget-me" dir="rtl" align='right'>GPDR</div>
 
 In accordance with article 17 of the EU's General Data Protection Regulation (GDPR), you can notify AdTrace when a user has exercised their right to be forgotten. Calling the following method will instruct the AdTrace SDK to communicate the user's choice to be forgotten to the AdTrace backend:
 
@@ -1804,14 +1851,13 @@ Upon receiving this information, AdTrace will erase the user's data and the AdTr
 
 Please note that even when testing, this decision is permanent. It **is not** reversible.
 
-## Testing and troubleshooting
+## <div dir="rtl" align='right'>Testing and troubleshooting</div>
 
-### <a id="ts-reset-gps-ad-id"></a>How can I reset Google Play store advertising identifier?
+### <div id="ts-reset-gps-ad-id" dir="rtl" align='right'>چگونه میتوانم شناسه تبلیغات سرویس گوگل را ریست کنم؟</div>
 
 Please follow [this instruction][reset-google-ad-id] to reset Google Play Store advertising identifier. 
 
-
-### <a id="ts-session-failed"></a>I'm seeing the "Session failed (Ignoring too frequent session. ...)" error.
+### <div id="ts-session-failed" dir="rtl" align='right'>من ارور "Session failed (Ignoring too frequent session. ...)" را مشاهده میکنم.</div>
 
 This error typically occurs when testing installs. Uninstalling and reinstalling the app is not enough to trigger a new install. The servers will determine that the SDK has lost its locally aggregated session data and ignore the erroneous message, given the information available on the servers about the device.
 
@@ -1841,7 +1887,7 @@ http://app.adtrace.io/forget_device?app_token={yourAppToken}&android_id={android
 
 When the device is forgotten, the link just returns `Forgot device`. If the device was already forgotten or the values were incorrect, the link returns `Device not found`.
 
-### <a id="ts-broadcast-receiver"></a>Is my broadcast receiver capturing the install referrer?
+### <div id="ts-broadcast-receiver" dir="rtl" align='right'>آیا broadcast receiver من اطلاعات install referrer را دریافت میکند؟</div>
 
 If you followed the instructions in the [guide](#broadcast_receiver), the broadcast receiver should be configured to send the install referrer to our SDK and to our servers.
 
@@ -1896,7 +1942,7 @@ public void onFireIntentClick(View v) {
 
 Feel free to alter second parameter of `putExtra` method with content of your choice.
 
-### <a id="ts-event-at-launch"></a>Can I trigger an event at application launch?
+### <div id="ts-event-at-launch" dir="rtl" align='right'>آیا می توانم هنگام راه اندازی برنامه اقدام به ایجاد یک رویداد کنم؟</div>
 
 Not how you might intuitively think. The `onCreate` method on the global `Application` class is called not only at application launch, but also when a system or application event is captured by the app.
 
@@ -1913,7 +1959,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [dashboard]:  http://adtrace.io
 [adtrace.io]: http://adtrace.io
 [en-readme]:  README.md
-[per-readme]:  ./doc/persian/README-PER.md
 
 [maven]:                          http://maven.org
 [releases]:                       https://github.com/adtrace/adtrace_sdk_android/releases
