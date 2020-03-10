@@ -37,7 +37,6 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
    * [Track event](#et-track-event)
    * [Track revenue](#et-track-revenue)
    * [Revenue deduplication](#et-revenue-deduplication)
-   * [In-App Purchase verification](#et-iap-verification)
 
 ### Custom parameters
 
@@ -742,10 +741,6 @@ event.setRevenue(0.01, "EUR");
 event.setOrderId("{OrderId}");
 AdTrace.trackEvent(event);
 ```
-
-### <a id="et-iap-verification"></a>In-App Purchase verification
-
-If you want to check the validity of In-App Purchases made in your app using Purchase Verification, AdTrace's server side receipt verification tool, then check out our Android purchase SDK to read more about it [here][android-purchase-verification].
 
 ## Custom parameters
 
