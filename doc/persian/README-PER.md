@@ -1410,7 +1410,7 @@ AdTrace.resetSessionPartnerParameters();
 </div>
 <br/>
 <div dir="rtl" align='right'>
-با استفاده از متد <code>setDelayStart</code> که مقداری به ثانیه میگیرد باعث تاخیر در شروع اولیه ادتریس خواهد شد:
+  با استفاده از متد <code>setDelayStart</code> که ورودی آن عددی به ثانیه است، باعث تاخیر در شروع اولیه خواهد شد:
 </div>
 <br/>
 
