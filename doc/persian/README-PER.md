@@ -703,7 +703,7 @@ AdTrace.onCreate(adtraceConfig);
 حال برنامه خود را کامپایل کنید و اجرا کنید. در قسمت <code>LogCat</code> میتوانید فیلتر <code>tag:AdTrace</code> را  اضافه کنید تا فقط لاگ های مربوط به ادتریس را مشاهده نمایید.
 </div>
 
-## <div dir="rtl" align='right'>Deep linking</div>
+## <div dir="rtl" align='right'>لینک دهی عمیق</div>
 
 ### <div id="dl-overview" dir="rtl" align='right'>نمای کلی لینک دهی عمیق</div>
 
