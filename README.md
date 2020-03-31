@@ -156,13 +156,13 @@ In order to correctly attribute an install of your app to its source, AdTrace ne
 
 #### <a id="qs-ir-gpr-api"></a>Google Play Referrer API
 
-In order to support this in your app, please make sure that you have followed the [Add the SDK to your project](#sdk-add) chapter properly and that you have following line added to your `build.gradle` file:
+In order to support this in your app, please make sure that you have followed the [Add the SDK to your project](#qs-add-sdk) chapter properly and that you have following line added to your `build.gradle` file:
 
 ```gradle
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 
-Also, make sure that you have paid attention to the [Proguard settings](#sdk-proguard) chapter and that you have added all the rules mentioned in it, especially the one needed for this feature:
+Also, make sure that you have paid attention to the [Proguard settings](#qs-proguard-settings) chapter and that you have added all the rules mentioned in it, especially the one needed for this feature:
 
 ```
 -keep public class com.android.installreferrer.** { *; }
@@ -170,7 +170,7 @@ Also, make sure that you have paid attention to the [Proguard settings](#sdk-pro
 
 #### <a id="qs-ir-gps-intent"></a>Google Play Store intent
 
-**Note**: Google has [announced](https://android-developers.googleblog.com/2019/11/still-using-installbroadcast-switch-to.html) deprecation of `INSTALL_REFERRER` intent usage to deliver referrer information as of March 1st 2020. If you are using this way of accessing referrer information, please migrate to [Google Play Referrer API](#gpr-api) approach.
+**Note**: Google has [announced](https://android-developers.googleblog.com/2019/11/still-using-installbroadcast-switch-to.html) deprecation of `INSTALL_REFERRER` intent usage to deliver referrer information as of March 1st 2020. If you are using this way of accessing referrer information, please migrate to [Google Play Referrer API](#qs-ir-gpr-api) approach.
 
 You should capture the Google Play Store `INSTALL_REFERRER` intent with a broadcast receiver. If you are **not using your own broadcast receiver** to receive the `INSTALL_REFERRER` intent, add the following `receiver` tag inside the `application` tag in your `AndroidManifest.xml`.
 
@@ -195,8 +195,8 @@ First, we'll set up basic session tracking.
 
 ### <a id="qs-integ-basic-setup"></a>Basic setup
 
-If you are integrating the SDK into a native app, follow the directions for a [Native App SDK](#basic-setup-native).
-If you are integrating the SDK for usage inside web views, please follow the directions for a [Web View SDK](#basic-setup-web) below.
+If you are integrating the SDK into a native app, follow the directions for a [Native App SDK](#qs-integ-basic-setup-native).
+If you are integrating the SDK for usage inside web views, please follow the directions for a [Web View SDK](#qs-integ-basic-setup-web) below.
 
 #### <a id="qs-integ-basic-setup-native"></a>Native App SDK
 
@@ -251,7 +251,7 @@ We use this environment to distinguish between real traffic and test traffic fro
 After you have obtained the reference to your `WebView` object:
 
 - Call `webView.getSettings().setJavaScriptEnabled(true)`, to enable Javascript in the web view
-- Start the default instance of `AdTraceBridgeInstance` by calling `AdTraceBridge.registerAndGetInstance(getApplication(), webview)`
+- Start the default instance of `AdTraceBridgeInstance` by calling `AdTraceBridge.registerAndGetInstance(getApplication(), webView)`
 - This will also register the AdTrace bridge as a Javascript Interface to the web view
 
 After these steps, your activity should look like this:
@@ -268,7 +268,7 @@ public class MainActivity extends Activity {
         webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new WebViewClient());
 
-        AdTraceBridge.registerAndGetInstance(getApplication(), webview);
+        AdTraceBridge.registerAndGetInstance(getApplication(), webView);
         try {
             webView.loadUrl("file:///android_asset/AdTraceExample-WebView.html");
         } catch (Exception e) {
@@ -288,7 +288,7 @@ In your HTML file, import the AdTrace Javascript files which are located in the 
 <script type="text/javascript" src="adtrace_config.js"></script>
 ```
 
-Once you add your references to the Javascript files, use them in your HTML file to initialise the AdTrace SDK:
+Once you add your references to the Javascript files, use them in your HTML file to initialize the AdTrace SDK:
 
 ```js
 let yourAppToken = '{YourAppToken}';
@@ -320,7 +320,7 @@ To increase the accuracy and security in fraud detection, you can enable or disa
 
 ### <a id="qs-integ-session-tracking-api14"></a>API level 14 and higher
 
-- Add a private class that implements the `ActivityLifecycleCallbacks` interface. If you don't have access to this interface, your app is targeting an Android API level inferior to 14. You will have to update manually each Activity by following these [instructions](#session-tracking-api9). If you had `AdTrace.onResume` and `AdTrace.onPause` calls on each Activity of your app before, you should remove them.
+- Add a private class that implements the `ActivityLifecycleCallbacks` interface. If you don't have access to this interface, your app is targeting an Android API level inferior to 14. You will have to update manually each Activity by following these [instructions](#qs-integ-session-tracking-api9). If you had `AdTrace.onResume` and `AdTrace.onPause` calls on each Activity of your app before, you should remove them.
 - Edit the `onActivityResumed(Activity activity)` method and add a call to `AdTrace.onResume()`. Edit the
 `onActivityPaused(Activity activity)` method and add a call to `AdTrace.onPause()`.
 - Add on the `onCreate()` method where the AdTrace SDK is configured and add call  `registerActivityLifecycleCallbacks` with an instance of the created `ActivityLifecycleCallbacks` class.
@@ -362,7 +362,7 @@ To increase the accuracy and security in fraud detection, you can enable or disa
 
 ### <a id="qs-integ-session-tracking-api9"></a>API level between 9 and 13
 
-If your app `minSdkVersion` in gradle is between `9` and `13`, consider updating it to at least `14` to simplify the integration process in the long term. Consult the official Android [dashboard][android-dashboard] to know the latest market share of the major versions.
+If your app `minSdkVersion` in gradle is between `9` and `13`, consider updating it to at least `14` to simplify the integration process in the long term.
 
 To provide proper session tracking it is required to call certain AdTrace SDK methods every time any Activity resumes or pauses. Otherwise the SDK might miss a session start or session end. In order to do so you should **follow these steps for each Activity of your app**:
 
@@ -674,7 +674,7 @@ AdTrace enables you to run re-engagement campaigns through deep links.
 
 If you are using this feature, in order for your user to be properly reattributed, you need to make one additional call to the AdTrace SDK in your app.
 
-Once you have received deep link content information in your app, add a call to the `AdTrace.appWillOpenUrl(Uri, Context)` method. By making this call, the AdTrace SDK will try to find if there is any new attribution information inside of the deep link. If there is any, it will be sent to the AdTrace backend. If your user should be reattributed due to a click on the AdTrace tracker URL with deep link content, you will see the [attribution callback](#attribution-callback) in your app being triggered with new attribution info for this user.
+Once you have received deep link content information in your app, add a call to the `AdTrace.appWillOpenUrl(Uri, Context)` method. By making this call, the AdTrace SDK will try to find if there is any new attribution information inside of the deep link. If there is any, it will be sent to the AdTrace backend. If your user should be reattributed due to a click on the AdTrace tracker URL with deep link content, you will see the [attribution callback](#af-attribution-callback) in your app being triggered with new attribution info for this user.
 
 The call to `AdTrace.appWillOpenUrl(Uri, Context)` should be done like this:
 
@@ -1185,8 +1185,6 @@ To send us the push notification token, add the following call to AdTrace once y
 AdTrace.setPushToken(pushNotificationsToken, context);
 ```
 
-**Note:** It is advised that you use the signature method above.
-
 </td>
 </tr>
 <tr>
@@ -1395,7 +1393,7 @@ let attribution = AdTrace.getAttribution();
 
 ### <a id="af-send-installed-apps"></a>Send installed apps
 
-To increase the accuracy and security in fraud detection, you can enable or disable the sending of installed applications on user's device as follows:
+To increase the accuracy and security in fraud detection, you can enable the sending of installed applications on user's device as follows:
 
 <table>
 <tr>
@@ -1731,7 +1729,7 @@ adtraceConfig.setSendInBackground(true);
 
 
 ### <a id="af-location"></a>Location
-Another way to increase the accuracy and security of fraud detection is to check the user's location. You can enable or disable this feature by using the following method.
+Another way to increase the accuracy and security of fraud detection is to check the user's location. You can enable this feature by using the following method.
 
 <table>
 <tr>
@@ -1817,33 +1815,11 @@ This error typically occurs when testing installs. Uninstalling and reinstalling
 
 This behaviour can be cumbersome during tests, but is necessary in order to have the sandbox behaviour match production as much as possible.
 
-You can reset the session data of the device in our servers. Check the error message in the logs:
-
-```
-Session failed (Ignoring too frequent session. Last session: YYYY-MM-DDTHH:mm:ss, this session: YYYY-MM-DDTHH:mm:ss, interval: XXs, min interval: 20m) (app_token: {yourAppToken}, adid: {adidValue})
-```
-
-With the `{yourAppToken}` and `{adidValue}`/`{gps_adidValue}`/`{androidIDValue}` values filled in below, open one of the 
-following links:
-
-
-```
-http://app.adtrace.io/forget_device?app_token={yourAppToken}&adid={adidValue}
-```
-
-```
-http://app.adtrace.io/forget_device?app_token={yourAppToken}&gps_adid={gps_adidValue}
-```
-
-```
-http://app.adtrace.io/forget_device?app_token={yourAppToken}&android_id={androidIDValue}
-```
-
-When the device is forgotten, the link just returns `Forgot device`. If the device was already forgotten or the values were incorrect, the link returns `Device not found`.
+You can reset the session data of the device in our servers by [reset Google AdId][reset-google-ad-id].
 
 ### <a id="ts-broadcast-receiver"></a>Is my broadcast receiver capturing the install referrer?
 
-If you followed the instructions in the [guide](#broadcast_receiver), the broadcast receiver should be configured to send the install referrer to our SDK and to our servers.
+If you followed the instructions in the [guide](#qs-ir-gps-intent), the broadcast receiver should be configured to send the install referrer to our SDK and to our servers.
 
 You can test this by triggering a test install referrer manually. Replace `com.your.appid` with your app ID and run the following command with the [adb](http://developer.android.com/tools/help/adb.html) tool that comes with Android Studio:
 
