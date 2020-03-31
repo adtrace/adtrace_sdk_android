@@ -172,8 +172,6 @@ implementation 'com.google.android.gms:play-services-analytics:16.0.4'
 
 ### <div id="qs-add-permissions" dir="rtl" align='right'>افزودن مجوزها</div>
 
-Please add the following permissions, which the AdTrace SDK needs, if they are not already present in your `AndroidManifest.xml` file:
-
 <div dir="rtl" align='right'>
 در ادامه دسترسی های زیر را در فایل <code>AndroidManifest.xml</code> خود اضافه کنید. توجه کنید که دسترسی موقعیت مکانی در حالت معمولی بسته است و باید این مجوز مستقیما از کاربر گرفته شود.
 </div>
@@ -251,7 +249,7 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 <div dir="rtl" align='right'>
 گوگل طی <a href="https://android-developers.googleblog.com/2019/11/still-using-installbroadcast-switch-to.html">بیانیه ای</a> اعلام کرد که از 1 مارچ 2020 دیگر اطلاعات <code>INSTALL_REFERRER</code> را به صورت broadcast ارسال نمیکند، برای همین به رویکرد <a href="#qs-ir-gpr-api">Google Play Referrer API</a> مراجعه کنید.
 </div>
-
+<br/>
 <div dir="rtl" align='right'>
 شما بایستی اطلاعات <code>INSTALL_REFERRER</code> گوگل پلی را توسط یک broadcast receiver دریافت کنید. اگر از <strong>broadcast receiver خود</strong> استفاده نمیکنید، تگ <code>receiver</code> را داخل تگ <code>application</code> درون فایل <code>AndroidManifest.xml</code> خود اضافه کنید:
 </div>
@@ -287,8 +285,6 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 </div>
 
 #### <div id="qs-integ-basic-setup-native" dir="rtl" align='right'>Native App SDK</div>
-
-We recommend using a global android [Application][android_application] class to initialize the SDK. If you don't have one in your app already, follow these steps:
 
 <div dir="rtl" align='right'>
 ما توصیه میکنیم یک کلاس <a href="http://developer.android.com/reference/android/app/Application.html">Application</a> برای راه اندازی SDK درون برنامه خود ایجاد کنید، اگر ایجاد نکردید مراحل زیر را طی کنید:
@@ -450,8 +446,8 @@ let environment = AdTraceConfig.EnvironmentProduction;
 <ul>
 <li>یک کلاس private به طوری که در از <code>ActivityLifecycleCallbacks</code> استفاده میکند در کلاس <code>Application</code>  خود بسازید. اگر با ارور دسترسی مواجه شدید، بدین معناست که API برنامه شما زیر 14 است و باید از <a href="#qs-integ-session-tracking-api9">این دستورالعمل</a> استفاده کنید.</li>
 <br/>
-<li>داخل متد <code>onActivityResumed(Activity activity)</code> دستور <code>AdTrace.onResume()</code> را اضافه کنید. و داخل متد <code>onActivityPaused(Activity activity)</code> دستور <code>AdTrace.onPause()</code> را قرار دهید.</li>
-<li>درون متد <code>onCreate()</code> درمحلی که ادتریس پیاده سازی شده است، یک آبجکت از این کلاس را به متد <code>registerActivityLifecycleCallbacks</code> بدهید.</li>
+<li>داخل متد <code>onActivityResumed(Activity activity)</code> دستور <code>()AdTrace.onResume</code> را اضافه کنید. و داخل متد <code>onActivityPaused(Activity activity)</code> دستور <code>()AdTrace.onPause</code> را قرار دهید.</li>
+<li>درون متد <code>()onCreate</code> درمحلی که ادتریس پیاده سازی شده است، یک آبجکت از این کلاس را به متد <code>registerActivityLifecycleCallbacks</code> بدهید.</li>
 </ul>
 </div>
 
@@ -495,7 +491,7 @@ public class GlobalApplication extends Application {
 <div dir="rtl" align='right'>
 اگر <code>minSdkVersion</code> برنامه شما داخل gradle بین 9 و 13 باشد، درنظر داشته باشید که برای طولانی مدت بایستی به 14 ارتقا پیدا کند تا تعامل بهتری با ادتریس داشته باشد.
 </div>
-
+<br/>
 <div dir="rtl" align='right'>
 برای ردیابی نشست بایستی دو متد از ادتریس را در هنگامی که Activity متوقف میشود و یا ادامه پیدا میکند فراخوانی شود. در غیراین صورت SDK ممکن است ابتدا یا پایان نشست را از دست بدهد. برای این کار شما بایستی <strong>موارد زیر را برای هر Activity برنامه اجرا کنید:</strong>
 </div>
@@ -503,8 +499,8 @@ public class GlobalApplication extends Application {
 <div dir="rtl" align='right'>
 <ul>
 <li>فایل activity تان را باز کنید</li>
-<li>در متد <code>onResume</code> دستور <code>AdTrace.onResume()</code> را اضافه کنید. در صورت نیاز متد را ایجاد کنید. </li>
-<li>در متد <code>onPause</code> دستور <code>AdTrace.onPause()</code> را اضافه کنید. در صورت نیاز متد را ایجاد کنید. </li>
+<li>در متد <code>onResume</code> دستور <code>()AdTrace.onResume</code> را اضافه کنید. در صورت نیاز متد را ایجاد کنید. </li>
+<li>در متد <code>onPause</code> دستور <code>()AdTrace.onPause</code> را اضافه کنید. در صورت نیاز متد را ایجاد کنید. </li>
 <ul>
 </div>
 
@@ -537,7 +533,7 @@ public class YourActivity extends Activity {
 <div dir="rtl" align='right'>
 برای استفاده از این ویژگی بایستی مدیر اکانت در داخل پنل فعال کند. برای اطلاعات بیشتر میتوانید از طریق <a href="info@adtrace.io">info@adtrace.io</a> در تماس باشید.
 </div>
-
+<br/>
 <div dir="rtl" align='right'>
 اگر امضا SDK فعال شده است، از متد زیر برای پیاده سازی استفاده کنید:
 </div>
@@ -585,6 +581,7 @@ AdTrace.onCreate(adtraceConfig);
 <div dir="rtl" align='right'>
 شما میتوانید در حین تست لاگ ادتریس را از طریق <code>setLogLevel</code> که در <code>AdTraceConfig</code> قرار دارد کنترل کنید:
 </div>
+<br/>
 
 <table>
 <tr>
@@ -631,6 +628,7 @@ adtraceConfig.setLogLevel(AdTraceConfig.LogLevelSuppress); // disable all logs
 <div dir="rtl" align='right'>
 در صورتی که میخواهید همه لاگ های ادتریس غیر فعال شود، علاوه بر مقدار <code>AdTraceConfig.LogLevelSuppress</code> بایستی در تنظیمات ادتریس یک پارامتر boolean قرار دهید که نشان دهنده پشتیبانی از این نوع لاگ (suppress) میباشد یا خیر:
 </div>
+<br/>
 
 <table>
 <tr>
@@ -781,7 +779,7 @@ AdTrace.onCreate(config);
 <div dir="rtl" align='right'>
 بعد از دریافت اطلاعات دیپ لینک از طریق SDK ادتریس، محتوا این اطلاعات با استفاده از یک listener و مقدار boolean به شما بازمیگرداند. مقدار بازگشتی با توجه به تصمیم شما مبنی بر اینکه میخواهید Activity موردنظر با آن scheme مربوطه را دارید یا خیر.
 </div>
-
+<br/>
 <div dir="rtl" align='right'>
 اگر مقدار بازگشتی شما <code>true</code> باشد، همانند <a href="#dl-standard">سناریو لینک دهی استاندارد</a> انجام میشود. اگر میخواهید که SDK آن Activity مورد نظر را باز نکند بایستی <code>false</code> را برگردانید (با توجه به محتوا دیپ لینک).
 </div>
@@ -915,7 +913,7 @@ AdTrace.trackEvent(event);
 <div dir="rtl" align='right'>
 شما میتوانید یک شناسه خرید مخصوص برای جلوگیری از تکرار رویداد درآمدی استفاده کنید. 10 شناسه آخر ذخیره میشود و درآمدهای رویدادهایی که شناسه خرید تکراری دارند درنظر گرفته نمیشوند. این برای موارد خریددرون برنامه ای بسیار کاربرد دارد. به مثال زیر توجه کنید.
 </div>
-
+<br/>
 <div dir="rtl" align='right'>
 اگر میخواهید پرداخت درون برنامه ای ها را رصد کنید، فراخوانی متد <code>trackEvent</code> را زمانی انجام دهید که خرید انجام شده است و محصول خریداری شده است. بدین صورت شما از تکرار رویداد درآمدی جلوگیری کرده اید.
 </div>
@@ -949,6 +947,7 @@ AdTrace.trackEvent(event);
 <div dir="rtl" align='right'>
 به عنوان مثال اگر شما آدرس <code>http://www.example.com/callback</code> را به رویداد خود اضافه نموده اید، ردیابی رویداد به صورت زیر خواهد بود:
 </div>
+<br/>
 
 <table>
 <tr>
@@ -1208,7 +1207,7 @@ AdTrace.removeSessionCallbackParameter('foo');
 
 <br/>
 <div dir="rtl" align='right'>
-اگر شما مایل هستید که تمام مقدایر پارامترهای callback نشست را پاک کنید، بایستی از متد <code>AdTrace.resetSessionCallbackParameters()</code> استفاده کنید:
+اگر شما مایل هستید که تمام مقدایر پارامترهای callback نشست را پاک کنید، بایستی از متد <code>()AdTrace.resetSessionCallbackParameters</code> استفاده کنید:
 </div>
 <br/>
 
@@ -1326,7 +1325,7 @@ AdTrace.removeSessionPartnerParameter('foo');
 
 <br/>
 <div dir="rtl" align='right'>
-اگر شما مایل هستید که تمام مقدایر پارامترهای partner نشست را پاک کنید، بایستی از متد <code>AdTrace.resetSessionPartnerParameters()</code> استفاده کنید:
+اگر شما مایل هستید که تمام مقدایر پارامترهای partner نشست را پاک کنید، بایستی از متد <code>()AdTrace.resetSessionPartnerParameters</code> استفاده کنید:
 </div>
 <br/>
 
@@ -1401,7 +1400,7 @@ adtraceConfig.setDelayStart(5.5);
 
 <br/>
 <div dir="rtl" align='right'>
-در این مثال SDK ادتریس مانع از ارسال نشست نصب اولیه و هر رویدادی با تاخیر 5.5 ثانیه خواهد شد. بعد از اتمام این زمان (یا فراخوانی متد <code>AdTrace.sendFirstPackages()</code> در طی این زمان) هر پارامتر نشستی با تاخیر آن زمان افزوده خواهد شد و بعد آن ادتریس به حالت عادی به کار خود ادامه میدهد.
+در این مثال SDK ادتریس مانع از ارسال نشست نصب اولیه و هر رویدادی با تاخیر 5.5 ثانیه خواهد شد. بعد از اتمام این زمان (یا فراخوانی متد <code>()AdTrace.sendFirstPackages</code> در طی این زمان) هر پارامتر نشستی با تاخیر آن زمان افزوده خواهد شد و بعد آن ادتریس به حالت عادی به کار خود ادامه میدهد.
 </div>
 <br/>
 <div dir="rtl" align='right'>
