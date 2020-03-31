@@ -2211,7 +2211,7 @@ AdTrace.gdprForgetMe();
 ### <div id="ts-reset-gps-ad-id" dir="rtl" align='right'>چگونه میتوانم شناسه تبلیغات سرویس گوگل را ریست کنم؟</div>
 
 <div dir="rtl" align='right'>
-با استفاده از <a href="doc/english/reset-google-ad-id.md">این دستور العمل</a> میتوانید شناسه تبلیغات سرویس گوگل را ریست کنید.
+با استفاده از <a href="../english/reset-google-ad-id.md">این دستور العمل</a> میتوانید شناسه تبلیغات سرویس گوگل را ریست کنید.
 </div>
 
 ### <div id="ts-session-failed" dir="rtl" align='right'>من ارور "Session failed (Ignoring too frequent session. ...)" را مشاهده میکنم.</div>
@@ -2245,7 +2245,7 @@ adb shell am broadcast -a com.android.vending.INSTALL_REFERRER -n com.your.appid
 
 <br/>
 <div dir="rtl" align='right'>
-اگر شما همزمان از boradcast receiver های مختلفی برای <code>INSTALL_REFERRER</code> استفاده میکنید، طبق <a href="doc/english/multiple-receivers.md">این آموزش</a>  کلاس <code>io.adtrace.sdk.AdTraceReferrerReceiver</code> را با broadcast receiver خود جایگزین کنید.
+اگر شما همزمان از boradcast receiver های مختلفی برای <code>INSTALL_REFERRER</code> استفاده میکنید، طبق <a href="../english/multiple-receivers.md">این آموزش</a>  کلاس <code>io.adtrace.sdk.AdTraceReferrerReceiver</code> را با broadcast receiver خود جایگزین کنید.
 </div>
 <br/>
 <div dir="rtl" align='right'>
