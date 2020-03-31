@@ -1,3 +1,4 @@
+
 <div dir="rtl" align='right'>فارسی | <a href="../../README.md">English</a></div>
 
 ## <div dir="rtl" align='right'>خلاصه</div>
@@ -142,15 +143,18 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
 <div dir="rtl" align='right'>
 موارد زیر را به فایل <code>build.gradle</code> داخل قسمت  <code>dependencies</code> اضافه کنید:
 </div>
+<br/>
 
 ```gradle
 implementation 'io.adtrace:android-sdk:1.0.2'
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 اگر مایل هستید که SDK ادتریس را داخل web view اپ خود استفاده کنید، این قسمت را همانند بالا داخل <code>dependencies</code> اضافه کنید:
 </div>
+<br/>
 
 ```gradle
 implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.2'
@@ -161,20 +165,24 @@ implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.2'
 <div dir="rtl" align='right'>
 از تاریخ 1 آگوست 2014، برنامه های داخل گوگل پلی بایستی از <a href="https://support.google.com/googleplay/android-developer/answer/6048248?hl=en">شناسه تبلیغاتی گوگل</a> برای شناسایی یکتابودن دستگاه استفاده کنند. برای فعالسازی امکان استفاده از این شناسه خط زیر را به <code>dependencies</code> فایل <code>build.gradle</code> خود اضافه کنید:
 </div>
+<br/>
 
 ```gradle
 implementation 'com.google.android.gms:play-services-analytics:16.0.4'
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 <strong>نکته: </strong> SDK ادتریس محصور به استفاده از ورژن خاصی از <code>play-services-analytics</code> گوگل پلی نیست. بنابراین استفاده از آخرین نسخه این کتابخانه برای ادتریس مشکلی ایجاد نمیکند.
 </div>
+<br/>
 
 ### <div id="qs-add-permissions" dir="rtl" align='right'>افزودن مجوزها</div>
 
 <div dir="rtl" align='right'>
 در ادامه دسترسی های زیر را در فایل <code>AndroidManifest.xml</code> خود اضافه کنید. توجه کنید که دسترسی موقعیت مکانی در حالت معمولی بسته است و باید این مجوز مستقیما از کاربر گرفته شود.
 </div>
+<br/>
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET"/>
@@ -183,9 +191,11 @@ implementation 'com.google.android.gms:play-services-analytics:16.0.4'
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!--optional-->
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 اگر استور مدنظر شما <strong>به جز گوگل پلی</strong> باشد، دسترسی زیر را نیز اضافه کنید:
 </div>
+<br/>
 
 ```xml
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -196,6 +206,7 @@ implementation 'com.google.android.gms:play-services-analytics:16.0.4'
 <div dir="rtl" align='right'>
 اگر از Progaurd استفاده میکنید، دستورهای زیر را در فایل Progaurd خود اضافه کنید:
 </div>
+<br/>
 
 ```
 -keep public class io.adtrace.sdk.** { *; }
@@ -212,6 +223,7 @@ implementation 'com.google.android.gms:play-services-analytics:16.0.4'
 -keep public class com.android.installreferrer.** { *; }
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 اگر هدف شما استوری به <strong>جز گوگل پلی</strong> میباشد، دستور <code>com.google.android.gms</code> را میتوانید پاک کنید.
 </div>
@@ -231,14 +243,17 @@ implementation 'com.google.android.gms:play-services-analytics:16.0.4'
 <div dir="rtl" align='right'>
 به منظور استفاده از این کتابخانه مطمئن شوید که <a href="#qs-add-sdk">افزودن SDK به پروژه</a> را به درستی پیاده سازی کردید و خط زیر به <code>build.gradle</code> اضافه شده است:
 </div>
+<br/>
 
 ```gradle
 implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 همچنین مطمئن شوید که درصورت داشتن Progaurd، بخش <a href="qs-proguard-settings">تنظیمات Progaurd</a> به صورت کامل اضافه شده است، مخصوصا دستور زیر:
 </div>
+<br/>
 
 ```
 -keep public class com.android.installreferrer.** { *; }
@@ -253,6 +268,7 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 <div dir="rtl" align='right'>
 شما بایستی اطلاعات <code>INSTALL_REFERRER</code> گوگل پلی را توسط یک broadcast receiver دریافت کنید. اگر از <strong>broadcast receiver خود</strong> استفاده نمیکنید، تگ <code>receiver</code> را داخل تگ <code>application</code> درون فایل <code>AndroidManifest.xml</code> خود اضافه کنید:
 </div>
+<br/>
 
 ```xml
 <receiver
@@ -265,6 +281,7 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 </receiver>
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 اگر قبلا از یک broadcast receiver برای دریافت اطلاعات <code>INSTALL_REFERRER</code> استفاده میکرده اید، از <a href="../english/multiple-receivers.md">این دستورالعمل</a>  برای اضافه نمودن broadcast receiver ادتریس استفاده کنید.
 </div>
@@ -295,6 +312,7 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 <li>در برنامه نمونه از یک کلاس به اسم <code>GlobalApplication</code> استفاده میشود، بنابراین فایل manifest ما به صورت زیر خواهد بود:</li>
 </ul>
 </div>
+<br/>
 
 ```xml
 <application
@@ -303,11 +321,13 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 </application>
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 <ul>
 <li>داخل کلاس <code>Application</code> متد <code>onCreate</code> را پیدا کنید تا بسازید و کد زیر را برای راه اندازی  SDK ادتریس به آن اضافه کنید:</li>
 </ul>
 </div>
+<br/>
 
 ```java
 import io.adtrace.sdk.AdTrace;
@@ -326,6 +346,7 @@ public class GlobalApplication extends Application {
 }
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 مقدار <code>{YourAppToken}</code> را با توکن برنامه خود که از پنل دریافت کرده اید، عوض کنید.
 </div>
@@ -333,12 +354,14 @@ public class GlobalApplication extends Application {
 <div dir="rtl" align='right'>
 با توجه به نوع ساخت برنامه شما برای تست یا رلیز، بایستی  <code>environment</code> را یکی از مقادیر زیر قرار دهید:
 </div>
+<br/>
 
 ```java
 String environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
 String environment = AdTraceConfig.ENVIRONMENT_PRODUCTION;
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 <strong>نکته:</strong> این مقدار تنها در زمان تست برنامه شما بایستی مقدار <code> AdTraceConfig.ENVIROMENT_SANDBOX</code> قرار بگیرد. این پارامتر را به <code>AdTraceConfig.ENVIROMENT_PRODUCTION</code> قبل از انتشار برنامه خود تغییر دهید.
 </div>
@@ -361,6 +384,7 @@ String environment = AdTraceConfig.ENVIRONMENT_PRODUCTION;
 <div dir="rtl" align='right'>
 بعد از پیاده سازی زیر، activity شما به صورت زیر خواهد شد:
 </div>
+<br/>
 
 ```java
 public class MainActivity extends Activity {
@@ -384,14 +408,16 @@ public class MainActivity extends Activity {
 }
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 بعد از مراحل بالا پل ارتباطی میان جاوااسکریپت و اندروید ادتریس به صورت موفقیت آمیز برقرار خواهد شد.
 </div>
-
+<br/>
 <div dir="rtl" align='right'>
 داخل فایل HTML خود فایل های جاوا اسکریپتی را در در پوشه <a href="https://github.com/adtrace/adtrace_sdk_android/tree/master/android-sdk-plugin-webbridge/src/main/assets
 ">assets</a> قرار دارند را وارد کنید:
 </div>
+<br/>
 
 ```html
 <script type="text/javascript" src="adtrace.js"></script>
@@ -399,9 +425,11 @@ public class MainActivity extends Activity {
 <script type="text/javascript" src="adtrace_config.js"></script>
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 بعد از وارد کردن فایلهای بالا، دستور زیر را داخل جاوااسکریپت  خود برای راه اندازی SDK کدهای زیر را  اضافه کنید:
 </div>
+<br/>
 
 ```js
 let yourAppToken = '{YourAppToken}';
@@ -411,6 +439,7 @@ let adtraceConfig = new AdTraceConfig(yourAppToken, environment);
 AdTrace.onCreate(adtraceConfig);
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 مقدار <code>{YourAppToken}</code> را با توکن برنامه خود که از پنل دریافت کرده اید، عوض کنید.
 </div>
@@ -418,14 +447,14 @@ AdTrace.onCreate(adtraceConfig);
 <div dir="rtl" align='right'>
 با توجه به نوع ساخت برنامه شما برای تست یا رلیز، بایستی  <code>environment</code> را یکی از مقادیر زیر قرار دهید:
 </div>
-
+<br/>
 
 ```js
 let environment = AdTraceConfig.EnvironmentSandbox;
 let environment = AdTraceConfig.EnvironmentProduction;
 ```
 
-
+<br/>
 <div dir="rtl" align='right'>
 <strong>نکته:</strong> این مقدار تنها در زمان تست برنامه شما بایستی مقدار <code> AdTraceConfig.ENVIROMENT_SANDBOX</code> قرار بگیرد. این پارامتر را به <code>AdTraceConfig.ENVIROMENT_PRODUCTION</code> قبل از انتشار برنامه خود تغییر دهید.
 </div>
@@ -450,6 +479,7 @@ let environment = AdTraceConfig.EnvironmentProduction;
 <li>درون متد <code>()onCreate</code> درمحلی که ادتریس پیاده سازی شده است، یک آبجکت از این کلاس را به متد <code>registerActivityLifecycleCallbacks</code> بدهید.</li>
 </ul>
 </div>
+<br/>
 
 ```java
 import io.adtrace.sdk.AdTrace;
@@ -507,6 +537,7 @@ public class GlobalApplication extends Application {
 <div dir="rtl" align='right'>
 بعد از موارد بالا، Activity مورد نظر باید شبیه همچینن چیزی شود:
 </div>
+<br/>
 
 ```java
 import io.adtrace.sdk.AdTrace;
@@ -524,6 +555,7 @@ public class YourActivity extends Activity {
 }
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 فراموش نکنید که این مراحل را برای <strong>هر Activity</strong> اجرا کنید.
 </div>
@@ -541,8 +573,8 @@ public class YourActivity extends Activity {
 <div dir="rtl" align='right'>
 یک App Secret توسط متد <code>setAppSecret</code> داخل <code>AdTraceConfig</code> فراخوانی میشود:
 </div>
-
 <br/>
+
 <table>
 <tr>
 <td>
@@ -625,6 +657,7 @@ adtraceConfig.setLogLevel(AdTraceConfig.LogLevelSuppress); // disable all logs
 </tr>
 </table>
 
+<br/>
 <div dir="rtl" align='right'>
 در صورتی که میخواهید همه لاگ های ادتریس غیر فعال شود، علاوه بر مقدار <code>AdTraceConfig.LogLevelSuppress</code> بایستی در تنظیمات ادتریس یک پارامتر boolean قرار دهید که نشان دهنده پشتیبانی از این نوع لاگ (suppress) میباشد یا خیر:
 </div>
@@ -638,7 +671,6 @@ adtraceConfig.setLogLevel(AdTraceConfig.LogLevelSuppress); // disable all logs
 </tr>
 <tr>
 <td>
-
 
 ```java
 AdTraceConfig adtraceConfig = new AdTraceConfig(this, appToken, environment, true);
@@ -683,6 +715,7 @@ AdTrace.onCreate(adtraceConfig);
 <div dir="rtl" align='right'>
 اگر کاربر برنامه شما را نصب داشته باشد و شما بخواهید از طریق کلیک ترکر ادتریس به برنامه منتقل شود، بایستی دیپ لینک را درون برنامه خود فعالسازی کنید. این راه از طریق یک <strong>scheme یکتا</strong> درون Activity مورد نظر فعال میشود. برای این کار درون <code>AndroidManifest.xml</code> یک تگ <code>intent-filter</code> به Activity مورد نظر تعریف کنید که مقدار <code>android:scheme</code> آن با یک مقدار مناسب پر شده باشد:
 </div>
+<br/>
 
 ```xml
 <activity
@@ -705,6 +738,7 @@ AdTrace.onCreate(adtraceConfig);
 </activity>
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 با توجه با مقدار <code>android:launchMode</code> داخل Activity  درون فایل <code>AndroidManifest.xml</code> اطلاعات درباره دیپ لینک به آن Activity رسانده خواهد شد، برای اطلاعات بیشتر از مقدارهای ممکن <code>android:launchMode</code> به <a href="https://developer.android.com/guide/topics/manifest/activity-element.html">دایکومنت رسمی اندروید</a> مراجعه کنید.
 </div>
@@ -712,6 +746,7 @@ AdTrace.onCreate(adtraceConfig);
 <div dir="rtl" align='right'>
 در دو قسمت از Activity اطلاعات دیپ لینک از طریق یک شی <code>Intent</code> قابل استفاده است، از طریق <code>onCreate</code> یا متد <code>onNewIntent</code> این امکان فراهم میباشد که به صورت زیر آموزش داده شده است:
 </div>
+<br/>
 
 ```java
 @Override
@@ -776,6 +811,7 @@ config.setOnDeeplinkResponseListener(new OnDeeplinkResponseListener() {
 AdTrace.onCreate(config);
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 بعد از دریافت اطلاعات دیپ لینک از طریق SDK ادتریس، محتوا این اطلاعات با استفاده از یک listener و مقدار boolean به شما بازمیگرداند. مقدار بازگشتی با توجه به تصمیم شما مبنی بر اینکه میخواهید Activity موردنظر با آن scheme مربوطه را دارید یا خیر.
 </div>
@@ -802,9 +838,11 @@ adtraceConfig.setDeferredDeeplinkCallback(function (deeplink) {});
 AdTrace.onCreate(adtraceConfig);
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 در این سناریو به تعویق افتاده، یک مورد اضافی بایستی به تنظیمات اضافه شود. هنگامی که SDK ادتریس اطاعات دیپ لینک را دریافت کرد، شما امکان این را دارید که SDK، با استفاده از این اطلاعات باز شود یا خیر که از طریق  متد <code>setOpenDeferredDeeplink</code> قابل استفاده است:
 </div>
+<br/>
 
 ```js
 // ...
@@ -844,6 +882,7 @@ AdTrace.start(adtraceConfig);
 <div dir="rtl" align='right'>
 فراخوانی متد <code>AdTrace.appWillOpenUrl(Uri, Context)</code> بایستی مثل زیر باشد:
 </div>
+<br/>
 
 ```java
 @Override
@@ -870,6 +909,7 @@ protected void onNewIntent(Intent intent) {
 <div dir="rtl" align='right'>
 <strong>نکته ای برای web view:</strong> این فراخوانی در جاوااسکریپت با متد <code>AdTrace.appWillOpenUrl</code> به شکل زیر میباشد:
 </div>
+<br/>
 
 ```js
 AdTrace.appWillOpenUrl(deeplinkUrl);
@@ -893,6 +933,7 @@ AdTrace.trackEvent(event);
 <div dir="rtl" align='right'>
 اگر کاربران شما از طریق کلیک بر روی تبلیغات یا پرداخت درون برنامه ای، رویدادی میتوانند ایجاد کنند، شما میتوانید آن درآمد را از طریق رویدادی مشخص رصد کنید. اگر فرض کنیم که یک ضربه به ارزش یک سنت از واحد یورو باشد، کد شما برای ردیابی این رویداد به صورت زیر میابشد:
 </div>
+<br/>
 
 ```java
 AdTraceEvent event = new AdTraceEvent("abc123");
@@ -917,6 +958,7 @@ AdTrace.trackEvent(event);
 <div dir="rtl" align='right'>
 اگر میخواهید پرداخت درون برنامه ای ها را رصد کنید، فراخوانی متد <code>trackEvent</code> را زمانی انجام دهید که خرید انجام شده است و محصول خریداری شده است. بدین صورت شما از تکرار رویداد درآمدی جلوگیری کرده اید.
 </div>
+<br/>
 
 ```java
 AdTraceEvent event = new AdTraceEvent("abc123");
@@ -984,9 +1026,11 @@ AdTrace.trackEvent(adtraceEvent);
 </tr>
 </table>
 
+<br/>
 <div dir="rtl" align='right'>
 در اینصورت ما رویداد شما را رصد خواهیم کرد و یک درخواست به صورت زیر ارسال خواهیم کرد:
 </div>
+<br/>
 
 ```
 http://www.example.com/callback?key=value&foo=bar
@@ -1001,6 +1045,7 @@ http://www.example.com/callback?key=value&foo=bar
 <div dir="rtl" align='right'>
 این پارامترها به صورت callback که در بالا مشاهده میکنید استفاده میشود، فقط از طریق متد <code>addPartnerParameter</code> درون یک شی از <code>AdTraceEvent</code> فراخوانی میشود.
 </div>
+<br/>
 
 <table>
 <tr>
@@ -1718,7 +1763,10 @@ adtraceConfig.setEnableSendInstalledApps(true);
 </tr>
 </table>
 
-**Note**: This option is **disabled** by default.
+<br/>
+<div dir="rtl" align='right'>
+<strong>نکته</strong>: این ویژگی در حالت پیشفرض <strong>غیرفعال</strong> میباشد.
+</div>
 
 ### <div id="af-di" dir="rtl" align='right'>شناسه های دستگاه</div>
 
@@ -1746,6 +1794,7 @@ SDK ادتریس انواع شناسه ها رو به شما پیشنهاد می
 <div dir="rtl" align='right'>
 اگر میخواهید شناسه تبلیغات گوگل را بدست آورید، یک محدودیتی وجود دارد که تنها از طریق ترد پس زمینه قابل خواندن میباشد. میتوانید از طریق تابع <code>getGoogleAdId</code> به همراه context و یک شی از <code>OnDeviceIdsRead</code> به صورت زیر به این شناسه دست پیدا کنید:
 </div>
+<br/>
 
 ```java
 AdTrace.getGoogleAdId(this, new OnDeviceIdsRead() {
@@ -1901,6 +1950,7 @@ let adid = AdTrace.getAdid();
 <li>برنامه خود را بسازید. در قسمت LogCat خود همچین خطی را مشاهده خواهید کرد.</li>
 </ul>
 </div>
+<br/>
 
   ```
   Default tracker: 'abc123'
@@ -2188,6 +2238,7 @@ Upon receiving this information, AdTrace will erase the user's data and the AdTr
 <div dir="rtl" align='right'>
 شما از طریق زیر میتوانید به صورت دستی این اطلاعات نصب را آزمایش کنید. قسمت <code>com.your.appid</code> را با شناسه برنامه (app ID) خود جایگزین نمایید و سپس دستور زیر را از طریق <a href="http://developer.android.com/tools/help/adb.html">adb</a> در اندروید استودو اجرا کنید:
 </div>
+<br/>
 
 ```
 adb shell am broadcast -a com.android.vending.INSTALL_REFERRER -n com.your.appid/io.adtrace.sdk.AdTraceReferrerReceiver --es "referrer" "adtrace_reftag%3Dabc1234%26tracking_id%3D123456789%26utm_source%3Dnetwork%26utm_medium%3Dbanner%26utm_campaign%3Dcampaign"
@@ -2206,14 +2257,17 @@ If you are already using a different broadcast receiver for the `INSTALL_REFERRE
 <div dir="rtl" align='right'>
 اگر سطح لاگ را به درجه <code>verbose</code> تغییر دهید، امکان مشادهده لاگ را به صورت زیر خواهید داشت:
 </div>
+<br/>
 
 ```
 V/AdTrace: Referrer to parse (adtrace_reftag=abc1234&tracking_id=123456789&utm_source=network&utm_medium=banner&utm_campaign=campaign) from reftag
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 و پکیج نصب به صورت زیر خواهد شد:
 </div>
+<br/>
 
 ```
 V/AdTrace: Path:      /sdk_click
@@ -2231,6 +2285,7 @@ V/AdTrace: Path:      /sdk_click
       tracking_enabled 1
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 اگر این آزمایش را قبل از اجرای برنامه انجام دهید، هیچ پکیجی ارسال نخواهد شد. بسته زمانی که برنامه باز شود ارسال خواهد شد.
 </div>
@@ -2242,6 +2297,7 @@ V/AdTrace: Path:      /sdk_click
 <div dir="rtl" align='right'>
 اگر شما مایل هستید به اینگه چطور برنامه اطلاعات referrer را به صورت غیرکدگذاری(unencoded) دریافت میکند، طبق مثال زیر یک متد به اسم <code>onFireIntentClick</code> درون فایل <code>MainActivity.java</code> خود ایجاد کنید:
 </div>
+<br/>
 
 ```java
 public void onFireIntentClick(View v) {
@@ -2252,6 +2308,7 @@ public void onFireIntentClick(View v) {
 }
 ```
 
+<br/>
 <div dir="rtl" align='right'>
 دومین مقدار <code>putExtra</code> را با مقدار دلخواه خود پر کنید.
 </div>
