@@ -2197,8 +2197,7 @@ AdTrace.gdprForgetMe();
 </tr>
 </table>
 
-Upon receiving this information, AdTrace will erase the user's data and the AdTrace SDK will stop tracking the user. No requests from this device will be sent to AdTrace in the future.
-
+<br/>
 <div dir="rtl" align='right'>
 طی دریافت این داده، ادتریس تمامی داده های کاربر را پاک خواهد کرد و ردیابی کاربر را متوقف خواهد کرد. هیچ درخواستی از این دستگاه به ادتریس در آینده ارسال نخواهد شد.
 </div>
