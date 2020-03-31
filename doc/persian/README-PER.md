@@ -2244,8 +2244,7 @@ Upon receiving this information, AdTrace will erase the user's data and the AdTr
 adb shell am broadcast -a com.android.vending.INSTALL_REFERRER -n com.your.appid/io.adtrace.sdk.AdTraceReferrerReceiver --es "referrer" "adtrace_reftag%3Dabc1234%26tracking_id%3D123456789%26utm_source%3Dnetwork%26utm_medium%3Dbanner%26utm_campaign%3Dcampaign"
 ```
 
-If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent and followed this [guide][referrer], replace `io.adtrace.sdk.AdTraceReferrerReceiver` with your broadcast receiver.
-
+<br/>
 <div dir="rtl" align='right'>
 اگر شما همزمان از boradcast receiver های مختلفی برای <code>INSTALL_REFERRER</code> استفاده میکنید، طبق <a href="doc/english/multiple-receivers.md">این آموزش</a>  کلاس <code>io.adtrace.sdk.AdTraceReferrerReceiver</code> را با broadcast receiver خود جایگزین کنید.
 </div>
