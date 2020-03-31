@@ -1,4 +1,11 @@
-<div dir="rtl" align='right'>فارسی | <a href="../../README.md">English</a></div>
+<style>
+  @font-face {
+    font-family: 'bkoodak';
+    src: URL('bkoodak.ttf') format('truetype');
+  }
+</style>
+
+<div font-family="bkoodak" dir="rtl" align='right'>فارسی | <a href="../../README.md">English</a></div>
 
 ## <div dir="rtl" align='right'>خلاصه</div>
 
