@@ -81,6 +81,12 @@ var AdTrace = {
         }
     },
 
+    setEnableLocation: function(enabled) {
+        if (AdTraceBridge) {
+            AdTraceBridge.setEnableLocation(enabled);
+        }
+    },
+
     sendFirstPackages: function() {
         if (AdTraceBridge) {
             AdTraceBridge.sendFirstPackages();
@@ -187,7 +193,7 @@ var AdTrace = {
         if (this.adtraceConfig) {
             return this.adtraceConfig.getSdkPrefix();
         } else {
-            return 'web-bridge1.0.2';
+            return 'web-bridge1.0.3';
         }
     },
 

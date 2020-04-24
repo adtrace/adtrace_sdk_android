@@ -378,6 +378,7 @@ public class AdTraceBridgeInstance {
             Object partnerParametersField = jsonAdTraceEvent.get("partnerParameters");
             Object orderIdField = jsonAdTraceEvent.get("orderId");
             Object callbackIdField = jsonAdTraceEvent.get("callbackId");
+            Object eventValueField = jsonAdTraceEvent.get("eventValue");
 
             String eventToken = AdTraceBridgeUtil.fieldToString(eventTokenField);
             AdTraceEvent adTraceEvent = new AdTraceEvent(eventToken);
@@ -423,6 +424,12 @@ public class AdTraceBridgeInstance {
             String callbackId = AdTraceBridgeUtil.fieldToString(callbackIdField);
             if (callbackId != null) {
                 adTraceEvent.setCallbackId(callbackId);
+            }
+
+            // Event value
+            String eventValue = AdTraceBridgeUtil.fieldToString(eventValueField);
+            if (eventValue != null) {
+                adTraceEvent.setEventValue(eventValue);
             }
 
             // Track event
@@ -504,6 +511,17 @@ public class AdTraceBridgeInstance {
         Boolean isOffline = AdTraceBridgeUtil.fieldToBoolean(isOfflineString);
         if (isOffline != null) {
             AdTrace.setOfflineMode(isOffline);
+        }
+    }
+
+    @JavascriptInterface
+    public void setEnableLocation(String isEnableLocationString) {
+        if (!isInitialized()) {
+            return;
+        }
+        Boolean isEnable = AdTraceBridgeUtil.fieldToBoolean(isEnableLocationString);
+        if (isEnable != null) {
+            AdTrace.enableLocation(isEnable);
         }
     }
 
