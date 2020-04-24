@@ -146,8 +146,8 @@ SDK اندروید ادتریس. شما برای اطلاعات بیشتر می�
 <br/>
 
 ```gradle
-implementation 'io.adtrace:android-sdk:1.0.2'
-implementation 'com.android.installreferrer:installreferrer:1.0'
+implementation 'io.adtrace:android-sdk:1.0.3'
+implementation 'com.android.installreferrer:installreferrer:1.1.2'
 ```
 
 <br/>
@@ -157,7 +157,7 @@ implementation 'com.android.installreferrer:installreferrer:1.0'
 <br/>
 
 ```gradle
-implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.2'
+implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.3'
 ```
 
 ### <div id="qs-add-gps" dir="rtl" align='right'>افزودن سرویس های گوگل پلی</div>
@@ -168,7 +168,7 @@ implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.2'
 <br/>
 
 ```gradle
-implementation 'com.google.android.gms:play-services-analytics:16.0.4'
+implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
 ```
 
 <br/>

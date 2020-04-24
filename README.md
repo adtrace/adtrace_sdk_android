@@ -89,14 +89,14 @@ These are the minimal steps required to integrate the AdTrace SDK into your Andr
 If you are using Maven, add the following to your `build.gradle` file:
 
 ```gradle
-implementation 'io.adtrace:android-sdk:1.0.2'
-implementation 'com.android.installreferrer:installreferrer:1.0'
+implementation 'io.adtrace:android-sdk:1.0.3'
+implementation 'com.android.installreferrer:installreferrer:1.1.2'
 ```
 
 If you would prefer to use the AdTrace SDK inside web views in your app, please include this additional dependency as well:
 
 ```gradle
-implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.2'
+implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.3'
 ```
 
 ### <a id="qs-add-gps"></a>Add Google Play Services
@@ -104,7 +104,7 @@ implementation 'io.adtrace:android-sdk-plugin-webbridge:1.0.2'
 Since the 1st of August of 2014, apps in the Google Play Store must use the [Google Advertising ID][google_ad_id] to uniquely identify devices. To enable the Google Advertising ID for our SDK, you must integrate [Google Play Services][google_play_services]. If you haven't done this yet, please add dependency to the Google Play Services library by adding the following dependecy to your `dependencies` block of app's `build.gradle` file:
 
 ```gradle
-implementation 'com.google.android.gms:play-services-analytics:16.0.4'
+implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
 ```
 
 **Note**: The AdTrace SDK is not tied to any specific version of the `play-services-analytics` part of the Google Play Services library, so feel free to always use the latest version of it (or whichever you might need).
