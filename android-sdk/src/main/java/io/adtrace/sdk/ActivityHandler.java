@@ -221,7 +221,7 @@ public class ActivityHandler implements IActivityHandler {
         internalState.sessionResponseProcessed = false;
         // does not have first start by default
         internalState.firstSdkStart = false;
-
+        // enabled location by default
         internalState.enableLocation = true;
 
         executor.submit(new Runnable() {
@@ -1389,26 +1389,12 @@ public class ActivityHandler implements IActivityHandler {
     private void enableLocationI(boolean enabled) {
         // compare with the internal state
         if (!hasChangedStateI(internalState.isEnableLocation(), enabled,
-                "AdTrace already in offline mode",
-                "AdTrace already in online mode")) {
+                "AdTrace already enabled location",
+                "AdTrace already disabled location")) {
             return;
         }
 
         internalState.enableLocation = enabled;
-
-        if (internalState.hasFirstSdkStartNotOcurred()) {
-            updateStatusI(enabled,
-                    "Handlers will start paused due to SDK being offline",
-                    "Handlers will still start as paused",
-                    "Handlers will start as active due to SDK being online");
-            return;
-        }
-
-        updateStatusI(enabled,
-                "Pausing handlers to put SDK offline mode",
-                "Handlers remain paused",
-                "Resuming handlers to put SDK in online mode");
-
     }
 
     private boolean hasChangedStateI(boolean previousState, boolean newState,
