@@ -140,6 +140,11 @@ public class AdTrace {
         adTraceInstance.setOfflineMode(enabled);
     }
 
+    /**
+     * Called to enable or disable location status.
+     *
+     * @param enabled boolean indicating should SDK use location of device or not
+     */
     public static void enableLocation(boolean enabled) {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
         adTraceInstance.enableLocation(enabled);
