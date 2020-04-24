@@ -1,21 +1,17 @@
 package io.adtrace.sdk;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 
 public class AdTraceLocation extends Service {
 
-    private static String TAG = AdTraceLocation.class.getName();
+    private ILogger logger = AdTraceFactory.getLogger();
     private final Context mContext;
     boolean isNetworkEnabled = false;
     Location location;
@@ -35,10 +31,10 @@ public class AdTraceLocation extends Service {
 
         try {
 
-            if (ActivityCompat.checkSelfPermission(mContext,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
+//            if (ContextCompat.checkSelfPermission(mContext,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                return;
+//            }
 
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
@@ -48,17 +44,15 @@ public class AdTraceLocation extends Service {
 
                 provider_info = LocationManager.NETWORK_PROVIDER;
 
-                if (provider_info!=null && !provider_info.isEmpty()) {
-                    if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(provider_info);
-                        updateCoordinates();
-                    }
+                if (locationManager != null) {
+                    location = locationManager.getLastKnownLocation(provider_info);
+                    updateCoordinates();
                 }
 
             }
 
         } catch (Exception e) {
-            Log.e(TAG, "Impossible to connect to LocationManager", e);
+            logger.info("Cannot get location");
         }
     }
 
