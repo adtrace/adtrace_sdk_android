@@ -7,10 +7,11 @@ subprojects {
 ext {
     // Android config.
     coreMinSdkVersion = 9
-    coreCompileSdkVersion = 28
-    coreTargetSdkVersion = 28
-    coreVersionName = '1.0.2'
-    defaultVersionCode = 102
+    testMinSdkVersion = 14
+    coreCompileSdkVersion = 29
+    coreTargetSdkVersion = 29
+    coreVersionName = '1.0.3'
+    defaultVersionCode = 103
 
     // Other config
     adtraceGroupId = 'io.adtrace'

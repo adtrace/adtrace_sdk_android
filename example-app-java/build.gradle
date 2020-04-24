@@ -1,32 +1,17 @@
 apply plugin: 'com.android.application'
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.ext.coreCompileSdkVersion
     defaultConfig {
         applicationId "io.adtrace.sdk"
-        minSdkVersion 19
-        targetSdkVersion 28
-        versionCode 2
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
+        minSdkVersion rootProject.ext.testMinSdkVersion
+        targetSdkVersion rootProject.ext.coreTargetSdkVersion
+        versionCode rootProject.ext.defaultVersionCode
+        versionName rootProject.ext.coreVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -36,15 +21,14 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
+    implementation 'com.android.installreferrer:installreferrer:1.1.2'
+    implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
 
     implementation project(':android-sdk')
-//    implementation 'io.adtrace:android-sdk:1.0.2'
-
-    implementation 'com.android.installreferrer:installreferrer:1.0'
-
 }
