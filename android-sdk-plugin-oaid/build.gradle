@@ -1,0 +1,160 @@
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+//repositories {
+//    maven {
+//        url "https://oss.sonatype.org/content/repositories/staging/"
+//    }
+//}
+
+android {
+    compileSdkVersion rootProject.ext.coreCompileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.coreMinSdkVersion
+        targetSdkVersion rootProject.ext.coreTargetSdkVersion
+        versionName rootProject.ext.coreVersionName
+        versionCode rootProject.ext.defaultVersionCode
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compileOnly files('libs/oaid_sdk_1.0.26.aar')
+    compileOnly project(':android-sdk')
+}
+
+
+task adtraceOaidAndroidAar (type: Copy) {
+    dependsOn 'assembleRelease'
+
+    from('build/outputs/aar/')
+    include 'android-sdk-plugin-oaid-release.aar'
+    destinationDir file('build/libs/')
+    rename 'android-sdk-plugin-oaid-release.aar', "${project.name}.aar"
+
+}
+
+task adtraceOaidAndroidJar(type: Jar) {
+    dependsOn 'packageReleaseAssets'
+    dependsOn 'compileReleaseJavaWithJavac'
+
+    from('build/intermediates/library_assets/release/packageReleaseAssets/out/') {
+        into('assets')
+    }
+    from('build/intermediates/javac/release/classes/')
+
+    archiveName "${project.name}.jar"
+}
+
+//task androidJavadocs(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//    // JDK 1.8 is more strict then 1.7. Have JDK 1.8 behave like 1.7 for javadoc generation.
+//    if (org.gradle.internal.jvm.Jvm.current().getJavaVersion() == JavaVersion.VERSION_1_8) {
+//        options.addStringOption('Xdoclint:none', '-quiet')
+//    }
+//}
+
+//task adtraceOaidAndroidJavadocsJar(type: Jar) {
+//    dependsOn 'androidJavadocs'
+//    classifier = 'javadoc'
+//    from androidJavadocs.destinationDir
+//}
+
+task adtraceOaidAndroidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives adtraceOaidAndroidJar
+//    archives adtraceOaidAndroidJavadocsJar
+    archives adtraceOaidAndroidSourcesJar
+}
+
+publishing {
+    publications {
+        mavenAndroidOaid(MavenPublication) {
+            customizePom(pom)
+            groupId rootProject.ext.adtraceGroupId
+            artifactId 'adtrace-android-oaid'
+            version rootProject.ext.coreVersionName
+
+            artifact adtraceOaidAndroidJar
+//            artifact adtraceOaidAndroidJavadocsJar
+            artifact adtraceOaidAndroidSourcesJar
+        }
+    }
+
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            if (project.hasProperty("sonatypeUsername")) {
+                credentials {
+                    username sonatypeUsername
+                    password sonatypePassword
+                }
+            }
+        }
+    }
+}
+
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // Add all items necessary for maven central publication.
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+            description 'The Oaid plugin for AdTrace SDK for Android'
+            name 'AdTrace Android SDK Oaid plugin'
+            url 'https://github.com/adtrace/adtrace_sdk_android'
+
+            organization {
+                name 'adtrace'
+                url 'http://www.adtrace.io'
+            }
+            licenses {
+                license {
+                    name 'MIT License'
+                    url 'http://www.opensource.org/licenses/mit-license.php'
+                }
+            }
+            scm {
+                url 'git@github.com:adtrace/adtrace_sdk_android.git'
+                connection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+                developerConnection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+            }
+            developers {
+                developer {
+                    name 'Nasser Amini'
+                    email 'namini40@gmail.com'
+                }
+            }
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenAndroidOaidPublication {
+        destination = file("${project.buildDir}/generated-pom.xml")
+    }
+    /* TODO check if/how to replace this tasks
+    tasks.publishMavenAndroidOaidPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenAndroidOaidPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
+    */
+}
+
+signing {
+    sign publishing.publications.mavenAndroidOaid
+}

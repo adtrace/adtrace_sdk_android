@@ -1,0 +1,43 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+ext{
+    adtraceGroupId = 'io.adtrace.sdk'
+
+    coreMinSdkVersion = 9
+    coreCompileSdkVersion = 31
+    coreTargetSdkVersion = 31
+    coreVersionName = '2.0.1'
+    defaultVersionCode = 1
+    webbridgeMinSdkVersion = 17
+
+}
+
+buildscript {
+    ext.kotlin_version = '1.5.31'
+
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.0.0"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" }
+
+}
+allprojects {
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
