@@ -12,7 +12,6 @@ android {
         targetSdkVersion rootProject.ext.coreTargetSdkVersion
         versionName rootProject.ext.coreVersionName
         versionCode rootProject.ext.defaultVersionCode
-        consumerProguardFiles 'adtrace-proguard-rules.txt'
     }
 
     buildTypes {
@@ -245,6 +244,6 @@ model {
 }
 
 signing {
-//    sign publishing.publications.mavenAndroidCore
-//    sign publishing.publications.mavenAndroidCoreAAR
+    sign publishing.publications.mavenAndroidCore
+    sign publishing.publications.mavenAndroidCoreAAR
 }

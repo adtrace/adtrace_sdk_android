@@ -92,17 +92,17 @@ publishing {
         }
     }
 
-    repositories {
-        maven {
-            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-            if (project.hasProperty("sonatypeUsername")) {
-                credentials {
-                    username sonatypeUsername
-                    password sonatypePassword
-                }
-            }
-        }
-    }
+//    repositories {
+//        maven {
+//            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+//            if (project.hasProperty("sonatypeUsername")) {
+//                credentials {
+//                    username sonatypeUsername
+//                    password sonatypePassword
+//                }
+//            }
+//        }
+//    }
 }
 
 def customizePom(pom) {
