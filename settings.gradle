@@ -8,7 +8,6 @@ dependencyResolutionManagement {
 
 }
 rootProject.name = "adtrace_sdk_android"
-include ':app'
 include ':android-sdk'
 include ':android-sdk-plugin-webbridge'
 include ':android-sdk-plugin-oaid'

@@ -13,7 +13,6 @@ ext{
 }
 
 buildscript {
-    ext.kotlin_version = '1.5.31'
 
     repositories {
         google()
@@ -25,7 +24,7 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" }
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0" }
 
 }
 allprojects {
