@@ -3,6 +3,56 @@
   <a href='https://opensource.org/licenses/MIT'><img src='https://img.shields.io/badge/License-MIT-green.svg'></a>  
 </p>
 
+
+# *Beta release note v2.0.1
+<span style="color: red">in order to test beta version **implement our library** as follows:</span>
+
+### step 1
+create `libs` folder in your project (it may exists!).
+
+### step 2
+add its path to project level `build.gradle` (newer updates  `settings.gradle`) as follows:
+```groovy
+allprojects {
+   repositories {
+      jcenter()
+      flatDir {
+         dirs 'libs'
+      }
+   }
+}
+```
+
+or
+
+```groovy
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+```
+add [libraries](./libs) to `libs` folder.
+
+and now open app level build.grdle file and add .aar file
+
+```groovy
+dependencies {
+    implementation(name:'adtrace-sdk-v2.0.1-beta', ext:'aar')
+}
+```
+now sync your project.
+
+<span style="color: yellow">**Note:** in order to enable **web-bridge** and **OAID**(targeting huawei devices) you need to **implement** those libraries too.</span>
+
+<span style="color: red">follow all other steps as described in the docs and make sure to pay attention to details.</span>
+
+
 ## Summary
 
 This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [adtrace.io].
