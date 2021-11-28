@@ -11,7 +11,7 @@
 create `libs` folder in your project (it may exists!).
 
 ### step 2
-add its path to project level `build.gradle` (newer updates  `settings.gradle`) as follows:
+add its path to project level `build.gradle` as follows:
 ```groovy
 allprojects {
    repositories {
@@ -23,7 +23,7 @@ allprojects {
 }
 ```
 
-or
+or (newer updates  `settings.gradle`) 
 
 ```groovy
 dependencyResolutionManagement {
