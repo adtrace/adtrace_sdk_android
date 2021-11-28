@@ -1,7 +1,13 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
+    id 'signing'
 }
-
+//repositories {
+//    maven {
+//        url "https://oss.sonatype.org/content/repositories/staging/"
+//    }
+//}
 
 android {
     compileSdkVersion rootProject.ext.coreCompileSdkVersion
@@ -21,4 +27,134 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':android-sdk')
 
+}
+
+task adtraceWebBridgeAndroidAar (type: Copy) {
+    dependsOn 'assembleRelease'
+
+    from('build/outputs/aar/')
+    include 'sdk-webbridge-release.aar'
+    destinationDir file('build/libs/')
+    rename 'sdk-webbridge-release.aar', "${project.name}.aar"
+
+}
+
+task adtraceWebBridgeAndroidJar(type: Jar) {
+    dependsOn 'packageReleaseAssets'
+    dependsOn 'compileReleaseJavaWithJavac'
+
+    from('build/intermediates/library_assets/release/packageReleaseAssets/out/') {
+        into('assets')
+    }
+    from('build/intermediates/javac/release/classes/')
+
+    archiveName "${project.name}.jar"
+}
+
+//task androidJavadocs(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//    // JDK 1.8 is more strict then 1.7. Have JDK 1.8 behave like 1.7 for javadoc generation.
+//    if (org.gradle.internal.jvm.Jvm.current().getJavaVersion() == JavaVersion.VERSION_1_8) {
+//        options.addStringOption('Xdoclint:none', '-quiet')
+//    }
+//}
+
+//task adtraceWebBridgeAndroidJavadocsJar(type: Jar) {
+//    dependsOn 'androidJavadocs'
+//    classifier = 'javadoc'
+//    from androidJavadocs.destinationDir
+//}
+
+task adtraceWebBridgeAndroidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives adtraceWebBridgeAndroidJar
+//    archives adtraceWebBridgeAndroidJavadocsJar
+    archives adtraceWebBridgeAndroidSourcesJar
+}
+
+publishing {
+    publications {
+        mavenAndroidWebBridge(MavenPublication) {
+            customizePom(pom)
+            groupId rootProject.ext.adtraceGroupId
+            artifactId 'adtrace-android-webbridge'
+            version rootProject.ext.coreVersionName
+
+            artifact adtraceWebBridgeAndroidJar
+//            artifact adtraceWebBridgeAndroidJavadocsJar
+            artifact adtraceWebBridgeAndroidSourcesJar
+        }
+    }
+
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            if (project.hasProperty("sonatypeUsername")) {
+                credentials {
+                    username sonatypeUsername
+                    password sonatypePassword
+                }
+            }
+        }
+    }
+}
+
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // Add all items necessary for maven central publication.
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+            description 'The WebBridge plugin for AdTrace SDK for Android'
+            name 'AdTrace Android SDK WebBridge plugin'
+            url 'https://github.com/adtrace/adtrace_sdk_android'
+
+            organization {
+                name 'adtrace'
+                url 'https://www.adtrace.io'
+            }
+            licenses {
+                license {
+                    name 'MIT License'
+                    url 'http://www.opensource.org/licenses/mit-license.php'
+                }
+            }
+            scm {
+                url 'git@github.com:adtrace/adtrace_sdk_android.git'
+                connection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+                developerConnection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+            }
+            developers {
+                developer {
+                    name 'Nasser Amini'
+                    email 'namini40@gmail.com'
+                }
+
+            }
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenAndroidWebBridgePublication {
+        destination = file("${project.buildDir}/generated-pom.xml")
+    }
+    /* TODO check if/how to replace this tasks
+    tasks.publishMavenAndroidWebBridgePublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenAndroidWebBridgePublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
+    */
+}
+
+signing {
+    sign publishing.publications.mavenAndroidWebBridge
 }
