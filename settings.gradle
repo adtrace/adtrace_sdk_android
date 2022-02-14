@@ -1,0 +1,1 @@
+include ':example-app-java', ':android-sdk', ':android-sdk-plugin-webbridge', ':example-app-webbridge'

@@ -1,0 +1,156 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
+    }
+    dependencies {
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
+ext {
+    bintrayRepo = rootProject.ext.bintrayRepository
+    bintrayName = 'android-sdk'
+
+    publishedGroupId = rootProject.ext.adtraceGroupId
+    libraryName = 'android-sdk'
+    artifact = 'android-sdk'
+
+    libraryDescription = 'AdTrace android SDK'
+
+    siteUrl = 'https://github.com/adtrace/adtrace_sdk_android'
+    gitUrl = 'https://github.com/adtrace/adtrace_sdk_android.git'
+
+    libraryVersion = rootProject.ext.coreVersionName
+
+    developerId = 'mortezakhosravinejad'
+    developerName = 'Morteza Khosravinejad'
+    developerEmail = 'morteza.khosravinejad@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+
+android {
+    compileSdkVersion rootProject.ext.coreCompileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.coreMinSdkVersion
+        targetSdkVersion rootProject.ext.coreTargetSdkVersion
+        versionName rootProject.ext.coreVersionName
+        versionCode rootProject.ext.defaultVersionCode
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        compileOptions {
+            encoding "UTF-8"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+
+group = publishedGroupId
+version = libraryVersion
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            packaging 'aar'
+            groupId publishedGroupId
+            artifactId artifact
+
+            name libraryName
+            description libraryDescription
+            url siteUrl
+
+            licenses {
+                license {
+                    name licenseName
+                    url licenseUrl
+                }
+            }
+            developers {
+                developer {
+                    id developerId
+                    name developerName
+                    email developerEmail
+                }
+            }
+            scm {
+                connection gitUrl
+                developerConnection gitUrl
+                url siteUrl
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        dryRun = false
+        publish = true
+        override = false
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+        }
+    }
+}
+
+//task createJar(type: Jar, dependsOn: 'assembleRelease') {
+//    from ('/home/morteza/Android/adtrace/github/adtrace_sdk_android/android-sdk/build/intermediates/intermediate-jars/release/')
+//    into ('libs/')
+//    include ('classes.jar')
+//    rename ('classes.jar', 'newjar.jar')
+//}
+//
+//createJar.dependsOn(build)
