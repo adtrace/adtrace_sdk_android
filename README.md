@@ -102,14 +102,14 @@ These are the minimum required steps to integrate the AdTrace SDK in your Androi
 If you are using Maven, add the following to your `build.gradle` file:
 
 ```java
-implementation 'io.adtrace.adtrace-android:2.0.1'
+implementation 'io.adtrace.adtrace-android:2.0.2'
 implementation 'com.android.installreferrer:installreferrer:2.2'
 ```
 
 If you would prefer to use the AdTrace SDK inside web views in your app, please include this additional dependency as well:
 
 ```java
-implementation 'io.adtrace.sdk:adtrace-android-webbridge:2.0.1'
+implementation 'io.adtrace.sdk:adtrace-android-webbridge:2.0.2'
 ```
 
 **Note**: The minimum supported Android API level for the web view extension is 17 (Jelly Bean).
