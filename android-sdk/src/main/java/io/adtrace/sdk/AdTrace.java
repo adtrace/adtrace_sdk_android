@@ -360,4 +360,15 @@ public class AdTrace {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
         adTraceInstance.setTestOptions(testOptions);
     }
+
+    static void setHuaweiInstallReferrerReadForFistTime(boolean huaweiInstallReferrerReadForFistTime){
+        getDefaultInstance().isHuaweiInstallReferrerReadForFistTime = huaweiInstallReferrerReadForFistTime;
+    }
+
+    static boolean getHuaweiInstallReferrerReadForFistTime(){
+        return getDefaultInstance().isHuaweiInstallReferrerReadForFistTime;
+    }
+
+
+
 }

@@ -2,7 +2,7 @@ package io.adtrace.sdk.oaid;
 
 import android.content.Context;
 
-import io.adtrace.sdk.ILogger;
+
 import com.bun.miitmdid.core.InfoCode;
 import com.bun.miitmdid.core.MdidSdkHelper;
 import com.bun.miitmdid.interfaces.IIdentifierListener;
@@ -11,6 +11,8 @@ import com.bun.miitmdid.interfaces.IdSupplier;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+
+import io.adtrace.sdk.ILogger;
 
 public class MsaSdkClient {
     public static String getOaid(Context context, final ILogger logger, long maxWaitTimeInMilli) {
@@ -38,7 +40,7 @@ public class MsaSdkClient {
                 return oaidHolder.poll(maxWaitTimeInMilli, TimeUnit.MILLISECONDS);
             }
         } catch (NoClassDefFoundError ex) {
-          logger.error("Couldn't find msa sdk " + ex.getMessage());
+            logger.error("Couldn't find msa sdk " + ex.getMessage());
         } catch (InterruptedException e) {
             logger.error("Waiting to read oaid from callback interrupted: %s",
                     e.getMessage());

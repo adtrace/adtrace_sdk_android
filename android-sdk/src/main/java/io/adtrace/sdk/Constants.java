@@ -29,7 +29,7 @@ public interface Constants {
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
     //todo: client sdk
-    String CLIENT_SDK = "android4.28.4";
+    String CLIENT_SDK = "android2.0.1";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";

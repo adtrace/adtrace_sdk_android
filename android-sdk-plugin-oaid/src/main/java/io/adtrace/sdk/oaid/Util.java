@@ -1,13 +1,15 @@
 package io.adtrace.sdk.oaid;
 
+
 import android.content.Context;
 import android.util.Log;
 
 import io.adtrace.sdk.ILogger;
 import io.adtrace.sdk.PackageBuilder;
-
+import io.adtrace.sdk.oaid.OpenDeviceIdentifierClient.Info;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -104,7 +106,7 @@ public class Util {
             }
             return builder.toString();
         } catch (Exception e) {
-            Log.e("AdTrace", "readCertFromAssetFile failed");
+            Log.e("Adjust", "readCertFromAssetFile failed");
             return "";
         }
     }

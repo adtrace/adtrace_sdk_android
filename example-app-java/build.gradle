@@ -35,5 +35,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads-identifier:17.0.0'
     implementation 'com.android.installreferrer:installreferrer:2.2'
     implementation project(':android-sdk')
+    implementation project(path: ':android-sdk-plugin-oaid')
 
 }

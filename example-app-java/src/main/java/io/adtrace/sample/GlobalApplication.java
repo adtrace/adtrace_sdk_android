@@ -137,7 +137,7 @@ public class GlobalApplication extends Application {
         // Enable OAID reading ONLY IF:
         // - OAID plugin is added to your app.
         // - Your app is NOT distributed in Google Play Store & supports OAID.
-        // AdTraceOaid.readOaid();
+//         AdTraceOaid.readOaid();
 
         // Initialise the adtrace SDK.
         AdTrace.onCreate(config);

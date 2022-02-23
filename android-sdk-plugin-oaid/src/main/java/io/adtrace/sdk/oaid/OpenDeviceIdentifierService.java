@@ -3,6 +3,7 @@
  */
 package io.adtrace.sdk.oaid;
 
+
 /**
  * Important: Please do not revise the order of the method in this AIDL file
  */
@@ -32,7 +33,7 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
             if (((iin != null) && (iin instanceof OpenDeviceIdentifierService))) {
                 return ((OpenDeviceIdentifierService) iin);
             }
-            return new Proxy(obj);
+            return new Stub.Proxy(obj);
         }
 
         @Override

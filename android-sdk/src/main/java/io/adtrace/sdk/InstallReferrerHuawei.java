@@ -97,8 +97,19 @@ public class InstallReferrerHuawei {
 
                 referrerCallback.onInstallReferrerRead(referrerDetails);
 
+
             } else {
                 logger.debug("InstallReferrerHuawei fail to read referrer for package [%s] and content uri [%s]", context.getPackageName(), uri.toString());
+
+//                if(!AdTrace.getHuaweiInstallReferrerReadForFistTime()){
+//                    long referrerClickTimestampSeconds = 123456L;
+//                    long installBeginTimestampSeconds = 123789L;
+//
+//                    ReferrerDetails referrerDetails = new ReferrerDetails("adtrace-huawei-referrer",
+//                            referrerClickTimestampSeconds, installBeginTimestampSeconds);
+//                    referrerCallback.onInstallReferrerRead(referrerDetails);
+//
+//                }
             }
         } catch (Exception e) {
                 logger.debug("InstallReferrerHuawei error [%s]", e.getMessage());

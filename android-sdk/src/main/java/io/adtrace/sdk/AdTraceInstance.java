@@ -754,4 +754,7 @@ public class AdTraceInstance {
             AdTraceFactory.disableSigning();
         }
     }
+
+    // huawei manual referrer
+    public  boolean isHuaweiInstallReferrerReadForFistTime = false;
 }
