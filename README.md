@@ -7,6 +7,8 @@
 
 This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [adtrace.io].
 
+
+
 Read this in Persian: [فارسی](fa-readme)
 
 ## Table of contents
@@ -78,9 +80,10 @@ Read this in Persian: [فارسی](fa-readme)
 - [Is my broadcast receiver capturing the install referrer?](#tt-broadcast-receiver)
 - [Can I trigger an event at application launch?](#tt-event-at-launch)
 
-### License
 
 ## Quick start
+
+## [Troubleshooting](./doc/fast-doc/android.md)
 
 ### <a id="qs-example-apps"></a>Example apps
 
