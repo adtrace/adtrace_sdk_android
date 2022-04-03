@@ -139,6 +139,18 @@ If you are **not targeting the Google Play Store**, you must also add the follow
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 ```
 
+
+#### <a id="gps-adid-permission"></a>Add permission to gather Google advertising ID
+
+If you are targeting Android 12 and above (API level 31), you need to add the `com.google.android.gms.AD_ID` permission to read the device's advertising ID. Add the following line to your `AndroidManifest.xml` to enable the permission.
+
+```xml
+<uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+```
+
+For more information, see [Google's `AdvertisingIdClient.Info` documentation](https://developers.google.com/android/reference/com/google/android/gms/ads/identifier/AdvertisingIdClient.Info#public-string-getid).
+
+
 ### <a id="qs-proguard"></a>Proguard settings
 
 If you are using Proguard, add these lines to your Proguard file:
