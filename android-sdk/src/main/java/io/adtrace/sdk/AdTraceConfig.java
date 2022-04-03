@@ -2,14 +2,19 @@ package io.adtrace.sdk;
 
 import android.content.Context;
 
-import java.util.List;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class AdTraceConfig {
     String basePath;
     String gdprPath;
+    String subscriptionPath;
     Context context;
     String appToken;
     String environment;
@@ -27,18 +32,33 @@ public class AdTraceConfig {
     OnDeeplinkResponseListener onDeeplinkResponseListener;
     boolean sendInBackground;
     Double delayStart;
-    List<IRunActivityHandler> preLaunchActionsArray;
+    AdTraceInstance.PreLaunchActions preLaunchActions;
     ILogger logger;
     String userAgent;
     String pushToken;
     Boolean startEnabled;
-    boolean enableInstalledApps = false;
     boolean startOffline;
     String secretId;
     String appSecret;
+    String externalDeviceId;
+    boolean preinstallTrackingEnabled;
+    Boolean needsCost;
+    String urlStrategy;
+    String preinstallFilePath;
 
     public static final String ENVIRONMENT_SANDBOX = "sandbox";
     public static final String ENVIRONMENT_PRODUCTION = "production";
+
+    public static final String URL_STRATEGY_INDIA = "url_strategy_india";
+    public static final String URL_STRATEGY_CHINA = "url_strategy_china";
+    public static final String DATA_RESIDENCY_EU = "data_residency_eu";
+    public static final String DATA_RESIDENCY_TR = "data_residency_tr";
+    public static final String DATA_RESIDENCY_US = "data_residency_us";
+
+    public static final String AD_REVENUE_APPLOVIN_MAX = "applovin_max_sdk";
+    public static final String AD_REVENUE_MOPUB = "mopub";
+    public static final String AD_REVENUE_ADMOB = "admob_sdk";
+    public static final String AD_REVENUE_IRONSOURCE = "ironsource_sdk";
 
     public AdTraceConfig(Context context, String appToken, String environment) {
         init(context, appToken, environment, false);
@@ -70,6 +90,7 @@ public class AdTraceConfig {
         // default values
         this.eventBufferingEnabled = false;
         this.sendInBackground = false;
+        this.preinstallTrackingEnabled = false;
     }
 
     public void setEventBufferingEnabled(Boolean eventBufferingEnabled) {
@@ -82,10 +103,6 @@ public class AdTraceConfig {
 
     public void setSendInBackground(boolean sendInBackground) {
         this.sendInBackground = sendInBackground;
-    }
-
-    public void enableSendInstalledApps(boolean enableInstalledApps) {
-        this.enableInstalledApps = enableInstalledApps;
     }
 
     public void setLogLevel(LogLevel logLevel) {
@@ -152,12 +169,42 @@ public class AdTraceConfig {
         logger.warn("This method has been deprecated and shouldn't be used anymore");
     }
 
+    public void setExternalDeviceId(String externalDeviceId) {
+        this.externalDeviceId = externalDeviceId;
+    }
+
+    public void setPreinstallTrackingEnabled(boolean preinstallTrackingEnabled) {
+        this.preinstallTrackingEnabled = preinstallTrackingEnabled;
+    }
+
+    public void setPreinstallFilePath(String preinstallFilePath) {
+        this.preinstallFilePath = preinstallFilePath;
+    }
+
+    public void setNeedsCost(boolean needsCost) {
+        this.needsCost = needsCost;
+    }
+
     public boolean isValid() {
         if (!checkAppToken(appToken)) return false;
         if (!checkEnvironment(environment)) return false;
         if (!checkContext(context)) return false;
 
         return true;
+    }
+
+    public void setUrlStrategy(String urlStrategy) {
+        if (urlStrategy == null || urlStrategy.isEmpty()) {
+            logger.error("Invalid url strategy");
+            return;
+        }
+        if (!urlStrategy.equals(URL_STRATEGY_INDIA)
+                && !urlStrategy.equals(URL_STRATEGY_CHINA)
+                && !urlStrategy.equals(DATA_RESIDENCY_EU))
+        {
+            logger.warn("Unrecognised url strategy %s", urlStrategy);
+        }
+        this.urlStrategy = urlStrategy;
     }
 
     private void setLogLevel(LogLevel logLevel, String environment) {

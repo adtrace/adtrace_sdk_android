@@ -1,3 +1,5 @@
+
+
 package io.adtrace.sdk;
 
 import java.io.IOException;
@@ -12,8 +14,13 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class ActivityPackage implements Serializable {
     private static final long serialVersionUID = -35935556512024097L;
 
@@ -46,6 +53,10 @@ public class ActivityPackage implements Serializable {
     private long clickTimeInMilliseconds;
     private long clickTimeInSeconds;
     private long installBeginTimeInSeconds;
+    private long clickTimeServerInSeconds;
+    private long installBeginTimeServerInSeconds;
+    private String installVersion;
+    private Boolean googlePlayInstant;
 
     public String getPath() {
         return path;
@@ -123,6 +134,38 @@ public class ActivityPackage implements Serializable {
         this.installBeginTimeInSeconds = installBeginTimeInSeconds;
     }
 
+    public long getClickTimeServerInSeconds() {
+        return this.clickTimeServerInSeconds;
+    }
+
+    public void setClickTimeServerInSeconds(long clickTimeServerInSeconds) {
+        this.clickTimeServerInSeconds = clickTimeServerInSeconds;
+    }
+
+    public long getInstallBeginTimeServerInSeconds() {
+        return this.installBeginTimeServerInSeconds;
+    }
+
+    public void setInstallBeginTimeServerInSeconds(long installBeginTimeServerInSeconds) {
+        this.installBeginTimeServerInSeconds = installBeginTimeServerInSeconds;
+    }
+
+    public String getInstallVersion() {
+        return this.installVersion;
+    }
+
+    public void setInstallVersion(String installVersion) {
+        this.installVersion = installVersion;
+    }
+
+    public Boolean getGooglePlayInstant() {
+        return this.googlePlayInstant;
+    }
+
+    public void setGooglePlayInstant(Boolean googlePlayInstant) {
+        this.googlePlayInstant = googlePlayInstant;
+    }
+
     public Map<String, String> getCallbackParameters() {
         return callbackParameters;
     }
@@ -159,7 +202,7 @@ public class ActivityPackage implements Serializable {
         return builder.toString();
     }
 
-    protected String getFailureMessage() {
+    public String getFailureMessage() {
         return Util.formatString("Failed to track %s%s", activityKind.toString(), suffix);
     }
 

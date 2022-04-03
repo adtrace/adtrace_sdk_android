@@ -6,7 +6,6 @@ function AdTraceEvent(eventToken) {
     this.partnerParameters = [];
     this.orderId = null;
     this.callbackId = null;
-    this.eventValue = null;
 }
 
 AdTraceEvent.prototype.setRevenue = function(revenue, currency) {
@@ -30,8 +29,4 @@ AdTraceEvent.prototype.setOrderId = function(orderId) {
 
 AdTraceEvent.prototype.setCallbackId = function(callbackId) {
     this.callbackId = callbackId;
-};
-
-AdTraceEvent.prototype.setEventValue = function(eventValue) {
-    this.eventValue = eventValue;
 };

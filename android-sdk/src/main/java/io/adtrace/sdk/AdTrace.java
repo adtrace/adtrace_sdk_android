@@ -3,15 +3,17 @@ package io.adtrace.sdk;
 import android.content.Context;
 import android.net.Uri;
 
-/**
- * The main interface to AdTrace.
- * Use the methods of this class to tell AdTrace about the usage of your app.
- * See the README for details.
- */
+import org.json.JSONObject;
+
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class AdTrace {
     /**
      * Singleton AdTrace SDK instance.
@@ -31,7 +33,7 @@ public class AdTrace {
      */
     public static synchronized AdTraceInstance getDefaultInstance() {
         @SuppressWarnings("unused")
-        String VERSION = "!SDK-VERSION-STRING!:io.adtrace:sdk-android:0.0.3";
+        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:AdTrace-android:4.28.4";
 
         if (defaultInstance == null) {
             defaultInstance = new AdTraceInstance();
@@ -141,16 +143,6 @@ public class AdTrace {
     }
 
     /**
-     * Called to enable or disable location status.
-     *
-     * @param enabled boolean indicating should SDK use location of device or not
-     */
-    public static void enableLocation(boolean enabled) {
-        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
-        adTraceInstance.enableLocation(enabled);
-    }
-
-    /**
      * Called if SDK initialisation was delayed and you would like to stop waiting for timer.
      */
     public static void sendFirstPackages() {
@@ -249,6 +241,59 @@ public class AdTrace {
     }
 
     /**
+     * Called to disable the third party sharing.
+     *
+     * @param context Application context
+     */
+    public static void disableThirdPartySharing(final Context context) {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.disableThirdPartySharing(context);
+    }
+
+    public static void trackThirdPartySharing(
+            final AdTraceThirdPartySharing adTraceThirdPartySharing)
+    {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.trackThirdPartySharing(adTraceThirdPartySharing);
+    }
+
+    public static void trackMeasurementConsent(final boolean consentMeasurement) {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.trackMeasurementConsent(consentMeasurement);
+    }
+
+    /**
+     * Track ad revenue from a source provider
+     *
+     * @param source Source of ad revenue information, see AdTraceConfig.AD_REVENUE_* for some possible sources
+     * @param payload JsonObject content of the ad revenue information
+     */
+    public static void trackAdRevenue(final String source, final JSONObject payload) {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.trackAdRevenue(source, payload);
+    }
+
+    /**
+     * Track ad revenue from a source provider
+     *
+     * @param adTraceAdRevenue AdTrace ad revenue information like source, revenue, currency etc
+     */
+    public static void trackAdRevenue(final AdTraceAdRevenue adTraceAdRevenue) {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.trackAdRevenue(adTraceAdRevenue);
+    }
+
+    /**
+     * Track subscription from Google Play.
+     *
+     * @param subscription AdTracePlayStoreSubscription object to be tracked
+     */
+    public static void trackPlayStoreSubscription(final AdTracePlayStoreSubscription subscription) {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.trackPlayStoreSubscription(subscription);
+    }
+
+    /**
      * Called to get value of Google Play Advertising Identifier.
      *
      * @param context        Application context
@@ -315,4 +360,15 @@ public class AdTrace {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
         adTraceInstance.setTestOptions(testOptions);
     }
+
+    static void setHuaweiInstallReferrerReadForFistTime(boolean huaweiInstallReferrerReadForFistTime){
+        getDefaultInstance().isHuaweiInstallReferrerReadForFistTime = huaweiInstallReferrerReadForFistTime;
+    }
+
+    static boolean getHuaweiInstallReferrerReadForFistTime(){
+        return getDefaultInstance().isHuaweiInstallReferrerReadForFistTime;
+    }
+
+
+
 }

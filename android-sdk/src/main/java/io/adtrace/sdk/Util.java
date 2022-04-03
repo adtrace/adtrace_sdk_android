@@ -1,10 +1,18 @@
+
 package io.adtrace.sdk;
+
+import static io.adtrace.sdk.Constants.ENCODING;
+import static io.adtrace.sdk.Constants.MD5;
+import static io.adtrace.sdk.Constants.SHA1;
+import static io.adtrace.sdk.Constants.SHA256;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -36,23 +44,33 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static io.adtrace.sdk.Constants.ENCODING;
-import static io.adtrace.sdk.Constants.MD5;
-import static io.adtrace.sdk.Constants.SHA1;
-import static io.adtrace.sdk.Constants.SHA256;
+import io.adtrace.sdk.scheduler.SingleThreadFutureScheduler;
 
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class Util {
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'Z";
     private static final String fieldReadErrorMessage = "Unable to read '%s' field in migration device with message (%s)";
     public static final DecimalFormat SecondsDisplayFormat = newLocalDecimalFormat();
     public static final SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+
+    // https://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
+    private static volatile SingleThreadFutureScheduler playAdIdScheduler = null;
 
     private static ILogger getLogger() {
         return AdTraceFactory.getLogger();
@@ -81,8 +99,65 @@ public class Util {
         return Util.formatString("'%s'", string);
     }
 
-    public static String getPlayAdId(Context context) {
-        return Reflection.getPlayAdId(context);
+    public static Object getAdvertisingInfoObject(final Context context, long timeoutMilli) {
+        return runSyncInPlayAdIdSchedulerWithTimeout(context, new Callable<Object>() {
+            @Override
+            public Object call() {
+                try {
+                    return Reflection.getAdvertisingInfoObject(context);
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+        }, timeoutMilli);
+    }
+
+    public static String getPlayAdId(final Context context,
+                                     final Object advertisingInfoObject,
+                                     long timeoutMilli)
+    {
+        return runSyncInPlayAdIdSchedulerWithTimeout(context, new Callable<String>() {
+            @Override
+            public String call() {
+                return Reflection.getPlayAdId(context, advertisingInfoObject);
+            }
+        }, timeoutMilli);
+    }
+
+    public static Boolean isPlayTrackingEnabled(final Context context,
+                                               final Object advertisingInfoObject,
+                                               long timeoutMilli)
+    {
+        return runSyncInPlayAdIdSchedulerWithTimeout(context, new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                return Reflection.isPlayTrackingEnabled(context, advertisingInfoObject);
+            }
+        }, timeoutMilli);
+    }
+
+    private static <R> R runSyncInPlayAdIdSchedulerWithTimeout(final Context context,
+                                                               Callable<R> callable,
+                                                               long timeoutMilli)
+    {
+        if (playAdIdScheduler == null) {
+            synchronized (Util.class) {
+                if (playAdIdScheduler == null) {
+                    playAdIdScheduler = new SingleThreadFutureScheduler("PlayAdIdLibrary", true);
+                }
+            }
+        }
+
+        ScheduledFuture<R> playAdIdFuture = playAdIdScheduler.scheduleFutureWithReturn(callable, 0);
+
+        try {
+            return playAdIdFuture.get(timeoutMilli, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException e) {
+        } catch (InterruptedException e) {
+        } catch (TimeoutException e) {
+        }
+
+        return null;
     }
 
     public static void runInBackground(Runnable command) {
@@ -104,7 +179,8 @@ public class Util {
         ILogger logger = AdTraceFactory.getLogger();
         if (Looper.myLooper() != Looper.getMainLooper()) {
             logger.debug("GoogleAdId being read in the background");
-            String GoogleAdId = Util.getPlayAdId(context);
+
+            String GoogleAdId = Util.getGoogleAdId(context);
 
             logger.debug("GoogleAdId read " + GoogleAdId);
             onDeviceIdRead.onGoogleAdIdRead(GoogleAdId);
@@ -117,7 +193,7 @@ public class Util {
             protected String doInBackground(Context... params) {
                 ILogger logger = AdTraceFactory.getLogger();
                 Context innerContext = params[0];
-                String innerResult = Util.getPlayAdId(innerContext);
+                String innerResult = Util.getGoogleAdId(innerContext);
                 logger.debug("GoogleAdId read " + innerResult);
                 return innerResult;
             }
@@ -130,8 +206,27 @@ public class Util {
         }.execute(context);
     }
 
-    public static Boolean isPlayTrackingEnabled(Context context) {
-        return Reflection.isPlayTrackingEnabled(context);
+    private static String getGoogleAdId(Context context) {
+        String googleAdId = null;
+        try {
+            GooglePlayServicesClient.GooglePlayServicesInfo gpsInfo =
+                    GooglePlayServicesClient.getGooglePlayServicesInfo(context,
+                            Constants.ONE_SECOND * 11);
+            if (gpsInfo != null) {
+                googleAdId = gpsInfo.getGpsAdid();
+            }
+        } catch (Exception e) {
+        }
+        if (googleAdId == null) {
+            Object advertisingInfoObject = Util.getAdvertisingInfoObject(
+                    context, Constants.ONE_SECOND * 11);
+
+            if (advertisingInfoObject != null) {
+                googleAdId = Util.getPlayAdId(context, advertisingInfoObject, Constants.ONE_SECOND);
+            }
+        }
+
+        return googleAdId;
     }
 
     public static String getMacAddress(Context context) {
@@ -304,6 +399,13 @@ public class Util {
     }
 
     public static int hashLong(Long value) {
+        if (value == null) {
+            return 0;
+        }
+        return value.hashCode();
+    }
+
+    public static int hashDouble(Double value) {
         if (value == null) {
             return 0;
         }
@@ -485,17 +587,69 @@ public class Util {
     }
 
     public static int getConnectivityType(Context context) {
-        int connectivityType = -1; // default value that will not be send
-
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            connectivityType = activeNetwork.getType();
+
+            if (cm == null) {
+                return -1;
+            }
+
+            // for api 22 or lower, still need to get raw type
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                return activeNetwork.getType();
+            }
+
+            // .getActiveNetwork() is only available from api 23
+            Network activeNetwork = cm.getActiveNetwork();
+            if (activeNetwork == null) {
+                return -1;
+            }
+
+            NetworkCapabilities activeNetworkCapabilities = cm.getNetworkCapabilities(activeNetwork);
+            if (activeNetworkCapabilities == null) {
+                return -1;
+            }
+
+            // check each network capability available from api 23
+            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return NetworkCapabilities.TRANSPORT_WIFI;
+            }
+            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return NetworkCapabilities.TRANSPORT_CELLULAR;
+            }
+            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                return NetworkCapabilities.TRANSPORT_ETHERNET;
+            }
+            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
+                return NetworkCapabilities.TRANSPORT_VPN;
+            }
+            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)) {
+                return NetworkCapabilities.TRANSPORT_BLUETOOTH;
+            }
+
+            // only after api 26, that more transport capabilities were added
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                return -1;
+            }
+
+            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI_AWARE)) {
+                return NetworkCapabilities.TRANSPORT_WIFI_AWARE;
+            }
+
+            // and then after api 27, that more transport capabilities were added
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) {
+                return -1;
+            }
+
+            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_LOWPAN)) {
+                return NetworkCapabilities.TRANSPORT_LOWPAN;
+            }
         } catch (Exception e) {
             getLogger().warn("Couldn't read connectivity type (%s)", e.getMessage());
         }
 
-        return connectivityType;
+        return -1;
     }
 
     public static int getNetworkType(Context context) {
@@ -504,7 +658,11 @@ public class Util {
         try {
             TelephonyManager teleMan =
                     (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            networkType = teleMan.getNetworkType();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                networkType = teleMan.getDataNetworkType();
+            } else {
+                networkType = teleMan.getNetworkType();
+            }
         } catch (Exception e) {
             getLogger().warn("Couldn't read network type (%s)", e.getMessage());
         }
@@ -629,5 +787,46 @@ public class Util {
 
     public static String getSdkVersion() {
         return Constants.CLIENT_SDK;
+    }
+
+    public static boolean resolveContentProvider(final Context applicationContext,
+                                                 final String authority) {
+        try {
+            return (applicationContext.getPackageManager()
+                    .resolveContentProvider(authority, 0) != null);
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean isEqualReferrerDetails(final ReferrerDetails referrerDetails,
+                                                 final String referrerApi,
+                                                 final ActivityState activityState) {
+        if (referrerApi.equals(Constants.REFERRER_API_GOOGLE)) {
+            return isEqualGoogleReferrerDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_HUAWEI)) {
+            return isEqualHuaweiReferrerDetails(referrerDetails, activityState);
+        }
+
+        return false;
+    }
+
+    private static boolean isEqualGoogleReferrerDetails(final ReferrerDetails referrerDetails,
+                                                       final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTime
+                && referrerDetails.installBeginTimestampSeconds == activityState.installBegin
+                && referrerDetails.referrerClickTimestampServerSeconds == activityState.clickTimeServer
+                && referrerDetails.installBeginTimestampServerSeconds == activityState.installBeginServer
+                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrer)
+                && Util.equalString(referrerDetails.installVersion, activityState.installVersion)
+                && Util.equalBoolean(referrerDetails.googlePlayInstant, activityState.googlePlayInstant) ;
+    }
+
+    private static boolean isEqualHuaweiReferrerDetails(final ReferrerDetails referrerDetails,
+                                                       final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeHuawei
+                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginHuawei
+                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerHuawei);
     }
 }

@@ -3,9 +3,16 @@ package io.adtrace.sdk;
 import android.content.Context;
 import android.net.Uri;
 
+import org.json.JSONObject;
+
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public interface IActivityHandler {
     void init(AdTraceConfig config);
 
@@ -35,11 +42,11 @@ public interface IActivityHandler {
 
     void sendReftagReferrer();
 
-    void sendInstallReferrer(String installReferrer, long referrerClickTimestampSeconds, long installBeginTimestampSeconds);
+    void sendPreinstallReferrer();
+
+    void sendInstallReferrer(ReferrerDetails referrerDetails, String referrerApi);
 
     void setOfflineMode(boolean enabled);
-
-    void enableLocation(boolean enabled);
 
     void setAskingAttribution(boolean askingAttribution);
 
@@ -63,6 +70,18 @@ public interface IActivityHandler {
 
     void gdprForgetMe();
 
+    void disableThirdPartySharing();
+
+    void trackThirdPartySharing(AdTraceThirdPartySharing adTraceThirdPartySharing);
+
+    void trackMeasurementConsent(boolean consentMeasurement);
+
+    void trackAdRevenue(String source, JSONObject adRevenueJson);
+
+    void trackAdRevenue(AdTraceAdRevenue adTraceAdRevenue);
+
+    void trackPlayStoreSubscription(AdTracePlayStoreSubscription subscription);
+
     void gotOptOutResponse();
 
     Context getContext();
@@ -77,11 +96,5 @@ public interface IActivityHandler {
 
     ActivityState getActivityState();
 
-    ActivityHandler.InternalState getInternalState();
-
     SessionParameters getSessionParameters();
-
-    String getBasePath();
-
-    String getGdprPath();
 }

@@ -1,3 +1,11 @@
+//
+//  AttributionHandler.java
+//  AdTrace SDK
+//
+//  Created by Pedro Silva (@nonelse) on 7th November 2014.
+//  Copyright (c) 2014-2018 AdTrace GmbH. All rights reserved.
+//
+
 package io.adtrace.sdk;
 
 import android.net.Uri;
@@ -5,20 +13,29 @@ import android.net.Uri;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
+import io.adtrace.sdk.network.IActivityPackageSender;
 import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
 import io.adtrace.sdk.scheduler.ThreadScheduler;
 import io.adtrace.sdk.scheduler.TimerOnce;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
-public class AttributionHandler implements IAttributionHandler {
+
+
+public class AttributionHandler implements IAttributionHandler,
+        IActivityPackageSender.ResponseDataCallbackSubscriber
+{
     private static final String ATTRIBUTION_TIMER_NAME = "Attribution timer";
     private boolean paused;
-    private String basePath;
-    private String clientSdk;
     private String lastInitiatedBy;
+    private IActivityPackageSender activityPackageSender;
 
     private ILogger logger;
     private TimerOnce timer;
@@ -45,7 +62,10 @@ public class AttributionHandler implements IAttributionHandler {
         activityHandlerWeakRef = null;
     }
 
-    public AttributionHandler(IActivityHandler activityHandler, boolean startsSending) {
+    public AttributionHandler(IActivityHandler activityHandler,
+                              boolean startsSending,
+                              IActivityPackageSender attributionHandlerActivityPackageSender)
+    {
         logger = AdTraceFactory.getLogger();
         scheduler = new SingleThreadCachedScheduler("AttributionHandler");
         timer = new TimerOnce(new Runnable() {
@@ -54,15 +74,18 @@ public class AttributionHandler implements IAttributionHandler {
                 sendAttributionRequest();
             }
         }, ATTRIBUTION_TIMER_NAME);
-        basePath = activityHandler.getBasePath();
-        clientSdk = activityHandler.getDeviceInfo().clientSdk;
-        init(activityHandler, startsSending);
+
+        init(activityHandler, startsSending, attributionHandlerActivityPackageSender);
     }
 
     @Override
-    public void init(IActivityHandler activityHandler, boolean startsSending) {
+    public void init(IActivityHandler activityHandler,
+                     boolean startsSending,
+                     IActivityPackageSender attributionHandlerActivityPackageSender)
+    {
         this.activityHandlerWeakRef = new WeakReference<IActivityHandler>(activityHandler);
         this.paused = !startsSending;
+        this.activityPackageSender = attributionHandlerActivityPackageSender;
     }
 
     @Override
@@ -157,8 +180,8 @@ public class AttributionHandler implements IAttributionHandler {
             return;
         }
 
-        long timerMilliseconds = responseData.jsonResponse.optLong("ask_in", -1);
-        if (timerMilliseconds >= 0) {
+        Long timerMilliseconds = responseData.askIn; // responseData.jsonResponse.optLong("ask_in", -1);
+        if (timerMilliseconds != null && timerMilliseconds >= 0) {
             activityHandler.setAskingAttribution(true);
             lastInitiatedBy = "backend";
             getAttributionI(timerMilliseconds);
@@ -166,24 +189,25 @@ public class AttributionHandler implements IAttributionHandler {
         }
 
         activityHandler.setAskingAttribution(false);
-        JSONObject attributionJson = responseData.jsonResponse.optJSONObject("attribution");
-        responseData.attribution = AdTraceAttribution.fromJson(
-                attributionJson,
-                responseData.adid,
-                Util.getSdkPrefixPlatform(clientSdk));
     }
 
-    private void checkSessionResponseI(IActivityHandler activityHandler, SessionResponseData sessionResponseData) {
+    private void checkSessionResponseI(IActivityHandler activityHandler,
+                                       SessionResponseData sessionResponseData)
+    {
         checkAttributionI(activityHandler, sessionResponseData);
         activityHandler.launchSessionResponseTasks(sessionResponseData);
     }
 
-    private void checkSdkClickResponseI(IActivityHandler activityHandler, SdkClickResponseData sdkClickResponseData) {
+    private void checkSdkClickResponseI(IActivityHandler activityHandler,
+                                        SdkClickResponseData sdkClickResponseData)
+    {
         checkAttributionI(activityHandler, sdkClickResponseData);
         activityHandler.launchSdkClickResponseTasks(sdkClickResponseData);
     }
 
-    private void checkAttributionResponseI(IActivityHandler activityHandler, AttributionResponseData attributionResponseData) {
+    private void checkAttributionResponseI(IActivityHandler activityHandler,
+                                           AttributionResponseData attributionResponseData)
+    {
         checkAttributionI(activityHandler, attributionResponseData);
         checkDeeplinkI(attributionResponseData);
         activityHandler.launchAttributionResponseTasks(attributionResponseData);
@@ -193,6 +217,7 @@ public class AttributionHandler implements IAttributionHandler {
         if (attributionResponseData.jsonResponse == null) {
             return;
         }
+
         JSONObject attributionJson = attributionResponseData.jsonResponse.optJSONObject("attribution");
         if (attributionJson == null) {
             return;
@@ -217,19 +242,23 @@ public class AttributionHandler implements IAttributionHandler {
         ActivityPackage attributionPackage = buildAndGetAttributionPackage();
         logger.verbose("%s", attributionPackage.getExtendedString());
 
-        try {
-            ResponseData responseData = UtilNetworking.createGETHttpsURLConnection(attributionPackage, basePath);
-            if (!(responseData instanceof AttributionResponseData)) {
-                return;
-            }
-            if (responseData.trackingState == TrackingState.OPTED_OUT) {
-                activityHandlerWeakRef.get().gotOptOutResponse();
-                return;
-            }
-            checkAttributionResponse((AttributionResponseData)responseData);
-        } catch (Exception e) {
-            logger.error("Failed to get attribution (%s)", e.getMessage());
-        }
+        Map<String, String> sendingParameters = generateSendingParametersI();
+
+        activityPackageSender.sendActivityPackage(
+                attributionPackage,
+                sendingParameters,
+                this);
+    }
+
+    private Map<String, String> generateSendingParametersI() {
+        HashMap<String, String> sendingParameters = new HashMap<>();
+
+        long now = System.currentTimeMillis();
+        String dateString = Util.dateFormatter.format(now);
+
+        PackageBuilder.addString(sendingParameters, "sent_at", dateString);
+
+        return sendingParameters;
     }
 
     private ActivityPackage buildAndGetAttributionPackage() {
@@ -240,10 +269,33 @@ public class AttributionHandler implements IAttributionHandler {
                 activityHandler.getDeviceInfo(),
                 activityHandler.getActivityState(),
                 activityHandler.getSessionParameters(),
-                activityHandler.getInternalState(),
                 now);
         ActivityPackage activityPackage = packageBuilder.buildAttributionPackage(lastInitiatedBy);
         lastInitiatedBy = null;
         return activityPackage;
+    }
+
+    @Override
+    public void onResponseDataCallback(final ResponseData responseData) {
+        scheduler.submit(new Runnable() {
+            @Override
+            public void run() {
+                IActivityHandler activityHandler = activityHandlerWeakRef.get();
+                if (activityHandler == null) {
+                    return;
+                }
+
+                if (responseData.trackingState == TrackingState.OPTED_OUT) {
+                    activityHandler.gotOptOutResponse();
+                    return;
+                }
+
+                if (!(responseData instanceof AttributionResponseData)) {
+                    return;
+                }
+
+                checkAttributionResponseI(activityHandler, (AttributionResponseData)responseData);
+            }
+        });
     }
 }

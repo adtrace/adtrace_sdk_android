@@ -1,6 +1,6 @@
 package io.adtrace.sdk.scheduler;
 
-
+import java.util.concurrent.Callable;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -10,8 +10,13 @@ import java.util.concurrent.TimeUnit;
 import io.adtrace.sdk.AdTraceFactory;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class SingleThreadFutureScheduler implements FutureScheduler {
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
 
@@ -37,6 +42,22 @@ public class SingleThreadFutureScheduler implements FutureScheduler {
     @Override
     public ScheduledFuture<?> scheduleFuture(Runnable command, long millisecondDelay) {
         return scheduledThreadPoolExecutor.schedule(new RunnableWrapper(command), millisecondDelay, TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public <V> ScheduledFuture<V> scheduleFutureWithReturn(final Callable<V> callable, long millisecondDelay) {
+        return scheduledThreadPoolExecutor.schedule(new Callable<V>() {
+            @Override
+            public V call() {
+                try {
+                    return callable.call();
+                } catch (Throwable t) {
+                    AdTraceFactory.getLogger().error("Callable error [%s] of type [%s]",
+                            t.getMessage(), t.getClass().getCanonicalName());
+                    return null;
+                }
+            }
+        }, millisecondDelay, TimeUnit.MILLISECONDS);
     }
 
     @Override

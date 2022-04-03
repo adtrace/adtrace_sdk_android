@@ -1,15 +1,21 @@
 package io.adtrace.sdk;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 
 public class SharedPreferencesManager {
     /**
@@ -28,22 +34,24 @@ public class SharedPreferencesManager {
     private static final String PREFS_KEY_PUSH_TOKEN = "push_token";
 
     /**
-     * Key name for location sending time.
-     */
-    private static final String PREFS_KEY_LAST_LOCATION_SENDING_TIME = "last_location_sending_time";
-
-    private static final String PREFS_KEY_LAST_INSTALLED_APPS_SENDING_TIME = "last_installed_apps_sending_time";
-
-    /**
      * Key name for info about whether install has been tracked or not.
      */
     private static final String PREFS_KEY_INSTALL_TRACKED = "install_tracked";
 
     private static final String PREFS_KEY_GDPR_FORGET_ME = "gdpr_forget_me";
 
+    private static final String PREFS_KEY_DISABLE_THIRD_PARTY_SHARING
+            = "disable_third_party_sharing";
+
     private static final String PREFS_KEY_DEEPLINK_URL = "deeplink_url";
 
     private static final String PREFS_KEY_DEEPLINK_CLICK_TIME = "deeplink_click_time";
+
+    private static final String PREFS_KEY_PREINSTALL_PAYLOAD_READ_STATUS
+            = "preinstall_payload_read_status";
+
+    private static final String PREFS_KEY_PREINSTALL_SYSTEM_INSTALLER_REFERRER
+            = "preinstall_system_installer_referrer";
 
     /**
      * Index for raw referrer string content in saved JSONArray object.
@@ -211,6 +219,31 @@ public class SharedPreferencesManager {
     }
 
     /**
+     * Save preinstall referrer string into shared preferences.
+     *
+     * @param referrer Preinstall referrer string
+     */
+    public synchronized void savePreinstallReferrer(final String referrer) {
+        saveString(PREFS_KEY_PREINSTALL_SYSTEM_INSTALLER_REFERRER, referrer);
+    }
+
+    /**
+     * Get saved preinstall referrer string from shared preferences.
+     *
+     * @return referrer Preinstall referrer string
+     */
+    public synchronized String getPreinstallReferrer() {
+        return getString(PREFS_KEY_PREINSTALL_SYSTEM_INSTALLER_REFERRER);
+    }
+
+    /**
+     * Remove saved preinstall referrer string from shared preferences.
+     */
+    public synchronized void removePreinstallReferrer() {
+        remove(PREFS_KEY_PREINSTALL_SYSTEM_INSTALLER_REFERRER);
+    }
+
+    /**
      * Initially called upon ActivityHandler initialisation.
      * Used to check if any of the still existing referrers was unsuccessfully being sent before app got killed.
      * If such found - switch it's isBeingSent flag back to "false".
@@ -283,34 +316,6 @@ public class SharedPreferencesManager {
         return getString(PREFS_KEY_PUSH_TOKEN);
     }
 
-    public synchronized void setLastInstalledAppsSendingTime(long milliseconds) {
-        saveLong(PREFS_KEY_LAST_INSTALLED_APPS_SENDING_TIME, milliseconds);
-    }
-
-    public synchronized long getLastInstalledAppsSendingTime() {
-        return getLong(PREFS_KEY_LAST_INSTALLED_APPS_SENDING_TIME, 0);
-    }
-
-    synchronized boolean canSendingInstalledApps(long now) {
-        long days = (((now - getLastInstalledAppsSendingTime()) / (1000 * 60 * 60 * 24)));
-
-        return days >= 10;
-    }
-
-    public synchronized void setLastLocationSendingTime(long milliseconds) {
-        saveLong(PREFS_KEY_LAST_LOCATION_SENDING_TIME, milliseconds);
-    }
-
-    public synchronized long getLastLocationSendingTime() {
-        return getLong(PREFS_KEY_LAST_LOCATION_SENDING_TIME, 0);
-    }
-
-    synchronized boolean canSendingLocation(long now) {
-        long days = (((now - getLastLocationSendingTime()) / (1000 * 60 * 60 * 24)));
-
-        return days >= 14;
-    }
-
     /**
      * Remove push token from shared preferences.
      */
@@ -346,6 +351,18 @@ public class SharedPreferencesManager {
         remove(PREFS_KEY_GDPR_FORGET_ME);
     }
 
+    public synchronized void setDisableThirdPartySharing() {
+        saveBoolean(PREFS_KEY_DISABLE_THIRD_PARTY_SHARING, true);
+    }
+
+    public synchronized boolean getDisableThirdPartySharing() {
+        return getBoolean(PREFS_KEY_DISABLE_THIRD_PARTY_SHARING, false);
+    }
+
+    public synchronized void removeDisableThirdPartySharing() {
+        remove(PREFS_KEY_DISABLE_THIRD_PARTY_SHARING);
+    }
+
     public synchronized void saveDeeplink(final Uri deeplink, final long clickTime) {
         if (deeplink == null) {
             return;
@@ -366,6 +383,23 @@ public class SharedPreferencesManager {
     public synchronized void removeDeeplink() {
         remove(PREFS_KEY_DEEPLINK_URL);
         remove(PREFS_KEY_DEEPLINK_CLICK_TIME);
+    }
+
+    /**
+     * Save information that preinstall tracker has been tracked to shared preferences.
+     */
+    public synchronized void setPreinstallPayloadReadStatus(long status) {
+        saveLong(PREFS_KEY_PREINSTALL_PAYLOAD_READ_STATUS, status);
+    }
+
+    /**
+     * Get information if preinstall tracker has been tracked from shared preferences. If no info, default to 0.
+     *
+     * @return long returning current read status of each Preinstall location.
+     * Default value in binary is `00.....00000000` indicating none of the locations are yet read.
+     */
+    public synchronized long getPreinstallPayloadReadStatus() {
+        return getLong(PREFS_KEY_PREINSTALL_PAYLOAD_READ_STATUS, 0);
     }
 
     /**
@@ -403,6 +437,16 @@ public class SharedPreferencesManager {
      */
     private synchronized void saveLong(final String key, final long value) {
         this.sharedPreferences.edit().putLong(key, value).apply();
+    }
+
+    /**
+     * Write a integer value to shared preferences.
+     *
+     * @param key   Key to be written to shared preferences
+     * @param value Value to be written to shared preferences
+     */
+    private synchronized void saveInteger(final String key, final int value) {
+        this.sharedPreferences.edit().putInt(key, value).apply();
     }
 
     /**

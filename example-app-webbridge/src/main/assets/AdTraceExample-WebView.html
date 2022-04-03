@@ -1,20 +1,21 @@
 <!doctype html>
 <html>
-    <head>
-        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
-	    <style type='text/css'>
+<head>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <style type='text/css'>
             html { font-family:Helvetica; color:#222; }
             h1 { color:steelblue; font-size:24px; margin-top:24px; }
             button { margin:0 3px 10px; font-size:12px; }
             .logLine { border-bottom:1px solid #ccc; padding:4px 2px; font-family:courier; font-size:11px; }
 	    </style>
-        <script type="text/javascript" src="adtrace_event.js"></script>
-        <script type="text/javascript" src="adtrace_config.js"></script>
-        <script type="text/javascript" src="adtrace.js"></script>
-    </head>
-    <body>
-        <h1 style="width:400px;height:35px;text-align:center;">AdTrace Web View SDK Demo App</h1>
-        <script language="javascript">
+    <script type="text/javascript" src="adtrace_event.js"></script>
+    <script type="text/javascript" src="adtrace_third_party_sharing.js"></script>
+    <script type="text/javascript" src="adtrace_config.js"></script>
+    <script type="text/javascript" src="adtrace.js"></script>
+</head>
+<body>
+<h1 style="width:400px;height:35px;text-align:center;">AdTrace Web View SDK Demo App</h1>
+<script language="javascript">
             window.onerror = function(err) { }
 
 		    function attributionCallback(attribution) {
@@ -59,7 +60,7 @@
                 alert('Deferred deeplink content:\n' + deferredDeeplink);
             }
 
-            var adtraceConfig = new AdTraceConfig('48ghkj3ydsdf', AdTraceConfig.EnvironmentSandbox);
+            var adtraceConfig = new AdTraceConfig('xyz123xyz123', AdTraceConfig.EnvironmentSandbox);
             adtraceConfig.setLogLevel(AdTraceConfig.LogLevelVerbose);
             // adtraceConfig.setOpenDeferredDeeplink(true);
             // adtraceConfig.setSendInBackground(true);
@@ -78,36 +79,36 @@
                 var btnTrackSimpleEvent = document.getElementById('btnTrackSimpleEvent')
                 btnTrackSimpleEvent.onclick = function(e) {
                     e.preventDefault();
-                    var adtraceEvent = new AdTraceEvent('x4nhn3');
+                    var adtraceEvent = new AdTraceEvent('x1y2z3');
                     AdTrace.trackEvent(adtraceEvent);
                 }
 
                 var btnTrackRevenueEvent = document.getElementById('btnTrackRevenueEvent')
                 btnTrackRevenueEvent.onclick = function(e) {
                     e.preventDefault()
-                    var adtraceEvent = new AdTraceEvent('x4nhn3');
-                    adtraceEvent.setRevenue(0.01, 'EUR');
+                    var adtraceEvent = new AdTraceEvent('a1b2c3');
+                    adtraceEvent.setRevenue(52000.0, 'IRR');
                     AdTrace.trackEvent(adtraceEvent);
                 }
 
                 var btnTrackCallbackEvent = document.getElementById('btnTrackCallbackEvent')
                 btnTrackCallbackEvent.onclick = function(e) {
                     e.preventDefault();
-                    var adtraceEvent = new AdTraceEvent('x4nhn3');
+                    var adtraceEvent = new AdTraceEvent('xyz123');
                     adtraceEvent.addCallbackParameter('key', 'value');
                     adtraceEvent.addCallbackParameter('x', 'y');
                     adtraceEvent.addCallbackParameter('key', 'lock');
                     AdTrace.trackEvent(adtraceEvent);
                 }
 
-                var btnTrackPartnerEvent = document.getElementById('btnTrackPartnerEvent')
-                btnTrackPartnerEvent.onclick = function(e) {
+                var btnTrackEventParameter = document.getElementById('btnEventParameter')
+                btnTrackEventParameter.onclick = function(e) {
                     e.preventDefault()
-                    var adtraceEvent = new AdTraceEvent('x4nhn3');
-                    adtraceEvent.addPartnerParameter('foo', 'bar');
-                    adtraceEvent.addPartnerParameter('x', 'y');
-                    adtraceEvent.addPartnerParameter('foo', 'foot');
-                    adtraceEvent.addPartnerParameter('x', 'z');
+                    var adtraceEvent = new AdTraceEvent('abc123');
+                    adtraceEvent.addEventParameter('foo', 'bar');
+                    adtraceEvent.addEventParameter('x', 'y');
+                    adtraceEvent.addEventParameter('foo', 'foot');
+                    adtraceEvent.addEventParameter('x', 'z');
                     AdTrace.trackEvent(adtraceEvent);
                 }
 
@@ -150,37 +151,37 @@
                 }
             }
         </script>
-        <div id='buttons'>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnTrackSimpleEvent'>Track Simple event</button>
-            </div>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnTrackRevenueEvent'>Track Revenue event</button>
-            </div>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnTrackCallbackEvent'>Track Callback event</button>
-            </div>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnTrackPartnerEvent'>Track Partner event</button>
-            </div>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnEnableOfflineMode'>Enable Offline mode</button>
-            </div>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnDisableOfflineMode'>Disable Offline mode</button>
-            </div>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnEnableSdk'>Enable SDK</button>
-            </div>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnDisableSdk'>Disable SDK</button>
-            </div>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnIsSdkEnabled'>Is SDK Enabled?</button>
-            </div>
-            <div style="width:400px;height:35px;text-align:center;">
-                <button id='btnGetGoogleAdId'>Get Google Ad Id</button>
-            </div>
-        </div>
-    </body>
+<div id='buttons'>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnTrackSimpleEvent'>Track Simple event</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnTrackRevenueEvent'>Track Revenue event</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnTrackCallbackEvent'>Track Callback event</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnTrackEventParameter'>Track event Parameter</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnEnableOfflineMode'>Enable Offline mode</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnDisableOfflineMode'>Disable Offline mode</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnEnableSdk'>Enable SDK</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnDisableSdk'>Disable SDK</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnIsSdkEnabled'>Is SDK Enabled?</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnGetGoogleAdId'>Get Google Ad Id</button>
+    </div>
+</div>
+</body>
 </html>

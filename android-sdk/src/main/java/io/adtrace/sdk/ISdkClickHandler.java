@@ -1,8 +1,17 @@
 package io.adtrace.sdk;
 
+import io.adtrace.sdk.network.IActivityPackageSender;
+
+
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
+
 public interface ISdkClickHandler {
     /**
      * Initialise SdkClickHandler instance.
@@ -10,7 +19,9 @@ public interface ISdkClickHandler {
      * @param activityHandler Activity handler instance.
      * @param startsSending   Is sending paused?
      */
-    void init(IActivityHandler activityHandler, boolean startsSending);
+    void init(IActivityHandler activityHandler,
+              boolean startsSending,
+              IActivityPackageSender sdkClickHandlerActivityPackageSender);
 
     /**
      * Pause sending from SdkClickHandler.
@@ -33,6 +44,11 @@ public interface ISdkClickHandler {
      * Send sdk_click packages made from all the persisted intent type referrers.
      */
     void sendReftagReferrers();
+
+    /**
+     * Send sdk_click package carrying preinstall info.
+     */
+    void sendPreinstallPayload(String payload, String location);
 
     /**
      * Teardown SdkClickHandler instance.

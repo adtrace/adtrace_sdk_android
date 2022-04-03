@@ -1,6 +1,5 @@
 package io.adtrace.sdk.scheduler;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -11,8 +10,13 @@ import java.util.concurrent.TimeUnit;
 import io.adtrace.sdk.AdTraceFactory;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class SingleThreadCachedScheduler implements ThreadScheduler {
     private final List<Runnable> queue;
     private boolean isThreadProcessing;

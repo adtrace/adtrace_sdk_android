@@ -1,9 +1,12 @@
 package io.adtrace.sample;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -12,11 +15,11 @@ import io.adtrace.sdk.AdTrace;
 import io.adtrace.sdk.AdTraceEvent;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String EVENT_TOKEN_SIMPLE = "gv1pq7";
-    private static final String EVENT_TOKEN_REVENUE = "51avek";
-    private static final String EVENT_TOKEN_CALLBACK = "mgm85o";
-    private static final String EVENT_TOKEN_PARTNER = "dqp3ns";
-    private static final String EVENT_TOKEN_VALUE = "jueov3";
+
+    private static final String EVENT_TOKEN_SIMPLE = "xyz123";
+    private static final String EVENT_TOKEN_REVENUE = "a1b2b3";
+    private static final String EVENT_TOKEN_CALLBACK = "x1y2z3";
+    private static final String EVENT_TOKEN_PARTNER = "abc123";
 
     private Button btnEnableDisableSDK;
 
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         AdTrace.appWillOpenUrl(data, getApplicationContext());
 
         // AdTrace UI according to SDK state.
-        btnEnableDisableSDK = findViewById(R.id.btnEnableDisableSDK);
+        btnEnableDisableSDK = (Button) findViewById(R.id.btnEnableDisableSDK);
     }
 
     @Override
@@ -44,11 +47,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     public void onTrackSimpleEventClick(View v) {
         AdTraceEvent event = new AdTraceEvent(EVENT_TOKEN_SIMPLE);
 
         // Assign custom identifier to event which will be reported in success/failure callbacks.
-        event.setCallbackId("sampleCallbackId");
+        event.setCallbackId("PrettyRandomIdentifier");
 
         AdTrace.trackEvent(event);
     }
@@ -56,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
     public void onTrackRevenueEventClick(View v) {
         AdTraceEvent event = new AdTraceEvent(EVENT_TOKEN_REVENUE);
 
-        // Add revenue 1 cent of an euro.
-        event.setRevenue(10000, "Rial");
+        // Add revenue 52000 Rials.
+        event.setRevenue(52000.0, "IRR");
 
         AdTrace.trackEvent(event);
     }
@@ -71,22 +95,24 @@ public class MainActivity extends AppCompatActivity {
         AdTrace.trackEvent(event);
     }
 
-    public void onTrackPartnerEventClick(View v) {
+    public void onTrackEventParameterClick(View v) {
         AdTraceEvent event = new AdTraceEvent(EVENT_TOKEN_PARTNER);
 
         // Add partner parameters to this parameter.
-        event.addPartnerParameter("foo", "bar");
+        event.addEventParameter("foo", "bar");
 
         AdTrace.trackEvent(event);
     }
 
-    public void onTrackValueEventClick(View v) {
-        AdTraceEvent event = new AdTraceEvent(EVENT_TOKEN_VALUE);
-
-        // set event value.
-        event.setEventValue("sampleValue");
-
-        AdTrace.trackEvent(event);
+    public void onEnableDisableOfflineModeClick(View v) {
+        if (((Button) v).getText().equals(
+                getApplicationContext().getResources().getString(R.string.txt_enable_offline_mode))) {
+            AdTrace.setOfflineMode(true);
+            ((Button) v).setText(R.string.txt_disable_offline_mode);
+        } else {
+            AdTrace.setOfflineMode(false);
+            ((Button) v).setText(R.string.txt_enable_offline_mode);
+        }
     }
 
     public void onEnableDisableSDKClick(View v) {
@@ -107,5 +133,17 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), R.string.txt_sdk_is_disabled,
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void onFireIntentClick(View v) {
+        Intent intent = new Intent("com.android.vending.INSTALL_REFERRER");
+        intent.setPackage("io.adtrace.sample");
+        intent.putExtra("referrer", "utm_source=test&utm_medium=test&utm_term=test&utm_content=test&utm_campaign=test");
+        sendBroadcast(intent);
+    }
+
+    public void onServiceActivityClick(View v) {
+        Intent intent = new Intent(this, ServiceActivity.class);
+        startActivity(intent);
     }
 }

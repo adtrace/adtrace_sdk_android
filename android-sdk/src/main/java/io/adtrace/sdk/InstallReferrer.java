@@ -1,7 +1,8 @@
 package io.adtrace.sdk;
 
-import android.content.Context;
+import static io.adtrace.sdk.Constants.ONE_SECOND;
 
+import android.content.Context;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -9,17 +10,19 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
+import io.adtrace.sdk.scheduler.ThreadExecutor;
 import io.adtrace.sdk.scheduler.TimerOnce;
-
-import static io.adtrace.sdk.Constants.ONE_SECOND;
 
 
 /**
- * Class used for Android install referrer logic.
- * <p>
- * /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 
 public class InstallReferrer implements InvocationHandler {
     /**
@@ -62,9 +65,12 @@ public class InstallReferrer implements InvocationHandler {
     private int retries;
 
     /**
-     * Boolean indicating whether service responded with install referrer information.
+     * Boolean indicating whether service should be tried to read.
+     * Either because it has not yet tried,
+     *  or it did and it was successful
+     *  or it did, was not successful, but it should not retry
      */
-    private final AtomicBoolean hasInstallReferrerBeenRead;
+    private final AtomicBoolean shouldTryToRead;
 
     /**
      * AdTrace logger instance.
@@ -93,17 +99,19 @@ public class InstallReferrer implements InvocationHandler {
 
     private Object playInstallReferrer;
 
+    private ThreadExecutor executor;
+
     /**
      * Default constructor.
      *
-     * @param context          Application context
+     * @param context         Application context
      * @param referrerCallback Callback for referrer information
      */
     public InstallReferrer(final Context context, final InstallReferrerReadListener referrerCallback) {
         this.logger = AdTraceFactory.getLogger();
         this.playInstallReferrer = createInstallReferrer(context, referrerCallback, logger);
         this.context = context;
-        this.hasInstallReferrerBeenRead = new AtomicBoolean(false);
+        this.shouldTryToRead = new AtomicBoolean(true);
         this.retries = 0;
         this.retryTimer = new TimerOnce(new Runnable() {
             @Override
@@ -112,6 +120,7 @@ public class InstallReferrer implements InvocationHandler {
             }
         }, "InstallReferrer");
         this.referrerCallback = referrerCallback;
+        this.executor = new SingleThreadCachedScheduler("InstallReferrer");
     }
 
     private Object createInstallReferrer(Context context, InstallReferrerReadListener referrerCallback, ILogger logger) {
@@ -138,8 +147,8 @@ public class InstallReferrer implements InvocationHandler {
         }
         closeReferrerClient();
 
-        if (hasInstallReferrerBeenRead.get()) {
-            logger.debug("Install referrer has already been read");
+        if (!shouldTryToRead.get()) {
+            logger.debug("Should not try to read Install referrer");
             return;
         }
 
@@ -257,8 +266,29 @@ public class InstallReferrer implements InvocationHandler {
      * {@inheritDoc}
      */
     @Override
-    public Object invoke(final Object proxy, final Method method, Object[] args)
-            throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args)
+            throws Throwable
+    {
+        executor.submit(new Runnable() {
+            @Override
+            public
+            void run() {
+                try {
+                    invokeI(proxy, method, args);
+                } catch (Throwable throwable) {
+                    logger.error("invoke error (%s) thrown by (%s)",
+                            throwable.getMessage(),
+                            throwable.getClass().getCanonicalName());
+                }
+            }
+        });
+
+        return null;
+    }
+
+    private Object invokeI(final Object proxy, final Method method, Object[] args)
+            throws Throwable
+    {
         if (method == null) {
             logger.error("InstallReferrer invoke method null");
             return null;
@@ -297,10 +327,10 @@ public class InstallReferrer implements InvocationHandler {
                 return null;
             }
 
-            onInstallReferrerSetupFinishedInt(responseCode);
+            onInstallReferrerSetupFinishedIntI(responseCode);
         } else if (methodName.equals("onInstallReferrerServiceDisconnected")) {
             logger.debug("Connection to install referrer service was lost. Retrying ...");
-            retry();
+            retryI();
         }
         return null;
     }
@@ -310,7 +340,7 @@ public class InstallReferrer implements InvocationHandler {
      *
      * @param responseCode Response code from install referrer service
      */
-    private void onInstallReferrerSetupFinishedInt(final int responseCode) {
+    private void onInstallReferrerSetupFinishedIntI(final int responseCode) {
         boolean retryAtEnd = false;
         switch (responseCode) {
             /** Success. */
@@ -325,12 +355,22 @@ public class InstallReferrer implements InvocationHandler {
                     logger.debug("installReferrer: %s, clickTime: %d, installBeginTime: %d",
                             installReferrer, clickTime, installBegin);
 
+                    String installVersion = getStringInstallVersion(referrerDetails);
+                    long clickTimeServer = getReferrerClickTimestampServerSeconds(referrerDetails);
+                    long installBeginServer = getInstallBeginTimestampServerSeconds(referrerDetails);
+                    Boolean googlePlayInstant = getBooleanGooglePlayInstantParam(referrerDetails);
+                    logger.debug("installVersion: %s, clickTimeServer: %d, " +
+                                    "installBeginServer: %d, googlePlayInstant: %b",
+                            installVersion, clickTimeServer, installBeginServer, googlePlayInstant);
+
                     logger.debug("Install Referrer read successfully. Closing connection");
 
-                    // Stuff successfully read, try to send it.
-                    referrerCallback.onInstallReferrerRead(installReferrer, clickTime, installBegin);
+                    ReferrerDetails installReferrerDetails = new ReferrerDetails(installReferrer,
+                            clickTime, installBegin, clickTimeServer, installBeginServer,
+                            installVersion, googlePlayInstant);
 
-                    hasInstallReferrerBeenRead.set(true);
+                    // Stuff successfully read, try to send it.
+                    referrerCallback.onInstallReferrerRead(installReferrerDetails);
                 } catch (Exception e) {
                     logger.warn("Couldn't get install referrer from client (%s). Retrying...", e.getMessage());
                     retryAtEnd = true;
@@ -370,8 +410,9 @@ public class InstallReferrer implements InvocationHandler {
                 break;
         }
         if (retryAtEnd) {
-            retry();
+            retryI();
         } else {
+            shouldTryToRead.set(false);
             closeReferrerClient();
         }
     }
@@ -463,11 +504,91 @@ public class InstallReferrer implements InvocationHandler {
     }
 
     /**
+     * Get install version string value.
+     *
+     * @param referrerDetails ReferrerDetails object
+     * @return Install version string value.
+     */
+    private String getStringInstallVersion(final Object referrerDetails) {
+        if (referrerDetails == null) {
+            return null;
+        }
+        try {
+            String stringInstallVersion = (String) Reflection.invokeInstanceMethod(
+                    referrerDetails, "getInstallVersion", null);
+            return stringInstallVersion;
+        } catch (Exception e) {
+            // not logging the error as this is expected to happen below v2.0
+        }
+        return null;
+    }
+
+    /**
+     * Get redirect URL click timestamp server.
+     *
+     * @param referrerDetails ReferrerDetails object
+     * @return Redirect URL click timestamp server.
+     */
+    private long getReferrerClickTimestampServerSeconds(final Object referrerDetails) {
+        if (referrerDetails == null) {
+            return -1;
+        }
+        try {
+            Long clickTimeServer = (Long) Reflection.invokeInstanceMethod(
+                    referrerDetails, "getReferrerClickTimestampServerSeconds", null);
+            return clickTimeServer;
+        } catch (Exception e) {
+            // not logging the error as this is expected to happen below v2.0
+        }
+        return -1;
+    }
+
+    /**
+     * Get Play Store app INSTALL button click timestamp server.
+     *
+     * @param referrerDetails ReferrerDetails object
+     * @return Play Store app INSTALL button click timestamp server.
+     */
+    private long getInstallBeginTimestampServerSeconds(final Object referrerDetails) {
+        if (referrerDetails == null) {
+            return -1;
+        }
+        try {
+            Long installBeginTime = (Long) Reflection.invokeInstanceMethod(
+                    referrerDetails, "getInstallBeginTimestampServerSeconds", null);
+            return installBeginTime;
+        } catch (Exception e) {
+            // not logging the error as this is expected to happen below v2.0
+        }
+        return -1;
+    }
+
+    /**
+     * Get google play instant boolean value.
+     *
+     * @param referrerDetails ReferrerDetails object
+     * @return Google play instant boolean value.
+     */
+    private Boolean getBooleanGooglePlayInstantParam(final Object referrerDetails) {
+        if (referrerDetails == null) {
+            return null;
+        }
+        try {
+            boolean booleanGooglePlayInstantParam = (boolean) Reflection.invokeInstanceMethod(
+                    referrerDetails, "getGooglePlayInstantParam", null);
+            return booleanGooglePlayInstantParam;
+        } catch (Exception e) {
+            // not logging the error as this is expected to happen below v2.0
+        }
+        return null;
+    }
+
+    /**
      * Retry connection to install referrer service.
      */
-    private void retry() {
-        if (hasInstallReferrerBeenRead.get()) {
-            logger.debug("Install referrer has already been read");
+    private void retryI() {
+        if (!shouldTryToRead.get()) {
+            logger.debug("Should not try to read Install referrer");
             closeReferrerClient();
             return;
         }

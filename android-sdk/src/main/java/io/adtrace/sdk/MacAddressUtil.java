@@ -10,8 +10,13 @@ import java.io.IOException;
 import java.util.Locale;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class MacAddressUtil {
     public static String getMacAddress(Context context) {
         final String rawAddress = getRawMacAddress(context);

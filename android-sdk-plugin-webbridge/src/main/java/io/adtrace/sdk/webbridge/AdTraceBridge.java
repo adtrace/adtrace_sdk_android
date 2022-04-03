@@ -1,8 +1,11 @@
 package io.adtrace.sdk.webbridge;
 
-import android.app.Application;
 import android.webkit.WebView;
+import android.app.Application;
 
+/**
+ * Created by uerceg on 10/06/16.
+ */
 public class AdTraceBridge {
     private static AdTraceBridgeInstance defaultInstance;
 
@@ -22,10 +25,17 @@ public class AdTraceBridge {
     }
 
     public static void setWebView(WebView webView) {
-        AdTraceBridge.getDefaultInstance().setWebView(webView);
+        io.adtrace.sdk.webbridge.AdTraceBridge.getDefaultInstance().setWebView(webView);
     }
 
     public static void setApplicationContext(Application application) {
-        AdTraceBridge.getDefaultInstance().setApplicationContext(application);
+        io.adtrace.sdk.webbridge.AdTraceBridge.getDefaultInstance().setApplicationContext(application);
+    }
+
+    public static synchronized void unregister() {
+        if (defaultInstance != null) {
+            defaultInstance.unregister();
+        }
+        defaultInstance = null;
     }
 }

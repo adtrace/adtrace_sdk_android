@@ -2,9 +2,17 @@ package io.adtrace.sdk;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
+
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class ResponseData {
     public boolean success;
     public boolean willRetry;
@@ -15,10 +23,22 @@ public class ResponseData {
     public ActivityKind activityKind;
     public TrackingState trackingState;
     public AdTraceAttribution attribution;
+    public Long askIn;
+    public Long retryIn;
+    public Long continueIn;
 
-    protected ResponseData() {}
+    public ActivityPackage activityPackage;
+    public Map<String, String> sendingParameters;
 
-    public static ResponseData buildResponseData(ActivityPackage activityPackage) {
+    protected ResponseData() {
+        success = false;
+        willRetry = false;
+    }
+
+    public static ResponseData buildResponseData(
+            ActivityPackage activityPackage,
+            Map<String, String> sendingParameters)
+    {
         ResponseData responseData;
         ActivityKind activityKind = activityPackage.getActivityKind();
         switch (activityKind) {
@@ -39,6 +59,8 @@ public class ResponseData {
                 break;
         }
         responseData.activityKind = activityKind;
+        responseData.activityPackage = activityPackage;
+        responseData.sendingParameters = sendingParameters;
 
         return responseData;
     }

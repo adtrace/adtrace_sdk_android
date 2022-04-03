@@ -9,13 +9,6 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.app.Application;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 import io.adtrace.sdk.AdTrace;
 import io.adtrace.sdk.AdTraceAttribution;
 import io.adtrace.sdk.AdTraceConfig;
@@ -25,7 +18,7 @@ import io.adtrace.sdk.AdTraceEventSuccess;
 import io.adtrace.sdk.AdTraceFactory;
 import io.adtrace.sdk.AdTraceSessionFailure;
 import io.adtrace.sdk.AdTraceSessionSuccess;
-import io.adtrace.sdk.AdTraceTestOptions;
+import io.adtrace.sdk.AdTraceThirdPartySharing;
 import io.adtrace.sdk.LogLevel;
 import io.adtrace.sdk.OnAttributionChangedListener;
 import io.adtrace.sdk.OnDeeplinkResponseListener;
@@ -35,6 +28,16 @@ import io.adtrace.sdk.OnEventTrackingSucceededListener;
 import io.adtrace.sdk.OnSessionTrackingFailedListener;
 import io.adtrace.sdk.OnSessionTrackingSucceededListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+/**
+ * Created by uerceg on 22/07/16.
+ */
 public class AdTraceBridgeInstance {
     private static final String LOG_LEVEL_VERBOSE = "VERBOSE";
     private static final String LOG_LEVEL_DEBUG = "DEBUG";
@@ -43,6 +46,9 @@ public class AdTraceBridgeInstance {
     private static final String LOG_LEVEL_ERROR = "ERROR";
     private static final String LOG_LEVEL_ASSERT = "ASSERT";
     private static final String LOG_LEVEL_SUPPRESS = "SUPPRESS";
+
+    private static final String JAVASCRIPT_INTERFACE_NAME = "AdTraceBridge";
+    private static final String FB_JAVASCRIPT_INTERFACE_NAME_PREFIX = "fbmq_";
 
     private WebView webView;
     private Application application;
@@ -54,8 +60,7 @@ public class AdTraceBridgeInstance {
 
     AdTraceBridgeInstance(Application application, WebView webView) {
         this.application = application;
-        this.webView = webView;
-        webView.addJavascriptInterface(this, "AdTraceBridge");
+        setWebView(webView);
     }
 
     // Automatically subscribe to Android lifecycle callbacks to properly handle session tracking.
@@ -112,11 +117,16 @@ public class AdTraceBridgeInstance {
         this.facebookSDKJSInterface = new FacebookSDKJSInterface();
 
         // Add FB pixel to JS interface.
-        this.webView.addJavascriptInterface(facebookSDKJSInterface, "fbmq_" + fbApplicationId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            this.webView.addJavascriptInterface(facebookSDKJSInterface,
+                                                FB_JAVASCRIPT_INTERFACE_NAME_PREFIX
+                                                + fbApplicationId
+                                               );
+        }
     }
 
     @JavascriptInterface
-    public void onCreate(String adTraceConfigString) {
+    public void onCreate(String adtraceConfigString) {
         // Initialise SDK only if it's not already initialised.
         if (isInitialized) {
             AdTraceBridgeUtil.getLogger().warn("AdTrace bridge is already initialized. Ignoring further attempts");
@@ -127,21 +137,22 @@ public class AdTraceBridgeInstance {
         }
 
         try {
-            AdTraceBridgeUtil.getLogger().verbose("Web bridge onCreate adTraceConfigString: " + adTraceConfigString);
+            AdTraceBridgeUtil.getLogger().verbose("Web bridge onCreate adtraceConfigString: " + adtraceConfigString);
 
-            JSONObject jsonAdTraceConfig = new JSONObject(adTraceConfigString);
+            JSONObject jsonAdTraceConfig = new JSONObject(adtraceConfigString);
             Object appTokenField = jsonAdTraceConfig.get("appToken");
             Object environmentField = jsonAdTraceConfig.get("environment");
             Object allowSuppressLogLevelField = jsonAdTraceConfig.get("allowSuppressLogLevel");
             Object eventBufferingEnabledField = jsonAdTraceConfig.get("eventBufferingEnabled");
             Object sendInBackgroundField = jsonAdTraceConfig.get("sendInBackground");
-            Object enableInstalledAppsField = jsonAdTraceConfig.get("enableInstalledApps");
             Object logLevelField = jsonAdTraceConfig.get("logLevel");
             Object sdkPrefixField = jsonAdTraceConfig.get("sdkPrefix");
             Object processNameField = jsonAdTraceConfig.get("processName");
             Object defaultTrackerField = jsonAdTraceConfig.get("defaultTracker");
+            Object externalDeviceIdField = jsonAdTraceConfig.get("externalDeviceId");
             Object attributionCallbackNameField = jsonAdTraceConfig.get("attributionCallbackName");
             Object deviceKnownField = jsonAdTraceConfig.get("deviceKnown");
+            Object needsCostField = jsonAdTraceConfig.get("needsCost");
             Object eventSuccessCallbackNameField = jsonAdTraceConfig.get("eventSuccessCallbackName");
             Object eventFailureCallbackNameField = jsonAdTraceConfig.get("eventFailureCallbackName");
             Object sessionSuccessCallbackNameField = jsonAdTraceConfig.get("sessionSuccessCallbackName");
@@ -157,82 +168,85 @@ public class AdTraceBridgeInstance {
             Object info4Field = jsonAdTraceConfig.get("info4");
             Object fbPixelDefaultEventTokenField = jsonAdTraceConfig.get("fbPixelDefaultEventToken");
             Object fbPixelMappingField = jsonAdTraceConfig.get("fbPixelMapping");
+            Object urlStrategyField = jsonAdTraceConfig.get("urlStrategy");
+            Object preinstallTrackingEnabledField = jsonAdTraceConfig.get("preinstallTrackingEnabled");
+            Object preinstallFilePathField = jsonAdTraceConfig.get("preinstallFilePath");
 
             String appToken = AdTraceBridgeUtil.fieldToString(appTokenField);
             String environment = AdTraceBridgeUtil.fieldToString(environmentField);
             Boolean allowSuppressLogLevel = AdTraceBridgeUtil.fieldToBoolean(allowSuppressLogLevelField);
 
-            AdTraceConfig adTraceConfig;
+            AdTraceConfig adtraceConfig;
             if (allowSuppressLogLevel == null) {
-                adTraceConfig = new AdTraceConfig(application.getApplicationContext(), appToken, environment);
+                adtraceConfig = new AdTraceConfig(application.getApplicationContext(), appToken, environment);
             } else {
-                adTraceConfig = new AdTraceConfig(application.getApplicationContext(), appToken, environment, allowSuppressLogLevel.booleanValue());
+                adtraceConfig = new AdTraceConfig(application.getApplicationContext(), appToken, environment, allowSuppressLogLevel.booleanValue());
             }
 
-            if (!adTraceConfig.isValid()) {
+            if (!adtraceConfig.isValid()) {
                 return;
             }
 
             // Event buffering
             Boolean eventBufferingEnabled = AdTraceBridgeUtil.fieldToBoolean(eventBufferingEnabledField);
             if (eventBufferingEnabled != null) {
-                adTraceConfig.setEventBufferingEnabled(eventBufferingEnabled);
+                adtraceConfig.setEventBufferingEnabled(eventBufferingEnabled);
             }
 
             // Send in the background
             Boolean sendInBackground = AdTraceBridgeUtil.fieldToBoolean(sendInBackgroundField);
             if (sendInBackground != null) {
-                adTraceConfig.setSendInBackground(sendInBackground);
-            }
-
-            // Enable installed apps
-            Boolean enableInstalledApps = AdTraceBridgeUtil.fieldToBoolean(enableInstalledAppsField);
-            if (enableInstalledApps != null) {
-                adTraceConfig.enableSendInstalledApps(enableInstalledApps);
+                adtraceConfig.setSendInBackground(sendInBackground);
             }
 
             // Log level
             String logLevelString = AdTraceBridgeUtil.fieldToString(logLevelField);
             if (logLevelString != null) {
                 if (logLevelString.equalsIgnoreCase(LOG_LEVEL_VERBOSE)) {
-                    adTraceConfig.setLogLevel(LogLevel.VERBOSE);
+                    adtraceConfig.setLogLevel(LogLevel.VERBOSE);
                 } else if (logLevelString.equalsIgnoreCase(LOG_LEVEL_DEBUG)) {
-                    adTraceConfig.setLogLevel(LogLevel.DEBUG);
+                    adtraceConfig.setLogLevel(LogLevel.DEBUG);
                 } else if (logLevelString.equalsIgnoreCase(LOG_LEVEL_INFO)) {
-                    adTraceConfig.setLogLevel(LogLevel.INFO);
+                    adtraceConfig.setLogLevel(LogLevel.INFO);
                 } else if (logLevelString.equalsIgnoreCase(LOG_LEVEL_WARN)) {
-                    adTraceConfig.setLogLevel(LogLevel.WARN);
+                    adtraceConfig.setLogLevel(LogLevel.WARN);
                 } else if (logLevelString.equalsIgnoreCase(LOG_LEVEL_ERROR)) {
-                    adTraceConfig.setLogLevel(LogLevel.ERROR);
+                    adtraceConfig.setLogLevel(LogLevel.ERROR);
                 } else if (logLevelString.equalsIgnoreCase(LOG_LEVEL_ASSERT)) {
-                    adTraceConfig.setLogLevel(LogLevel.ASSERT);
+                    adtraceConfig.setLogLevel(LogLevel.ASSERT);
                 } else if (logLevelString.equalsIgnoreCase(LOG_LEVEL_SUPPRESS)) {
-                    adTraceConfig.setLogLevel(LogLevel.SUPRESS);
+                    adtraceConfig.setLogLevel(LogLevel.SUPRESS);
                 }
             }
 
             // SDK prefix
             String sdkPrefix = AdTraceBridgeUtil.fieldToString(sdkPrefixField);
             if (sdkPrefix != null) {
-                adTraceConfig.setSdkPrefix(sdkPrefix);
+                adtraceConfig.setSdkPrefix(sdkPrefix);
             }
 
             // Main process name
             String processName = AdTraceBridgeUtil.fieldToString(processNameField);
             if (processName != null) {
-                adTraceConfig.setProcessName(processName);
+                adtraceConfig.setProcessName(processName);
             }
 
             // Default tracker
             String defaultTracker = AdTraceBridgeUtil.fieldToString(defaultTrackerField);
             if (defaultTracker != null) {
-                adTraceConfig.setDefaultTracker(defaultTracker);
+                adtraceConfig.setDefaultTracker(defaultTracker);
+            }
+
+            // External device ID
+            String externalDeviceId = AdTraceBridgeUtil.fieldToString(externalDeviceIdField);
+            if (externalDeviceId != null) {
+                adtraceConfig.setExternalDeviceId(externalDeviceId);
             }
 
             // Attribution callback name
             final String attributionCallbackName = AdTraceBridgeUtil.fieldToString(attributionCallbackNameField);
             if (attributionCallbackName != null) {
-                adTraceConfig.setOnAttributionChangedListener(new OnAttributionChangedListener() {
+                adtraceConfig.setOnAttributionChangedListener(new OnAttributionChangedListener() {
                     @Override
                     public void onAttributionChanged(AdTraceAttribution attribution) {
                         AdTraceBridgeUtil.execAttributionCallbackCommand(webView, attributionCallbackName, attribution);
@@ -243,13 +257,19 @@ public class AdTraceBridgeInstance {
             // Is device known
             Boolean deviceKnown = AdTraceBridgeUtil.fieldToBoolean(deviceKnownField);
             if (deviceKnown != null) {
-                adTraceConfig.setDeviceKnown(deviceKnown);
+                adtraceConfig.setDeviceKnown(deviceKnown);
+            }
+
+            // Needs cost
+            Boolean needsCost = AdTraceBridgeUtil.fieldToBoolean(needsCostField);
+            if (needsCost != null) {
+                adtraceConfig.setNeedsCost(needsCost);
             }
 
             // Event success callback
             final String eventSuccessCallbackName = AdTraceBridgeUtil.fieldToString(eventSuccessCallbackNameField);
             if (eventSuccessCallbackName != null) {
-                adTraceConfig.setOnEventTrackingSucceededListener(new OnEventTrackingSucceededListener() {
+                adtraceConfig.setOnEventTrackingSucceededListener(new OnEventTrackingSucceededListener() {
                     public void onFinishedEventTrackingSucceeded(AdTraceEventSuccess eventSuccessResponseData) {
                         AdTraceBridgeUtil.execEventSuccessCallbackCommand(webView, eventSuccessCallbackName, eventSuccessResponseData);
                     }
@@ -259,7 +279,7 @@ public class AdTraceBridgeInstance {
             // Event failure callback
             final String eventFailureCallbackName = AdTraceBridgeUtil.fieldToString(eventFailureCallbackNameField);
             if (eventFailureCallbackName != null) {
-                adTraceConfig.setOnEventTrackingFailedListener(new OnEventTrackingFailedListener() {
+                adtraceConfig.setOnEventTrackingFailedListener(new OnEventTrackingFailedListener() {
                     public void onFinishedEventTrackingFailed(AdTraceEventFailure eventFailureResponseData) {
                         AdTraceBridgeUtil.execEventFailureCallbackCommand(webView, eventFailureCallbackName, eventFailureResponseData);
                     }
@@ -269,7 +289,7 @@ public class AdTraceBridgeInstance {
             // Session success callback
             final String sessionSuccessCallbackName = AdTraceBridgeUtil.fieldToString(sessionSuccessCallbackNameField);
             if (sessionSuccessCallbackName != null) {
-                adTraceConfig.setOnSessionTrackingSucceededListener(new OnSessionTrackingSucceededListener() {
+                adtraceConfig.setOnSessionTrackingSucceededListener(new OnSessionTrackingSucceededListener() {
                     @Override
                     public void onFinishedSessionTrackingSucceeded(AdTraceSessionSuccess sessionSuccessResponseData) {
                         AdTraceBridgeUtil.execSessionSuccessCallbackCommand(webView, sessionSuccessCallbackName, sessionSuccessResponseData);
@@ -280,7 +300,7 @@ public class AdTraceBridgeInstance {
             // Session failure callback
             final String sessionFailureCallbackName = AdTraceBridgeUtil.fieldToString(sessionFailureCallbackNameField);
             if (sessionFailureCallbackName != null) {
-                adTraceConfig.setOnSessionTrackingFailedListener(new OnSessionTrackingFailedListener() {
+                adtraceConfig.setOnSessionTrackingFailedListener(new OnSessionTrackingFailedListener() {
                     @Override
                     public void onFinishedSessionTrackingFailed(AdTraceSessionFailure failureResponseData) {
                         AdTraceBridgeUtil.execSessionFailureCallbackCommand(webView, sessionFailureCallbackName, failureResponseData);
@@ -297,7 +317,7 @@ public class AdTraceBridgeInstance {
             // Deferred deeplink callback
             final String deferredDeeplinkCallbackName = AdTraceBridgeUtil.fieldToString(deferredDeeplinkCallbackNameField);
             if (deferredDeeplinkCallbackName != null) {
-                adTraceConfig.setOnDeeplinkResponseListener(new OnDeeplinkResponseListener() {
+                adtraceConfig.setOnDeeplinkResponseListener(new OnDeeplinkResponseListener() {
                     @Override
                     public boolean launchReceivedDeeplink(Uri deeplink) {
                         AdTraceBridgeUtil.execSingleValueCallback(webView, deferredDeeplinkCallbackName, deeplink.toString());
@@ -309,13 +329,13 @@ public class AdTraceBridgeInstance {
             // Delay start
             Double delayStart = AdTraceBridgeUtil.fieldToDouble(delayStartField);
             if (delayStart != null) {
-                adTraceConfig.setDelayStart(delayStart);
+                adtraceConfig.setDelayStart(delayStart);
             }
 
             // User agent
             String userAgent = AdTraceBridgeUtil.fieldToString(userAgentField);
             if (userAgent != null) {
-                adTraceConfig.setUserAgent(userAgent);
+                adtraceConfig.setUserAgent(userAgent);
             }
 
             // App secret
@@ -325,7 +345,7 @@ public class AdTraceBridgeInstance {
             Long info3 = AdTraceBridgeUtil.fieldToLong(info3Field);
             Long info4 = AdTraceBridgeUtil.fieldToLong(info4Field);
             if (secretId != null && info1 != null && info2 != null && info3 != null && info4 != null) {
-                adTraceConfig.setAppSecret(secretId, info1, info2, info3, info4);
+                adtraceConfig.setAppSecret(secretId, info1, info2, info3, info4);
             }
 
             // Check Pixel Default Event Token
@@ -348,9 +368,27 @@ public class AdTraceBridgeInstance {
                 AdTraceFactory.getLogger().error("AdTraceBridgeInstance.configureFbPixel: %s", e.getMessage());
             }
 
+            // Set url strategy
+            String urlStrategy = AdTraceBridgeUtil.fieldToString(urlStrategyField);
+            if (urlStrategy != null) {
+                adtraceConfig.setUrlStrategy(urlStrategy);
+            }
+
+            // Preinstall tracking
+            Boolean preinstallTrackingEnabled = AdTraceBridgeUtil.fieldToBoolean(preinstallTrackingEnabledField);
+            if (preinstallTrackingEnabled != null) {
+                adtraceConfig.setPreinstallTrackingEnabled(preinstallTrackingEnabled);
+            }
+
+            // Preinstall secondary file path
+            String preinstallFilePath = AdTraceBridgeUtil.fieldToString(preinstallFilePathField);
+            if (preinstallFilePath != null) {
+                adtraceConfig.setPreinstallFilePath(preinstallFilePath);
+            }
+
             // Manually call onResume() because web view initialisation will happen a bit delayed.
             // With this delay, it will miss lifecycle callback onResume() initial firing.
-            AdTrace.onCreate(adTraceConfig);
+            AdTrace.onCreate(adtraceConfig);
             AdTrace.onResume();
 
             isInitialized = true;
@@ -363,27 +401,26 @@ public class AdTraceBridgeInstance {
     }
 
     @JavascriptInterface
-    public void trackEvent(String adTraceEventString) {
+    public void trackEvent(String adtraceEventString) {
         if (!isInitialized()) {
             return;
         }
 
         try {
-            JSONObject jsonAdTraceEvent = new JSONObject(adTraceEventString);
+            JSONObject jsonAdTraceEvent = new JSONObject(adtraceEventString);
 
             Object eventTokenField = jsonAdTraceEvent.get("eventToken");
             Object revenueField = jsonAdTraceEvent.get("revenue");
             Object currencyField = jsonAdTraceEvent.get("currency");
             Object callbackParametersField = jsonAdTraceEvent.get("callbackParameters");
-            Object partnerParametersField = jsonAdTraceEvent.get("partnerParameters");
+            Object eventParametersField = jsonAdTraceEvent.get("eventParameters");
             Object orderIdField = jsonAdTraceEvent.get("orderId");
             Object callbackIdField = jsonAdTraceEvent.get("callbackId");
-            Object eventValueField = jsonAdTraceEvent.get("eventValue");
 
             String eventToken = AdTraceBridgeUtil.fieldToString(eventTokenField);
-            AdTraceEvent adTraceEvent = new AdTraceEvent(eventToken);
+            AdTraceEvent adtraceEvent = new AdTraceEvent(eventToken);
 
-            if (!adTraceEvent.isValid()) {
+            if (!adtraceEvent.isValid()) {
                 return;
             }
 
@@ -391,7 +428,7 @@ public class AdTraceBridgeInstance {
             Double revenue = AdTraceBridgeUtil.fieldToDouble(revenueField);
             String currency = AdTraceBridgeUtil.fieldToString(currencyField);
             if (revenue != null && currency != null) {
-                adTraceEvent.setRevenue(revenue, currency);
+                adtraceEvent.setRevenue(revenue, currency);
             }
 
             // Callback parameters
@@ -400,42 +437,50 @@ public class AdTraceBridgeInstance {
                 for (int i = 0; i < callbackParameters.length; i += 2) {
                     String key = callbackParameters[i];
                     String value = callbackParameters[i+1];
-                    adTraceEvent.addCallbackParameter(key, value);
+                    adtraceEvent.addCallbackParameter(key, value);
                 }
             }
 
-            // Partner parameters
-            String[] partnerParameters = AdTraceBridgeUtil.jsonArrayToArray((JSONArray)partnerParametersField);
-            if (partnerParameters != null) {
-                for (int i = 0; i < partnerParameters.length; i += 2) {
-                    String key = partnerParameters[i];
-                    String value = partnerParameters[i+1];
-                    adTraceEvent.addPartnerParameter(key, value);
+            // event parameters
+            String[] eventParameters = AdTraceBridgeUtil.jsonArrayToArray((JSONArray)eventParametersField);
+            if (eventParameters != null) {
+                for (int i = 0; i < eventParameters.length; i += 2) {
+                    String key = eventParameters[i];
+                    String value = eventParameters[i+1];
+                    adtraceEvent.addEventParameter(key, value);
                 }
             }
 
             // Revenue deduplication
             String orderId = AdTraceBridgeUtil.fieldToString(orderIdField);
             if (orderId != null) {
-                adTraceEvent.setOrderId(orderId);
+                adtraceEvent.setOrderId(orderId);
             }
 
             // Callback id
             String callbackId = AdTraceBridgeUtil.fieldToString(callbackIdField);
             if (callbackId != null) {
-                adTraceEvent.setCallbackId(callbackId);
-            }
-
-            // Event value
-            String eventValue = AdTraceBridgeUtil.fieldToString(eventValueField);
-            if (eventValue != null) {
-                adTraceEvent.setEventValue(eventValue);
+                adtraceEvent.setCallbackId(callbackId);
             }
 
             // Track event
-            AdTrace.trackEvent(adTraceEvent);
+            AdTrace.trackEvent(adtraceEvent);
         } catch (Exception e) {
             AdTraceFactory.getLogger().error("AdTraceBridgeInstance trackEvent: %s", e.getMessage());
+        }
+    }
+
+    @JavascriptInterface
+    public void trackAdRevenue(final String source, final String payload) {
+        try {
+            // payload JSON string is URL encoded
+            String decodedPayload = URLDecoder.decode(payload, "UTF-8");
+            JSONObject jsonPayload = new JSONObject(decodedPayload);
+            AdTrace.trackAdRevenue(source, jsonPayload);
+        } catch (JSONException je) {
+            AdTraceFactory.getLogger().debug("Ad revenue payload does not seem to be a valid JSON string");
+        } catch (UnsupportedEncodingException ue) {
+            AdTraceFactory.getLogger().debug("Unable to URL decode given JSON string");
         }
     }
 
@@ -515,17 +560,6 @@ public class AdTraceBridgeInstance {
     }
 
     @JavascriptInterface
-    public void setEnableLocation(String isEnableLocationString) {
-        if (!isInitialized()) {
-            return;
-        }
-        Boolean isEnable = AdTraceBridgeUtil.fieldToBoolean(isEnableLocationString);
-        if (isEnable != null) {
-            AdTrace.enableLocation(isEnable);
-        }
-    }
-
-    @JavascriptInterface
     public void sendFirstPackages() {
         if (!isInitialized()) {
             return;
@@ -599,6 +633,63 @@ public class AdTraceBridgeInstance {
     }
 
     @JavascriptInterface
+    public void disableThirdPartySharing() {
+        if (!isInitialized()) {
+            return;
+        }
+        AdTrace.disableThirdPartySharing(application.getApplicationContext());
+    }
+
+    @JavascriptInterface
+    public void trackThirdPartySharing(String adtraceThirdPartySharingString) {
+        if (!isInitialized()) {
+            return;
+        }
+
+        try {
+            JSONObject jsonAdTraceThirdPartySharing = new JSONObject(adtraceThirdPartySharingString);
+
+            Object isEnabledField =
+                    jsonAdTraceThirdPartySharing.get("isEnabled");
+            Object granularOptionsField = jsonAdTraceThirdPartySharing.get("granularOptions");
+
+            Boolean isEnabled = AdTraceBridgeUtil.fieldToBoolean(isEnabledField);
+
+            AdTraceThirdPartySharing adtraceThirdPartySharing =
+                    new AdTraceThirdPartySharing(isEnabled);
+
+            // Callback parameters
+            String[] granularOptions =
+                    AdTraceBridgeUtil.jsonArrayToArray((JSONArray)granularOptionsField);
+            if (granularOptions != null) {
+                for (int i = 0; i < granularOptions.length; i += 3) {
+                    String partnerName = granularOptions[i];
+                    String key = granularOptions[i + 1];
+                    String value = granularOptions[i + 2];
+                    adtraceThirdPartySharing.addGranularOption(partnerName, key, value);
+                }
+            }
+
+            // Track ThirdPartySharing
+            AdTrace.trackThirdPartySharing(adtraceThirdPartySharing);
+        } catch (Exception e) {
+            AdTraceFactory.getLogger().error(
+                    "AdTraceBridgeInstance trackThirdPartySharing: %s", e.getMessage());
+        }
+    }
+
+    @JavascriptInterface
+    public void trackMeasurementConsent(String consentMeasurementString) {
+        if (!isInitialized()) {
+            return;
+        }
+        Boolean consentMeasurement = AdTraceBridgeUtil.fieldToBoolean(consentMeasurementString);
+        if (consentMeasurement != null) {
+            AdTrace.trackMeasurementConsent(consentMeasurement);
+        }
+    }
+
+    @JavascriptInterface
     public void getGoogleAdId(final String callback) {
         if (!isInitialized()) {
             return;
@@ -642,103 +733,6 @@ public class AdTraceBridgeInstance {
     }
 
     @JavascriptInterface
-    public void setTestOptions(final String testOptionsString) {
-        AdTraceFactory.getLogger().verbose("AdTraceBridgeInstance setTestOptions: %s", testOptionsString);
-
-        if (!isInitialized()) {
-            return;
-        }
-
-        try {
-            AdTraceTestOptions adTraceTestOptions = new AdTraceTestOptions();
-            JSONObject jsonAdTraceTestOptions = new JSONObject(testOptionsString);
-
-            Object baseUrlField = jsonAdTraceTestOptions.get("baseUrl");
-            Object gdprUrlField = jsonAdTraceTestOptions.get("gdprUrl");
-            Object basePathField = jsonAdTraceTestOptions.get("basePath");
-            Object gdprPathField = jsonAdTraceTestOptions.get("gdprPath");
-            Object useTestConnectionOptionsField = jsonAdTraceTestOptions.get("useTestConnectionOptions");
-            Object timerIntervalInMillisecondsField = jsonAdTraceTestOptions.get("timerIntervalInMilliseconds");
-            Object timerStartInMillisecondsField = jsonAdTraceTestOptions.get("timerStartInMilliseconds");
-            Object sessionIntervalInMillisecondsField = jsonAdTraceTestOptions.get("sessionIntervalInMilliseconds");
-            Object subsessionIntervalInMillisecondsField = jsonAdTraceTestOptions.get("subsessionIntervalInMilliseconds");
-            Object teardownField = jsonAdTraceTestOptions.get("teardown");
-            Object tryInstallReferrerField = jsonAdTraceTestOptions.get("tryInstallReferrer");
-            Object noBackoffWaitField = jsonAdTraceTestOptions.get("noBackoffWait");
-            Object hasContextField = jsonAdTraceTestOptions.get("hasContext");
-
-            String gdprUrl = AdTraceBridgeUtil.fieldToString(gdprUrlField);
-            if (gdprUrl != null) {
-                adTraceTestOptions.gdprUrl = gdprUrl;
-            }
-
-            String baseUrl = AdTraceBridgeUtil.fieldToString(baseUrlField);
-            if (baseUrl != null) {
-                adTraceTestOptions.baseUrl = baseUrl;
-            }
-
-            String basePath = AdTraceBridgeUtil.fieldToString(basePathField);
-            if (basePath != null) {
-                adTraceTestOptions.basePath = basePath;
-            }
-
-            String gdprPath = AdTraceBridgeUtil.fieldToString(gdprPathField);
-            if (gdprPath != null) {
-                adTraceTestOptions.gdprPath = gdprPath;
-            }
-
-            Boolean useTestConnectionOptions = AdTraceBridgeUtil.fieldToBoolean(useTestConnectionOptionsField);
-            if (useTestConnectionOptions != null) {
-                adTraceTestOptions.useTestConnectionOptions = useTestConnectionOptions;
-            }
-
-            Long timerIntervalInMilliseconds = AdTraceBridgeUtil.fieldToLong(timerIntervalInMillisecondsField);
-            if (timerIntervalInMilliseconds != null) {
-                adTraceTestOptions.timerIntervalInMilliseconds = timerIntervalInMilliseconds;
-            }
-
-            Long timerStartInMilliseconds = AdTraceBridgeUtil.fieldToLong(timerStartInMillisecondsField);
-            if (timerStartInMilliseconds != null) {
-                adTraceTestOptions.timerStartInMilliseconds = timerStartInMilliseconds;
-            }
-
-            Long sessionIntervalInMilliseconds = AdTraceBridgeUtil.fieldToLong(sessionIntervalInMillisecondsField);
-            if (sessionIntervalInMilliseconds != null) {
-                adTraceTestOptions.sessionIntervalInMilliseconds = sessionIntervalInMilliseconds;
-            }
-
-            Long subsessionIntervalInMilliseconds = AdTraceBridgeUtil.fieldToLong(subsessionIntervalInMillisecondsField);
-            if (subsessionIntervalInMilliseconds != null) {
-                adTraceTestOptions.subsessionIntervalInMilliseconds = subsessionIntervalInMilliseconds;
-            }
-
-            Boolean teardown = AdTraceBridgeUtil.fieldToBoolean(teardownField);
-            if (teardown != null) {
-                adTraceTestOptions.teardown = teardown;
-            }
-
-            Boolean tryInstallReferrer = AdTraceBridgeUtil.fieldToBoolean(tryInstallReferrerField);
-            if (tryInstallReferrer != null) {
-                adTraceTestOptions.tryInstallReferrer = tryInstallReferrer;
-            }
-
-            Boolean noBackoffWait = AdTraceBridgeUtil.fieldToBoolean(noBackoffWaitField);
-            if (noBackoffWait != null) {
-                adTraceTestOptions.noBackoffWait = noBackoffWait;
-            }
-
-            Boolean hasContext = AdTraceBridgeUtil.fieldToBoolean(hasContextField);
-            if (hasContext != null && hasContext.booleanValue()) {
-                adTraceTestOptions.context = application.getApplicationContext();
-            }
-
-            AdTrace.setTestOptions(adTraceTestOptions);
-        } catch (Exception e) {
-            AdTraceFactory.getLogger().error("AdTraceBridgeInstance setTestOptions: %s", e.getMessage());
-        }
-    }
-
-    @JavascriptInterface
     public void fbPixelEvent(String pixelId, String event_name, String jsonString) {
         this.facebookSDKJSInterface.sendEvent(pixelId, event_name, jsonString);
     }
@@ -751,9 +745,48 @@ public class AdTraceBridgeInstance {
 
     public void setWebView(WebView webView) {
         this.webView = webView;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            webView.addJavascriptInterface(this, JAVASCRIPT_INTERFACE_NAME);
+        }
     }
 
     public void setApplicationContext(Application application) {
         this.application = application;
+    }
+
+    public void unregister() {
+        if (!isInitialized()) {
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            this.webView.removeJavascriptInterface(JAVASCRIPT_INTERFACE_NAME);
+        }
+
+        unregisterFacebookSDKJSInterface();
+
+        application = null;
+        webView = null;
+        isInitialized = false;
+    }
+
+    public void unregisterFacebookSDKJSInterface() {
+        if (!isInitialized()) {
+            return;
+        }
+
+        if (this.facebookSDKJSInterface == null) {
+            return;
+        }
+
+        String fbApplicationId = FacebookSDKJSInterface.getApplicationId(application.getApplicationContext());
+        if (fbApplicationId == null) {
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            this.webView.removeJavascriptInterface(FB_JAVASCRIPT_INTERFACE_NAME_PREFIX + fbApplicationId);
+        }
+
+        this.facebookSDKJSInterface = null;
     }
 }

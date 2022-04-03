@@ -9,8 +9,13 @@ import java.io.ObjectStreamField;
 import java.io.Serializable;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class AdTraceAttribution implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final ObjectStreamField[] serialPersistentFields = {
@@ -22,6 +27,9 @@ public class AdTraceAttribution implements Serializable {
             new ObjectStreamField("creative", String.class),
             new ObjectStreamField("clickLabel", String.class),
             new ObjectStreamField("adid", String.class),
+            new ObjectStreamField("costType", String.class),
+            new ObjectStreamField("costAmount", Double.class),
+            new ObjectStreamField("costCurrency", String.class),
     };
 
     public String trackerToken;
@@ -32,6 +40,9 @@ public class AdTraceAttribution implements Serializable {
     public String creative;
     public String clickLabel;
     public String adid;
+    public String costType;
+    public Double costAmount;
+    public String costCurrency;
 
     public static AdTraceAttribution fromJson(JSONObject jsonObject, String adid, String sdkPlatform) {
         if (jsonObject == null) return null;
@@ -48,16 +59,22 @@ public class AdTraceAttribution implements Serializable {
             attribution.creative = jsonObject.optString("creative", "");
             attribution.clickLabel = jsonObject.optString("click_label", "");
             attribution.adid = adid != null ? adid : "";
+            attribution.costType = jsonObject.optString("cost_type", "");
+            attribution.costAmount = jsonObject.optDouble("cost_amount", 0);
+            attribution.costCurrency = jsonObject.optString("cost_currency", "");
         } else {
             // Rest of all platforms.
-            attribution.trackerToken = jsonObject.optString("tracker_token", null);
-            attribution.trackerName = jsonObject.optString("tracker_name", null);
-            attribution.network = jsonObject.optString("network", null);
-            attribution.campaign = jsonObject.optString("campaign", null);
-            attribution.adgroup = jsonObject.optString("adgroup", null);
-            attribution.creative = jsonObject.optString("creative", null);
-            attribution.clickLabel = jsonObject.optString("click_label", null);
+            attribution.trackerToken = jsonObject.optString("tracker_token");
+            attribution.trackerName = jsonObject.optString("tracker_name");
+            attribution.network = jsonObject.optString("network");
+            attribution.campaign = jsonObject.optString("campaign");
+            attribution.adgroup = jsonObject.optString("adgroup");
+            attribution.creative = jsonObject.optString("creative");
+            attribution.clickLabel = jsonObject.optString("click_label");
             attribution.adid = adid;
+            attribution.costType = jsonObject.optString("cost_type");
+            attribution.costAmount = jsonObject.optDouble("cost_amount");
+            attribution.costCurrency = jsonObject.optString("cost_currency");
         }
 
         return attribution;
@@ -78,6 +95,9 @@ public class AdTraceAttribution implements Serializable {
         if (!Util.equalString(creative, otherAttribution.creative)) return false;
         if (!Util.equalString(clickLabel, otherAttribution.clickLabel)) return false;
         if (!Util.equalString(adid, otherAttribution.adid)) return false;
+        if (!Util.equalString(costType, otherAttribution.costType)) return false;
+        if (!Util.equalsDouble(costAmount, otherAttribution.costAmount)) return false;
+        if (!Util.equalString(costCurrency, otherAttribution.costCurrency)) return false;
 
         return true;
     }
@@ -93,14 +113,19 @@ public class AdTraceAttribution implements Serializable {
         hashCode = 37 * hashCode + Util.hashString(creative);
         hashCode = 37 * hashCode + Util.hashString(clickLabel);
         hashCode = 37 * hashCode + Util.hashString(adid);
+        hashCode = 37 * hashCode + Util.hashString(costType);
+        hashCode = 37 * hashCode + Util.hashDouble(costAmount);
+        hashCode = 37 * hashCode + Util.hashString(costCurrency);
 
         return hashCode;
     }
 
     @Override
     public String toString() {
-        return Util.formatString("tt:%s tn:%s net:%s cam:%s adg:%s cre:%s cl:%s adid:%s",
-                trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
+        return Util.formatString(
+                "tt:%s tn:%s net:%s cam:%s adg:%s cre:%s cl:%s adid:%s ct:%s ca:%.2f cc:%s",
+                trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel,
+                adid, costType, costAmount, costCurrency);
     }
 
     private void writeObject(ObjectOutputStream stream) throws IOException {

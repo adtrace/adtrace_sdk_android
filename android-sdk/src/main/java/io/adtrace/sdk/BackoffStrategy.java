@@ -1,17 +1,17 @@
 package io.adtrace.sdk;
 
+
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public enum BackoffStrategy {
     LONG_WAIT(1,                        // min retries
             2 * Constants.ONE_MINUTE,   // milliseconds multiplier
-            24 * Constants.ONE_HOUR,    // max wait time
-            0.5,                        // min jitter multiplier
-            1.0),                       // max jitter multiplier
-
-    NORMAL_WAIT(1,                        // min retries
-            15 * Constants.ONE_SECOND,   // milliseconds multiplier
             24 * Constants.ONE_HOUR,    // max wait time
             0.5,                        // min jitter multiplier
             1.0),                       // max jitter multiplier

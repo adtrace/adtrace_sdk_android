@@ -8,11 +8,20 @@
 
 package io.adtrace.sdk;
 
+import io.adtrace.sdk.network.IActivityPackageSender;
+
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public interface IAttributionHandler {
-    void init(IActivityHandler activityHandler, boolean startsSending);
+    void init(IActivityHandler activityHandler,
+              boolean startsSending,
+              IActivityPackageSender attributionHandlerActivityPackageSender);
     void checkSessionResponse(SessionResponseData sessionResponseData);
     void checkSdkClickResponse(SdkClickResponseData sdkClickResponseData);
     void pauseSending();

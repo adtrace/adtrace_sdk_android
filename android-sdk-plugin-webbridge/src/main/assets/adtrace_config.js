@@ -21,7 +21,6 @@ function AdTraceConfig(appToken, environment, legacy) {
 
     this.eventBufferingEnabled = null;
     this.sendInBackground = null;
-    this.enableInstalledApps = null;
     this.logLevel = null;
     this.sdkPrefix = null;
     this.processName = null;
@@ -30,6 +29,7 @@ function AdTraceConfig(appToken, environment, legacy) {
     this.attributionCallbackName = null;
     this.attributionCallbackFunction = null;
     this.deviceKnown = null;
+    this.needsCost = null;
     this.eventSuccessCallbackName = null;
     this.eventSuccessCallbackFunction = null;
     this.eventFailureCallbackName = null;
@@ -50,10 +50,19 @@ function AdTraceConfig(appToken, environment, legacy) {
     this.info4 = null;
     this.fbPixelDefaultEventToken = null;
     this.fbPixelMapping = [];
+    this.urlStrategy = null;
+    this.preinstallTrackingEnabled = null;
+    this.preinstallFilePath = null;
 }
 
 AdTraceConfig.EnvironmentSandbox = 'sandbox';
 AdTraceConfig.EnvironmentProduction = 'production';
+
+AdTraceConfig.UrlStrategyIndia = "url_strategy_india";
+AdTraceConfig.UrlStrategyChina = "url_strategy_china";
+AdTraceConfig.DataResidencyEU = "data_residency_eu";
+AdTraceConfig.DataResidencyTR = "data_residency_tr";
+AdTraceConfig.DataResidencyUS = "data_residency_us";
 
 AdTraceConfig.LogLevelVerbose = 'VERBOSE',
 AdTraceConfig.LogLevelDebug = 'DEBUG',
@@ -73,10 +82,6 @@ AdTraceConfig.prototype.setEventBufferingEnabled = function(isEnabled) {
 
 AdTraceConfig.prototype.setSendInBackground = function(isEnabled) {
     this.sendInBackground = isEnabled;
-};
-
-AdTraceConfig.prototype.setEnableInstalledApps = function(enableInstalledApps) {
-    this.enableInstalledApps = enableInstalledApps;
 };
 
 AdTraceConfig.prototype.setLogLevel = function(logLevel) {
@@ -120,6 +125,10 @@ AdTraceConfig.prototype.adtrace_attributionCallback = function(attribution) {
 
 AdTraceConfig.prototype.setDeviceKnown = function(deviceKnown) {
     this.deviceKnown = deviceKnown;
+};
+
+AdTraceConfig.prototype.setNeedsCost = function(needsCost) {
+    this.needsCost = needsCost;
 };
 
 AdTraceConfig.prototype.setEventSuccessCallback = function(callback) {
@@ -223,7 +232,19 @@ AdTraceConfig.prototype.setFbPixelDefaultEventToken = function(fbPixelDefaultEve
     this.fbPixelDefaultEventToken = fbPixelDefaultEventToken;
 };
 
-AdTraceConfig.prototype.addFbPixelMapping = function(fbEventNameKey, adjEventTokenValue) {
+AdTraceConfig.prototype.addFbPixelMapping = function(fbEventNameKey, adtrcEventTokenValue) {
     this.fbPixelMapping.push(fbEventNameKey);
-    this.fbPixelMapping.push(adjEventTokenValue);
+    this.fbPixelMapping.push(adtrcEventTokenValue);
+};
+
+AdTraceConfig.prototype.setUrlStrategy = function(urlStrategy) {
+    this.urlStrategy = urlStrategy;
+};
+
+AdTraceConfig.prototype.setPreinstallTrackingEnabled = function(preinstallTrackingEnabled) {
+    this.preinstallTrackingEnabled = preinstallTrackingEnabled;
+};
+
+AdTraceConfig.prototype.setPreinstallFilePath = function(preinstallFilePath) {
+    this.preinstallFilePath = preinstallFilePath;
 };

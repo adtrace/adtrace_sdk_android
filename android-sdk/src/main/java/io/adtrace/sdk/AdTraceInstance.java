@@ -1,17 +1,35 @@
 package io.adtrace.sdk;
 
-import android.net.Uri;
 import android.content.Context;
+import android.net.Uri;
 
-import java.util.List;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
+
 
 /**
- * Class used to forward instructions to SDK which user gives as part of AdTrace class interface.
- *
- * @author Morteza KhosraviNejad
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class AdTraceInstance {
+    public static class PreLaunchActions {
+        public List<IRunActivityHandler> preLaunchActionsArray;
+        public List<AdTraceThirdPartySharing> preLaunchAdTraceThirdPartySharingArray;
+        public Boolean lastMeasurementConsentTracked;
+
+        public PreLaunchActions() {
+            preLaunchActionsArray = new ArrayList<>();
+            preLaunchAdTraceThirdPartySharingArray = new ArrayList<>();
+            lastMeasurementConsentTracked = null;
+        }
+    }
+
     /**
      * Push notifications token.
      */
@@ -27,17 +45,12 @@ public class AdTraceInstance {
      */
     private boolean startOffline = false;
 
-    private boolean enableLocation = false;
-
     /**
      * ActivityHandler instance.
      */
     private IActivityHandler activityHandler;
 
-    /**
-     * Array of actions that were requested before SDK initialisation.
-     */
-    private List<IRunActivityHandler> preLaunchActionsArray;
+    private PreLaunchActions preLaunchActions = new PreLaunchActions();
 
     /**
      * Base path for AdTrace packages.
@@ -48,6 +61,11 @@ public class AdTraceInstance {
      * Path for GDPR package.
      */
     private String gdprPath;
+
+    /**
+     * Path for subscription package.
+     */
+    private String subscriptionPath;
 
     /**
      * Called upon SDK initialisation.
@@ -68,12 +86,13 @@ public class AdTraceInstance {
             return;
         }
 
-        adTraceConfig.preLaunchActionsArray = preLaunchActionsArray;
+        adTraceConfig.preLaunchActions = preLaunchActions;
         adTraceConfig.pushToken = pushToken;
         adTraceConfig.startEnabled = startEnabled;
         adTraceConfig.startOffline = startOffline;
         adTraceConfig.basePath = this.basePath;
         adTraceConfig.gdprPath = this.gdprPath;
+        adTraceConfig.subscriptionPath = this.subscriptionPath;
 
         activityHandler = AdTraceFactory.getActivityHandler(adTraceConfig);
         setSendingReferrersAsNotSent(adTraceConfig.context);
@@ -85,7 +104,7 @@ public class AdTraceInstance {
      * @param event AdTraceEvent object to be tracked
      */
     public void trackEvent(final AdTraceEvent event) {
-        if (!checkActivityHandler()) {
+        if (!checkActivityHandler("trackEvent")) {
             return;
         }
         activityHandler.trackEvent(event);
@@ -95,7 +114,7 @@ public class AdTraceInstance {
      * Called upon each Activity's onResume() method call.
      */
     public void onResume() {
-        if (!checkActivityHandler()) {
+        if (!checkActivityHandler("onResume")) {
             return;
         }
         activityHandler.onResume();
@@ -105,7 +124,7 @@ public class AdTraceInstance {
      * Called upon each Activity's onPause() method call.
      */
     public void onPause() {
-        if (!checkActivityHandler()) {
+        if (!checkActivityHandler("onPause")) {
             return;
         }
         activityHandler.onPause();
@@ -129,7 +148,7 @@ public class AdTraceInstance {
      * @return boolean indicating whether SDK is enabled or not
      */
     public boolean isEnabled() {
-        if (!checkActivityHandler()) {
+        if (!checkActivityHandler("isEnabled")) {
             return isInstanceEnabled();
         }
         return activityHandler.isEnabled();
@@ -141,7 +160,7 @@ public class AdTraceInstance {
      * @param url Deep link URL to process
      */
     public void appWillOpenUrl(final Uri url) {
-        if (!checkActivityHandler()) {
+        if (!checkActivityHandler("appWillOpenUrl")) {
             return;
         }
         long clickTime = System.currentTimeMillis();
@@ -155,10 +174,16 @@ public class AdTraceInstance {
      * @param context Application context
      */
     public void appWillOpenUrl(final Uri url, final Context context) {
+        // Check for deep link validity. If invalid, return.
+        if (url == null || url.toString().length() == 0) {
+            AdTraceFactory.getLogger().warn(
+                    "Skipping deep link processing (null or empty)");
+            return;
+        }
+
         long clickTime = System.currentTimeMillis();
-        if (!checkActivityHandler()) {
-            SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(context);
-            sharedPreferencesManager.saveDeeplink(url, clickTime);
+        if (!checkActivityHandler("appWillOpenUrl", true)) {
+            saveDeeplink(url, clickTime, context);
             return;
         }
 
@@ -176,13 +201,37 @@ public class AdTraceInstance {
 
         // Check for referrer validity. If invalid, return.
         if (rawReferrer == null || rawReferrer.length() == 0) {
+            AdTraceFactory.getLogger().warn(
+                    "Skipping INSTALL_REFERRER intent referrer processing (null or empty)");
             return;
         }
 
         saveRawReferrer(rawReferrer, clickTime, context);
-        if (checkActivityHandler("referrer")) {
+        if (checkActivityHandler("referrer", true)) {
             if (activityHandler.isEnabled()) {
                 activityHandler.sendReftagReferrer();
+            }
+        }
+    }
+
+    /**
+     * Called to process preinstall payload information sent with SYSTEM_INSTALLER_REFERRER intent.
+     *
+     * @param referrer    Preinstall referrer content
+     * @param context     Application context
+     */
+    public void sendPreinstallReferrer(final String referrer, final Context context) {
+        // Check for referrer validity. If invalid, return.
+        if (referrer == null || referrer.length() == 0) {
+            AdTraceFactory.getLogger().warn(
+                    "Skipping SYSTEM_INSTALLER_REFERRER preinstall referrer processing (null or empty)");
+            return;
+        }
+
+        savePreinstallReferrer(referrer, context);
+        if (checkActivityHandler("preinstall referrer", true)) {
+            if (activityHandler.isEnabled()) {
+                activityHandler.sendPreinstallReferrer();
             }
         }
     }
@@ -200,19 +249,11 @@ public class AdTraceInstance {
         }
     }
 
-    public void enableLocation(final boolean enabled) {
-        if (!checkActivityHandler(enabled, "location enabled", "location disabled")) {
-            this.enableLocation = enabled;
-        } else {
-            activityHandler.enableLocation(enabled);
-        }
-    }
-
     /**
      * Called if SDK initialisation was delayed and you would like to stop waiting for timer.
      */
     public void sendFirstPackages() {
-        if (!checkActivityHandler()) {
+        if (!checkActivityHandler("sendFirstPackages")) {
             return;
         }
         activityHandler.sendFirstPackages();
@@ -225,14 +266,12 @@ public class AdTraceInstance {
      * @param value Global callback parameter value
      */
     public void addSessionCallbackParameter(final String key, final String value) {
-        if (checkActivityHandler("adding session callback parameter")) {
+        if (checkActivityHandler("adding session callback parameter", true)) {
             activityHandler.addSessionCallbackParameter(key, value);
             return;
         }
-        if (preLaunchActionsArray == null) {
-            preLaunchActionsArray = new ArrayList<IRunActivityHandler>();
-        }
-        preLaunchActionsArray.add(new IRunActivityHandler() {
+
+        preLaunchActions.preLaunchActionsArray.add(new IRunActivityHandler() {
             @Override
             public void run(final ActivityHandler activityHandler) {
                 activityHandler.addSessionCallbackParameterI(key, value);
@@ -247,14 +286,11 @@ public class AdTraceInstance {
      * @param value Global partner parameter value
      */
     public void addSessionPartnerParameter(final String key, final String value) {
-        if (checkActivityHandler("adding session partner parameter")) {
+        if (checkActivityHandler("adding session partner parameter", true)) {
             activityHandler.addSessionPartnerParameter(key, value);
             return;
         }
-        if (preLaunchActionsArray == null) {
-            preLaunchActionsArray = new ArrayList<IRunActivityHandler>();
-        }
-        preLaunchActionsArray.add(new IRunActivityHandler() {
+        preLaunchActions.preLaunchActionsArray.add(new IRunActivityHandler() {
             @Override
             public void run(final ActivityHandler activityHandler) {
                 activityHandler.addSessionPartnerParameterI(key, value);
@@ -268,14 +304,11 @@ public class AdTraceInstance {
      * @param key Global callback parameter key
      */
     public void removeSessionCallbackParameter(final String key) {
-        if (checkActivityHandler("removing session callback parameter")) {
+        if (checkActivityHandler("removing session callback parameter", true)) {
             activityHandler.removeSessionCallbackParameter(key);
             return;
         }
-        if (preLaunchActionsArray == null) {
-            preLaunchActionsArray = new ArrayList<IRunActivityHandler>();
-        }
-        preLaunchActionsArray.add(new IRunActivityHandler() {
+        preLaunchActions.preLaunchActionsArray.add(new IRunActivityHandler() {
             @Override
             public void run(final ActivityHandler activityHandler) {
                 activityHandler.removeSessionCallbackParameterI(key);
@@ -289,14 +322,11 @@ public class AdTraceInstance {
      * @param key Global partner parameter key
      */
     public void removeSessionPartnerParameter(final String key) {
-        if (checkActivityHandler("removing session partner parameter")) {
+        if (checkActivityHandler("removing session partner parameter", true)) {
             activityHandler.removeSessionPartnerParameter(key);
             return;
         }
-        if (preLaunchActionsArray == null) {
-            preLaunchActionsArray = new ArrayList<IRunActivityHandler>();
-        }
-        preLaunchActionsArray.add(new IRunActivityHandler() {
+        preLaunchActions.preLaunchActionsArray.add(new IRunActivityHandler() {
             @Override
             public void run(final ActivityHandler activityHandler) {
                 activityHandler.removeSessionPartnerParameterI(key);
@@ -308,14 +338,11 @@ public class AdTraceInstance {
      * Called to remove all added global callback parameters.
      */
     public void resetSessionCallbackParameters() {
-        if (checkActivityHandler("resetting session callback parameters")) {
+        if (checkActivityHandler("resetting session callback parameters", true)) {
             activityHandler.resetSessionCallbackParameters();
             return;
         }
-        if (preLaunchActionsArray == null) {
-            preLaunchActionsArray = new ArrayList<IRunActivityHandler>();
-        }
-        preLaunchActionsArray.add(new IRunActivityHandler() {
+        preLaunchActions.preLaunchActionsArray.add(new IRunActivityHandler() {
             @Override
             public void run(final ActivityHandler activityHandler) {
                 activityHandler.resetSessionCallbackParametersI();
@@ -327,14 +354,11 @@ public class AdTraceInstance {
      * Called to remove all added global partner parameters.
      */
     public void resetSessionPartnerParameters() {
-        if (checkActivityHandler("resetting session partner parameters")) {
+        if (checkActivityHandler("resetting session partner parameters", true)) {
             activityHandler.resetSessionPartnerParameters();
             return;
         }
-        if (preLaunchActionsArray == null) {
-            preLaunchActionsArray = new ArrayList<IRunActivityHandler>();
-        }
-        preLaunchActionsArray.add(new IRunActivityHandler() {
+        preLaunchActions.preLaunchActionsArray.add(new IRunActivityHandler() {
             @Override
             public void run(final ActivityHandler activityHandler) {
                 activityHandler.resetSessionPartnerParametersI();
@@ -347,7 +371,7 @@ public class AdTraceInstance {
      * Used only for AdTrace tests, shouldn't be used in client apps.
      */
     public void teardown() {
-        if (!checkActivityHandler()) {
+        if (!checkActivityHandler("teardown")) {
             return;
         }
         activityHandler.teardown();
@@ -360,7 +384,7 @@ public class AdTraceInstance {
      * @param token Push notifications token
      */
     public void setPushToken(final String token) {
-        if (!checkActivityHandler("push token")) {
+        if (!checkActivityHandler("push token", true)) {
             this.pushToken = token;
         } else {
             activityHandler.setPushToken(token, false);
@@ -375,7 +399,7 @@ public class AdTraceInstance {
      */
     public void setPushToken(final String token, final Context context) {
         savePushToken(token, context);
-        if (checkActivityHandler("push token")) {
+        if (checkActivityHandler("push token", true)) {
             if (activityHandler.isEnabled()) {
                 activityHandler.setPushToken(token, true);
             }
@@ -389,11 +413,81 @@ public class AdTraceInstance {
      */
     public void gdprForgetMe(final Context context) {
         saveGdprForgetMe(context);
-        if (checkActivityHandler("gdpr")) {
+        if (checkActivityHandler("gdpr", true)) {
             if (activityHandler.isEnabled()) {
                 activityHandler.gdprForgetMe();
             }
         }
+    }
+
+    /**
+     * Called to disable the third party sharing.
+     *
+     * @param context Application context
+     */
+    public void disableThirdPartySharing(final Context context) {
+        if (!checkActivityHandler("disable third party sharing", true)) {
+            saveDisableThirdPartySharing(context);
+            return;
+        }
+
+        activityHandler.disableThirdPartySharing();
+    }
+
+    public void trackThirdPartySharing(final AdTraceThirdPartySharing adTraceThirdPartySharing) {
+        if (!checkActivityHandler("third party sharing", true)) {
+            preLaunchActions.preLaunchAdTraceThirdPartySharingArray.add(adTraceThirdPartySharing);
+            return;
+        }
+
+        activityHandler.trackThirdPartySharing(adTraceThirdPartySharing);
+    }
+
+    public void trackMeasurementConsent(final boolean consentMeasurement) {
+        if (!checkActivityHandler("measurement consent", true)) {
+            preLaunchActions.lastMeasurementConsentTracked = consentMeasurement;
+            return;
+        }
+
+        activityHandler.trackMeasurementConsent(consentMeasurement);
+    }
+
+    /**
+     * Track ad revenue from a source provider
+     *
+     * @param source Source of ad revenue information, see AdTraceConfig.AD_REVENUE_* for some possible sources
+     * @param adRevenueJson JsonObject content of the ad revenue information
+     */
+    public void trackAdRevenue(String source, JSONObject adRevenueJson) {
+        if (!checkActivityHandler("trackAdRevenue")) {
+            return;
+        }
+        activityHandler.trackAdRevenue(source, adRevenueJson);
+    }
+
+    /**
+     * Track ad revenue from a source provider
+     *
+     * @param adTraceAdRevenue AdTrace ad revenue information like source, revenue, currency etc
+     */
+    public void trackAdRevenue(final AdTraceAdRevenue adTraceAdRevenue) {
+        if (!checkActivityHandler("trackAdRevenue")) {
+            return;
+        }
+
+        activityHandler.trackAdRevenue(adTraceAdRevenue);
+    }
+
+    /**
+     * Track subscription from Google Play.
+     *
+     * @param subscription AdTracePlayStoreSubscription object to be tracked
+     */
+    public void trackPlayStoreSubscription(AdTracePlayStoreSubscription subscription) {
+        if (!checkActivityHandler("trackPlayStoreSubscription")) {
+            return;
+        }
+        activityHandler.trackPlayStoreSubscription(subscription);
     }
 
     /**
@@ -402,7 +496,7 @@ public class AdTraceInstance {
      * @return Unique AdTrace device indetifier
      */
     public String getAdid() {
-        if (!checkActivityHandler()) {
+        if (!checkActivityHandler("getAdid")) {
             return null;
         }
         return activityHandler.getAdid();
@@ -414,7 +508,7 @@ public class AdTraceInstance {
      * @return AdTraceAttribution object with current attribution value
      */
     public AdTraceAttribution getAttribution() {
-        if (!checkActivityHandler()) {
+        if (!checkActivityHandler("getAttribution")) {
             return null;
         }
         return activityHandler.getAttribution();
@@ -434,8 +528,8 @@ public class AdTraceInstance {
      *
      * @return boolean indicating whether ActivityHandler instance is set or not
      */
-    private boolean checkActivityHandler() {
-        return checkActivityHandler(null);
+    private boolean checkActivityHandler(final String action) {
+        return checkActivityHandler(action, false);
     }
 
     /**
@@ -448,31 +542,38 @@ public class AdTraceInstance {
      */
     private boolean checkActivityHandler(final boolean status, final String trueMessage, final String falseMessage) {
         if (status) {
-            return checkActivityHandler(trueMessage);
+            return checkActivityHandler(trueMessage, true);
         } else {
-            return checkActivityHandler(falseMessage);
+            return checkActivityHandler(falseMessage, true);
         }
     }
 
     /**
      * Check if ActivityHandler instance is set or not.
      *
-     * @param savedForLaunchWarningSuffixMessage Log message to indicate action that was asked when SDK was disabled
+     * @param action Log message to indicate action that was asked to perform when SDK was disabled
      * @return boolean indicating whether ActivityHandler instance is set or not
      */
-    private boolean checkActivityHandler(final String savedForLaunchWarningSuffixMessage) {
-        if (activityHandler == null) {
-            if (savedForLaunchWarningSuffixMessage != null) {
-                AdTraceFactory.getLogger().warn(
-                        "AdTrace not initialized, but %s saved for launch",
-                        savedForLaunchWarningSuffixMessage);
-            } else {
-                AdTraceFactory.getLogger().error("AdTrace not initialized correctly");
-            }
-            return false;
-        } else {
+    private boolean checkActivityHandler(final String action, final boolean actionSaved) {
+        if (activityHandler != null) {
             return true;
         }
+
+        if (action == null) {
+            AdTraceFactory.getLogger().error("AdTrace not initialized correctly");
+            return false;
+        }
+
+        if (actionSaved) {
+            AdTraceFactory.getLogger().warn(
+                    "AdTrace not initialized, but %s saved for launch",
+                    action);
+        } else {
+            AdTraceFactory.getLogger().warn(
+                    "AdTrace not initialized, can't perform %s",
+                    action);
+        }
+        return false;
     }
 
     /**
@@ -488,6 +589,23 @@ public class AdTraceInstance {
             public void run() {
                 SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(context);
                 sharedPreferencesManager.saveRawReferrer(rawReferrer, clickTime);
+            }
+        };
+        Util.runInBackground(command);
+    }
+
+    /**
+     * Save preinstall referrer to shared preferences.
+     *
+     * @param referrer    Preinstall referrer content
+     * @param context     Application context
+     */
+    private void savePreinstallReferrer(final String referrer, final Context context) {
+        Runnable command = new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(context);
+                sharedPreferencesManager.savePreinstallReferrer(referrer);
             }
         };
         Util.runInBackground(command);
@@ -521,6 +639,40 @@ public class AdTraceInstance {
             public void run() {
                 SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(context);
                 sharedPreferencesManager.setGdprForgetMe();
+            }
+        };
+        Util.runInBackground(command);
+    }
+
+    /**
+     * Save disable third party sharing choice to shared preferences.
+     *
+     * @param context Application context
+     */
+    private void saveDisableThirdPartySharing(final Context context) {
+        Runnable command = new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(context);
+                sharedPreferencesManager.setDisableThirdPartySharing();
+            }
+        };
+        Util.runInBackground(command);
+    }
+
+    /**
+     * Save deep link to shared preferences.
+     *
+     * @param deeplink  Deeplink Uri object
+     * @param clickTime Time when appWillOpenUrl(Uri, Context) method was called
+     * @param context   Application context
+     */
+    private void saveDeeplink(final Uri deeplink, final long clickTime, final Context context) {
+        Runnable command = new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(context);
+                sharedPreferencesManager.saveDeeplink(deeplink, clickTime);
             }
         };
         Util.runInBackground(command);
@@ -564,14 +716,17 @@ public class AdTraceInstance {
         if (testOptions.gdprPath != null) {
             this.gdprPath = testOptions.gdprPath;
         }
+        if (testOptions.subscriptionPath != null) {
+            this.subscriptionPath = testOptions.subscriptionPath;
+        }
         if (testOptions.baseUrl != null) {
             AdTraceFactory.setBaseUrl(testOptions.baseUrl);
         }
         if (testOptions.gdprUrl != null) {
             AdTraceFactory.setGdprUrl(testOptions.gdprUrl);
         }
-        if (testOptions.useTestConnectionOptions != null && testOptions.useTestConnectionOptions.booleanValue()) {
-            AdTraceFactory.useTestConnectionOptions();
+        if (testOptions.subscriptionUrl != null) {
+            AdTraceFactory.setSubscriptionUrl(testOptions.subscriptionUrl);
         }
         if (testOptions.timerIntervalInMilliseconds != null) {
             AdTraceFactory.setTimerInterval(testOptions.timerIntervalInMilliseconds);
@@ -592,5 +747,14 @@ public class AdTraceInstance {
             AdTraceFactory.setPackageHandlerBackoffStrategy(BackoffStrategy.NO_WAIT);
             AdTraceFactory.setSdkClickBackoffStrategy(BackoffStrategy.NO_WAIT);
         }
+        if (testOptions.enableSigning != null && testOptions.enableSigning) {
+            AdTraceFactory.enableSigning();
+        }
+        if (testOptions.disableSigning != null && testOptions.disableSigning) {
+            AdTraceFactory.disableSigning();
+        }
     }
+
+    // huawei manual referrer
+    public  boolean isHuaweiInstallReferrerReadForFistTime = false;
 }

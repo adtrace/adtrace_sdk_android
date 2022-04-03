@@ -8,10 +8,15 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class Reflection {
-    private static Object getAdvertisingInfoObject(Context context) throws Exception {
+    public static Object getAdvertisingInfoObject(Context context) throws Exception {
         return invokeStaticMethod("com.google.android.gms.ads.identifier.AdvertisingIdClient", "getAdvertisingIdInfo", new Class[]{Context.class}, context);
     }
 
@@ -28,9 +33,21 @@ public class Reflection {
         return null;
     }
 
-    public static String getPlayAdId(Context context) {
+    static Map<String, String> getOaidParameters(Context context, ILogger logger) {
+        Object oaidParameters = null;
         try {
-            Object AdvertisingInfoObject = getAdvertisingInfoObject(context);
+            oaidParameters = invokeStaticMethod("io.adtrace.sdk.oaid.Util", "getOaidParameters", new Class[]{Context.class, ILogger.class}, context, logger);
+            Class<Map<String, String>> stringStringMapClass = (Class<Map<String, String>>) (Class) Map.class;
+            if (oaidParameters != null && stringStringMapClass.isInstance(oaidParameters)) {
+                return (Map<String, String>) oaidParameters;
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public static String getPlayAdId(Context context, Object AdvertisingInfoObject) {
+        try {
             String playAdid = (String) invokeInstanceMethod(AdvertisingInfoObject, "getId", null);
             return playAdid;
         } catch (Throwable t) {
@@ -38,9 +55,8 @@ public class Reflection {
         }
     }
 
-    public static Boolean isPlayTrackingEnabled(Context context) {
+    public static Boolean isPlayTrackingEnabled(Context context, Object AdvertisingInfoObject) {
         try {
-            Object AdvertisingInfoObject = getAdvertisingInfoObject(context);
             Boolean isLimitedTrackingEnabled = (Boolean) invokeInstanceMethod(AdvertisingInfoObject, "isLimitAdTrackingEnabled", null);
             Boolean isPlayTrackingEnabled = (isLimitedTrackingEnabled == null ? null : !isLimitedTrackingEnabled);
             return isPlayTrackingEnabled;
@@ -60,6 +76,10 @@ public class Reflection {
 
     public static Object createDefaultInstance(String className) {
         Class classObject = forName(className);
+        if (classObject == null) {
+            return null;
+        }
+
         Object instance = createDefaultInstance(classObject);
         return instance;
     }

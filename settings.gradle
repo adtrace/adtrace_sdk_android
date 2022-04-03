@@ -1,1 +1,16 @@
-include ':example-app-java', ':android-sdk', ':android-sdk-plugin-webbridge', ':example-app-webbridge'
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+}
+rootProject.name = "adtrace_sdk_android"
+include ':android-sdk'
+include ':android-sdk-plugin-webbridge'
+include ':android-sdk-plugin-oaid'
+include ':example-app-java'
+include ':example-app-kotlin'
+include ':example-app-tv'
+include ':example-app-webbridge'

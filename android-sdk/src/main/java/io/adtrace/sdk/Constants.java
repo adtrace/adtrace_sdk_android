@@ -1,8 +1,16 @@
+
+
 package io.adtrace.sdk;
 
+
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public interface Constants {
     int ONE_SECOND = 1000;
     int ONE_MINUTE = 60 * ONE_SECOND;
@@ -15,12 +23,18 @@ public interface Constants {
 
     String BASE_URL = "https://app.adtrace.io";
     String GDPR_URL = "https://gdpr.adtrace.io";
+    //todo: subscription url
+    String SUBSCRIPTION_URL = "https://subscription.adtrace.com";
+
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    String CLIENT_SDK = "android1.0.3";
+    //todo: client sdk
+    String CLIENT_SDK = "android2.0.1";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";
+    String REFERRER_API_GOOGLE = "google";
+    String REFERRER_API_HUAWEI = "huawei";
     String DEEPLINK = "deeplink";
     String PUSH = "push";
     String THREAD_PREFIX = "AdTrace-";
@@ -45,6 +59,7 @@ public interface Constants {
     String MD5 = "MD5";
     String SHA1 = "SHA-1";
     String SHA256 = "SHA-256";
+    int MINIMAL_ERROR_STATUS_CODE = 400;
 
     String CALLBACK_PARAMETERS = "callback_params";
     String PARTNER_PARAMETERS = "partner_params";
@@ -52,4 +67,25 @@ public interface Constants {
     int MAX_INSTALL_REFERRER_RETRIES = 2;
 
     String FB_AUTH_REGEX = "^(fb|vk)[0-9]{5,}[^:]*://authorize.*access_token=.*";
+
+    String PREINSTALL = "preinstall";
+    String SYSTEM_PROPERTIES = "system_properties";
+    String SYSTEM_PROPERTIES_REFLECTION = "system_properties_reflection";
+    String SYSTEM_PROPERTIES_PATH = "system_properties_path";
+    String SYSTEM_PROPERTIES_PATH_REFLECTION = "system_properties_path_reflection";
+    String CONTENT_PROVIDER = "content_provider";
+    String CONTENT_PROVIDER_INTENT_ACTION = "content_provider_intent_action";
+    String CONTENT_PROVIDER_NO_PERMISSION = "content_provider_no_permission";
+    String FILE_SYSTEM = "file_system";
+    String SYSTEM_INSTALLER_REFERRER = "system_installer_referrer";
+
+    //todo:
+    String ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PREFIX = "adtrace.preinstall.";
+    String ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PATH = "adtrace.preinstall.path";
+    String ADTRACE_PREINSTALL_CONTENT_URI_AUTHORITY = "io.adtrace.preinstall";
+    String ADTRACE_PREINSTALL_CONTENT_URI_PATH = "trackers";
+    String ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION = "com.attribution.REFERRAL_PROVIDER";
+    String ADTRACE_PREINSTALL_FILE_SYSTEM_PATH = "/data/local/tmp/adtrace.preinstall";
+    String EXTRA_SYSTEM_INSTALLER_REFERRER = "com.attribution.EXTRA_SYSTEM_INSTALLER_REFERRER";
+
 }

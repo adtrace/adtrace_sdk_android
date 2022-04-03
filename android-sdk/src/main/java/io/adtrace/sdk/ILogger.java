@@ -1,8 +1,13 @@
 package io.adtrace.sdk;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public interface ILogger {
     void setLogLevel(LogLevel logLevel, boolean isProductionEnvironment);
 

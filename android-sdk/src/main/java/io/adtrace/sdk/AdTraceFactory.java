@@ -2,31 +2,26 @@ package io.adtrace.sdk;
 
 import android.content.Context;
 
-import java.io.IOException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+
+import io.adtrace.sdk.network.IActivityPackageSender;
+import io.adtrace.sdk.network.UtilNetworking;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class AdTraceFactory {
     private static IPackageHandler packageHandler = null;
-    private static IRequestHandler requestHandler = null;
     private static IAttributionHandler attributionHandler = null;
     private static IActivityHandler activityHandler = null;
     private static ILogger logger = null;
-    private static HttpsURLConnection httpsURLConnection = null;
     private static ISdkClickHandler sdkClickHandler = null;
 
     private static long timerInterval = -1;
@@ -35,10 +30,13 @@ public class AdTraceFactory {
     private static long subsessionInterval = -1;
     private static BackoffStrategy sdkClickBackoffStrategy = null;
     private static BackoffStrategy packageHandlerBackoffStrategy = null;
+    private static BackoffStrategy installSessionBackoffStrategy = null;
     private static long maxDelayStart = -1;
-    private static String baseUrl = Constants.BASE_URL;
-    private static String gdprUrl = Constants.GDPR_URL;
+    private static String baseUrl = null;
+    private static String gdprUrl = null;
+    private static String subscriptionUrl = null;
     private static UtilNetworking.IConnectionOptions connectionOptions = null;
+    private static UtilNetworking.IHttpsURLConnectionProvider httpsURLConnectionProvider = null;
     private static boolean tryInstallReferrer = true;
 
     public static class URLGetConnection {
@@ -50,23 +48,23 @@ public class AdTraceFactory {
         }
     }
 
-    public static IPackageHandler getPackageHandler(IActivityHandler activityHandler,
-                                                    Context context,
-                                                    boolean startsSending) {
+    public static IPackageHandler getPackageHandler(
+            IActivityHandler activityHandler,
+            Context context,
+            boolean startsSending,
+            IActivityPackageSender packageHandlerActivityPackageSender)
+    {
         if (packageHandler == null) {
-            return new PackageHandler(activityHandler, context, startsSending);
+            return new PackageHandler(activityHandler,
+                    context,
+                    startsSending,
+                    packageHandlerActivityPackageSender);
         }
-        packageHandler.init(activityHandler, context, startsSending);
+        packageHandler.init(activityHandler,
+                context,
+                startsSending,
+                packageHandlerActivityPackageSender);
         return packageHandler;
-    }
-
-    public static IRequestHandler getRequestHandler(IActivityHandler activityHandler,
-                                                    IPackageHandler packageHandler) {
-        if (requestHandler == null) {
-            return new RequestHandler(activityHandler, packageHandler);
-        }
-        requestHandler.init(activityHandler, packageHandler);
-        return requestHandler;
     }
 
     public static ILogger getLogger() {
@@ -114,9 +112,16 @@ public class AdTraceFactory {
 
     public static BackoffStrategy getPackageHandlerBackoffStrategy() {
         if (packageHandlerBackoffStrategy == null) {
-            return BackoffStrategy.NORMAL_WAIT;
+            return BackoffStrategy.LONG_WAIT;
         }
         return packageHandlerBackoffStrategy;
+    }
+
+    public static BackoffStrategy getInstallSessionBackoffStrategy() {
+        if (installSessionBackoffStrategy == null) {
+            return BackoffStrategy.SHORT_WAIT;
+        }
+        return installSessionBackoffStrategy;
     }
 
     public static IActivityHandler getActivityHandler(AdTraceConfig config) {
@@ -127,29 +132,34 @@ public class AdTraceFactory {
         return activityHandler;
     }
 
-    public static IAttributionHandler getAttributionHandler(IActivityHandler activityHandler,
-                                                            boolean startsSending) {
+    public static IAttributionHandler getAttributionHandler(
+            IActivityHandler activityHandler,
+            boolean startsSending,
+            IActivityPackageSender packageHandlerActivityPackageSender)
+    {
         if (attributionHandler == null) {
-            return new AttributionHandler(activityHandler, startsSending);
+            return new AttributionHandler(activityHandler,
+                    startsSending,
+                    packageHandlerActivityPackageSender);
         }
-        attributionHandler.init(activityHandler, startsSending);
+        attributionHandler.init(activityHandler,
+                startsSending,
+                packageHandlerActivityPackageSender);
         return attributionHandler;
     }
 
-    public static HttpsURLConnection getHttpsURLConnection(URL url) throws IOException {
-        if (AdTraceFactory.httpsURLConnection == null) {
-            return (HttpsURLConnection)url.openConnection();
-        }
-
-        return AdTraceFactory.httpsURLConnection;
-    }
-
-    public static ISdkClickHandler getSdkClickHandler(IActivityHandler activityHandler, boolean startsSending) {
+    public static ISdkClickHandler getSdkClickHandler(
+            IActivityHandler activityHandler,
+            boolean startsSending,
+            IActivityPackageSender packageHandlerActivityPackageSender)
+    {
         if (sdkClickHandler == null) {
-            return new SdkClickHandler(activityHandler, startsSending);
+            return new SdkClickHandler(activityHandler,
+                    startsSending,
+                    packageHandlerActivityPackageSender);
         }
 
-        sdkClickHandler.init(activityHandler, startsSending);
+        sdkClickHandler.init(activityHandler, startsSending, packageHandlerActivityPackageSender);
         return sdkClickHandler;
     }
 
@@ -161,24 +171,29 @@ public class AdTraceFactory {
     }
 
     public static String getBaseUrl() {
-        if (AdTraceFactory.baseUrl == null) {
-            return Constants.BASE_URL;
-        }
         return AdTraceFactory.baseUrl;
     }
 
     public static String getGdprUrl() {
-        if (AdTraceFactory.gdprUrl == null) {
-            return Constants.GDPR_URL;
-        }
         return AdTraceFactory.gdprUrl;
+    }
+
+    public static String getSubscriptionUrl() {
+        return AdTraceFactory.subscriptionUrl;
     }
 
     public static UtilNetworking.IConnectionOptions getConnectionOptions() {
         if (connectionOptions == null) {
-            return new UtilNetworking.ConnectionOptions();
+            return UtilNetworking.createDefaultConnectionOptions();
         }
         return connectionOptions;
+    }
+
+    public static UtilNetworking.IHttpsURLConnectionProvider getHttpsURLConnectionProvider() {
+        if (httpsURLConnectionProvider == null) {
+            return UtilNetworking.createDefaultHttpsURLConnectionProvider();
+        }
+        return httpsURLConnectionProvider;
     }
 
     public static boolean getTryInstallReferrer() {
@@ -187,10 +202,6 @@ public class AdTraceFactory {
 
     public static void setPackageHandler(IPackageHandler packageHandler) {
         AdTraceFactory.packageHandler = packageHandler;
-    }
-
-    public static void setRequestHandler(IRequestHandler requestHandler) {
-        AdTraceFactory.requestHandler = requestHandler;
     }
 
     public static void setLogger(ILogger logger) {
@@ -229,10 +240,6 @@ public class AdTraceFactory {
         AdTraceFactory.attributionHandler = attributionHandler;
     }
 
-    public static void setHttpsURLConnection(HttpsURLConnection httpsURLConnection) {
-        AdTraceFactory.httpsURLConnection = httpsURLConnection;
-    }
-
     public static void setSdkClickHandler(ISdkClickHandler sdkClickHandler) {
         AdTraceFactory.sdkClickHandler = sdkClickHandler;
     }
@@ -245,67 +252,30 @@ public class AdTraceFactory {
         AdTraceFactory.gdprUrl = gdprUrl;
     }
 
-    public static void useTestConnectionOptions() {
-        AdTraceFactory.connectionOptions = new UtilNetworking.IConnectionOptions() {
-            @Override
-            public void applyConnectionOptions(HttpsURLConnection connection, String clientSdk) {
-                UtilNetworking.ConnectionOptions defaultConnectionOption = new UtilNetworking.ConnectionOptions();
-                defaultConnectionOption.applyConnectionOptions(connection, clientSdk);
-                try {
-                    SSLContext sc = SSLContext.getInstance("TLS");
-                    sc.init(null, new TrustManager[]{
-                            new X509TrustManager() {
-                                public X509Certificate[] getAcceptedIssuers() {
-                                    getLogger().verbose("getAcceptedIssuers");
-                                    return null;
-                                }
-                                public void checkClientTrusted(
-                                        X509Certificate[] certs, String authType) {
-                                    getLogger().verbose("checkClientTrusted ");
-                                }
-                                public void checkServerTrusted(
-                                        X509Certificate[] certs, String authType) throws CertificateException {
-                                    getLogger().verbose("checkServerTrusted ");
+    public static void setSubscriptionUrl(String subscriptionUrl) {
+        AdTraceFactory.subscriptionUrl = subscriptionUrl;
+    }
 
-                                    String serverThumbprint = "7BCFF44099A35BC093BB48C5A6B9A516CDFDA0D1";
-                                    X509Certificate certificate = certs[0];
+    public static void setConnectionOptions(UtilNetworking.IConnectionOptions connectionOptions) {
+        AdTraceFactory.connectionOptions = connectionOptions;
+    }
 
-                                    MessageDigest md = null;
-                                    try {
-                                        md = MessageDigest.getInstance("SHA1");
-                                        byte[] publicKey = md.digest(certificate.getEncoded());
-                                        String hexString = byte2HexFormatted(publicKey);
-
-                                        if (!hexString.equalsIgnoreCase(serverThumbprint)) {
-                                            throw new CertificateException();
-                                        }
-                                    } catch (NoSuchAlgorithmException e) {
-                                        getLogger().error("testingMode error %s", e.getMessage());
-                                    } catch (CertificateEncodingException e) {
-                                        getLogger().error("testingMode error %s", e.getMessage());
-                                    }
-                                }
-                            }
-                    }, new java.security.SecureRandom());
-                    connection.setSSLSocketFactory(sc.getSocketFactory());
-
-                    connection.setHostnameVerifier(new HostnameVerifier() {
-                        @Override
-                        public boolean verify(String hostname, SSLSession session) {
-                            getLogger().verbose("verify hostname ");
-                            return true;
-                        }
-                    });
-                } catch (Exception e) {
-                    getLogger().error("testingMode error %s", e.getMessage());
-                }
-            }
-        };
-
+    public static void setHttpsURLConnectionProvider(
+            UtilNetworking.IHttpsURLConnectionProvider httpsURLConnectionProvider)
+    {
+        AdTraceFactory.httpsURLConnectionProvider = httpsURLConnectionProvider;
     }
 
     public static void setTryInstallReferrer(boolean tryInstallReferrer) {
         AdTraceFactory.tryInstallReferrer = tryInstallReferrer;
+    }
+
+    public static void enableSigning() {
+        AdTraceSigner.enableSigning(getLogger());
+    }
+
+    public static void disableSigning() {
+        AdTraceSigner.disableSigning(getLogger());
     }
 
     private static String byte2HexFormatted(byte[] arr) {
@@ -336,11 +306,9 @@ public class AdTraceFactory {
             PackageHandler.deleteState(context);
         }
         packageHandler = null;
-        requestHandler = null;
         attributionHandler = null;
         activityHandler = null;
         logger = null;
-        httpsURLConnection = null;
         sdkClickHandler = null;
 
         timerInterval = -1;
@@ -352,7 +320,9 @@ public class AdTraceFactory {
         maxDelayStart = -1;
         baseUrl = Constants.BASE_URL;
         gdprUrl = Constants.GDPR_URL;
+        subscriptionUrl = Constants.SUBSCRIPTION_URL;
         connectionOptions = null;
+        httpsURLConnectionProvider = null;
         tryInstallReferrer = true;
     }
 }

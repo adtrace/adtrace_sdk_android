@@ -3,18 +3,23 @@ package io.adtrace.sdk;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class AdTraceEvent {
     String eventToken;
     Double revenue;
     String currency;
     Map<String, String> callbackParameters;
-    Map<String, String> partnerParameters;
+    Map<String, String> eventValueParameters;
     String orderId;
     String callbackId;
-    String eventValue;
 
     private static ILogger logger = AdTraceFactory.getLogger();
 
@@ -29,14 +34,6 @@ public class AdTraceEvent {
 
         this.revenue = revenue;
         this.currency = currency;
-    }
-
-    public void setEventValue(String value) {
-        if (value == null || value.equals("")) {
-            logger.error("Missing Event Value");
-            return;
-        }
-        this.eventValue = value;
     }
 
     public void addCallbackParameter(String key, String value) {
@@ -54,15 +51,15 @@ public class AdTraceEvent {
         }
     }
 
-    public void addPartnerParameter(String key, String value) {
-        if (!Util.isValidParameter(key, "key", "Partner")) return;
-        if (!Util.isValidParameter(value, "value", "Partner")) return;
+    public void addEventParameter(String key, String value) {
+        if (!Util.isValidParameter(key, "key", "EventValueParams")) return;
+        if (!Util.isValidParameter(value, "value", "EventValueParams")) return;
 
-        if (partnerParameters == null) {
-            partnerParameters = new LinkedHashMap<String, String>();
+        if (eventValueParameters == null) {
+            eventValueParameters = new LinkedHashMap<String, String>();
         }
 
-        String previousValue = partnerParameters.put(key, value);
+        String previousValue = eventValueParameters.put(key, value);
 
         if (previousValue != null) {
             logger.warn("Key %s was overwritten", key);
@@ -86,8 +83,8 @@ public class AdTraceEvent {
             logger.error("Missing Event Token");
             return false;
         }
-        if (eventToken.length() != 6) {
-            logger.error("Malformed Event Token '%s'", eventToken);
+        if (eventToken.length() <= 0) {
+            logger.error("Event Token can't be empty");
             return false;
         }
         return true;

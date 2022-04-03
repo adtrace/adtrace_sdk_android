@@ -19,6 +19,12 @@ var AdTrace = {
         }
     },
 
+    trackAdRevenue: function(source, payload) {
+        if (AdTraceBridge) {
+            AdTraceBridge.trackAdRevenue(source, payload);
+        }
+    },
+
     onResume: function () {
         if (AdTraceBridge) {
             AdTraceBridge.onResume();
@@ -81,12 +87,6 @@ var AdTrace = {
         }
     },
 
-    setEnableLocation: function(enabled) {
-        if (AdTraceBridge) {
-            AdTraceBridge.setEnableLocation(enabled);
-        }
-    },
-
     sendFirstPackages: function() {
         if (AdTraceBridge) {
             AdTraceBridge.sendFirstPackages();
@@ -138,6 +138,24 @@ var AdTrace = {
     gdprForgetMe: function() {
         if (AdTraceBridge) {
             AdTraceBridge.gdprForgetMe();
+        }
+    },
+
+    disableThirdPartySharing: function() {
+        if (AdTraceBridge) {
+            AdTraceBridge.disableThirdPartySharing();
+        }
+    },
+
+    trackThirdPartySharing: function(adtraceThirdPartySharing) {
+        if (AdTraceBridge) {
+            AdTraceBridge.trackThirdPartySharing(JSON.stringify(adtraceThirdPartySharing));
+        }
+    },
+
+    trackMeasurementConsent: function(consentMeasurement) {
+        if (AdTraceBridge) {
+            AdTraceBridge.trackMeasurementConsent(consentMeasurement);
         }
     },
 
@@ -193,14 +211,7 @@ var AdTrace = {
         if (this.adtraceConfig) {
             return this.adtraceConfig.getSdkPrefix();
         } else {
-            return 'web-bridge1.0.3';
-        }
-    },
-
-    setTestOptions: function (testOptions) {
-        var testOptionsString = JSON.stringify(testOptions);
-        if (AdTraceBridge) {
-            AdTraceBridge.setTestOptions(testOptionsString);
+            return 'web-bridge4.28.4';
         }
     },
 

@@ -1,3 +1,5 @@
+
+
 package io.adtrace.sdk;
 
 import java.io.IOException;
@@ -10,8 +12,13 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 /**
- * Created by Morteza KhosraviNejad on 06/01/19.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
+
+
 public class ActivityState implements Serializable, Cloneable {
     private static final long serialVersionUID = 9039439291143138148L;
     private static final int ORDER_ID_MAXCOUNT = 10;
@@ -20,6 +27,7 @@ public class ActivityState implements Serializable, Cloneable {
             new ObjectStreamField("uuid", String.class),
             new ObjectStreamField("enabled", boolean.class),
             new ObjectStreamField("isGdprForgotten", boolean.class),
+            new ObjectStreamField("isThirdPartySharingDisabled", boolean.class),
             new ObjectStreamField("askingAttribution", boolean.class),
             new ObjectStreamField("eventCount", int.class),
             new ObjectStreamField("sessionCount", int.class),
@@ -35,12 +43,20 @@ public class ActivityState implements Serializable, Cloneable {
             new ObjectStreamField("clickTime", long.class),
             new ObjectStreamField("installBegin", long.class),
             new ObjectStreamField("installReferrer", String.class),
+            new ObjectStreamField("googlePlayInstant", Boolean.class),
+            new ObjectStreamField("clickTimeServer", long.class),
+            new ObjectStreamField("installBeginServer", long.class),
+            new ObjectStreamField("installVersion", String.class),
+            new ObjectStreamField("clickTimeHuawei", long.class),
+            new ObjectStreamField("installBeginHuawei", long.class),
+            new ObjectStreamField("installReferrerHuawei", String.class),
     };
 
     // persistent data
     protected String uuid;
     protected boolean enabled;
     protected boolean isGdprForgotten;
+    protected boolean isThirdPartySharingDisabled;
     protected boolean askingAttribution;
 
     // global counters
@@ -65,6 +81,14 @@ public class ActivityState implements Serializable, Cloneable {
     protected long clickTime;
     protected long installBegin;
     protected String installReferrer;
+    protected Boolean googlePlayInstant;
+    protected long clickTimeServer;
+    protected long installBeginServer;
+    protected String installVersion;
+
+    protected long clickTimeHuawei;
+    protected long installBeginHuawei;
+    protected String installReferrerHuawei;
 
     protected ActivityState() {
         logger = AdTraceFactory.getLogger();
@@ -72,6 +96,7 @@ public class ActivityState implements Serializable, Cloneable {
         uuid = Util.createUuid();
         enabled = true;
         isGdprForgotten = false;
+        isThirdPartySharingDisabled = false;
         askingAttribution = false;
         eventCount = 0; // no events yet
         sessionCount = 0; // the first session just started
@@ -87,6 +112,13 @@ public class ActivityState implements Serializable, Cloneable {
         clickTime = 0;
         installBegin = 0;
         installReferrer = null;
+        googlePlayInstant = null;
+        clickTimeServer = 0;
+        installBeginServer = 0;
+        installVersion = null;
+        clickTimeHuawei = 0;
+        installBeginHuawei = 0;
+        installReferrerHuawei = null;
     }
 
     protected void resetSessionAttributes(long now) {
@@ -133,6 +165,7 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalString(uuid, otherActivityState.uuid)) return false;
         if (!Util.equalBoolean(enabled, otherActivityState.enabled)) return false;
         if (!Util.equalBoolean(isGdprForgotten, otherActivityState.isGdprForgotten)) return false;
+        if (!Util.equalBoolean(isThirdPartySharingDisabled, otherActivityState.isThirdPartySharingDisabled)) return false;
         if (!Util.equalBoolean(askingAttribution, otherActivityState.askingAttribution)) return false;
         if (!Util.equalInt(eventCount, otherActivityState.eventCount)) return false;
         if (!Util.equalInt(sessionCount, otherActivityState.sessionCount)) return false;
@@ -147,6 +180,13 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalLong(clickTime, otherActivityState.clickTime)) return false;
         if (!Util.equalLong(installBegin, otherActivityState.installBegin)) return false;
         if (!Util.equalString(installReferrer, otherActivityState.installReferrer)) return false;
+        if (!Util.equalBoolean(googlePlayInstant, otherActivityState.googlePlayInstant)) return false;
+        if (!Util.equalLong(clickTimeServer, otherActivityState.clickTimeServer)) return false;
+        if (!Util.equalLong(installBeginServer, otherActivityState.installBeginServer)) return false;
+        if (!Util.equalString(installVersion, otherActivityState.installVersion)) return false;
+        if (!Util.equalLong(clickTimeHuawei, otherActivityState.clickTimeHuawei)) return false;
+        if (!Util.equalLong(installBeginHuawei, otherActivityState.installBeginHuawei)) return false;
+        if (!Util.equalString(installReferrerHuawei, otherActivityState.installReferrerHuawei)) return false;
         return true;
     }
 
@@ -156,6 +196,7 @@ public class ActivityState implements Serializable, Cloneable {
         hashCode = 37 * hashCode + Util.hashString(uuid);
         hashCode = 37 * hashCode + Util.hashBoolean(enabled);
         hashCode = 37 * hashCode + Util.hashBoolean(isGdprForgotten);
+        hashCode = 37 * hashCode + Util.hashBoolean(isThirdPartySharingDisabled);
         hashCode = 37 * hashCode + Util.hashBoolean(askingAttribution);
         hashCode = 37 * hashCode + eventCount;
         hashCode = 37 * hashCode + sessionCount;
@@ -170,6 +211,13 @@ public class ActivityState implements Serializable, Cloneable {
         hashCode = 37 * hashCode + Util.hashLong(clickTime);
         hashCode = 37 * hashCode + Util.hashLong(installBegin);
         hashCode = 37 * hashCode + Util.hashString(installReferrer);
+        hashCode = 37 * hashCode + Util.hashBoolean(googlePlayInstant);
+        hashCode = 37 * hashCode + Util.hashLong(clickTimeServer);
+        hashCode = 37 * hashCode + Util.hashLong(installBeginServer);
+        hashCode = 37 * hashCode + Util.hashString(installVersion);
+        hashCode = 37 * hashCode + Util.hashLong(clickTimeHuawei);
+        hashCode = 37 * hashCode + Util.hashLong(installBeginHuawei);
+        hashCode = 37 * hashCode + Util.hashString(installReferrerHuawei);
         return hashCode;
     }
 
@@ -188,6 +236,7 @@ public class ActivityState implements Serializable, Cloneable {
         uuid = Util.readStringField(fields, "uuid", null);
         enabled = Util.readBooleanField(fields, "enabled", true);
         isGdprForgotten = Util.readBooleanField(fields, "isGdprForgotten", false);
+        isThirdPartySharingDisabled = Util.readBooleanField(fields, "isThirdPartySharingDisabled", false);
         askingAttribution = Util.readBooleanField(fields, "askingAttribution", false);
 
         updatePackages = Util.readBooleanField(fields, "updatePackages", false);
@@ -198,6 +247,14 @@ public class ActivityState implements Serializable, Cloneable {
         clickTime = Util.readLongField(fields, "clickTime", -1l);
         installBegin = Util.readLongField(fields, "installBegin", -1l);
         installReferrer = Util.readStringField(fields, "installReferrer", null);
+        googlePlayInstant = Util.readObjectField(fields, "googlePlayInstant", null);
+        clickTimeServer = Util.readLongField(fields, "clickTimeServer", -1l);
+        installBeginServer = Util.readLongField(fields, "installBeginServer", -1l);
+        installVersion = Util.readStringField(fields, "installVersion", null);
+
+        clickTimeHuawei = Util.readLongField(fields, "clickTimeHuawei", -1l);
+        installBeginHuawei = Util.readLongField(fields, "installBeginHuawei", -1l);
+        installReferrerHuawei = Util.readStringField(fields, "installReferrerHuawei", null);
 
         // create UUID for migrating devices
         if (uuid == null) {
