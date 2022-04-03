@@ -7,7 +7,6 @@
 
 This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [adtrace.io].
 
-Read this in Persian: [فارسی](fa-readme)
 
 ## Table of contents
 
