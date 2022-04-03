@@ -39,7 +39,6 @@ Read this in Persian: [فارسی](fa-readme)
 - [Deep linking overview](#dl)
 - [Standard deep linking scenario](#dl-standard)
 - [Deferred deep linking scenario](#dl-deferred)
-- [Reattribution via deep links](#dl-reattribution)
 
 ### Event tracking
 
@@ -67,14 +66,11 @@ Read this in Persian: [فارسی](fa-readme)
 - [Uninstall tracking](#af-uninstall-tracking)
 - [Device IDs](#af-device-ids)
   - [Google Play Services advertising identifier](#af-gps-adid)
-  - [Amazon advertising identifier](#af-amazon-adid)
   - [AdTrace device identifier](#af-adid)
 - [Offline mode](#af-offline-mode)
 - [Disable tracking](#af-disable-tracking)
 - [Event buffering](#af-event-buffering)
 - [Background tracking](#af-background-tracking)
-- [GDPR right to be forgotten](#af-gdpr-forget-me)
-- [[beta] Data residency](#af-data-residency)
 
 ### Testing and troubleshooting
 
@@ -703,42 +699,6 @@ Remember that if you do not set the callback, **the AdTrace SDK will always atte
 </tr>    
 </table>
 
-### <a id="dl-reattribution"></a>Reattribution via deeplinks
-
-AdTrace enables you to run re-engagement campaigns with deeplinks. If you are using this feature, you need to make one additional call to the AdTrace SDK in your app for us to properly reattribute your users.
-
-Once you have received the deeplink content in your app, add a call to the `AdTrace.appWillOpenUrl(Uri, Context)` method. By making this call, the AdTrace SDK will send information to the AdTrace backend to check if there is any new attribution information inside of the deeplink. If your user is reattributed due to a click on the AdTrace tracker URL with deeplink content, you will see the [attribution callback](#af-attribution-callback) triggered in your app with new attribution info for this user.
-
-Here's how the call to `AdTrace.appWillOpenUrl(Uri, Context)` should look:
-
-```java
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-   super.onCreate(savedInstanceState);
-   setContentView(R.layout.activity_main);
-
-   Intent intent = getIntent();
-   Uri data = intent.getData();
-   AdTrace.appWillOpenUrl(data, getApplicationContext());
- }
-```
-
-```java
-@Override
-protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
-    Uri data = intent.getData();
-    AdTrace.appWillOpenUrl(data, getApplicationContext());
-}
-```
-
-**Note**: `AdTrace.appWillOpenUrl(Uri)` method is marked as **deprecated** as of Android SDK v2.0.1. Please use `AdTrace.appWillOpenUrl(Uri, Context)` method instead.
-
-**Note for web view**: This call can also be made from the web view with the function `AdTrace.appWillOpenUrl` in Javascript like so:
-
-```js
-AdTrace.appWillOpenUrl(deeplinkUrl);
-```
 
 ## Event tracking
 
@@ -1465,41 +1425,6 @@ AdTrace.getGoogleAdId(function (googleAdId) {
 </tr>    
 </table>
 
-### <a id="af-amazon-adid"></a>Amazon advertising identifier
-
-If you need to obtain the Amazon Advertising ID, call the following method on `AdTrace` instance:
-
-<table>    
-<tr>    
-<td>    
-<b>Native App SDK</b>    
-</td>    
-</tr>    
-<tr>    
-<td>
-
-```java
-String amazonAdId = AdTrace.getAmazonAdId(context);
-```
-
-</td>    
-</tr>    
-<tr>    
-<td>    
-<b>Web View SDK</b>    
-</td>    
-</tr>    
-<tr>    
-<td>
-
-```js
-let amazonAdId = AdTrace.getAmazonAdId();
-```
-
-</td>    
-</tr>    
-</table>
-
 ### <a id="af-adid"></a>AdTrace device identifier
 
 For each device with your app installed on it, our backend generates a unique **AdTrace device identifier** (known as an **adid**). In order to obtain this identifier, call the following method on `AdTrace` instance:
@@ -1684,86 +1609,6 @@ adtraceConfig.setSendInBackground(true);
 </td>    
 </tr>    
 </table>
-
-### <a id="af-gdpr-forget-me"></a>GDPR right to be forgotten
-
-In accordance with article 17 of the EU's General Data Protection Regulation (GDPR), you can notify AdTrace when a user has exercised their right to be forgotten. Calling the following method will instruct the AdTrace SDK to communicate the user's choice to be forgotten to the AdTrace backend:
-
-<table>    
-<tr>    
-<td>    
-<b>Native App SDK</b>    
-</td>    
-</tr>    
-<tr>    
-<td>
-
-```java
-AdTrace.gdprForgetMe(context);
-```
-
-</td>    
-</tr>    
-<tr>    
-<td>    
-<b>Web View SDK</b>    
-</td>    
-</tr>    
-<tr>    
-<td>
-
-```js
-AdTrace.gdprForgetMe();
-```
-
-</td>    
-</tr>    
-</table>
-
-Upon receiving this information, AdTrace will erase the user's data and the AdTrace SDK will stop tracking the user. No requests from this device will be sent to AdTrace in the future.
-
-Please note that even when testing, this decision is permanent. It **is not** reversible.
-
-### <a id="af-data-residency"></a>[beta] Data residency
-
-In order to enable data residency feature, make sure to make a call to `setUrlStrategy` method of the `AdTraceConfig` instance with one of the following constants:
-
-<table>    
-<tr>    
-<td>    
-<b>Native App SDK</b>    
-</td>    
-</tr>    
-<tr>    
-<td>
-
-```java
-adtraceConfig.setUrlStrategy(AdTraceConfig.DATA_RESIDENCY_IR); // for Iran data residency region
-adtraceConfig.setUrlStrategy(AdTraceConfig.DATA_RESIDENCY_TR); // for Turkey data residency region
-adtraceConfig.setUrlStrategy(AdTraceConfig.DATA_RESIDENCY_AE); // for Emarat data residency region
-```
-
-</td>    
-</tr>    
-<tr>    
-<td>    
-<b>Web View SDK</b>    
-</td>    
-</tr>    
-<tr>    
-<td>
-
-```js
-adtraceConfig.setUrlStrategy(AdTraceConfig.DataResidencyIR); // for Iran data residency region
-adtraceConfig.setUrlStrategy(AdTraceConfig.DataResidencyTR); // for Turkey data residency region
-adtraceConfig.setUrlStrategy(AdTraceConfig.DataResidencyAE); // for Emarat data residency region
-```
-
-</td>    
-</tr>    
-</table>
-
-**Note:** This feature is currently in beta testing phase. If you are interested in getting access to it, please contact your dedicated account manager or conta Please, do not turn this setting on before making sure with the support team that this feature is enabled for your app because otherwise SDK traffic will get dropped.
 
 ## Testing and troubleshooting
 
