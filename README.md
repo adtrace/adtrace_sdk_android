@@ -214,7 +214,7 @@ You should capture the Google Play Store `INSTALL_REFERRER` intent with a broadc
 
 ```xml
 <receiver
-  android:name="com.adtrace.sdk.AdTraceReferrerReceiver"
+  android:name="io.adtrace.sdk.AdTraceReferrerReceiver"
   android:permission="android.permission.INSTALL_PACKAGES"
   android:exported="true">
   <intent-filter>
