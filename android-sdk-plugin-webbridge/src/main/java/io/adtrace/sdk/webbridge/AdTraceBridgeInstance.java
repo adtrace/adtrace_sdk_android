@@ -36,7 +36,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 /**
- * Created by uerceg on 22/07/16.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2021.
  */
 public class AdTraceBridgeInstance {
     private static final String LOG_LEVEL_VERBOSE = "VERBOSE";
@@ -171,6 +174,8 @@ public class AdTraceBridgeInstance {
             Object urlStrategyField = jsonAdTraceConfig.get("urlStrategy");
             Object preinstallTrackingEnabledField = jsonAdTraceConfig.get("preinstallTrackingEnabled");
             Object preinstallFilePathField = jsonAdTraceConfig.get("preinstallFilePath");
+            Object playStoreKidsAppEnabledField = jsonAdTraceConfig.get("playStoreKidsAppEnabled");
+            Object coppaCompliantEnabledField = jsonAdTraceConfig.get("coppaCompliantEnabled");
 
             String appToken = AdTraceBridgeUtil.fieldToString(appTokenField);
             String environment = AdTraceBridgeUtil.fieldToString(environmentField);
@@ -384,6 +389,18 @@ public class AdTraceBridgeInstance {
             String preinstallFilePath = AdTraceBridgeUtil.fieldToString(preinstallFilePathField);
             if (preinstallFilePath != null) {
                 adtraceConfig.setPreinstallFilePath(preinstallFilePath);
+            }
+
+            // PlayStore Kids app
+            Boolean playStoreKidsAppEnabled = AdTraceBridgeUtil.fieldToBoolean(playStoreKidsAppEnabledField);
+            if (playStoreKidsAppEnabled != null) {
+                adtraceConfig.setPlayStoreKidsAppEnabled(playStoreKidsAppEnabled);
+            }
+
+            // Coppa compliant
+            Boolean coppaCompliantEnabled = AdTraceBridgeUtil.fieldToBoolean(coppaCompliantEnabledField);
+            if (coppaCompliantEnabled != null) {
+                adtraceConfig.setCoppaCompliantEnabled(coppaCompliantEnabled);
             }
 
             // Manually call onResume() because web view initialisation will happen a bit delayed.
