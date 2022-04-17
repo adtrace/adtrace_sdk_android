@@ -53,6 +53,8 @@ function AdTraceConfig(appToken, environment, legacy) {
     this.urlStrategy = null;
     this.preinstallTrackingEnabled = null;
     this.preinstallFilePath = null;
+    this.playStoreKidsAppEnabled = null;
+    this.coppaCompliantEnabled = null;
 }
 
 AdTraceConfig.EnvironmentSandbox = 'sandbox';
