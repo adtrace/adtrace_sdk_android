@@ -7,7 +7,7 @@ package io.adtrace.sdk;
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2022.
+ *                   Copyright © 2021.
  */
 
 
@@ -21,20 +21,19 @@ public interface Constants {
     int SOCKET_TIMEOUT = Constants.ONE_MINUTE;
     int MAX_WAIT_INTERVAL = Constants.ONE_MINUTE;
 
-    String BASE_URL = "https://app.adtrace.io";
+    String BASE_URL = "https://adtrace-track-uat.sdb247.com";
     String GDPR_URL = "https://gdpr.adtrace.io";
-    //todo: subscription url
     String SUBSCRIPTION_URL = "https://subscription.adtrace.com";
 
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    //todo: client sdk
-    String CLIENT_SDK = "android2.0.1";
+    String CLIENT_SDK = "android2.1.0";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";
     String REFERRER_API_GOOGLE = "google";
-    String REFERRER_API_HUAWEI = "huawei";
+    String REFERRER_API_HUAWEI_ADS = "huawei_ads";
+    String REFERRER_API_HUAWEI_APP_GALLERY = "huawei_app_gallery";
     String DEEPLINK = "deeplink";
     String PUSH = "push";
     String THREAD_PREFIX = "AdTrace-";
@@ -56,8 +55,6 @@ public interface Constants {
     String REFERRER = "referrer";
 
     String ENCODING = "UTF-8";
-    String MD5 = "MD5";
-    String SHA1 = "SHA-1";
     String SHA256 = "SHA-256";
     int MINIMAL_ERROR_STATUS_CODE = 400;
 
@@ -79,7 +76,6 @@ public interface Constants {
     String FILE_SYSTEM = "file_system";
     String SYSTEM_INSTALLER_REFERRER = "system_installer_referrer";
 
-    //todo:
     String ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PREFIX = "adtrace.preinstall.";
     String ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PATH = "adtrace.preinstall.path";
     String ADTRACE_PREINSTALL_CONTENT_URI_AUTHORITY = "io.adtrace.preinstall";
