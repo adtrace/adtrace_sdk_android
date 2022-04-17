@@ -2,8 +2,6 @@
 package io.adtrace.sdk;
 
 import static io.adtrace.sdk.Constants.ENCODING;
-import static io.adtrace.sdk.Constants.MD5;
-import static io.adtrace.sdk.Constants.SHA1;
 import static io.adtrace.sdk.Constants.SHA256;
 
 import android.content.ContentResolver;
@@ -52,6 +50,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.adtrace.sdk.scheduler.AsyncTaskExecutor;
 import io.adtrace.sdk.scheduler.SingleThreadFutureScheduler;
 
 
@@ -165,7 +164,7 @@ public class Util {
             command.run();
             return;
         }
-        new AsyncTask<Object,Void,Void>() {
+        new AsyncTaskExecutor<Object, Void>() {
             @Override
             protected Void doInBackground(Object... params) {
                 Runnable command = (Runnable)params[0];
@@ -176,19 +175,8 @@ public class Util {
     }
 
     public static void getGoogleAdId(Context context, final OnDeviceIdsRead onDeviceIdRead) {
-        ILogger logger = AdTraceFactory.getLogger();
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            logger.debug("GoogleAdId being read in the background");
 
-            String GoogleAdId = Util.getGoogleAdId(context);
-
-            logger.debug("GoogleAdId read " + GoogleAdId);
-            onDeviceIdRead.onGoogleAdIdRead(GoogleAdId);
-            return;
-        }
-
-        logger.debug("GoogleAdId being read in the foreground");
-        new AsyncTask<Context,Void,String>() {
+        new AsyncTaskExecutor<Context, String>() {
             @Override
             protected String doInBackground(Context... params) {
                 ILogger logger = AdTraceFactory.getLogger();
@@ -200,7 +188,6 @@ public class Util {
 
             @Override
             protected void onPostExecute(String playAdiId) {
-                ILogger logger = AdTraceFactory.getLogger();
                 onDeviceIdRead.onGoogleAdIdRead(playAdiId);
             }
         }.execute(context);
@@ -229,9 +216,6 @@ public class Util {
         return googleAdId;
     }
 
-    public static String getMacAddress(Context context) {
-        return MacAddressUtil.getMacAddress(context);
-    }
 
     public static String getAndroidId(Context context) {
         return AndroidIdUtil.getAndroidId(context);
@@ -433,16 +417,8 @@ public class Util {
         return value.hashCode();
     }
 
-    public static String sha1(final String text) {
-        return hash(text, SHA1);
-    }
-
     public static String sha256(final String text) {
         return hash(text, SHA256);
-    }
-
-    public static String md5(final String text) {
-        return hash(text, MD5);
     }
 
     public static String hash(final String text, final String method) {
@@ -652,24 +628,6 @@ public class Util {
         return -1;
     }
 
-    public static int getNetworkType(Context context) {
-        int networkType = -1; // default value that will not be send
-
-        try {
-            TelephonyManager teleMan =
-                    (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                networkType = teleMan.getDataNetworkType();
-            } else {
-                networkType = teleMan.getNetworkType();
-            }
-        } catch (Exception e) {
-            getLogger().warn("Couldn't read network type (%s)", e.getMessage());
-        }
-
-        return networkType;
-    }
-
     public static String getMcc(Context context) {
         try {
             TelephonyManager tel = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -800,20 +758,79 @@ public class Util {
         }
     }
 
+
     public static boolean isEqualReferrerDetails(final ReferrerDetails referrerDetails,
                                                  final String referrerApi,
                                                  final ActivityState activityState) {
         if (referrerApi.equals(Constants.REFERRER_API_GOOGLE)) {
             return isEqualGoogleReferrerDetails(referrerDetails, activityState);
-        } else if (referrerApi.equals(Constants.REFERRER_API_HUAWEI)) {
-            return isEqualHuaweiReferrerDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_HUAWEI_ADS)) {
+            return isEqualHuaweiReferrerAdsDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_HUAWEI_APP_GALLERY)) {
+            return isEqualHuaweiReferrerAppGalleryDetails(referrerDetails, activityState);
         }
 
         return false;
     }
 
+    public static boolean canReadPlayIds(final AdTraceConfig adtracConfig) {
+        if (adtracConfig.playStoreKidsAppEnabled) {
+            return false;
+        }
+
+        if (adtracConfig.coppaCompliantEnabled) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean canReadNonPlayIds(final AdTraceConfig adtracConfig) {
+        if (adtracConfig.playStoreKidsAppEnabled) {
+            return false;
+        }
+
+        if (adtracConfig.coppaCompliantEnabled) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static Map<String, String> getImeiParameters(final AdTraceConfig adtracConfig, ILogger logger) {
+        if (adtracConfig.coppaCompliantEnabled) {
+            return null;
+        }
+
+        return Reflection.getImeiParameters(adtracConfig.context, logger);
+    }
+
+    public static Map<String, String> getOaidParameters(final AdTraceConfig adtracConfig, ILogger logger) {
+        if (adtracConfig.coppaCompliantEnabled) {
+            return null;
+        }
+
+        return Reflection.getOaidParameters(adtracConfig.context, logger);
+    }
+
+    public static String getFireAdvertisingId(final AdTraceConfig adtracConfig) {
+        if (adtracConfig.coppaCompliantEnabled) {
+            return null;
+        }
+
+        return getFireAdvertisingId(adtracConfig.context.getContentResolver());
+    }
+
+    public static Boolean getFireTrackingEnabled(final AdTraceConfig adtracConfig) {
+        if (adtracConfig.coppaCompliantEnabled) {
+            return null;
+        }
+
+        return getFireTrackingEnabled(adtracConfig.context.getContentResolver());
+    }
+
     private static boolean isEqualGoogleReferrerDetails(final ReferrerDetails referrerDetails,
-                                                       final ActivityState activityState) {
+                                                        final ActivityState activityState) {
         return referrerDetails.referrerClickTimestampSeconds == activityState.clickTime
                 && referrerDetails.installBeginTimestampSeconds == activityState.installBegin
                 && referrerDetails.referrerClickTimestampServerSeconds == activityState.clickTimeServer
@@ -823,10 +840,17 @@ public class Util {
                 && Util.equalBoolean(referrerDetails.googlePlayInstant, activityState.googlePlayInstant) ;
     }
 
-    private static boolean isEqualHuaweiReferrerDetails(final ReferrerDetails referrerDetails,
-                                                       final ActivityState activityState) {
+    private static boolean isEqualHuaweiReferrerAdsDetails(final ReferrerDetails referrerDetails,
+                                                           final ActivityState activityState) {
         return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeHuawei
                 && referrerDetails.installBeginTimestampSeconds == activityState.installBeginHuawei
                 && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerHuawei);
+    }
+
+    private static boolean isEqualHuaweiReferrerAppGalleryDetails(final ReferrerDetails referrerDetails,
+                                                                  final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeHuawei
+                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginHuawei
+                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerHuaweiAppGallery);
     }
 }
