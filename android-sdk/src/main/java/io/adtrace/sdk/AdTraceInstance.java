@@ -13,7 +13,7 @@ import java.util.List;
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2022.
+ *                   Copyright © 2021.
  */
 
 
@@ -755,6 +755,5 @@ public class AdTraceInstance {
         }
     }
 
-    // huawei manual referrer
-    public  boolean isHuaweiInstallReferrerReadForFistTime = false;
+
 }
