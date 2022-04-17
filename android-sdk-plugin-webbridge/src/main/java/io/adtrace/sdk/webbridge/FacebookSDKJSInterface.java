@@ -20,6 +20,14 @@ package io.adtrace.sdk.webbridge;
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *
+ *
+ *  * AdTrace android SDK (https://adtrace.io)
+ *  * Created by Nasser Amini (github.com/namini40) on April 2022.
+ *  * Notice: See LICENSE.txt for modification and distribution information
+ *  *                   Copyright © 2021.
+ *
  */
 
 import android.content.Context;
