@@ -19,7 +19,7 @@ import io.adtrace.sdk.scheduler.TimerOnce;
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2022.
+ *                   Copyright © 2021.
  */
 
 
@@ -370,7 +370,7 @@ public class InstallReferrer implements InvocationHandler {
                             installVersion, googlePlayInstant);
 
                     // Stuff successfully read, try to send it.
-                    referrerCallback.onInstallReferrerRead(installReferrerDetails);
+                    referrerCallback.onInstallReferrerRead(installReferrerDetails, Constants.REFERRER_API_GOOGLE);
                 } catch (Exception e) {
                     logger.warn("Couldn't get install referrer from client (%s). Retrying...", e.getMessage());
                     retryAtEnd = true;
