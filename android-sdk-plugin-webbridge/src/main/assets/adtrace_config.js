@@ -248,3 +248,10 @@ AdTraceConfig.prototype.setPreinstallTrackingEnabled = function(preinstallTracki
 AdTraceConfig.prototype.setPreinstallFilePath = function(preinstallFilePath) {
     this.preinstallFilePath = preinstallFilePath;
 };
+AdTraceConfig.prototype.setPlayStoreKidsAppEnabled = function(isEnabled) {
+    this.playStoreKidsAppEnabled = isEnabled;
+};
+
+AdTraceConfig.prototype.setCoppaCompliantEnabled = function(isEnabled) {
+    this.coppaCompliantEnabled = isEnabled;
+};
