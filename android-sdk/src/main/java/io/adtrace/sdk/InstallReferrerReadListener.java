@@ -9,5 +9,5 @@ package io.adtrace.sdk;
 
 
 public interface InstallReferrerReadListener {
-    void onInstallReferrerRead(ReferrerDetails referrerDetails);
+    void onInstallReferrerRead(ReferrerDetails referrerDetails, String referrerApi);
 }
