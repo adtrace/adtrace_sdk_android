@@ -4,8 +4,12 @@ import android.webkit.WebView;
 import android.app.Application;
 
 /**
- * Created by uerceg on 10/06/16.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2022.
  */
+
 public class AdTraceBridge {
     private static AdTraceBridgeInstance defaultInstance;
 
@@ -25,11 +29,11 @@ public class AdTraceBridge {
     }
 
     public static void setWebView(WebView webView) {
-        io.adtrace.sdk.webbridge.AdTraceBridge.getDefaultInstance().setWebView(webView);
+        AdTraceBridge.getDefaultInstance().setWebView(webView);
     }
 
     public static void setApplicationContext(Application application) {
-        io.adtrace.sdk.webbridge.AdTraceBridge.getDefaultInstance().setApplicationContext(application);
+        AdTraceBridge.getDefaultInstance().setApplicationContext(application);
     }
 
     public static synchronized void unregister() {
