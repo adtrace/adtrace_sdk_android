@@ -34,7 +34,7 @@ import javax.net.ssl.X509TrustManager;
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2021.
+ *                   Copyright © 2022.
  */
 public class AdTraceBridgeUtil {
     public static void sendDeeplinkToWebView(final WebView webView, final Uri deeplink) {
