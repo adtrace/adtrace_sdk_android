@@ -21,7 +21,7 @@ public interface Constants {
     int SOCKET_TIMEOUT = Constants.ONE_MINUTE;
     int MAX_WAIT_INTERVAL = Constants.ONE_MINUTE;
 
-    String BASE_URL = "https://adtrace-track-uat.sdb247.com";
+    String BASE_URL = "https://app.adtrace.io";
     String GDPR_URL = "https://gdpr.adtrace.io";
     String SUBSCRIPTION_URL = "https://subscription.adtrace.com";
 
