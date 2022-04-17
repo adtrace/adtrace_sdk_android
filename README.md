@@ -74,6 +74,9 @@ Read this in Persian: [فارسی](fa-readme)
 - [Event buffering](#af-event-buffering)
 - [Background tracking](#af-background-tracking)
 
+* [COPPA compliance](#af-coppa-compliance)
+* [Play Store Kids Apps](#af-play-store-kids-apps)
+
 ### Testing and troubleshooting
 
 - [I'm seeing the "session failed (Ignoring too frequent session...)" error](#tt-session-failed)
@@ -1624,6 +1627,76 @@ adtraceConfig.setSendInBackground(true);
 </td>    
 </tr>    
 </table>
+
+
+### <a id="af-coppa-compliance"></a>COPPA compliance
+
+By deafult AdTrace SDK doesn't mark app as COPPA compliant. In order to mark your app as COPPA compliant, make sure to call `setCoppaCompliantEnabled` method of `AdTraceConfig` instance with boolean parameter `true`:
+
+<table>
+<tr>
+<td>
+<b>Native App SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```java
+adtraceConfig.setCoppaCompliantEnabled(true);
+```
+</td>
+</tr>
+<tr>
+<td>
+<b>Web View SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+adtraceConfig.setCoppaCompliantEnabled(true);
+```
+</td>
+</tr>
+</table>
+
+**Note:** By enabling this feature, third-party sharing will be automatically disabled for the users. If later during the app lifetime you decide not to mark app as COPPA compliant anymore, third-party sharing **will not be automatically re-enabled**. Instead, next to not marking your app as COPPA compliant anymore, you will need to explicitly re-enable third-party sharing in case you want to do that.
+
+### <a id="af-play-store-kids-apps"></a>Play Store Kids Apps
+
+By default AdTrace SDK doesn't mark app as Play Store Kids App. In order to mark your app as the app which is targetting kids in Play Store, make sure to call `setPlayStoreKidsAppEnabled` method of `AdTraceConfig` instance with boolean parameter `true`:
+
+<table>
+<tr>
+<td>
+<b>Native App SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```java
+adtraceConfig.setPlayStoreKidsAppEnabled(true);
+```
+</td>
+</tr>
+<tr>
+<td>
+<b>Web View SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+adtraceConfig.setPlayStoreKidsAppEnabled(true);
+```
+</td>
+</tr>
+</table>
+
 
 ## Testing and troubleshooting
 
