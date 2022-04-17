@@ -12,9 +12,9 @@ import io.adtrace.sdk.network.IActivityPackageSender;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
- * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2021.
+ *                   Copyright © 2022.
  */
 
 
