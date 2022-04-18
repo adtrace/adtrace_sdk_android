@@ -27,7 +27,7 @@ public class GlobalApplication extends Application {
         super.onCreate();
 
         // Configure adtrace SDK.
-        String appToken = "xyz123abc456";
+        String appToken = "wzfjavr56krp";
         String environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
 
         AdTraceConfig config = new AdTraceConfig(this, appToken, environment);

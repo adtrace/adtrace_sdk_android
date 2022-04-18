@@ -16,9 +16,9 @@ import io.adtrace.sdk.AdTraceEvent;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String EVENT_TOKEN_SIMPLE = "xyz123";
-    private static final String EVENT_TOKEN_REVENUE = "a1b2b3";
-    private static final String EVENT_TOKEN_CALLBACK = "x1y2z3";
+    private static final String EVENT_TOKEN_SIMPLE = "jmj5me";
+    private static final String EVENT_TOKEN_REVENUE = "jmj5me";
+    private static final String EVENT_TOKEN_CALLBACK = "jmj5me";
     private static final String EVENT_TOKEN_PARTNER = "abc123";
 
     private Button btnEnableDisableSDK;
