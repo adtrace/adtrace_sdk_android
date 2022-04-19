@@ -110,7 +110,7 @@ implementation 'com.android.installreferrer:installreferrer:2.2'
 If you would prefer to use the AdTrace SDK inside web views in your app, please include this additional dependency as well:
 
 ```java
-implementation 'io.adtrace:android-sdk-plugin-webbridge:2.1.0'
+implementation 'io.adtrace:android-sdk-plugin-webbridge:2.1.1'
 ```
 
 **Note**: The minimum supported Android API level for the web view extension is 17 (Jelly Bean).
