@@ -27,7 +27,7 @@ public class GlobalApplication extends Application {
         super.onCreate();
 
         // Configure adtrace SDK.
-        String appToken = "xyz123abc456";
+        String appToken = "wzfjavr56krp";
         String environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
 
         AdTraceConfig config = new AdTraceConfig(this, appToken, environment);
@@ -137,7 +137,11 @@ public class GlobalApplication extends Application {
         // Enable OAID reading ONLY IF:
         // - OAID plugin is added to your app.
         // - Your app is NOT distributed in Google Play Store & supports OAID.
-//         AdTraceOaid.readOaid();
+        // AdTraceOaid.readOaid();
+
+        // Enable Google play kids and COPPA complaint
+//         config.setPlayStoreKidsAppEnabled(true);
+//         config.setCoppaCompliantEnabled(true);
 
         // Initialise the adtrace SDK.
         AdTrace.onCreate(config);

@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
- * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2021.
+ *                   Copyright © 2022.
  */
 
 
@@ -276,11 +276,11 @@ public class AdTrace {
     /**
      * Track ad revenue from a source provider
      *
-     * @param adTraceAdRevenue AdTrace ad revenue information like source, revenue, currency etc
+     * @param adtraceAdRevenue AdTrace ad revenue information like source, revenue, currency etc
      */
-    public static void trackAdRevenue(final AdTraceAdRevenue adTraceAdRevenue) {
+    public static void trackAdRevenue(final AdTraceAdRevenue adtraceAdRevenue) {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
-        adTraceInstance.trackAdRevenue(adTraceAdRevenue);
+        adTraceInstance.trackAdRevenue(adtraceAdRevenue);
     }
 
     /**
@@ -361,13 +361,6 @@ public class AdTrace {
         adTraceInstance.setTestOptions(testOptions);
     }
 
-    static void setHuaweiInstallReferrerReadForFistTime(boolean huaweiInstallReferrerReadForFistTime){
-        getDefaultInstance().isHuaweiInstallReferrerReadForFistTime = huaweiInstallReferrerReadForFistTime;
-    }
-
-    static boolean getHuaweiInstallReferrerReadForFistTime(){
-        return getDefaultInstance().isHuaweiInstallReferrerReadForFistTime;
-    }
 
 
 

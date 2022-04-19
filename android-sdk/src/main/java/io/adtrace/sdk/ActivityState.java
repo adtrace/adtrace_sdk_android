@@ -13,7 +13,7 @@ import java.util.LinkedList;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
- * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2021.
  */
@@ -50,6 +50,8 @@ public class ActivityState implements Serializable, Cloneable {
             new ObjectStreamField("clickTimeHuawei", long.class),
             new ObjectStreamField("installBeginHuawei", long.class),
             new ObjectStreamField("installReferrerHuawei", String.class),
+            new ObjectStreamField("installReferrerHuaweiAppGallery", String.class),
+            new ObjectStreamField("isThirdPartySharingDisabledForCoppa", boolean.class),
     };
 
     // persistent data
@@ -57,6 +59,7 @@ public class ActivityState implements Serializable, Cloneable {
     protected boolean enabled;
     protected boolean isGdprForgotten;
     protected boolean isThirdPartySharingDisabled;
+    protected boolean isThirdPartySharingDisabledForCoppa;
     protected boolean askingAttribution;
 
     // global counters
@@ -89,6 +92,7 @@ public class ActivityState implements Serializable, Cloneable {
     protected long clickTimeHuawei;
     protected long installBeginHuawei;
     protected String installReferrerHuawei;
+    protected String installReferrerHuaweiAppGallery;
 
     protected ActivityState() {
         logger = AdTraceFactory.getLogger();
@@ -97,6 +101,7 @@ public class ActivityState implements Serializable, Cloneable {
         enabled = true;
         isGdprForgotten = false;
         isThirdPartySharingDisabled = false;
+        isThirdPartySharingDisabledForCoppa = false;
         askingAttribution = false;
         eventCount = 0; // no events yet
         sessionCount = 0; // the first session just started
@@ -119,6 +124,7 @@ public class ActivityState implements Serializable, Cloneable {
         clickTimeHuawei = 0;
         installBeginHuawei = 0;
         installReferrerHuawei = null;
+        installReferrerHuaweiAppGallery = null;
     }
 
     protected void resetSessionAttributes(long now) {
@@ -166,6 +172,7 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalBoolean(enabled, otherActivityState.enabled)) return false;
         if (!Util.equalBoolean(isGdprForgotten, otherActivityState.isGdprForgotten)) return false;
         if (!Util.equalBoolean(isThirdPartySharingDisabled, otherActivityState.isThirdPartySharingDisabled)) return false;
+        if (!Util.equalBoolean(isThirdPartySharingDisabledForCoppa, otherActivityState.isThirdPartySharingDisabledForCoppa)) return false;
         if (!Util.equalBoolean(askingAttribution, otherActivityState.askingAttribution)) return false;
         if (!Util.equalInt(eventCount, otherActivityState.eventCount)) return false;
         if (!Util.equalInt(sessionCount, otherActivityState.sessionCount)) return false;
@@ -187,6 +194,7 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalLong(clickTimeHuawei, otherActivityState.clickTimeHuawei)) return false;
         if (!Util.equalLong(installBeginHuawei, otherActivityState.installBeginHuawei)) return false;
         if (!Util.equalString(installReferrerHuawei, otherActivityState.installReferrerHuawei)) return false;
+        if (!Util.equalString(installReferrerHuaweiAppGallery, otherActivityState.installReferrerHuaweiAppGallery)) return false;
         return true;
     }
 
@@ -197,6 +205,7 @@ public class ActivityState implements Serializable, Cloneable {
         hashCode = 37 * hashCode + Util.hashBoolean(enabled);
         hashCode = 37 * hashCode + Util.hashBoolean(isGdprForgotten);
         hashCode = 37 * hashCode + Util.hashBoolean(isThirdPartySharingDisabled);
+        hashCode = 37 * hashCode + Util.hashBoolean(isThirdPartySharingDisabledForCoppa);
         hashCode = 37 * hashCode + Util.hashBoolean(askingAttribution);
         hashCode = 37 * hashCode + eventCount;
         hashCode = 37 * hashCode + sessionCount;
@@ -218,6 +227,7 @@ public class ActivityState implements Serializable, Cloneable {
         hashCode = 37 * hashCode + Util.hashLong(clickTimeHuawei);
         hashCode = 37 * hashCode + Util.hashLong(installBeginHuawei);
         hashCode = 37 * hashCode + Util.hashString(installReferrerHuawei);
+        hashCode = 37 * hashCode + Util.hashString(installReferrerHuaweiAppGallery);
         return hashCode;
     }
 
@@ -237,6 +247,7 @@ public class ActivityState implements Serializable, Cloneable {
         enabled = Util.readBooleanField(fields, "enabled", true);
         isGdprForgotten = Util.readBooleanField(fields, "isGdprForgotten", false);
         isThirdPartySharingDisabled = Util.readBooleanField(fields, "isThirdPartySharingDisabled", false);
+        isThirdPartySharingDisabledForCoppa = Util.readBooleanField(fields, "isThirdPartySharingDisabledForCoppa", false);
         askingAttribution = Util.readBooleanField(fields, "askingAttribution", false);
 
         updatePackages = Util.readBooleanField(fields, "updatePackages", false);
@@ -255,6 +266,7 @@ public class ActivityState implements Serializable, Cloneable {
         clickTimeHuawei = Util.readLongField(fields, "clickTimeHuawei", -1l);
         installBeginHuawei = Util.readLongField(fields, "installBeginHuawei", -1l);
         installReferrerHuawei = Util.readStringField(fields, "installReferrerHuawei", null);
+        installReferrerHuaweiAppGallery = Util.readStringField(fields, "installReferrerHuaweiAppGallery", null);
 
         // create UUID for migrating devices
         if (uuid == null) {

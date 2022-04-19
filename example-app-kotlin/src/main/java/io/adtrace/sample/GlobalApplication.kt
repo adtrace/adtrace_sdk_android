@@ -107,6 +107,10 @@ class GlobalApplication : Application() {
         // - Your app is NOT distributed in Google Play Store & supports OAID.
         // AdTraceOaid.readOaid()
 
+        // Enable Google play kids and COPPA complaint
+        // config.setPlayStoreKidsAppEnabled(true)
+        // config.setCoppaCompliantEnabled(true)
+
         // Initialise the adtrace SDK.
         AdTrace.onCreate(config)
 

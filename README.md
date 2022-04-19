@@ -9,7 +9,6 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
 
 
 
-Read this in Persian: [فارسی](fa-readme)
 
 ## Table of contents
 
@@ -74,6 +73,9 @@ Read this in Persian: [فارسی](fa-readme)
 - [Event buffering](#af-event-buffering)
 - [Background tracking](#af-background-tracking)
 
+* [COPPA compliance](#af-coppa-compliance)
+* [Play Store Kids Apps](#af-play-store-kids-apps)
+
 ### Testing and troubleshooting
 
 - [I'm seeing the "session failed (Ignoring too frequent session...)" error](#tt-session-failed)
@@ -101,14 +103,14 @@ These are the minimum required steps to integrate the AdTrace SDK in your Androi
 If you are using Maven, add the following to your `build.gradle` file:
 
 ```java
-implementation 'io.adtrace:android-sdk:2.0.2'
+implementation 'io.adtrace:android-sdk:2.1.0'
 implementation 'com.android.installreferrer:installreferrer:2.2'
 ```
 
 If you would prefer to use the AdTrace SDK inside web views in your app, please include this additional dependency as well:
 
 ```java
-implementation 'io.adtrace:android-sdk-plugin-webbridge:2.0.2'
+implementation 'io.adtrace:android-sdk-plugin-webbridge:2.1.0'
 ```
 
 **Note**: The minimum supported Android API level for the web view extension is 17 (Jelly Bean).
@@ -202,7 +204,7 @@ Please follow the directions for your [Proguard settings](#qs-proguard) carefull
  -keep public class com.android.installreferrer.** { *; }
 ```
 
-This feature is supported if you are using **AdTrace SDK v2.0.1 or above**.
+This feature is supported if you are using **AdTrace SDK v2.+ or above**.
 
 #### <a id="qs-gps-intent"></a>Google Play Store intent
 
@@ -1258,7 +1260,7 @@ The listener function is called after the SDK receives the final attribution dat
 - `clickLabel` the click label string of the current attribution.
 - `adid` the AdTrace device identifier string.
 
-**Note**: The cost data - `costType`, `costAmount` & `costCurrency` are only available when configured in `AdTraceConfig` by calling `setNeedsCost` method. If not configured or configured, but not being part of the attribution, these fields will have value `null`. This feature is available in SDK v2.0.1 and above.
+**Note**: The cost data - `costType`, `costAmount` & `costCurrency` are only available when configured in `AdTraceConfig` by calling `setNeedsCost` method. If not configured or configured, but not being part of the attribution, these fields will have value `null`. This feature is available in SDK v2.+ and above.
 
 ### <a id="af-session-event-callbacks"></a>Session and event callbacks
 
@@ -1625,6 +1627,76 @@ adtraceConfig.setSendInBackground(true);
 </tr>    
 </table>
 
+
+### <a id="af-coppa-compliance"></a>COPPA compliance
+
+By deafult AdTrace SDK doesn't mark app as COPPA compliant. In order to mark your app as COPPA compliant, make sure to call `setCoppaCompliantEnabled` method of `AdTraceConfig` instance with boolean parameter `true`:
+
+<table>
+<tr>
+<td>
+<b>Native App SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```java
+adtraceConfig.setCoppaCompliantEnabled(true);
+```
+</td>
+</tr>
+<tr>
+<td>
+<b>Web View SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+adtraceConfig.setCoppaCompliantEnabled(true);
+```
+</td>
+</tr>
+</table>
+
+**Note:** By enabling this feature, third-party sharing will be automatically disabled for the users. If later during the app lifetime you decide not to mark app as COPPA compliant anymore, third-party sharing **will not be automatically re-enabled**. Instead, next to not marking your app as COPPA compliant anymore, you will need to explicitly re-enable third-party sharing in case you want to do that.
+
+### <a id="af-play-store-kids-apps"></a>Play Store Kids Apps
+
+By default AdTrace SDK doesn't mark app as Play Store Kids App. In order to mark your app as the app which is targetting kids in Play Store, make sure to call `setPlayStoreKidsAppEnabled` method of `AdTraceConfig` instance with boolean parameter `true`:
+
+<table>
+<tr>
+<td>
+<b>Native App SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```java
+adtraceConfig.setPlayStoreKidsAppEnabled(true);
+```
+</td>
+</tr>
+<tr>
+<td>
+<b>Web View SDK</b>
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+adtraceConfig.setPlayStoreKidsAppEnabled(true);
+```
+</td>
+</tr>
+</table>
+
+
 ## Testing and troubleshooting
 
 ### <a id="tt-session-failed"></a>I'm seeing the "Session failed (Ignoring too frequent session. ...)" error.
@@ -1663,7 +1735,7 @@ And a click package added to the SDK's package handler:
 
 ```
 V/AdTrace: Path:      /sdk_click
- ClientSdk: android2.0.1
+ ClientSdk: android2.1.0
  Parameters:
 	 app_token        adt1exadt1ex
 	 click_time       yyyy-MM-dd'T'HH:mm:ss.SSS'Z'Z

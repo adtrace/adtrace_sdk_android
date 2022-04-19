@@ -16,9 +16,9 @@ import io.adtrace.sdk.scheduler.ThreadScheduler;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
- * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2021.
+ *                   Copyright © 2022.
  */
 
 
@@ -178,7 +178,7 @@ public class SdkClickHandler implements ISdkClickHandler {
                                 savedRawReferrerString,
                                 savedClickTime,
                                 activityHandler.getActivityState(),
-                                activityHandler.getAdTraceConfig(),
+                                activityHandler.getAdtraceConfig(),
                                 activityHandler.getDeviceInfo(),
                                 activityHandler.getSessionParameters());
 
@@ -215,7 +215,7 @@ public class SdkClickHandler implements ISdkClickHandler {
                         preinstallPayload,
                         preinstallLocation,
                         activityHandler.getActivityState(),
-                        activityHandler.getAdTraceConfig(),
+                        activityHandler.getAdtraceConfig(),
                         activityHandler.getDeviceInfo(),
                         activityHandler.getSessionParameters());
 

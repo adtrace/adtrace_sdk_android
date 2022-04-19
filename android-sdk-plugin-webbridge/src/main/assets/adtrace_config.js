@@ -53,6 +53,8 @@ function AdTraceConfig(appToken, environment, legacy) {
     this.urlStrategy = null;
     this.preinstallTrackingEnabled = null;
     this.preinstallFilePath = null;
+    this.playStoreKidsAppEnabled = null;
+    this.coppaCompliantEnabled = null;
 }
 
 AdTraceConfig.EnvironmentSandbox = 'sandbox';
@@ -247,4 +249,11 @@ AdTraceConfig.prototype.setPreinstallTrackingEnabled = function(preinstallTracki
 
 AdTraceConfig.prototype.setPreinstallFilePath = function(preinstallFilePath) {
     this.preinstallFilePath = preinstallFilePath;
+};
+AdTraceConfig.prototype.setPlayStoreKidsAppEnabled = function(isEnabled) {
+    this.playStoreKidsAppEnabled = isEnabled;
+};
+
+AdTraceConfig.prototype.setCoppaCompliantEnabled = function(isEnabled) {
+    this.coppaCompliantEnabled = isEnabled;
 };

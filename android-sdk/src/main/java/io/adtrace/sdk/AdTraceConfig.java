@@ -5,9 +5,9 @@ import android.content.Context;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
- * Created by Nasser Amini (namini40@gmail.com) on August 2021.
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2021.
+ *                   Copyright © 2022.
  */
 
 
@@ -45,6 +45,8 @@ public class AdTraceConfig {
     Boolean needsCost;
     String urlStrategy;
     String preinstallFilePath;
+    boolean playStoreKidsAppEnabled;
+    boolean coppaCompliantEnabled;
 
     public static final String ENVIRONMENT_SANDBOX = "sandbox";
     public static final String ENVIRONMENT_PRODUCTION = "production";
@@ -59,6 +61,9 @@ public class AdTraceConfig {
     public static final String AD_REVENUE_MOPUB = "mopub";
     public static final String AD_REVENUE_ADMOB = "admob_sdk";
     public static final String AD_REVENUE_IRONSOURCE = "ironsource_sdk";
+    public static final String AD_REVENUE_ADMOST = "admost_sdk";
+    public static final String AD_REVENUE_UNITY = "unity_sdk";
+    public static final String AD_REVENUE_HELIUM_CHARTBOOST = "helium_chartboost_sdk";
 
     public AdTraceConfig(Context context, String appToken, String environment) {
         init(context, appToken, environment, false);
@@ -184,6 +189,15 @@ public class AdTraceConfig {
     public void setNeedsCost(boolean needsCost) {
         this.needsCost = needsCost;
     }
+
+    public void setPlayStoreKidsAppEnabled(boolean playStoreKidsAppEnabled) {
+        this.playStoreKidsAppEnabled = playStoreKidsAppEnabled;
+    }
+
+    public void setCoppaCompliantEnabled(boolean coppaCompliantEnabled) {
+        this.coppaCompliantEnabled = coppaCompliantEnabled;
+    }
+
 
     public boolean isValid() {
         if (!checkAppToken(appToken)) return false;

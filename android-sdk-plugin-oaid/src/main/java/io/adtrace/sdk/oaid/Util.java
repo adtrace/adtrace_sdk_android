@@ -59,7 +59,7 @@ public class Util {
 
     private static Map<String, String> getOaidParametersUsingHMS(Context context, ILogger logger) {
         for (int attempt = 1; attempt <= 3; attempt += 1) {
-            OpenDeviceIdentifierClient.Info oaidInfo = OpenDeviceIdentifierClient.getOaidInfo(context, logger, 3000 * attempt);
+            Info oaidInfo = OpenDeviceIdentifierClient.getOaidInfo(context, logger, 3000 * attempt);
             if (oaidInfo != null) {
                 Map<String, String> parameters = new HashMap<String, String>();
                 PackageBuilder.addString(parameters, "oaid", oaidInfo.getOaid());
@@ -106,7 +106,7 @@ public class Util {
             }
             return builder.toString();
         } catch (Exception e) {
-            Log.e("Adjust", "readCertFromAssetFile failed");
+            Log.e("AdTrace", "readCertFromAssetFile failed");
             return "";
         }
     }

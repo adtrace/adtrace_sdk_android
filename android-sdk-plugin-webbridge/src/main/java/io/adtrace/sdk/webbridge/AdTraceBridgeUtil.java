@@ -31,7 +31,10 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * Created by uerceg on 22/07/16.
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2022.
  */
 public class AdTraceBridgeUtil {
     public static void sendDeeplinkToWebView(final WebView webView, final Uri deeplink) {
@@ -280,7 +283,7 @@ public class AdTraceBridgeUtil {
                     SSLContext sc = SSLContext.getInstance("TLS");
                     sc.init(null, new TrustManager[]{
                             new X509TrustManager() {
-                                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                                public X509Certificate[] getAcceptedIssuers() {
                                     Log.d("TestApp","getAcceptedIssuers");
                                     return null;
                                 }
