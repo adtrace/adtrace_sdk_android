@@ -68,6 +68,7 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
 - [Device IDs](#af-device-ids)
   - [Google Play Services advertising identifier](#af-gps-adid)
   - [AdTrace device identifier](#af-adid)
+- [Pre-installed trackers](#af-pre-installed-trackers)
 - [Offline mode](#af-offline-mode)
 - [Disable tracking](#af-disable-tracking)
 - [Event buffering](#af-event-buffering)
@@ -1479,6 +1480,56 @@ let adid = AdTrace.getAdid();
 
 **Note**: Information about the **adid** is only available after our backend tracks the app instal. **It is not possible** to access the **adid** value before the SDK has been initialized and the installation of your app has been successfully tracked.
 
+### <a id="af-pre-installed-trackers"></a>Pre-installed trackers
+
+If you want to use the AdTrace SDK to recognize users whose devices came with your app pre-installed, follow these steps:
+
+- Create a new tracker in your [dashboard].
+- Open your app delegate and set the default tracker of your config:
+
+  <table>
+  <tr>
+  <td>
+  <b>Native App SDK</b>
+  </td>
+  </tr>
+  <tr>
+  <td>
+
+  ```java
+  adtraceConfig.setDefaultTracker("{TrackerToken}");
+  ```
+  </td>
+  </tr>
+  <tr>
+  <td>
+  <b>Web View SDK</b>
+  </td>
+  </tr>
+  <tr>
+  <td>
+
+  ```js
+  adtraceConfig.setDefaultTracker('{TrackerToken}');
+  ```
+  </td>
+  </tr>
+  </table>
+
+- Replace `{TrackerToken}` with the tracker token you created in step one. Please note that the dashboard displays a tracker URL (including `http://app.adtrace.io/`). In your source code, you should specify only the six or seven-character token and not the entire URL.
+
+- Build and run your app. You should see a line like the following in your LogCat:
+
+  ```
+  Default tracker: 'abc123'
+  ```
+
+### <a id="af-offline-mode"></a>Offline mode
+
+You can put the AdTrace SDK in offline mode to suspend transmission to our servers (while retaining tracked data to be sent later). While in offline mode, all information is saved in a file. Please be careful not to trigger too many events while in offline mode.
+
+Activate offline mode by calling `setOfflineMode` with the parameter `true`.
+	
 ### <a id="af-offline-mode"></a>Offline mode
 
 You can put the AdTrace SDK in offline mode to suspend transmission to our servers (while retaining tracked data to be sent later). While in offline mode, all information is saved in a file. Please be careful not to trigger too many events while in offline mode.
