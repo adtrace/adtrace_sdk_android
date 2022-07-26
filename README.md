@@ -40,6 +40,7 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
 - [Deep linking overview](#dl)
 - [Standard deep linking scenario](#dl-standard)
 - [Deferred deep linking scenario](#dl-deferred)
+- [Reattribution via deep links](#dl-reattribution)
 
 ### Event tracking
 
@@ -716,6 +717,47 @@ Remember that if you do not set the callback, **the AdTrace SDK will always atte
 </td>    
 </tr>    
 </table>
+
+
+### <a id="dl-reattribution"></a>Reattribution via deeplinks
+
+AdTrace enables you to run re-engagement campaigns with deeplinks.
+
+If you are using this feature, you need to make one additional call to the AdTrace SDK in your app for us to properly reattribute your users.
+
+Once you have received the deeplink content in your app, add a call to the `AdTrace.appWillOpenUrl(Uri, Context)` method. By making this call, the AdTrace SDK will send information to the AdTrace backend to check if there is any new attribution information inside of the deeplink. If your user is reattributed due to a click on the AdTrace tracker URL with deeplink content, you will see the [attribution callback](#af-attribution-callback) triggered in your app with new attribution info for this user.
+
+Here's how the call to `AdTrace.appWillOpenUrl(Uri, Context)` should look:
+
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    Intent intent = getIntent();
+    Uri data = intent.getData();
+    AdTrace.appWillOpenUrl(data, getApplicationContext());
+}
+```
+
+```java
+@Override
+protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+
+    Uri data = intent.getData();
+    AdTrace.appWillOpenUrl(data, getApplicationContext());
+}
+```
+
+**Note**: `AdTrace.appWillOpenUrl(Uri)` method is marked as **deprecated** as of Android SDK v2+. Please use `AdTrace.appWillOpenUrl(Uri, Context)` method instead.
+
+**Note for web view**: This call can also be made from the web view with the function `AdTrace.appWillOpenUrl` in Javascript like so:
+
+```js
+AdTrace.appWillOpenUrl(deeplinkUrl);
+```
 
 
 ## Event tracking
