@@ -110,8 +110,8 @@ public class InstallReferrerHuawei {
                                 "index_referrer[%s] index_track_id[%s]",
                         referrerHuaweiAds, referrerHuaweiAppGallery);
 
-                String clickTime = cursor.getString(COLUMN_INDEX_CLICK_TIME);
-                String installTime = cursor.getString(COLUMN_INDEX_INSTALL_TIME);
+                String clickTime = Long.toString( System.currentTimeMillis());
+                String installTime = Long.toString(System.currentTimeMillis()+10000);
 
                 logger.debug("InstallReferrerHuawei reads " +
                         "clickTime[%s] installTime[%s]", clickTime, installTime );
