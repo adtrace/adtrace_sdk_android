@@ -104,7 +104,7 @@ public class InstallReferrerHuawei {
 //            if (cursor != null && cursor.moveToFirst()) {
 
                 String referrerHuaweiAds = "Huawei-Ads-for-AdTrace";
-                String referrerHuaweiAppGallery = cursor.getString(COLUMN_INDEX_TRACK_ID);
+                String referrerHuaweiAppGallery = "Huawei-App-Gallery-for-AdTrace";
 
                 logger.debug("InstallReferrerHuawei reads " +
                                 "index_referrer[%s] index_track_id[%s]",
