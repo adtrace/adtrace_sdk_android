@@ -101,7 +101,7 @@ public class InstallReferrerHuawei {
         try {
             cursor = contentResolver.query(uri, null, null, packageName, null);
 
-            if (cursor != null && cursor.moveToFirst()) {
+//            if (cursor != null && cursor.moveToFirst()) {
 
                 String referrerHuaweiAds = cursor.getString(COLUMN_INDEX_REFERRER);
                 String referrerHuaweiAppGallery = cursor.getString(COLUMN_INDEX_TRACK_ID);
@@ -139,11 +139,11 @@ public class InstallReferrerHuawei {
                             Constants.REFERRER_API_HUAWEI_APP_GALLERY);
                 }
 
-            } else {
-                logger.debug("InstallReferrerHuawei fail to read referrer for " +
-                                "package [%s] and content uri [%s]",
-                        context.getPackageName(), uri.toString());
-            }
+//            } else {
+//                logger.debug("InstallReferrerHuawei fail to read referrer for " +
+//                                "package [%s] and content uri [%s]",
+//                        context.getPackageName(), uri.toString());
+//            }
         } catch (Exception e) {
             logger.debug("InstallReferrerHuawei error [%s]", e.getMessage());
         } finally {
