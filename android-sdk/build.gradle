@@ -13,20 +13,18 @@ android {
         targetSdkVersion rootProject.ext.coreTargetSdkVersion
         versionName rootProject.ext.coreVersionName
         versionCode rootProject.ext.defaultVersionCode
+        consumerProguardFiles 'adjust-proguard-rules.txt'
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    lintOptions {
-        abortOnError true
-        checkReleaseBuilds false
-    }
-
 }
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

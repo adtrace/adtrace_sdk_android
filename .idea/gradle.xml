@@ -19,6 +19,12 @@
             <option value="$PROJECT_DIR$/example-app-kotlin" />
             <option value="$PROJECT_DIR$/example-app-tv" />
             <option value="$PROJECT_DIR$/example-app-webbridge" />
+            <option value="$PROJECT_DIR$/test-app-core" />
+            <option value="$PROJECT_DIR$/test-app-webbridge" />
+            <option value="$PROJECT_DIR$/test-kotlin" />
+            <option value="$PROJECT_DIR$/test-library" />
+            <option value="$PROJECT_DIR$/test-options" />
+            <option value="$PROJECT_DIR$/test-unit" />
           </set>
         </option>
       </GradleProjectSettings>
