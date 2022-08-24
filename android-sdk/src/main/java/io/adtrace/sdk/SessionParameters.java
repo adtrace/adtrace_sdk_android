@@ -10,8 +10,6 @@ import java.util.Map;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
-
 public class SessionParameters {
     Map<String, String> callbackParameters;
     Map<String, String> partnerParameters;

@@ -8,8 +8,6 @@ package io.adtrace.sdk;
  *                   Copyright © 2022.
  */
 
-
-
 public class SdkClickResponseData extends ResponseData {
     boolean isInstallReferrer;
     long clickTime;
