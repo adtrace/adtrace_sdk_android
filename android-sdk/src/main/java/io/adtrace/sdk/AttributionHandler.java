@@ -254,7 +254,7 @@ public class AttributionHandler implements IAttributionHandler,
         long now = System.currentTimeMillis();
         IActivityHandler activityHandler = activityHandlerWeakRef.get();
         PackageBuilder packageBuilder = new PackageBuilder(
-                activityHandler.getAdtraceConfig(),
+                activityHandler.getAdTraceConfig(),
                 activityHandler.getDeviceInfo(),
                 activityHandler.getActivityState(),
                 activityHandler.getSessionParameters(),

@@ -7,7 +7,6 @@ package io.adtrace.sdk.scheduler;
  *                   Copyright © 2022.
  */
 
-
 public interface ThreadScheduler extends ThreadExecutor {
     void schedule(Runnable task, long millisecondsDelay);
 }

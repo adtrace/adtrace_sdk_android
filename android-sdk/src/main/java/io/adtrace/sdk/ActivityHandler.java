@@ -1,11 +1,5 @@
 package io.adtrace.sdk;
 
-import static io.adtrace.sdk.Constants.ACTIVITY_STATE_FILENAME;
-import static io.adtrace.sdk.Constants.ATTRIBUTION_FILENAME;
-import static io.adtrace.sdk.Constants.SESSION_CALLBACK_PARAMETERS_FILENAME;
-import static io.adtrace.sdk.Constants.SESSION_PARTNER_PARAMETERS_FILENAME;
-import static io.adtrace.sdk.Constants.REFERRER_API_XIAOMI;
-
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +7,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Handler;
+
+import io.adtrace.sdk.network.ActivityPackageSender;
+import io.adtrace.sdk.network.IActivityPackageSender;
+import io.adtrace.sdk.network.UtilNetworking;
+import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
+import io.adtrace.sdk.scheduler.ThreadExecutor;
+import io.adtrace.sdk.scheduler.TimerCycle;
+import io.adtrace.sdk.scheduler.TimerOnce;
 
 import org.json.JSONObject;
 
@@ -23,20 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import io.adtrace.sdk.network.ActivityPackageSender;
-import io.adtrace.sdk.network.IActivityPackageSender;
-import io.adtrace.sdk.network.UtilNetworking;
-import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
-import io.adtrace.sdk.scheduler.ThreadExecutor;
-import io.adtrace.sdk.scheduler.TimerCycle;
-import io.adtrace.sdk.scheduler.TimerOnce;
-
-/**
- * AdTrace android SDK (https://adtrace.io)
- * Created by Nasser Amini (github.com/namini40) on April 2022.
- * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2022.
- */
+import static io.adtrace.sdk.Constants.ACTIVITY_STATE_FILENAME;
+import static io.adtrace.sdk.Constants.ATTRIBUTION_FILENAME;
+import static io.adtrace.sdk.Constants.REFERRER_API_XIAOMI;
+import static io.adtrace.sdk.Constants.SESSION_CALLBACK_PARAMETERS_FILENAME;
+import static io.adtrace.sdk.Constants.SESSION_PARTNER_PARAMETERS_FILENAME;
 
 public class ActivityHandler implements IActivityHandler {
     private static long FOREGROUND_TIMER_INTERVAL;
@@ -243,7 +236,7 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public AdTraceConfig getAdtraceConfig() {
+    public AdTraceConfig getAdTraceConfig() {
         return adtraceConfig;
     }
 
@@ -263,37 +256,37 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public void init(AdTraceConfig adTraceConfig) {
-        this.adtraceConfig = adTraceConfig;
+    public void init(AdTraceConfig adtraceConfig) {
+        this.adtraceConfig = adtraceConfig;
     }
 
-    public static ActivityHandler getInstance(AdTraceConfig adTraceConfig) {
-        if (adTraceConfig == null) {
+    public static ActivityHandler getInstance(AdTraceConfig adtraceConfig) {
+        if (adtraceConfig == null) {
             AdTraceFactory.getLogger().error("AdTraceConfig missing");
             return null;
         }
 
-        if (!adTraceConfig.isValid()) {
+        if (!adtraceConfig.isValid()) {
             AdTraceFactory.getLogger().error("AdTraceConfig not initialized correctly");
             return null;
         }
 
-        if (adTraceConfig.processName != null) {
+        if (adtraceConfig.processName != null) {
             int currentPid = android.os.Process.myPid();
-            ActivityManager manager = (ActivityManager) adTraceConfig.context.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager manager = (ActivityManager) adtraceConfig.context.getSystemService(Context.ACTIVITY_SERVICE);
 
             if (manager == null) {
                 return null;
             }
 
             List<ActivityManager.RunningAppProcessInfo> processInfoList = manager.getRunningAppProcesses();
-            if(processInfoList ==null){
+            if (processInfoList == null) {
                 return null;
             }
 
             for (ActivityManager.RunningAppProcessInfo processInfo : processInfoList) {
                 if (processInfo.pid == currentPid) {
-                    if (!processInfo.processName.equalsIgnoreCase(adTraceConfig.processName)) {
+                    if (!processInfo.processName.equalsIgnoreCase(adtraceConfig.processName)) {
                         AdTraceFactory.getLogger().info("Skipping initialization in background process (%s)", processInfo.processName);
                         return null;
                     }
@@ -302,7 +295,7 @@ public class ActivityHandler implements IActivityHandler {
             }
         }
 
-        ActivityHandler activityHandler = new ActivityHandler(adTraceConfig);
+        ActivityHandler activityHandler = new ActivityHandler(adtraceConfig);
         return activityHandler;
     }
 
@@ -352,7 +345,7 @@ public class ActivityHandler implements IActivityHandler {
                 if (internalState.hasFirstSdkStartNotOcurred()) {
                     logger.warn("Event tracked before first activity resumed.\n" +
                             "If it was triggered in the Application class, it might timestamp or even send an install long before the user opens the app.\n" +
-                            "Please check https://github.com/adtrace/adtrace_sdk_android#can-i-trigger-an-event-at-application-launch for more information.");
+                            "Please check https://github.com/adtrace/android_sdk#can-i-trigger-an-event-at-application-launch for more information.");
                     startI();
                 }
                 trackEventI(event);
@@ -645,11 +638,11 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public void trackThirdPartySharing(final AdTraceThirdPartySharing adTraceThirdPartySharing) {
+    public void trackThirdPartySharing(final AdTraceThirdPartySharing adtraceThirdPartySharing) {
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                trackThirdPartySharingI(adTraceThirdPartySharing);
+                trackThirdPartySharingI(adtraceThirdPartySharing);
             }
         });
     }
@@ -675,11 +668,11 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public void trackAdRevenue(final AdTraceAdRevenue adTraceAdRevenue) {
+    public void trackAdRevenue(final AdTraceAdRevenue adtraceAdRevenue) {
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                trackAdRevenueI(adTraceAdRevenue);
+                trackAdRevenueI(adtraceAdRevenue);
             }
         });
     }
@@ -739,6 +732,8 @@ public class ActivityHandler implements IActivityHandler {
     public AdTraceAttribution getAttribution() {
         return attribution;
     }
+
+
 
     public InternalState getInternalState() {
         return internalState;
@@ -806,158 +801,160 @@ public class ActivityHandler implements IActivityHandler {
                     }
 
                     if (adtraceConfig.playStoreKidsAppEnabled) {
-                        if (adtraceConfig.playStoreKidsAppEnabled) {
-                            logger.info("Cannot read non Play IDs with play store kids app enabled");
-                        }
-                    } else {
-                        logger.error("Unable to get any Device IDs. Please check if Proguard is correctly set with AdTrace SDK");
+                        logger.info("Cannot read non Play IDs with play store kids app enabled");
                     }
-                }
-            } else {
-                logger.info("Google Play Services Advertising ID read correctly at start time");
-            }
-
-            if (adtraceConfig.defaultTracker != null) {
-                logger.info("Default tracker: '%s'", adtraceConfig.defaultTracker);
-            }
-
-            if (adtraceConfig.pushToken != null) {
-                logger.info("Push token: '%s'", adtraceConfig.pushToken);
-                if (internalState.hasFirstSdkStartOcurred()) {
-                    // since sdk has already started, try to send current push token
-                    setPushToken(adtraceConfig.pushToken, false);
                 } else {
-                    // since sdk has not yet started, save current push token for when it does
-                    SharedPreferencesManager.getDefaultInstance(getContext()).savePushToken(adtraceConfig.pushToken);
-                }
-            } else {
-                // since sdk has already started, check if there is a saved push from previous runs
-                if (internalState.hasFirstSdkStartOcurred()) {
-                    String savedPushToken = SharedPreferencesManager.getDefaultInstance(getContext()).getPushToken();
-                    if (savedPushToken != null)
-                        setPushToken(savedPushToken, true);
+                    logger.error("Unable to get any Device IDs. Please check if Proguard is correctly set with AdTrace SDK");
                 }
             }
-
-            // GDPR
-            if (internalState.hasFirstSdkStartOcurred()) {
-                SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
-                if (sharedPreferencesManager.getGdprForgetMe()) {
-                    gdprForgetMe();
-                } else {
-                    if (sharedPreferencesManager.getDisableThirdPartySharing()) {
-                        disableThirdPartySharing();
-                    }
-                    for (AdTraceThirdPartySharing adTraceThirdPartySharing :
-                            adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray) {
-                        trackThirdPartySharing(adTraceThirdPartySharing);
-                    }
-                    if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
-                        trackMeasurementConsent(adtraceConfig.preLaunchActions.
-                                lastMeasurementConsentTracked.booleanValue());
-                    }
-
-                    adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray = new ArrayList<>();
-                    adtraceConfig.preLaunchActions.lastMeasurementConsentTracked = null;
-                }
-            }
-
-            foregroundTimer = new TimerCycle(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            foregroundTimerFired();
-                        }
-                    }, FOREGROUND_TIMER_START, FOREGROUND_TIMER_INTERVAL, FOREGROUND_TIMER_NAME);
-
-            // create background timer
-            if (adtraceConfig.sendInBackground) {
-                logger.info("Send in background configured");
-
-                backgroundTimer = new TimerOnce(new Runnable() {
-                    @Override
-                    public void run() {
-                        backgroundTimerFired();
-                    }
-                }, BACKGROUND_TIMER_NAME);
-            }
-
-            // configure delay start timer
-            if (internalState.hasFirstSdkStartNotOcurred() &&
-                    adtraceConfig.delayStart != null &&
-                    adtraceConfig.delayStart > 0.0) {
-                logger.info("Delay start configured");
-                internalState.delayStart = true;
-                delayStartTimer = new TimerOnce(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendFirstPackages();
-                    }
-                }, DELAY_START_TIMER_NAME);
-            }
-
-            UtilNetworking.setUserAgent(adtraceConfig.userAgent);
-
-            IActivityPackageSender packageHandlerActivitySender =
-                    new ActivityPackageSender(
-                            adtraceConfig.urlStrategy,
-                            adtraceConfig.basePath,
-                            adtraceConfig.gdprPath,
-                            adtraceConfig.subscriptionPath,
-                            deviceInfo.clientSdk);
-            packageHandler = AdTraceFactory.getPackageHandler(
-                    this,
-                    adtraceConfig.context,
-                    toSendI(false),
-                    packageHandlerActivitySender);
-
-            IActivityPackageSender attributionHandlerActivitySender =
-                    new ActivityPackageSender(
-                            adtraceConfig.urlStrategy,
-                            adtraceConfig.basePath,
-                            adtraceConfig.gdprPath,
-                            adtraceConfig.subscriptionPath,
-                            deviceInfo.clientSdk);
-
-            attributionHandler = AdTraceFactory.getAttributionHandler(
-                    this,
-                    toSendI(false),
-                    attributionHandlerActivitySender);
-
-            IActivityPackageSender sdkClickHandlerActivitySender =
-                    new ActivityPackageSender(
-                            adtraceConfig.urlStrategy,
-                            adtraceConfig.basePath,
-                            adtraceConfig.gdprPath,
-                            adtraceConfig.subscriptionPath,
-                            deviceInfo.clientSdk);
-
-            sdkClickHandler = AdTraceFactory.getSdkClickHandler(
-                    this,
-                    toSendI(true),
-                    sdkClickHandlerActivitySender);
-
-            if (isToUpdatePackagesI()) {
-                updatePackagesI();
-            }
-
-            installReferrer = new InstallReferrer(adtraceConfig.context, new InstallReferrerReadListener() {
-                @Override
-                public void onInstallReferrerRead(ReferrerDetails referrerDetails, String referrerApi) {
-                    sendInstallReferrer(referrerDetails, referrerApi);
-                }
-            });
-
-            installReferrerHuawei = new InstallReferrerHuawei(adtraceConfig.context, new InstallReferrerReadListener() {
-                @Override
-                public void onInstallReferrerRead(ReferrerDetails referrerDetails, String referrerApi) {
-                    sendInstallReferrer(referrerDetails, referrerApi);
-                }
-            });
-
-            preLaunchActionsI(adtraceConfig.preLaunchActions.preLaunchActionsArray);
-            sendReftagReferrerI();
+        } else {
+            logger.info("Google Play Services Advertising ID read correctly at start time");
         }
+
+        if (adtraceConfig.defaultTracker != null) {
+            logger.info("Default tracker: '%s'", adtraceConfig.defaultTracker);
+        }
+
+        if (adtraceConfig.pushToken != null) {
+            logger.info("Push token: '%s'", adtraceConfig.pushToken);
+            if (internalState.hasFirstSdkStartOcurred()) {
+                // since sdk has already started, try to send current push token
+                setPushToken(adtraceConfig.pushToken, false);
+            } else {
+                // since sdk has not yet started, save current push token for when it does
+                SharedPreferencesManager.getDefaultInstance(getContext()).savePushToken(adtraceConfig.pushToken);
+            }
+        } else {
+            // since sdk has already started, check if there is a saved push from previous runs
+            if (internalState.hasFirstSdkStartOcurred()) {
+                String savedPushToken = SharedPreferencesManager.getDefaultInstance(getContext()).getPushToken();
+                if(savedPushToken!=null)
+                    setPushToken(savedPushToken, true);
+            }
+        }
+
+        // GDPR
+        if (internalState.hasFirstSdkStartOcurred()) {
+            SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
+            if (sharedPreferencesManager.getGdprForgetMe()) {
+                gdprForgetMe();
+            } else {
+                if (sharedPreferencesManager.getDisableThirdPartySharing()) {
+                    disableThirdPartySharing();
+                }
+                for (AdTraceThirdPartySharing adtraceThirdPartySharing :
+                        adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray)
+                {
+                    trackThirdPartySharing(adtraceThirdPartySharing);
+                }
+                if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
+                    trackMeasurementConsent(
+                            adtraceConfig.preLaunchActions.
+                                    lastMeasurementConsentTracked.booleanValue());
+                }
+
+                adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray =
+                        new ArrayList<>();
+                adtraceConfig.preLaunchActions.lastMeasurementConsentTracked = null;
+            }
+        }
+
+        foregroundTimer = new TimerCycle(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        foregroundTimerFired();
+                    }
+                }, FOREGROUND_TIMER_START, FOREGROUND_TIMER_INTERVAL, FOREGROUND_TIMER_NAME);
+
+        // create background timer
+        if (adtraceConfig.sendInBackground) {
+            logger.info("Send in background configured");
+
+            backgroundTimer = new TimerOnce(new Runnable() {
+                @Override
+                public void run() {
+                    backgroundTimerFired();
+                }
+            }, BACKGROUND_TIMER_NAME);
+        }
+
+        // configure delay start timer
+        if (internalState.hasFirstSdkStartNotOcurred() &&
+                adtraceConfig.delayStart != null &&
+                adtraceConfig.delayStart > 0.0)
+        {
+            logger.info("Delay start configured");
+            internalState.delayStart = true;
+            delayStartTimer = new TimerOnce(new Runnable() {
+                @Override
+                public void run() {
+                    sendFirstPackages();
+                }
+            }, DELAY_START_TIMER_NAME);
+        }
+
+        UtilNetworking.setUserAgent(adtraceConfig.userAgent);
+
+        IActivityPackageSender packageHandlerActivitySender =
+                new ActivityPackageSender(
+                        adtraceConfig.urlStrategy,
+                        adtraceConfig.basePath,
+                        adtraceConfig.gdprPath,
+                        adtraceConfig.subscriptionPath,
+                        deviceInfo.clientSdk);
+        packageHandler = AdTraceFactory.getPackageHandler(
+                this,
+                adtraceConfig.context,
+                toSendI(false),
+                packageHandlerActivitySender);
+
+        IActivityPackageSender attributionHandlerActivitySender =
+                new ActivityPackageSender(
+                        adtraceConfig.urlStrategy,
+                        adtraceConfig.basePath,
+                        adtraceConfig.gdprPath,
+                        adtraceConfig.subscriptionPath,
+                        deviceInfo.clientSdk);
+
+        attributionHandler = AdTraceFactory.getAttributionHandler(
+                this,
+                toSendI(false),
+                attributionHandlerActivitySender);
+
+        IActivityPackageSender sdkClickHandlerActivitySender =
+                new ActivityPackageSender(
+                        adtraceConfig.urlStrategy,
+                        adtraceConfig.basePath,
+                        adtraceConfig.gdprPath,
+                        adtraceConfig.subscriptionPath,
+                        deviceInfo.clientSdk);
+
+        sdkClickHandler = AdTraceFactory.getSdkClickHandler(
+                this,
+                toSendI(true),
+                sdkClickHandlerActivitySender);
+
+        if (isToUpdatePackagesI()) {
+            updatePackagesI();
+        }
+
+        installReferrer = new InstallReferrer(adtraceConfig.context, new InstallReferrerReadListener() {
+            @Override
+            public void onInstallReferrerRead(ReferrerDetails referrerDetails, String referrerApi) {
+                sendInstallReferrer(referrerDetails, referrerApi);
+            }
+        });
+
+        installReferrerHuawei = new InstallReferrerHuawei(adtraceConfig.context, new InstallReferrerReadListener() {
+            @Override
+            public void onInstallReferrerRead(ReferrerDetails referrerDetails, String referrerApi) {
+                sendInstallReferrer(referrerDetails, referrerApi);
+            }
+        });
+
+        preLaunchActionsI(adtraceConfig.preLaunchActions.preLaunchActionsArray);
+        sendReftagReferrerI();
     }
 
     private void checkForPreinstallI() {
@@ -1178,10 +1175,10 @@ public class ActivityHandler implements IActivityHandler {
                 if (sharedPreferencesManager.getDisableThirdPartySharing()) {
                     disableThirdPartySharingI();
                 }
-                for (AdTraceThirdPartySharing adTraceThirdPartySharing :
+                for (AdTraceThirdPartySharing adtraceThirdPartySharing :
                         adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray)
                 {
-                    trackThirdPartySharingI(adTraceThirdPartySharing);
+                    trackThirdPartySharingI(adtraceThirdPartySharing);
                 }
                 if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
                     trackMeasurementConsentI(
@@ -1642,10 +1639,10 @@ public class ActivityHandler implements IActivityHandler {
                 if (sharedPreferencesManager.getDisableThirdPartySharing()) {
                     disableThirdPartySharingI();
                 }
-                for (AdTraceThirdPartySharing adTraceThirdPartySharing :
+                for (AdTraceThirdPartySharing adtraceThirdPartySharing :
                         adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray)
                 {
-                    trackThirdPartySharingI(adTraceThirdPartySharing);
+                    trackThirdPartySharingI(adtraceThirdPartySharing);
                 }
                 if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
                     trackMeasurementConsentI(
@@ -2275,10 +2272,10 @@ public class ActivityHandler implements IActivityHandler {
         }
     }
 
-    private void trackThirdPartySharingI(final AdTraceThirdPartySharing adTraceThirdPartySharing) {
+    private void trackThirdPartySharingI(final AdTraceThirdPartySharing adtraceThirdPartySharing) {
         if (!checkActivityStateI(activityState)) {
             adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray.add(
-                    adTraceThirdPartySharing);
+                    adtraceThirdPartySharing);
             return;
         }
         if (!isEnabledI()) { return; }
@@ -2293,7 +2290,7 @@ public class ActivityHandler implements IActivityHandler {
                 adtraceConfig, deviceInfo, activityState, sessionParameters, now);
 
         ActivityPackage activityPackage =
-                packageBuilder.buildThirdPartySharingPackage(adTraceThirdPartySharing);
+                packageBuilder.buildThirdPartySharingPackage(adtraceThirdPartySharing);
         packageHandler.addPackage(activityPackage);
 
         if (adtraceConfig.eventBufferingEnabled) {
@@ -2340,17 +2337,17 @@ public class ActivityHandler implements IActivityHandler {
         packageHandler.sendFirstPackage();
     }
 
-    private void trackAdRevenueI(AdTraceAdRevenue adTraceAdRevenue) {
+    private void trackAdRevenueI(AdTraceAdRevenue adtraceAdRevenue) {
         if (!checkActivityStateI(activityState)) { return; }
         if (!isEnabledI()) { return; }
-        if (!checkAdTraceAdRevenue(adTraceAdRevenue)) { return; }
+        if (!checkAdTraceAdRevenue(adtraceAdRevenue)) { return; }
         if (activityState.isGdprForgotten) { return; }
 
         long now = System.currentTimeMillis();
 
         PackageBuilder packageBuilder = new PackageBuilder(adtraceConfig, deviceInfo, activityState, sessionParameters, now);
 
-        ActivityPackage adRevenuePackage = packageBuilder.buildAdRevenuePackage(adTraceAdRevenue, internalState.isInDelayedStart());
+        ActivityPackage adRevenuePackage = packageBuilder.buildAdRevenuePackage(adtraceAdRevenue, internalState.isInDelayedStart());
         packageHandler.addPackage(adRevenuePackage);
         packageHandler.sendFirstPackage();
     }
@@ -2515,13 +2512,13 @@ public class ActivityHandler implements IActivityHandler {
         return true;
     }
 
-    private boolean checkAdTraceAdRevenue(AdTraceAdRevenue adTraceAdRevenue) {
-        if (adTraceAdRevenue == null) {
+    private boolean checkAdTraceAdRevenue(AdTraceAdRevenue adtraceAdRevenue) {
+        if (adtraceAdRevenue == null) {
             logger.error("Ad revenue object missing");
             return false;
         }
 
-        if (!adTraceAdRevenue.isValid()) {
+        if (!adtraceAdRevenue.isValid()) {
             logger.error("Ad revenue object not initialized correctly");
             return false;
         }
@@ -2604,7 +2601,7 @@ public class ActivityHandler implements IActivityHandler {
 
         boolean isInstallReferrerXiaomi =
                 responseData.referrerApi != null &&
-                (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_XIAOMI));
+                        (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_XIAOMI));
 
         if (isInstallReferrerXiaomi) {
             activityState.clickTimeXiaomi = responseData.clickTime;

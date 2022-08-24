@@ -11,7 +11,6 @@ import java.util.concurrent.ScheduledFuture;
  *                   Copyright © 2022.
  */
 
-
 public interface FutureScheduler {
     ScheduledFuture<?> scheduleFuture(Runnable command, long millisecondDelay);
     ScheduledFuture<?> scheduleFutureWithFixedDelay(Runnable command,

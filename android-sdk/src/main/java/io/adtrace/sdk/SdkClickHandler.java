@@ -174,7 +174,7 @@ public class SdkClickHandler implements ISdkClickHandler {
                                 savedRawReferrerString,
                                 savedClickTime,
                                 activityHandler.getActivityState(),
-                                activityHandler.getAdtraceConfig(),
+                                activityHandler.getAdTraceConfig(),
                                 activityHandler.getDeviceInfo(),
                                 activityHandler.getSessionParameters());
 
@@ -211,7 +211,7 @@ public class SdkClickHandler implements ISdkClickHandler {
                         preinstallPayload,
                         preinstallLocation,
                         activityHandler.getActivityState(),
-                        activityHandler.getAdtraceConfig(),
+                        activityHandler.getAdTraceConfig(),
                         activityHandler.getDeviceInfo(),
                         activityHandler.getSessionParameters());
 

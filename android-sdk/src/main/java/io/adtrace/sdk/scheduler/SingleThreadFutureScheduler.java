@@ -16,7 +16,6 @@ import io.adtrace.sdk.AdTraceFactory;
  *                   Copyright © 2022.
  */
 
-
 public class SingleThreadFutureScheduler implements FutureScheduler {
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
 

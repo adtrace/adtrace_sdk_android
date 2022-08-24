@@ -89,7 +89,7 @@ public interface IActivityHandler {
 
     AdTraceAttribution getAttribution();
 
-    AdTraceConfig getAdtraceConfig();
+    AdTraceConfig getAdTraceConfig();
 
     DeviceInfo getDeviceInfo();
 
