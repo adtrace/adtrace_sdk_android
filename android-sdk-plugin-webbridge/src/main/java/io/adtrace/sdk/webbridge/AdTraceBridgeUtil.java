@@ -128,6 +128,7 @@ public class AdTraceBridgeUtil {
                     jsonAttribution.put("costType", attribution.costType == null ? JSONObject.NULL : attribution.costType);
                     jsonAttribution.put("costAmount", attribution.costAmount == null || attribution.costAmount.isNaN() ? 0 : attribution.costAmount);
                     jsonAttribution.put("costCurrency", attribution.costCurrency == null ? JSONObject.NULL : attribution.costCurrency);
+                    jsonAttribution.put("fbInstallReferrer", attribution.fbInstallReferrer == null ? JSONObject.NULL : attribution.fbInstallReferrer);
 
                     String command = "javascript:" + commandName + "(" + jsonAttribution.toString() + ");";
                     webView.loadUrl(command);
@@ -283,7 +284,7 @@ public class AdTraceBridgeUtil {
                     SSLContext sc = SSLContext.getInstance("TLS");
                     sc.init(null, new TrustManager[]{
                             new X509TrustManager() {
-                                public X509Certificate[] getAcceptedIssuers() {
+                                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                                     Log.d("TestApp","getAcceptedIssuers");
                                     return null;
                                 }
