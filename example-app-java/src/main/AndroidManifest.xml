@@ -10,7 +10,7 @@
     <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
 
     <!-- Use ONLY IF you are supporting preinstall tracker via content provider -->
-    <uses-permission android:name="com.adjust.preinstall.READ_PERMISSION"/>
+    <uses-permission android:name="io.adtrace.preinstall.READ_PERMISSION"/>
 
     <application
         android:name=".GlobalApplication"

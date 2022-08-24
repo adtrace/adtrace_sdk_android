@@ -1,9 +1,12 @@
-plugins {
-    id 'com.android.library'
-    id 'com.vanniktech.maven.publish'
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
+repositories {
+    maven {
+        url "https://oss.sonatype.org/content/repositories/staging/"
+    }
 }
-
 
 android {
     compileSdkVersion rootProject.ext.coreCompileSdkVersion
@@ -11,25 +14,154 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.coreMinSdkVersion
         targetSdkVersion rootProject.ext.coreTargetSdkVersion
-        versionName rootProject.ext.coreVersionName
-        versionCode rootProject.ext.defaultVersionCode
-    }
-    lintOptions {
-        abortOnError false
     }
 }
 
 dependencies {
     compileOnly files('libs/oaid_sdk_1.1.0.aar')
+    // Add SDK via module.
     compileOnly project(':android-sdk')
+    // Add SDK via Maven.
+    // implementation 'io.adtrace:android-sdk:2.2.0'
+}
+
+// read local properties
+File localPropsFile = project.rootProject.file('local.properties')
+if (localPropsFile.exists()) {
+    Properties p = new Properties()
+    new FileInputStream(localPropsFile).withCloseable { is ->
+        p.load(is)
+    }
+    p.each { name, value ->
+        ext[name] = value
+    }
+}
+
+task adtraceOaidAndroidAar (type: Copy) {
+    dependsOn 'assembleRelease'
+
+    from('build/outputs/aar/')
+    include 'sdk-plugin-oaid-release.aar'
+    destinationDir file('build/libs/')
+    rename 'sdk-plugin-oaid-release.aar', "${project.name}.aar"
+
+}
+
+task adtraceOaidAndroidJar(type: Jar) {
+    dependsOn 'packageReleaseAssets'
+    dependsOn 'compileReleaseJavaWithJavac'
+
+    from('build/intermediates/library_assets/release/packageReleaseAssets/out/') {
+        into('assets')
+    }
+    from('build/intermediates/javac/release/classes/')
+
+    archiveName "${project.name}.jar"
+}
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            classpath += variant.javaCompileProvider.get().classpath
+        }
+    }
+}
+
+task adtraceOaidAndroidJavadocsJar(type: Jar) {
+    dependsOn 'androidJavadocs'
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task adtraceOaidAndroidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives adtraceOaidAndroidJar
+    archives adtraceOaidAndroidJavadocsJar
+    archives adtraceOaidAndroidSourcesJar
 }
 
 publishing {
-    repositories {
-        maven {
-            def releasesRepoUrl = "$buildDir/repos/releases"
-            def snapshotsRepoUrl = "$buildDir/repos/snapshots"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+    publications {
+        mavenAndroidOaid(MavenPublication) {
+            customizePom(pom)
+            groupId rootProject.ext.adtraceGroupId
+            artifactId 'android-sdk-plugin-oaid'
+            version rootProject.ext.coreVersionName
+
+            artifact adtraceOaidAndroidJar
+            artifact adtraceOaidAndroidJavadocsJar
+            artifact adtraceOaidAndroidSourcesJar
         }
     }
+
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            if (project.hasProperty("sonatypeUsername")) {
+                credentials {
+                    username sonatypeUsername
+                    password sonatypePassword
+                }
+            }
+        }
+    }
+}
+
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // Add all items necessary for maven central publication.
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+            description 'The AdTrace SDK for Android'
+            name 'AdTrace Android SDK'
+            url 'https://github.com/adtrace/adtrace_sdk_android'
+            organization {
+                name 'adtrace'
+                url 'https://www.adtrace.cio'
+            }
+            licenses {
+                license {
+                    name 'MIT License'
+                    url 'http://www.opensource.org/licenses/mit-license.php'
+                }
+            }
+            scm {
+                url 'git@github.com:adtrace/adtrace_sdk_android.git'
+                connection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+                developerConnection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+            }
+            developers {
+                developer {
+                    name 'Nasser Amini'
+                    email 'namini40@gmail.com'
+                }
+            }
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenAndroidOaidPublication {
+        destination = file("${project.buildDir}/generated-pom.xml")
+    }
+    /* TODO check if/how to replace this tasks
+    tasks.publishMavenAndroidOaidPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenAndroidOaidPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
+    */
+}
+
+signing {
+    sign publishing.publications.mavenAndroidOaid
 }

@@ -1,17 +1,20 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-ext{
-    adtraceGroupId = 'io.adtrace.sdk'
+// common in all sub-projects
+subprojects {
+}
 
+ext {
+    // Android config.
     coreMinSdkVersion = 9
-    coreCompileSdkVersion = 31
-    coreTargetSdkVersion = 31
-    coreVersionName = '2.0.2'
+    coreCompileSdkVersion = 32
+    coreTargetSdkVersion = 32
+    coreVersionName = '2.2.0'
     defaultVersionCode = 1
     webbridgeMinSdkVersion = 17
 
-
-
+    // POM.
+    adtraceGroupId = 'io.adtrace'
 }
 
 buildscript {
@@ -25,12 +28,10 @@ buildscript {
         classpath 'com.android.tools.build:gradle:7.2.2'
 
         // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.19.0'
-    }
-
+        // in the individual module build.gradle files.
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" }
 }
+
 allprojects {
     repositories {
         mavenCentral()
@@ -41,21 +42,4 @@ allprojects {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
-    plugins.withId("com.vanniktech.maven.publish") {
-        mavenPublish {
-            sonatypeHost = "S01"
-            releaseSigningEnabled = true
-        }
-    }
-
-}
-
-subprojects {
-    tasks.withType(Javadoc).all { enabled = false }
-}
-
-
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

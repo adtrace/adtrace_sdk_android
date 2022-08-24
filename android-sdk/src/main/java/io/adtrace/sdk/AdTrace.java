@@ -32,7 +32,7 @@ public class AdTrace {
      */
     public static synchronized AdTraceInstance getDefaultInstance() {
         @SuppressWarnings("unused")
-        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:AdTrace-android:2.1.0";
+        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:AdTrace-android:2.2.0";
 
         if (defaultInstance == null) {
             defaultInstance = new AdTraceInstance();
