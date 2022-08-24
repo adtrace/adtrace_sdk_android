@@ -3,7 +3,6 @@
  */
 package io.adtrace.sdk.oaid;
 
-
 /**
  * Important: Please do not revise the order of the method in this AIDL file
  */
