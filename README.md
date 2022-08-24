@@ -149,13 +149,21 @@ If you are **not targeting the Google Play Store**, you must also add the follow
 
 #### <a id="gps-adid-permission"></a>Add permission to gather Google advertising ID
 
-If you are targeting Android 12 and above (API level 31), you need to add the `com.google.android.gms.AD_ID` permission to read the device's advertising ID. Add the following line to your `AndroidManifest.xml` to enable the permission.
-
+If you are targeting Android 12 and above (API level 31), you need to add the `com.google.android.gms.AD_ID` permission to read the device's advertising ID.
 ```xml
 <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 ```
+ this permission is neccessary for attribution (tracking where an install is coming from) systems and it is a MUST for AdTrace SDK to work fine on android devices.
+from AdTrace Android SDK `V2.2 +` this feature is **built inside the SDK** and there is no need to manually addded it to your project. however in those cases where you do *not* want to use this permission you can simply add the following.
+
+```xml
+<uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+```
+
+Add this to your `AndroidManifest.xml` to disable the permission.
 
 For more information, see [Google's `AdvertisingIdClient.Info` documentation](https://developers.google.com/android/reference/com/google/android/gms/ads/identifier/AdvertisingIdClient.Info#public-string-getid).
+
 
 
 ### <a id="qs-proguard"></a>Proguard settings
