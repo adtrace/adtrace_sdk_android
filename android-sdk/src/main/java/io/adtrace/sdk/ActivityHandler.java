@@ -1,11 +1,10 @@
-
-
 package io.adtrace.sdk;
 
 import static io.adtrace.sdk.Constants.ACTIVITY_STATE_FILENAME;
 import static io.adtrace.sdk.Constants.ATTRIBUTION_FILENAME;
 import static io.adtrace.sdk.Constants.SESSION_CALLBACK_PARAMETERS_FILENAME;
 import static io.adtrace.sdk.Constants.SESSION_PARTNER_PARAMETERS_FILENAME;
+import static io.adtrace.sdk.Constants.REFERRER_API_XIAOMI;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -38,7 +37,6 @@ import io.adtrace.sdk.scheduler.TimerOnce;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class ActivityHandler implements IActivityHandler {
     private static long FOREGROUND_TIMER_INTERVAL;
@@ -133,8 +131,7 @@ public class ActivityHandler implements IActivityHandler {
         deleteSessionCallbackParameters(context);
         deleteSessionPartnerParameters(context);
 
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(context);
-        sharedPreferencesManager.clear();
+        SharedPreferencesManager.getDefaultInstance(context).clear();
     }
 
     public class InternalState {
@@ -293,7 +290,8 @@ public class ActivityHandler implements IActivityHandler {
             if(processInfoList ==null){
                 return null;
             }
-            for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+
+            for (ActivityManager.RunningAppProcessInfo processInfo : processInfoList) {
                 if (processInfo.pid == currentPid) {
                     if (!processInfo.processName.equalsIgnoreCase(adTraceConfig.processName)) {
                         AdTraceFactory.getLogger().info("Skipping initialization in background process (%s)", processInfo.processName);
@@ -613,8 +611,7 @@ public class ActivityHandler implements IActivityHandler {
             @Override
             public void run() {
                 if (!preSaved) {
-                    SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-                    sharedPreferencesManager.savePushToken(token);
+                    SharedPreferencesManager.getDefaultInstance(getContext()).savePushToken(token);
                 }
 
                 if (internalState.hasFirstSdkStartNotOcurred()) {
@@ -837,16 +834,15 @@ public class ActivityHandler implements IActivityHandler {
         } else {
             // since sdk has already started, check if there is a saved push from previous runs
             if (internalState.hasFirstSdkStartOcurred()) {
-                SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-                String savedPushToken = sharedPreferencesManager.getPushToken();
-
-                setPushToken(savedPushToken, true);
+                String savedPushToken = SharedPreferencesManager.getDefaultInstance(getContext()).getPushToken();
+                if(savedPushToken!=null)
+                    setPushToken(savedPushToken, true);
             }
         }
 
         // GDPR
         if (internalState.hasFirstSdkStartOcurred()) {
-            SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+            SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
             if (sharedPreferencesManager.getGdprForgetMe()) {
                 gdprForgetMe();
             } else {
@@ -984,7 +980,7 @@ public class ActivityHandler implements IActivityHandler {
             return;
         }
 
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
         long readStatus = sharedPreferencesManager.getPreinstallPayloadReadStatus();
 
         if (PreinstallUtil.hasAllLocationsBeenRead(readStatus)) {
@@ -1171,7 +1167,7 @@ public class ActivityHandler implements IActivityHandler {
 
         long now = System.currentTimeMillis();
 
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
         activityState.pushToken = sharedPreferencesManager.getPushToken();
         // activityState.isGdprForgotten = sharedPreferencesManager.getGdprForgetMe();
 
@@ -1181,6 +1177,7 @@ public class ActivityHandler implements IActivityHandler {
                 gdprForgetMeI();
             } else {
                 processCoppaComplianceI();
+
                 // check if disable third party sharing request came, then send it first
                 if (sharedPreferencesManager.getDisableThirdPartySharing()) {
                     disableThirdPartySharingI();
@@ -1260,11 +1257,24 @@ public class ActivityHandler implements IActivityHandler {
             // Try to check if there's new referrer information.
             installReferrer.startConnection();
             installReferrerHuawei.readReferrer();
+            readInstallReferrerXiaomi();
 
             return;
         }
 
         logger.verbose("Time span since last activity too short for a new subsession");
+    }
+
+    private void readInstallReferrerXiaomi() {
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                ReferrerDetails referrerDetails = Reflection.getXiaomiReferrer(getContext(), logger);
+                if (referrerDetails != null) {
+                    sendInstallReferrer(referrerDetails, REFERRER_API_XIAOMI);
+                }
+            }
+        });
     }
 
     private void trackNewSessionI(final long now) {
@@ -1302,7 +1312,7 @@ public class ActivityHandler implements IActivityHandler {
             return;
         }
 
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
         String cachedDeeplinkUrl = sharedPreferencesManager.getDeeplinkUrl();
         long cachedDeeplinkClickTime = sharedPreferencesManager.getDeeplinkClickTime();
 
@@ -1448,8 +1458,7 @@ public class ActivityHandler implements IActivityHandler {
 
         // mark install as tracked on success
         if (sessionResponseData.success) {
-            SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-            sharedPreferencesManager.setInstallTracked();
+            SharedPreferencesManager.getDefaultInstance(getContext()).setInstallTracked();
         }
 
         // launch Session tracking listener if available
@@ -1627,12 +1636,13 @@ public class ActivityHandler implements IActivityHandler {
         writeActivityStateI();
 
         if (enabled) {
-            SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+            SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
 
             if (sharedPreferencesManager.getGdprForgetMe()) {
                 gdprForgetMeI();
             } else {
                 processCoppaComplianceI();
+
                 if (sharedPreferencesManager.getDisableThirdPartySharing()) {
                     disableThirdPartySharingI();
                 }
@@ -1669,8 +1679,7 @@ public class ActivityHandler implements IActivityHandler {
 
 
     private void checkAfterNewStartI() {
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-        checkAfterNewStartI(sharedPreferencesManager);
+        checkAfterNewStartI(SharedPreferencesManager.getDefaultInstance(getContext()));
     }
 
     private void checkAfterNewStartI(SharedPreferencesManager sharedPreferencesManager) {
@@ -1694,6 +1703,7 @@ public class ActivityHandler implements IActivityHandler {
         // try to read and send the install referrer
         installReferrer.startConnection();
         installReferrerHuawei.readReferrer();
+        readInstallReferrerXiaomi();
     }
 
     private void setOfflineModeI(boolean offline) {
@@ -1785,9 +1795,7 @@ public class ActivityHandler implements IActivityHandler {
             return;
         }
 
-        SharedPreferencesManager sharedPreferencesManager =
-                new SharedPreferencesManager(getContext());
-        String referrerPayload = sharedPreferencesManager.getPreinstallReferrer();
+        String referrerPayload = SharedPreferencesManager.getDefaultInstance(getContext()).getPreinstallReferrer();
 
         if (referrerPayload == null || referrerPayload.isEmpty()) {
             return;
@@ -2204,8 +2212,7 @@ public class ActivityHandler implements IActivityHandler {
         packageHandler.addPackage(infoPackage);
 
         // If push token was cached, remove it.
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-        sharedPreferencesManager.removePushToken();
+        SharedPreferencesManager.getDefaultInstance(getContext()).removePushToken();
 
         if (adtraceConfig.eventBufferingEnabled) {
             logger.info("Buffered event %s", infoPackage.getSuffix());
@@ -2229,8 +2236,7 @@ public class ActivityHandler implements IActivityHandler {
         packageHandler.addPackage(gdprPackage);
 
         // If GDPR choice was cached, remove it.
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-        sharedPreferencesManager.removeGdprForgetMe();
+        SharedPreferencesManager.getDefaultInstance(getContext()).removeGdprForgetMe();
 
         if (adtraceConfig.eventBufferingEnabled) {
             logger.info("Buffered event %s", gdprPackage.getSuffix());
@@ -2242,7 +2248,7 @@ public class ActivityHandler implements IActivityHandler {
     private void disableThirdPartySharingI() {
         // cache the disable third party sharing request, so that the request order maintains
         // even this call returns before making server request
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
         sharedPreferencesManager.setDisableThirdPartySharing();
 
         if (!checkActivityStateI(activityState)) { return; }
@@ -2285,6 +2291,7 @@ public class ActivityHandler implements IActivityHandler {
             logger.warn("Calling third party sharing API not allowed when COPPA enabled");
             return;
         }
+
         long now = System.currentTimeMillis();
         PackageBuilder packageBuilder = new PackageBuilder(
                 adtraceConfig, deviceInfo, activityState, sessionParameters, now);
@@ -2594,6 +2601,21 @@ public class ActivityHandler implements IActivityHandler {
             activityState.clickTimeHuawei = responseData.clickTime;
             activityState.installBeginHuawei = responseData.installBegin;
             activityState.installReferrerHuaweiAppGallery = responseData.installReferrer;
+
+            writeActivityStateI();
+            return;
+        }
+
+        boolean isInstallReferrerXiaomi =
+                responseData.referrerApi != null &&
+                (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_XIAOMI));
+
+        if (isInstallReferrerXiaomi) {
+            activityState.clickTimeXiaomi = responseData.clickTime;
+            activityState.installBeginXiaomi = responseData.installBegin;
+            activityState.installReferrerXiaomi = responseData.installReferrer;
+            activityState.clickTimeServerXiaomi = responseData.clickTimeServer;
+            activityState.installBeginServerXiaomi = responseData.installBeginServer;
 
             writeActivityStateI();
             return;

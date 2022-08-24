@@ -1,5 +1,4 @@
 
-
 package io.adtrace.sdk;
 
 import java.io.IOException;
@@ -17,7 +16,6 @@ import java.util.LinkedList;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2021.
  */
-
 
 public class ActivityState implements Serializable, Cloneable {
     private static final long serialVersionUID = 9039439291143138148L;
