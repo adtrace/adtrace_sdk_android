@@ -1,7 +1,6 @@
 package io.adtrace.sdk;
 
 import android.content.Context;
-
 import java.util.Map;
 
 /**
@@ -10,7 +9,6 @@ import java.util.Map;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class AdTraceSigner {
 

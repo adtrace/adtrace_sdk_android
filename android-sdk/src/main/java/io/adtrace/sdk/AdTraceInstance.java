@@ -16,7 +16,6 @@ import java.util.List;
  *                   Copyright © 2022.
  */
 
-
 public class AdTraceInstance {
     public static class PreLaunchActions {
         public List<IRunActivityHandler> preLaunchActionsArray;
@@ -584,14 +583,7 @@ public class AdTraceInstance {
      * @param context     Application context
      */
     private void saveRawReferrer(final String rawReferrer, final long clickTime, final Context context) {
-        Runnable command = new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(context);
-                sharedPreferencesManager.saveRawReferrer(rawReferrer, clickTime);
-            }
-        };
-        Util.runInBackground(command);
+        SharedPreferencesManager.getDefaultInstance(context).saveRawReferrer(rawReferrer, clickTime);
     }
 
     /**

@@ -13,6 +13,8 @@ import android.content.Intent;
  *                   Copyright © 2022.
  */
 
+// support multiple BroadcastReceivers for the INSTALL_REFERRER:
+// https://appington.wordpress.com/2012/08/01/giving-credit-for-android-app-installs/
 
 public class AdTraceReferrerReceiver extends BroadcastReceiver {
     @Override

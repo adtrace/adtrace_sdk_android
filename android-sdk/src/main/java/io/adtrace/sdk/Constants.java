@@ -1,7 +1,4 @@
-
-
 package io.adtrace.sdk;
-
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -9,7 +6,6 @@ package io.adtrace.sdk;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public interface Constants {
     int ONE_SECOND = 1000;

@@ -10,7 +10,6 @@ import android.provider.Settings.Secure;
  *                   Copyright © 2022.
  */
 
-
 public class AndroidIdUtil {
     public static String getAndroidId(final Context context) {
         return Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
