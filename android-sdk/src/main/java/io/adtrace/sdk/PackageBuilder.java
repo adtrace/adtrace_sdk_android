@@ -1,7 +1,6 @@
 
 package io.adtrace.sdk;
 
-import android.content.ContentResolver;
 import android.text.TextUtils;
 
 import org.json.JSONObject;
@@ -340,6 +339,7 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "subsession_count", activityStateCopy.subsessionCount);
         PackageBuilder.addDuration(parameters, "time_spent", activityStateCopy.timeSpent);
         PackageBuilder.addString(parameters, "updated_at", deviceInfo.appUpdateTime);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -421,6 +421,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "package_name", deviceInfo.packageName);
         PackageBuilder.addString(parameters, "push_token", activityStateCopy.pushToken);
         PackageBuilder.addDouble(parameters, "revenue", event.revenue);
+        PackageBuilder.addString(parameters, "deduplication_id", event.orderId);
         PackageBuilder.addString(parameters, "screen_density", deviceInfo.screenDensity);
         PackageBuilder.addString(parameters, "screen_format", deviceInfo.screenFormat);
         PackageBuilder.addString(parameters, "screen_size", deviceInfo.screenSize);
@@ -429,6 +430,7 @@ public class PackageBuilder {
         PackageBuilder.addDuration(parameters, "session_length", activityStateCopy.sessionLength);
         PackageBuilder.addLong(parameters, "subsession_count", activityStateCopy.subsessionCount);
         PackageBuilder.addDuration(parameters, "time_spent", activityStateCopy.timeSpent);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -481,6 +483,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "push_token", activityStateCopy.pushToken);
         PackageBuilder.addString(parameters, "secret_id", adtraceConfig.secretId);
         PackageBuilder.addString(parameters, "source", source);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -588,6 +591,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "updated_at", deviceInfo.appUpdateTime);
         PackageBuilder.addString(parameters, "payload", preinstallPayload);
         PackageBuilder.addString(parameters, "found_location", preinstallLocation);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -648,6 +652,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "package_name", deviceInfo.packageName);
         PackageBuilder.addString(parameters, "push_token", activityStateCopy.pushToken);
         PackageBuilder.addString(parameters, "secret_id", adtraceConfig.secretId);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -708,6 +713,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "package_name", deviceInfo.packageName);
         PackageBuilder.addString(parameters, "push_token", activityStateCopy.pushToken);
         PackageBuilder.addString(parameters, "secret_id", adtraceConfig.secretId);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -767,6 +773,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "package_name", deviceInfo.packageName);
         PackageBuilder.addString(parameters, "push_token", activityStateCopy.pushToken);
         PackageBuilder.addString(parameters, "secret_id", adtraceConfig.secretId);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -836,6 +843,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "package_name", deviceInfo.packageName);
         PackageBuilder.addString(parameters, "push_token", activityStateCopy.pushToken);
         PackageBuilder.addString(parameters, "secret_id", adtraceConfig.secretId);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -900,6 +908,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "package_name", deviceInfo.packageName);
         PackageBuilder.addString(parameters, "push_token", activityStateCopy.pushToken);
         PackageBuilder.addString(parameters, "secret_id", adtraceConfig.secretId);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -984,6 +993,7 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "subsession_count", activityStateCopy.subsessionCount);
         PackageBuilder.addDuration(parameters, "time_spent", activityStateCopy.timeSpent);
         PackageBuilder.addString(parameters, "updated_at", deviceInfo.appUpdateTime);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -1079,6 +1089,7 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "subsession_count", activityStateCopy.subsessionCount);
         PackageBuilder.addDuration(parameters, "time_spent", activityStateCopy.timeSpent);
         PackageBuilder.addString(parameters, "updated_at", deviceInfo.appUpdateTime);
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -1177,6 +1188,7 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "revenue", subscription.getPrice());
         PackageBuilder.addDateInMilliseconds(parameters, "transaction_date", subscription.getPurchaseTime());
         PackageBuilder.addString(parameters, "transaction_id", subscription.getOrderId());
+
         injectFeatureFlagsWithParameters(parameters);
 
         checkDeviceIds(parameters);
@@ -1328,7 +1340,8 @@ public class PackageBuilder {
                 logger.info("Missing Device IDs. COPPA enabled.");
             } else {
                 logger.error("Missing Device IDs. Please check if Proguard is correctly set with AdTrace SDK");
-            }        }
+            }
+        }
     }
 
     private String getEventSuffix(AdTraceEvent event) {
