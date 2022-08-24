@@ -16,7 +16,6 @@ import io.adtrace.sdk.network.UtilNetworking;
  *                   Copyright © 2022.
  */
 
-
 public class AdTraceFactory {
     private static IPackageHandler packageHandler = null;
     private static IAttributionHandler attributionHandler = null;
