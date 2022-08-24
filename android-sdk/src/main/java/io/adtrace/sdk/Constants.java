@@ -34,6 +34,7 @@ public interface Constants {
     String REFERRER_API_GOOGLE = "google";
     String REFERRER_API_HUAWEI_ADS = "huawei_ads";
     String REFERRER_API_HUAWEI_APP_GALLERY = "huawei_app_gallery";
+    String REFERRER_API_XIAOMI = "xiaomi";
     String DEEPLINK = "deeplink";
     String PUSH = "push";
     String THREAD_PREFIX = "AdTrace-";
@@ -83,5 +84,4 @@ public interface Constants {
     String ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION = "com.attribution.REFERRAL_PROVIDER";
     String ADTRACE_PREINSTALL_FILE_SYSTEM_PATH = "/data/local/tmp/adtrace.preinstall";
     String EXTRA_SYSTEM_INSTALLER_REFERRER = "com.attribution.EXTRA_SYSTEM_INSTALLER_REFERRER";
-
 }

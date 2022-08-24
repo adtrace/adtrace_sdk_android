@@ -159,23 +159,7 @@ public class Util {
         return null;
     }
 
-    public static void runInBackground(Runnable command) {
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            command.run();
-            return;
-        }
-        new AsyncTaskExecutor<Object, Void>() {
-            @Override
-            protected Void doInBackground(Object... params) {
-                Runnable command = (Runnable)params[0];
-                command.run();
-                return null;
-            }
-        }.execute((Object)command);
-    }
-
     public static void getGoogleAdId(Context context, final OnDeviceIdsRead onDeviceIdRead) {
-
         new AsyncTaskExecutor<Context, String>() {
             @Override
             protected String doInBackground(Context... params) {
@@ -215,7 +199,6 @@ public class Util {
 
         return googleAdId;
     }
-
 
     public static String getAndroidId(Context context) {
         return AndroidIdUtil.getAndroidId(context);
@@ -768,6 +751,8 @@ public class Util {
             return isEqualHuaweiReferrerAdsDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_HUAWEI_APP_GALLERY)) {
             return isEqualHuaweiReferrerAppGalleryDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_XIAOMI)) {
+            return isEqualXiaomiReferrerDetails(referrerDetails, activityState);
         }
 
         return false;
@@ -852,5 +837,14 @@ public class Util {
         return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeHuawei
                 && referrerDetails.installBeginTimestampSeconds == activityState.installBeginHuawei
                 && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerHuaweiAppGallery);
+    }
+
+    private static boolean isEqualXiaomiReferrerDetails(final ReferrerDetails referrerDetails,
+                                                        final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeXiaomi
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginXiaomi
+               && referrerDetails.referrerClickTimestampServerSeconds == activityState.clickTimeServerXiaomi
+               && referrerDetails.installBeginTimestampServerSeconds == activityState.installBeginServerXiaomi
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerXiaomi);
     }
 }
