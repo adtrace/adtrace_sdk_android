@@ -1,11 +1,3 @@
-//
-//  IAttributionHandler.java
-//  AdTrace SDK
-//
-//  Created by Pedro Silva (@nonelse) on 15th December 2014.
-//  Copyright (c) 2014-2018 AdTrace GmbH. All rights reserved.
-//
-
 package io.adtrace.sdk;
 
 import io.adtrace.sdk.network.IActivityPackageSender;
@@ -16,7 +8,6 @@ import io.adtrace.sdk.network.IActivityPackageSender;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public interface IAttributionHandler {
     void init(IActivityHandler activityHandler,

@@ -7,7 +7,6 @@ package io.adtrace.sdk;
  *                   Copyright © 2022.
  */
 
-
 public interface InstallReferrerReadListener {
     void onInstallReferrerRead(ReferrerDetails referrerDetails, String referrerApi);
 }

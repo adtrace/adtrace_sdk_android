@@ -12,7 +12,6 @@ import org.json.JSONObject;
  *                   Copyright © 2021.
  */
 
-
 public interface IActivityHandler {
     void init(AdTraceConfig config);
 

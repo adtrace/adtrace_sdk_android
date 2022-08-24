@@ -11,7 +11,6 @@ import io.adtrace.sdk.network.IActivityPackageSender;
  *                   Copyright © 2022.
  */
 
-
 public interface IPackageHandler {
     void init(IActivityHandler activityHandler,
               Context context,
