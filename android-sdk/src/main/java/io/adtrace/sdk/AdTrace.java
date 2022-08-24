@@ -13,7 +13,6 @@ import org.json.JSONObject;
  *                   Copyright © 2022.
  */
 
-
 public class AdTrace {
     /**
      * Singleton AdTrace SDK instance.
@@ -33,7 +32,7 @@ public class AdTrace {
      */
     public static synchronized AdTraceInstance getDefaultInstance() {
         @SuppressWarnings("unused")
-        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:AdTrace-android:4.28.4";
+        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:AdTrace-android:2.1.0";
 
         if (defaultInstance == null) {
             defaultInstance = new AdTraceInstance();
@@ -300,7 +299,12 @@ public class AdTrace {
      * @param onDeviceIdRead Callback to get triggered once identifier is obtained
      */
     public static void getGoogleAdId(Context context, OnDeviceIdsRead onDeviceIdRead) {
-        Util.getGoogleAdId(context, onDeviceIdRead);
+        Context appContext = null;
+        if (context != null) {
+            appContext = context.getApplicationContext();
+        }
+
+        Util.getGoogleAdId(appContext, onDeviceIdRead);
     }
 
     /**
@@ -310,7 +314,12 @@ public class AdTrace {
      * @return Amazon Advertising Identifier
      */
     public static String getAmazonAdId(final Context context) {
-        return Util.getFireAdvertisingId(context.getContentResolver());
+        Context appContext = extractApplicationContext(context);
+        if (appContext != null) {
+            return Util.getFireAdvertisingId(appContext.getContentResolver());
+        }
+
+        return null;
     }
 
     /**
@@ -361,7 +370,11 @@ public class AdTrace {
         adTraceInstance.setTestOptions(testOptions);
     }
 
+    private static Context extractApplicationContext(final Context context) {
+        if (context == null) {
+            return null;
+        }
 
-
-
+        return context.getApplicationContext();
+    }
 }
