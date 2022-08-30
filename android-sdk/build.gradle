@@ -115,7 +115,7 @@ publishing {
             artifactId 'android-sdk'
             version rootProject.ext.coreVersionName
 
-            artifact("$buildDir/outputs/aar/sdk-core-release.aar"){
+            artifact("$buildDir/outputs/aar/android-sdk-release.aar"){
                 builtBy tasks.getByPath("adtraceCoreAarRelease")
             }
             artifact adtraceCoreAndroidJavadocsJar
@@ -152,7 +152,7 @@ def customizePom(pom) {
             url 'https://github.com/adtrace/adtrace_sdk_android'
             organization {
                 name 'adtrace'
-                url 'https://www.adtrace.cio'
+                url 'https://www.adtrace.io'
             }
             licenses {
                 license {

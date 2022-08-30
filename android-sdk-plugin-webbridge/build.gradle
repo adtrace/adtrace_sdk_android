@@ -125,7 +125,7 @@ def customizePom(pom) {
             url 'https://github.com/adtrace/adtrace_sdk_android'
             organization {
                 name 'adtrace'
-                url 'https://www.adtrace.cio'
+                url 'https://www.adtrace.io'
             }
             licenses {
                 license {
