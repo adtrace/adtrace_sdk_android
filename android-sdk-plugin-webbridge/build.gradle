@@ -102,7 +102,7 @@ publishing {
 
     repositories {
         maven {
-            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
             if (project.hasProperty("sonatypeUsername")) {
                 credentials {
                     username sonatypeUsername
@@ -163,5 +163,6 @@ model {
 }
 
 signing {
+    sign configuration.allArtifacts
     sign publishing.publications.mavenAndroidWebBridge
 }

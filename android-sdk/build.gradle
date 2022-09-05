@@ -24,6 +24,10 @@ android {
     }
 }
 
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
 // read local properties
 File localPropsFile = project.rootProject.file('local.properties')
 if (localPropsFile.exists()) {
@@ -36,9 +40,7 @@ if (localPropsFile.exists()) {
     }
 }
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-}
+
 
 task adtraceCoreAarRelease(type: Copy) {
     dependsOn 'assembleRelease'
@@ -126,12 +128,7 @@ publishing {
 
     repositories {
         maven {
-            if (rootProject.ext.coreVersionName.toString().contains('SNAPSHOT')) {
-                println "Using Maven SNAPSHOT repository for publishing"
-                url "https://oss.sonatype.org/content/repositories/snapshots/"
-            } else {
-                url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-            }
+            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
             if (project.hasProperty("sonatypeUsername")) {
                 credentials {
                     username sonatypeUsername
@@ -238,6 +235,7 @@ model {
 }
 
 signing {
+    sign configurations.archives
     sign publishing.publications.mavenAndroidCore
     sign publishing.publications.mavenAndroidCoreAAR
 }
