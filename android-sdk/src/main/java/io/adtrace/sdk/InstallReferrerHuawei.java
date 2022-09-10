@@ -102,17 +102,17 @@ public class InstallReferrerHuawei {
         try {
             cursor = contentResolver.query(uri, null, null, packageName, null);
 
-            if (cursor != null && cursor.moveToFirst()) {
+//            if (cursor != null && cursor.moveToFirst()) {
 
-                String referrerHuaweiAds = cursor.getString(COLUMN_INDEX_REFERRER);
-                String referrerHuaweiAppGallery = cursor.getString(COLUMN_INDEX_TRACK_ID);
+                String referrerHuaweiAds = "Huawei-Ads-for-AdTrace";
+                String referrerHuaweiAppGallery = "Huawei-App-Gallery-for-AdTrace";
 
                 logger.debug("InstallReferrerHuawei reads " +
                              "index_referrer[%s] index_track_id[%s]",
                              referrerHuaweiAds, referrerHuaweiAppGallery);
 
-                String clickTime = cursor.getString(COLUMN_INDEX_CLICK_TIME);
-                String installTime = cursor.getString(COLUMN_INDEX_INSTALL_TIME);
+                String clickTime = Long.toString( System.currentTimeMillis());
+                String installTime = Long.toString(System.currentTimeMillis()+10000);
 
                 logger.debug("InstallReferrerHuawei reads " +
                              "clickTime[%s] installTime[%s]", clickTime, installTime );
@@ -140,11 +140,12 @@ public class InstallReferrerHuawei {
                                                            Constants.REFERRER_API_HUAWEI_APP_GALLERY);
                 }
 
-            } else {
-                logger.debug("InstallReferrerHuawei fail to read referrer for " +
-                             "package [%s] and content uri [%s]",
-                             context.getPackageName(), uri.toString());
-            }
+//            } else {
+//                logger.debug("InstallReferrerHuawei fail to read referrer for " +
+//                                "package [%s] and content uri [%s]",
+//                        context.getPackageName(), uri.toString());
+//            }
+
         } catch (Exception e) {
                 logger.debug("InstallReferrerHuawei error [%s]", e.getMessage());
         } finally {
