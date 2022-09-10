@@ -20,6 +20,7 @@ import io.adtrace.sdk.OnEventTrackingFailedListener;
 import io.adtrace.sdk.OnEventTrackingSucceededListener;
 import io.adtrace.sdk.OnSessionTrackingFailedListener;
 import io.adtrace.sdk.OnSessionTrackingSucceededListener;
+import io.adtrace.sdk.oaid.AdTraceOaid;
 
 public class GlobalApplication extends Application {
     @Override
