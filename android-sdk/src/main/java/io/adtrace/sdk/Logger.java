@@ -16,7 +16,6 @@ import java.util.Locale;
  *                   Copyright © 2022.
  */
 
-
 public class Logger implements ILogger {
 
     private LogLevel logLevel;

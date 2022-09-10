@@ -1,7 +1,4 @@
-
-
 package io.adtrace.sdk;
-
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -9,7 +6,6 @@ package io.adtrace.sdk;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public interface Constants {
     int ONE_SECOND = 1000;
@@ -27,13 +23,14 @@ public interface Constants {
 
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    String CLIENT_SDK = "android2.1.0";
+    String CLIENT_SDK = "android2.2.0";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";
     String REFERRER_API_GOOGLE = "google";
     String REFERRER_API_HUAWEI_ADS = "huawei_ads";
     String REFERRER_API_HUAWEI_APP_GALLERY = "huawei_app_gallery";
+    String REFERRER_API_XIAOMI = "xiaomi";
     String DEEPLINK = "deeplink";
     String PUSH = "push";
     String THREAD_PREFIX = "AdTrace-";
@@ -83,5 +80,4 @@ public interface Constants {
     String ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION = "com.attribution.REFERRAL_PROVIDER";
     String ADTRACE_PREINSTALL_FILE_SYSTEM_PATH = "/data/local/tmp/adtrace.preinstall";
     String EXTRA_SYSTEM_INSTALLER_REFERRER = "com.attribution.EXTRA_SYSTEM_INSTALLER_REFERRER";
-
 }

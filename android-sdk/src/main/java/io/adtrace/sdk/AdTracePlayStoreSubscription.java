@@ -10,7 +10,6 @@ import java.util.Map;
  *                   Copyright © 2022.
  */
 
-
 public class AdTracePlayStoreSubscription {
     private long price;             // [M] revenue
     private String currency;        // [M] currency

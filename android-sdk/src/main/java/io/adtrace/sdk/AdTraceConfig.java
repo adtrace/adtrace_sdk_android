@@ -2,14 +2,12 @@ package io.adtrace.sdk;
 
 import android.content.Context;
 
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class AdTraceConfig {
     String basePath;
@@ -64,6 +62,7 @@ public class AdTraceConfig {
     public static final String AD_REVENUE_ADMOST = "admost_sdk";
     public static final String AD_REVENUE_UNITY = "unity_sdk";
     public static final String AD_REVENUE_HELIUM_CHARTBOOST = "helium_chartboost_sdk";
+    public static final String AD_REVENUE_SOURCE_PUBLISHER = "publisher_sdk";
 
     public AdTraceConfig(Context context, String appToken, String environment) {
         init(context, appToken, environment, false);

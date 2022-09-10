@@ -10,7 +10,6 @@ import java.util.Map;
  *                   Copyright © 2022.
  */
 
-
 public class AdTraceThirdPartySharing {
     Boolean isEnabled;
     Map<String, Map<String, String>> granularOptions;

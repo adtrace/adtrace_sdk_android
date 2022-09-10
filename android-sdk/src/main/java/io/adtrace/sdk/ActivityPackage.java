@@ -1,5 +1,3 @@
-
-
 package io.adtrace.sdk;
 
 import java.io.IOException;
@@ -19,7 +17,6 @@ import java.util.TreeMap;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class ActivityPackage implements Serializable {
     private static final long serialVersionUID = -35935556512024097L;

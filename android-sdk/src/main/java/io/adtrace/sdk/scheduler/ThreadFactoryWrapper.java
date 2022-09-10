@@ -15,7 +15,6 @@ import io.adtrace.sdk.Constants;
  *                   Copyright © 2022.
  */
 
-
 public class ThreadFactoryWrapper implements ThreadFactory {
     private String source;
 

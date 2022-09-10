@@ -1,6 +1,5 @@
 package io.adtrace.sdk.oaid;
 
-
 import android.content.Context;
 import android.util.Log;
 

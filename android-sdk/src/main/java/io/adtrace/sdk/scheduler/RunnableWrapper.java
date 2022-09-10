@@ -9,7 +9,6 @@ import io.adtrace.sdk.AdTraceFactory;
  *                   Copyright © 2022.
  */
 
-
 public class RunnableWrapper implements Runnable {
     private Runnable runnable;
 
