@@ -16,7 +16,6 @@ import io.adtrace.sdk.AdTraceFactory;
  *                   Copyright © 2022.
  */
 
-
 public class SingleThreadCachedScheduler implements ThreadScheduler {
     private final List<Runnable> queue;
     private boolean isThreadProcessing;

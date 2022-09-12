@@ -1,5 +1,7 @@
 package io.adtrace.sdk.scheduler;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -7,8 +9,6 @@ package io.adtrace.sdk.scheduler;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
-
 
 public interface ThreadExecutor {
     void submit(Runnable task);

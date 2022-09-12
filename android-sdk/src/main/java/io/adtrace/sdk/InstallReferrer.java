@@ -22,8 +22,6 @@ import io.adtrace.sdk.scheduler.TimerOnce;
  *                   Copyright © 2022.
  */
 
-
-
 public class InstallReferrer implements InvocationHandler {
     /**
      * Android install referrer library package name.
@@ -93,7 +91,7 @@ public class InstallReferrer implements InvocationHandler {
     private TimerOnce retryTimer;
 
     /**
-     * Weak reference to ActivityHandler instance.
+     * Referrer callback.
      */
     private final InstallReferrerReadListener referrerCallback;
 

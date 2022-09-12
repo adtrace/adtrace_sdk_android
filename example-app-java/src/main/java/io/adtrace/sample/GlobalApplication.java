@@ -20,6 +20,7 @@ import io.adtrace.sdk.OnEventTrackingFailedListener;
 import io.adtrace.sdk.OnEventTrackingSucceededListener;
 import io.adtrace.sdk.OnSessionTrackingFailedListener;
 import io.adtrace.sdk.OnSessionTrackingSucceededListener;
+import io.adtrace.sdk.oaid.AdTraceOaid;
 
 public class GlobalApplication extends Application {
     @Override
@@ -137,7 +138,7 @@ public class GlobalApplication extends Application {
         // Enable OAID reading ONLY IF:
         // - OAID plugin is added to your app.
         // - Your app is NOT distributed in Google Play Store & supports OAID.
-        // AdTraceOaid.readOaid();
+         AdTraceOaid.readOaid();
 
         // Enable Google play kids and COPPA complaint
 //         config.setPlayStoreKidsAppEnabled(true);

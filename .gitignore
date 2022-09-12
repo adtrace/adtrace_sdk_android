@@ -13,6 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+gradle.properties
 /android-sdk/gradle.properties
 /android-sdk-plugin-oaid/gradle.properties
 /android-sdk-plugin-webbridge/gradle.properties

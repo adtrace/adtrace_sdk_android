@@ -15,7 +15,6 @@ import java.util.concurrent.Executors;
  *                   Copyright © 2022.
  */
 
-
 public final class AdTraceLinkResolution {
     public interface AdTraceLinkResolutionCallback {
         void resolvedLinkCallback(Uri resolvedLink);

@@ -3,18 +3,17 @@
     package="io.adtrace.sample" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
     <!-- Use ONLY IF you are using plugin-imei and if your app is NOT DISTRIBUTED in Play Store -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
 
     <application
         android:name=".GlobalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Adtrace_sdk_android" >
         <activity
@@ -32,7 +31,10 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -35,7 +35,6 @@ import java.util.Locale;
  *                   Copyright © 2022.
  */
 
-
 class DeviceInfo {
 
     private static final String OFFICIAL_FACEBOOK_SIGNATURE =
@@ -199,6 +198,7 @@ class DeviceInfo {
         if (!Util.canReadNonPlayIds(adtraceConfig)) {
             return;
         }
+
         if (nonGoogleIdsReadOnce) {
             return;
         }
@@ -416,4 +416,6 @@ class DeviceInfo {
             return null;
         }
     }
+
+
 }

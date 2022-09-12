@@ -10,7 +10,6 @@ import java.util.Map;
  *                   Copyright © 2022.
  */
 
-
 public class AdTraceAdRevenue {
     String source;
     Double revenue;

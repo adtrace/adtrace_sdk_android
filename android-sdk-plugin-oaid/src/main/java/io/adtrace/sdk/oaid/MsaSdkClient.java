@@ -2,7 +2,7 @@ package io.adtrace.sdk.oaid;
 
 import android.content.Context;
 
-
+import io.adtrace.sdk.ILogger;
 import com.bun.miitmdid.core.InfoCode;
 import com.bun.miitmdid.core.MdidSdkHelper;
 import com.bun.miitmdid.interfaces.IIdentifierListener;
@@ -11,8 +11,6 @@ import com.bun.miitmdid.interfaces.IdSupplier;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-
-import io.adtrace.sdk.ILogger;
 
 public class MsaSdkClient {
     public static String getOaid(Context context, final ILogger logger, long maxWaitTimeInMilli) {

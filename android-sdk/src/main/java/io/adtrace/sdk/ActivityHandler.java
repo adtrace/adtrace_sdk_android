@@ -1,11 +1,4 @@
-
-
 package io.adtrace.sdk;
-
-import static io.adtrace.sdk.Constants.ACTIVITY_STATE_FILENAME;
-import static io.adtrace.sdk.Constants.ATTRIBUTION_FILENAME;
-import static io.adtrace.sdk.Constants.SESSION_CALLBACK_PARAMETERS_FILENAME;
-import static io.adtrace.sdk.Constants.SESSION_PARTNER_PARAMETERS_FILENAME;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -14,6 +7,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Handler;
+
+import io.adtrace.sdk.network.ActivityPackageSender;
+import io.adtrace.sdk.network.IActivityPackageSender;
+import io.adtrace.sdk.network.UtilNetworking;
+import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
+import io.adtrace.sdk.scheduler.ThreadExecutor;
+import io.adtrace.sdk.scheduler.TimerCycle;
+import io.adtrace.sdk.scheduler.TimerOnce;
 
 import org.json.JSONObject;
 
@@ -24,21 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import io.adtrace.sdk.network.ActivityPackageSender;
-import io.adtrace.sdk.network.IActivityPackageSender;
-import io.adtrace.sdk.network.UtilNetworking;
-import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
-import io.adtrace.sdk.scheduler.ThreadExecutor;
-import io.adtrace.sdk.scheduler.TimerCycle;
-import io.adtrace.sdk.scheduler.TimerOnce;
-
-/**
- * AdTrace android SDK (https://adtrace.io)
- * Created by Nasser Amini (github.com/namini40) on April 2022.
- * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2022.
- */
-
+import static io.adtrace.sdk.Constants.ACTIVITY_STATE_FILENAME;
+import static io.adtrace.sdk.Constants.ATTRIBUTION_FILENAME;
+import static io.adtrace.sdk.Constants.REFERRER_API_XIAOMI;
+import static io.adtrace.sdk.Constants.SESSION_CALLBACK_PARAMETERS_FILENAME;
+import static io.adtrace.sdk.Constants.SESSION_PARTNER_PARAMETERS_FILENAME;
 
 public class ActivityHandler implements IActivityHandler {
     private static long FOREGROUND_TIMER_INTERVAL;
@@ -133,8 +124,7 @@ public class ActivityHandler implements IActivityHandler {
         deleteSessionCallbackParameters(context);
         deleteSessionPartnerParameters(context);
 
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(context);
-        sharedPreferencesManager.clear();
+        SharedPreferencesManager.getDefaultInstance(context).clear();
     }
 
     public class InternalState {
@@ -246,7 +236,7 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public AdTraceConfig getAdtraceConfig() {
+    public AdTraceConfig getAdTraceConfig() {
         return adtraceConfig;
     }
 
@@ -266,36 +256,37 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public void init(AdTraceConfig adTraceConfig) {
-        this.adtraceConfig = adTraceConfig;
+    public void init(AdTraceConfig adtraceConfig) {
+        this.adtraceConfig = adtraceConfig;
     }
 
-    public static ActivityHandler getInstance(AdTraceConfig adTraceConfig) {
-        if (adTraceConfig == null) {
+    public static ActivityHandler getInstance(AdTraceConfig adtraceConfig) {
+        if (adtraceConfig == null) {
             AdTraceFactory.getLogger().error("AdTraceConfig missing");
             return null;
         }
 
-        if (!adTraceConfig.isValid()) {
+        if (!adtraceConfig.isValid()) {
             AdTraceFactory.getLogger().error("AdTraceConfig not initialized correctly");
             return null;
         }
 
-        if (adTraceConfig.processName != null) {
+        if (adtraceConfig.processName != null) {
             int currentPid = android.os.Process.myPid();
-            ActivityManager manager = (ActivityManager) adTraceConfig.context.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager manager = (ActivityManager) adtraceConfig.context.getSystemService(Context.ACTIVITY_SERVICE);
 
             if (manager == null) {
                 return null;
             }
 
             List<ActivityManager.RunningAppProcessInfo> processInfoList = manager.getRunningAppProcesses();
-            if(processInfoList ==null){
+            if (processInfoList == null) {
                 return null;
             }
-            for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+
+            for (ActivityManager.RunningAppProcessInfo processInfo : processInfoList) {
                 if (processInfo.pid == currentPid) {
-                    if (!processInfo.processName.equalsIgnoreCase(adTraceConfig.processName)) {
+                    if (!processInfo.processName.equalsIgnoreCase(adtraceConfig.processName)) {
                         AdTraceFactory.getLogger().info("Skipping initialization in background process (%s)", processInfo.processName);
                         return null;
                     }
@@ -304,7 +295,7 @@ public class ActivityHandler implements IActivityHandler {
             }
         }
 
-        ActivityHandler activityHandler = new ActivityHandler(adTraceConfig);
+        ActivityHandler activityHandler = new ActivityHandler(adtraceConfig);
         return activityHandler;
     }
 
@@ -354,13 +345,12 @@ public class ActivityHandler implements IActivityHandler {
                 if (internalState.hasFirstSdkStartNotOcurred()) {
                     logger.warn("Event tracked before first activity resumed.\n" +
                             "If it was triggered in the Application class, it might timestamp or even send an install long before the user opens the app.\n" +
-                            "Please check https://github.com/adtrace/adtrace_sdk_android#can-i-trigger-an-event-at-application-launch for more information.");
+                            "Please check https://github.com/adtrace/android_sdk#can-i-trigger-an-event-at-application-launch for more information.");
                     startI();
                 }
                 trackEventI(event);
             }
         });
-
     }
 
     @Override
@@ -613,8 +603,7 @@ public class ActivityHandler implements IActivityHandler {
             @Override
             public void run() {
                 if (!preSaved) {
-                    SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-                    sharedPreferencesManager.savePushToken(token);
+                    SharedPreferencesManager.getDefaultInstance(getContext()).savePushToken(token);
                 }
 
                 if (internalState.hasFirstSdkStartNotOcurred()) {
@@ -649,11 +638,11 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public void trackThirdPartySharing(final AdTraceThirdPartySharing adTraceThirdPartySharing) {
+    public void trackThirdPartySharing(final AdTraceThirdPartySharing adtraceThirdPartySharing) {
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                trackThirdPartySharingI(adTraceThirdPartySharing);
+                trackThirdPartySharingI(adtraceThirdPartySharing);
             }
         });
     }
@@ -679,11 +668,11 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public void trackAdRevenue(final AdTraceAdRevenue adTraceAdRevenue) {
+    public void trackAdRevenue(final AdTraceAdRevenue adtraceAdRevenue) {
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                trackAdRevenueI(adTraceAdRevenue);
+                trackAdRevenueI(adtraceAdRevenue);
             }
         });
     }
@@ -743,6 +732,8 @@ public class ActivityHandler implements IActivityHandler {
     public AdTraceAttribution getAttribution() {
         return attribution;
     }
+
+
 
     public InternalState getInternalState() {
         return internalState;
@@ -831,32 +822,30 @@ public class ActivityHandler implements IActivityHandler {
                 setPushToken(adtraceConfig.pushToken, false);
             } else {
                 // since sdk has not yet started, save current push token for when it does
-                SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-                sharedPreferencesManager.savePushToken(adtraceConfig.pushToken);
+                SharedPreferencesManager.getDefaultInstance(getContext()).savePushToken(adtraceConfig.pushToken);
             }
         } else {
             // since sdk has already started, check if there is a saved push from previous runs
             if (internalState.hasFirstSdkStartOcurred()) {
-                SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-                String savedPushToken = sharedPreferencesManager.getPushToken();
-
-                setPushToken(savedPushToken, true);
+                String savedPushToken = SharedPreferencesManager.getDefaultInstance(getContext()).getPushToken();
+                if(savedPushToken!=null)
+                    setPushToken(savedPushToken, true);
             }
         }
 
         // GDPR
         if (internalState.hasFirstSdkStartOcurred()) {
-            SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+            SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
             if (sharedPreferencesManager.getGdprForgetMe()) {
                 gdprForgetMe();
             } else {
                 if (sharedPreferencesManager.getDisableThirdPartySharing()) {
                     disableThirdPartySharing();
                 }
-                for (AdTraceThirdPartySharing adTraceThirdPartySharing :
+                for (AdTraceThirdPartySharing adtraceThirdPartySharing :
                         adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray)
                 {
-                    trackThirdPartySharing(adTraceThirdPartySharing);
+                    trackThirdPartySharing(adtraceThirdPartySharing);
                 }
                 if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
                     trackMeasurementConsent(
@@ -984,7 +973,7 @@ public class ActivityHandler implements IActivityHandler {
             return;
         }
 
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
         long readStatus = sharedPreferencesManager.getPreinstallPayloadReadStatus();
 
         if (PreinstallUtil.hasAllLocationsBeenRead(readStatus)) {
@@ -1151,9 +1140,9 @@ public class ActivityHandler implements IActivityHandler {
 
         AdTraceSigner.onResume(adtraceConfig.logger);
 
-        processCoppaComplianceI();
-
         updateHandlersStatusAndSendI();
+
+        processCoppaComplianceI();
 
         processSessionI();
 
@@ -1171,7 +1160,7 @@ public class ActivityHandler implements IActivityHandler {
 
         long now = System.currentTimeMillis();
 
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
         activityState.pushToken = sharedPreferencesManager.getPushToken();
         // activityState.isGdprForgotten = sharedPreferencesManager.getGdprForgetMe();
 
@@ -1181,14 +1170,15 @@ public class ActivityHandler implements IActivityHandler {
                 gdprForgetMeI();
             } else {
                 processCoppaComplianceI();
+
                 // check if disable third party sharing request came, then send it first
                 if (sharedPreferencesManager.getDisableThirdPartySharing()) {
                     disableThirdPartySharingI();
                 }
-                for (AdTraceThirdPartySharing adTraceThirdPartySharing :
+                for (AdTraceThirdPartySharing adtraceThirdPartySharing :
                         adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray)
                 {
-                    trackThirdPartySharingI(adTraceThirdPartySharing);
+                    trackThirdPartySharingI(adtraceThirdPartySharing);
                 }
                 if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
                     trackMeasurementConsentI(
@@ -1260,11 +1250,24 @@ public class ActivityHandler implements IActivityHandler {
             // Try to check if there's new referrer information.
             installReferrer.startConnection();
             installReferrerHuawei.readReferrer();
+            readInstallReferrerXiaomi();
 
             return;
         }
 
         logger.verbose("Time span since last activity too short for a new subsession");
+    }
+
+    private void readInstallReferrerXiaomi() {
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                ReferrerDetails referrerDetails = Reflection.getXiaomiReferrer(getContext(), logger);
+                if (referrerDetails != null) {
+                    sendInstallReferrer(referrerDetails, REFERRER_API_XIAOMI);
+                }
+            }
+        });
     }
 
     private void trackNewSessionI(final long now) {
@@ -1302,7 +1305,7 @@ public class ActivityHandler implements IActivityHandler {
             return;
         }
 
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
         String cachedDeeplinkUrl = sharedPreferencesManager.getDeeplinkUrl();
         long cachedDeeplinkClickTime = sharedPreferencesManager.getDeeplinkClickTime();
 
@@ -1448,8 +1451,7 @@ public class ActivityHandler implements IActivityHandler {
 
         // mark install as tracked on success
         if (sessionResponseData.success) {
-            SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-            sharedPreferencesManager.setInstallTracked();
+            SharedPreferencesManager.getDefaultInstance(getContext()).setInstallTracked();
         }
 
         // launch Session tracking listener if available
@@ -1627,19 +1629,20 @@ public class ActivityHandler implements IActivityHandler {
         writeActivityStateI();
 
         if (enabled) {
-            SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+            SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
 
             if (sharedPreferencesManager.getGdprForgetMe()) {
                 gdprForgetMeI();
             } else {
                 processCoppaComplianceI();
+
                 if (sharedPreferencesManager.getDisableThirdPartySharing()) {
                     disableThirdPartySharingI();
                 }
-                for (AdTraceThirdPartySharing adTraceThirdPartySharing :
+                for (AdTraceThirdPartySharing adtraceThirdPartySharing :
                         adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray)
                 {
-                    trackThirdPartySharingI(adTraceThirdPartySharing);
+                    trackThirdPartySharingI(adtraceThirdPartySharing);
                 }
                 if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
                     trackMeasurementConsentI(
@@ -1669,8 +1672,7 @@ public class ActivityHandler implements IActivityHandler {
 
 
     private void checkAfterNewStartI() {
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-        checkAfterNewStartI(sharedPreferencesManager);
+        checkAfterNewStartI(SharedPreferencesManager.getDefaultInstance(getContext()));
     }
 
     private void checkAfterNewStartI(SharedPreferencesManager sharedPreferencesManager) {
@@ -1694,6 +1696,7 @@ public class ActivityHandler implements IActivityHandler {
         // try to read and send the install referrer
         installReferrer.startConnection();
         installReferrerHuawei.readReferrer();
+        readInstallReferrerXiaomi();
     }
 
     private void setOfflineModeI(boolean offline) {
@@ -1785,9 +1788,7 @@ public class ActivityHandler implements IActivityHandler {
             return;
         }
 
-        SharedPreferencesManager sharedPreferencesManager =
-                new SharedPreferencesManager(getContext());
-        String referrerPayload = sharedPreferencesManager.getPreinstallReferrer();
+        String referrerPayload = SharedPreferencesManager.getDefaultInstance(getContext()).getPreinstallReferrer();
 
         if (referrerPayload == null || referrerPayload.isEmpty()) {
             return;
@@ -2204,8 +2205,7 @@ public class ActivityHandler implements IActivityHandler {
         packageHandler.addPackage(infoPackage);
 
         // If push token was cached, remove it.
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-        sharedPreferencesManager.removePushToken();
+        SharedPreferencesManager.getDefaultInstance(getContext()).removePushToken();
 
         if (adtraceConfig.eventBufferingEnabled) {
             logger.info("Buffered event %s", infoPackage.getSuffix());
@@ -2229,8 +2229,7 @@ public class ActivityHandler implements IActivityHandler {
         packageHandler.addPackage(gdprPackage);
 
         // If GDPR choice was cached, remove it.
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
-        sharedPreferencesManager.removeGdprForgetMe();
+        SharedPreferencesManager.getDefaultInstance(getContext()).removeGdprForgetMe();
 
         if (adtraceConfig.eventBufferingEnabled) {
             logger.info("Buffered event %s", gdprPackage.getSuffix());
@@ -2242,7 +2241,7 @@ public class ActivityHandler implements IActivityHandler {
     private void disableThirdPartySharingI() {
         // cache the disable third party sharing request, so that the request order maintains
         // even this call returns before making server request
-        SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getContext());
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
         sharedPreferencesManager.setDisableThirdPartySharing();
 
         if (!checkActivityStateI(activityState)) { return; }
@@ -2273,10 +2272,10 @@ public class ActivityHandler implements IActivityHandler {
         }
     }
 
-    private void trackThirdPartySharingI(final AdTraceThirdPartySharing adTraceThirdPartySharing) {
+    private void trackThirdPartySharingI(final AdTraceThirdPartySharing adtraceThirdPartySharing) {
         if (!checkActivityStateI(activityState)) {
             adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray.add(
-                    adTraceThirdPartySharing);
+                    adtraceThirdPartySharing);
             return;
         }
         if (!isEnabledI()) { return; }
@@ -2285,12 +2284,13 @@ public class ActivityHandler implements IActivityHandler {
             logger.warn("Calling third party sharing API not allowed when COPPA enabled");
             return;
         }
+
         long now = System.currentTimeMillis();
         PackageBuilder packageBuilder = new PackageBuilder(
                 adtraceConfig, deviceInfo, activityState, sessionParameters, now);
 
         ActivityPackage activityPackage =
-                packageBuilder.buildThirdPartySharingPackage(adTraceThirdPartySharing);
+                packageBuilder.buildThirdPartySharingPackage(adtraceThirdPartySharing);
         packageHandler.addPackage(activityPackage);
 
         if (adtraceConfig.eventBufferingEnabled) {
@@ -2337,17 +2337,17 @@ public class ActivityHandler implements IActivityHandler {
         packageHandler.sendFirstPackage();
     }
 
-    private void trackAdRevenueI(AdTraceAdRevenue adTraceAdRevenue) {
+    private void trackAdRevenueI(AdTraceAdRevenue adtraceAdRevenue) {
         if (!checkActivityStateI(activityState)) { return; }
         if (!isEnabledI()) { return; }
-        if (!checkAdTraceAdRevenue(adTraceAdRevenue)) { return; }
+        if (!checkAdTraceAdRevenue(adtraceAdRevenue)) { return; }
         if (activityState.isGdprForgotten) { return; }
 
         long now = System.currentTimeMillis();
 
         PackageBuilder packageBuilder = new PackageBuilder(adtraceConfig, deviceInfo, activityState, sessionParameters, now);
 
-        ActivityPackage adRevenuePackage = packageBuilder.buildAdRevenuePackage(adTraceAdRevenue, internalState.isInDelayedStart());
+        ActivityPackage adRevenuePackage = packageBuilder.buildAdRevenuePackage(adtraceAdRevenue, internalState.isInDelayedStart());
         packageHandler.addPackage(adRevenuePackage);
         packageHandler.sendFirstPackage();
     }
@@ -2512,13 +2512,13 @@ public class ActivityHandler implements IActivityHandler {
         return true;
     }
 
-    private boolean checkAdTraceAdRevenue(AdTraceAdRevenue adTraceAdRevenue) {
-        if (adTraceAdRevenue == null) {
+    private boolean checkAdTraceAdRevenue(AdTraceAdRevenue adtraceAdRevenue) {
+        if (adtraceAdRevenue == null) {
             logger.error("Ad revenue object missing");
             return false;
         }
 
-        if (!adTraceAdRevenue.isValid()) {
+        if (!adtraceAdRevenue.isValid()) {
             logger.error("Ad revenue object not initialized correctly");
             return false;
         }
@@ -2594,6 +2594,21 @@ public class ActivityHandler implements IActivityHandler {
             activityState.clickTimeHuawei = responseData.clickTime;
             activityState.installBeginHuawei = responseData.installBegin;
             activityState.installReferrerHuaweiAppGallery = responseData.installReferrer;
+
+            writeActivityStateI();
+            return;
+        }
+
+        boolean isInstallReferrerXiaomi =
+                responseData.referrerApi != null &&
+                        (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_XIAOMI));
+
+        if (isInstallReferrerXiaomi) {
+            activityState.clickTimeXiaomi = responseData.clickTime;
+            activityState.installBeginXiaomi = responseData.installBegin;
+            activityState.installReferrerXiaomi = responseData.installReferrer;
+            activityState.clickTimeServerXiaomi = responseData.clickTimeServer;
+            activityState.installBeginServerXiaomi = responseData.installBeginServer;
 
             writeActivityStateI();
             return;

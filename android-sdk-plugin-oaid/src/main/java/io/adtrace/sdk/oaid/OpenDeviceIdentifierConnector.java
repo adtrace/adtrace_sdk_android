@@ -125,3 +125,4 @@ public class OpenDeviceIdentifierConnector implements ServiceConnection, IBinder
         }
     }
 }
+

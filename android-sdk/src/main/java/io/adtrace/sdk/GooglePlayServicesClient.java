@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
  *                   Copyright © 2022.
  */
 
-
 public class GooglePlayServicesClient {
     public static final class GooglePlayServicesInfo {
         private final String gpsAdid;

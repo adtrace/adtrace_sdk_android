@@ -11,7 +11,6 @@ import java.util.Map;
  *                   Copyright © 2022.
  */
 
-
 public class AdTraceEvent {
     String eventToken;
     Double revenue;

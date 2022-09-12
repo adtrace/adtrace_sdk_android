@@ -13,7 +13,6 @@ import android.content.Intent;
  *                   Copyright © 2022.
  */
 
-
 public class AdTracePreinstallReferrerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

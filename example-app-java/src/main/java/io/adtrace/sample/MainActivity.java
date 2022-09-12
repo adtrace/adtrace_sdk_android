@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Assign custom identifier to event which will be reported in success/failure callbacks.
         event.setCallbackId("PrettyRandomIdentifier");
+        event.setOrderId("123456");
 
         AdTrace.trackEvent(event);
     }

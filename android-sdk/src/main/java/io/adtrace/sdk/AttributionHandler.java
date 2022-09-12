@@ -1,17 +1,7 @@
-//
-//  AttributionHandler.java
-//  AdTrace SDK
-//
-//  Created by Pedro Silva (@nonelse) on 7th November 2014.
-//  Copyright (c) 2014-2018 AdTrace GmbH. All rights reserved.
-//
-
 package io.adtrace.sdk;
 
 import android.net.Uri;
-
 import org.json.JSONObject;
-
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +17,6 @@ import io.adtrace.sdk.scheduler.TimerOnce;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class AttributionHandler implements IAttributionHandler,
         IActivityPackageSender.ResponseDataCallbackSubscriber
@@ -265,7 +254,7 @@ public class AttributionHandler implements IAttributionHandler,
         long now = System.currentTimeMillis();
         IActivityHandler activityHandler = activityHandlerWeakRef.get();
         PackageBuilder packageBuilder = new PackageBuilder(
-                activityHandler.getAdtraceConfig(),
+                activityHandler.getAdTraceConfig(),
                 activityHandler.getDeviceInfo(),
                 activityHandler.getActivityState(),
                 activityHandler.getSessionParameters(),

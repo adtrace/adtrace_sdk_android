@@ -656,7 +656,6 @@ public class ActivityPackageSender implements IActivityPackageSender {
         String googleAdIdName = "gps_adid";
         String fireAdIdName = "fire_adid";
         String androidIdName = "android_id";
-
         String androidUUIDName= "android_uuid";
 
         if (parameters.get(googleAdIdName) != null) {
@@ -668,7 +667,6 @@ public class ActivityPackageSender implements IActivityPackageSender {
         if (parameters.get(androidIdName) != null) {
             return androidIdName;
         }
-
         if (parameters.get(androidUUIDName) != null) {
             return androidUUIDName;
         }

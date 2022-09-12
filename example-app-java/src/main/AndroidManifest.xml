@@ -3,11 +3,11 @@
     package="io.adtrace.sample">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
     <!-- Use ONLY IF you are using plugin-imei and if your app is NOT DISTRIBUTED in Play Store -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
 
     <!-- Use ONLY IF you are supporting preinstall tracker via content provider -->
     <uses-permission android:name="io.adtrace.preinstall.READ_PERMISSION"/>
@@ -37,11 +37,10 @@
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -51,7 +50,6 @@
                 <data android:scheme="adtrace-example" />
             </intent-filter>
         </activity>
-
         <service
             android:name=".ServiceExample"
             android:enabled="true"
