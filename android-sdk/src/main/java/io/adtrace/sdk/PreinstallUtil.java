@@ -272,20 +272,32 @@ public class PreinstallUtil {
                                                                 final String permission,
                                                                 final ILogger logger)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> providers = context.getPackageManager()
-                                                 .queryIntentContentProviders(
-                                                         new Intent(ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION), 0);
-            List<String> payloads = new ArrayList<String>();
-            for (ResolveInfo provider : providers) {
-                boolean permissionGranted = true;
-                if (permission != null) {
-                    int result = context.getPackageManager().checkPermission(
-                            permission, provider.providerInfo.packageName);
-                    if (result != PackageManager.PERMISSION_GRANTED) {
-                        permissionGranted = false;
-                    }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return null;
+        }
+
+        List<ResolveInfo> providers;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            providers = context.getPackageManager()
+              .queryIntentContentProviders(
+                new Intent(ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION),
+                PackageManager.ResolveInfoFlags.of(0));
+        } else {
+            providers = context.getPackageManager()
+              .queryIntentContentProviders(
+                new Intent(ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION), 0);
+        }
+
+        List<String> payloads = new ArrayList<String>();
+        for (ResolveInfo provider : providers) {
+            boolean permissionGranted = true;
+            if (permission != null) {
+                int result = context.getPackageManager().checkPermission(
+                        permission, provider.providerInfo.packageName);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    permissionGranted = false;
                 }
+            }
 
                 if (permissionGranted) {
                     String authority = provider.providerInfo.authority;
@@ -300,9 +312,8 @@ public class PreinstallUtil {
                 }
             }
 
-            if (!payloads.isEmpty()) {
-                return payloads;
-            }
+        if (!payloads.isEmpty()) {
+            return payloads;
         }
 
         return null;
