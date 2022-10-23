@@ -27,7 +27,6 @@ import android.util.DisplayMetrics;
 import java.util.Date;
 import java.util.Locale;
 
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.

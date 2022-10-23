@@ -7,7 +7,6 @@ package io.adtrace.sdk;
  *                   Copyright © 2022.
  */
 
-
 public enum TrackingState {
     OPTED_OUT(1);
 

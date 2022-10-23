@@ -33,7 +33,6 @@ import java.util.List;
  *                   Copyright © 2022.
  */
 
-
 public class PreinstallUtil {
 
     private static final long SYSTEM_PROPERTY_BITMASK = 1;                  //00...000000001

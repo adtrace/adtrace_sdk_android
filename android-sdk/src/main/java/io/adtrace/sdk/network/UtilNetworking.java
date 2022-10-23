@@ -19,8 +19,6 @@ import io.adtrace.sdk.ILogger;
  *                   Copyright © 2022.
  */
 
-
-
 public class UtilNetworking {
     private static String userAgent;
 

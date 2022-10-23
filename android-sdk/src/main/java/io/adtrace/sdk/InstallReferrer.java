@@ -14,7 +14,6 @@ import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
 import io.adtrace.sdk.scheduler.ThreadExecutor;
 import io.adtrace.sdk.scheduler.TimerOnce;
 
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.

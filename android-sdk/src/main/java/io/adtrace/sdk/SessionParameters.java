@@ -3,13 +3,13 @@ package io.adtrace.sdk;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
+
 public class SessionParameters {
     Map<String, String> callbackParameters;
     Map<String, String> partnerParameters;

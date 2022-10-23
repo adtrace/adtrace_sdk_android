@@ -14,7 +14,6 @@ import java.util.Map;
  *                   Copyright © 2022.
  */
 
-
 public class Reflection {
     public static Object getAdvertisingInfoObject(Context context) throws Exception {
         return invokeStaticMethod("com.google.android.gms.ads.identifier.AdvertisingIdClient", "getAdvertisingIdInfo", new Class[]{Context.class}, context);

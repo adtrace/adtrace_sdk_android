@@ -53,14 +53,12 @@ import java.util.regex.Pattern;
 import io.adtrace.sdk.scheduler.AsyncTaskExecutor;
 import io.adtrace.sdk.scheduler.SingleThreadFutureScheduler;
 
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class Util {
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'Z";

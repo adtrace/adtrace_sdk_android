@@ -20,7 +20,6 @@ import io.adtrace.sdk.Constants;
  *                   Copyright © 2022.
  */
 
-
 public class UrlStrategy {
     //todo:
     private static final String BASE_URL_INDIA = "https://app.adtrace.net.in";

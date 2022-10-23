@@ -7,7 +7,6 @@ package io.adtrace.sdk;
  *                   Copyright © 2022.
  */
 
-
 public class ReferrerDetails {
     public String installReferrer;                     // The referrer URL of the installed package.
     public long referrerClickTimestampSeconds;         // The client-side timestamp, when the referrer click happened.

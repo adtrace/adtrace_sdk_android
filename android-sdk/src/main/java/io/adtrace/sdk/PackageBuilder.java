@@ -16,7 +16,6 @@ import java.util.Map;
  *                   Copyright © 2022.
  */
 
-
 public class PackageBuilder {
     private static ILogger logger = AdTraceFactory.getLogger();
     private long createdAt;

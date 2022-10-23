@@ -1,6 +1,5 @@
 package io.adtrace.sdk;
 
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.

@@ -3,7 +3,6 @@ package io.adtrace.sdk;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.

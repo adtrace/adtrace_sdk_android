@@ -1,5 +1,8 @@
 package io.adtrace.sdk.network;
 
+
+
+
 import android.net.Uri;
 
 import org.json.JSONException;
@@ -36,6 +39,13 @@ import io.adtrace.sdk.network.UtilNetworking.IHttpsURLConnectionProvider;
 import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
 import io.adtrace.sdk.scheduler.ThreadExecutor;
 
+
+/**
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2022.
+ */
 
 public class ActivityPackageSender implements IActivityPackageSender {
     private String basePath;

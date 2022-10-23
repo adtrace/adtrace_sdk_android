@@ -18,14 +18,12 @@ import io.adtrace.sdk.network.IActivityPackageSender;
 import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
 import io.adtrace.sdk.scheduler.ThreadScheduler;
 
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class PackageHandler implements IPackageHandler,
         IActivityPackageSender.ResponseDataCallbackSubscriber
