@@ -1,12 +1,12 @@
 package io.adtrace.sdk;
 
-import android.content.Context;
 import android.net.Uri;
+import android.content.Context;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * AdTrace android SDK (https://adtrace.io)

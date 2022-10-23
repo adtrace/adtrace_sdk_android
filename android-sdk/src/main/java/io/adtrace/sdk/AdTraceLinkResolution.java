@@ -26,7 +26,7 @@ public final class AdTraceLinkResolution {
     private static final int maxRecursions = 10;
     private static final String[] expectedUrlHostSuffixArray = {
             "adtrace.io",
-            "adtrc.st",
+            "adtrce.st",
             "go.link"
     };
     //todo: urls
