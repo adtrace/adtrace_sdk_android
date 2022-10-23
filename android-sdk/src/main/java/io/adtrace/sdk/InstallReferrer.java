@@ -4,15 +4,17 @@ import static io.adtrace.sdk.Constants.ONE_SECOND;
 
 import android.content.Context;
 
+import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
+import io.adtrace.sdk.scheduler.ThreadExecutor;
+import io.adtrace.sdk.scheduler.TimerOnce;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
-import io.adtrace.sdk.scheduler.ThreadExecutor;
-import io.adtrace.sdk.scheduler.TimerOnce;
+import static io.adtrace.sdk.Constants.ONE_SECOND;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
