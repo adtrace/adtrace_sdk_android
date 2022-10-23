@@ -1,5 +1,13 @@
 package io.adtrace.sdk;
 
+/**
+ * AdTrace android SDK (https://adtrace.io)
+ * Created by Nasser Amini (github.com/namini40) on April 2022.
+ * Notice: See LICENSE.txt for modification and distribution information
+ *                   Copyright © 2022.
+ */
+
+
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -344,8 +352,7 @@ public class ActivityHandler implements IActivityHandler {
             public void run() {
                 if (internalState.hasFirstSdkStartNotOcurred()) {
                     logger.warn("Event tracked before first activity resumed.\n" +
-                            "If it was triggered in the Application class, it might timestamp or even send an install long before the user opens the app.\n" +
-                            "Please check https://github.com/adtrace/android_sdk#can-i-trigger-an-event-at-application-launch for more information.");
+                            "If it was triggered in the Application class, it might timestamp or even send an install long before the user opens the app.\n");
                     startI();
                 }
                 trackEventI(event);
@@ -732,8 +739,6 @@ public class ActivityHandler implements IActivityHandler {
     public AdTraceAttribution getAttribution() {
         return attribution;
     }
-
-
 
     public InternalState getInternalState() {
         return internalState;
@@ -1250,12 +1255,25 @@ public class ActivityHandler implements IActivityHandler {
             // Try to check if there's new referrer information.
             installReferrer.startConnection();
             installReferrerHuawei.readReferrer();
+            readInstallReferrerSamsung();
             readInstallReferrerXiaomi();
 
             return;
         }
 
         logger.verbose("Time span since last activity too short for a new subsession");
+    }
+
+    private void readInstallReferrerSamsung() {
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                ReferrerDetails referrerDetails = Reflection.getSamsungReferrer(getContext(), logger);
+                if (referrerDetails != null) {
+                    sendInstallReferrer(referrerDetails, REFERRER_API_SAMSUNG);
+                }
+            }
+        });
     }
 
     private void readInstallReferrerXiaomi() {
@@ -1696,6 +1714,7 @@ public class ActivityHandler implements IActivityHandler {
         // try to read and send the install referrer
         installReferrer.startConnection();
         installReferrerHuawei.readReferrer();
+        readInstallReferrerSamsung();
         readInstallReferrerXiaomi();
     }
 
@@ -2599,6 +2618,19 @@ public class ActivityHandler implements IActivityHandler {
             return;
         }
 
+        boolean isInstallReferrerSamsung =
+                responseData.referrerApi != null &&
+                (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_SAMSUNG));
+
+        if (isInstallReferrerSamsung) {
+            activityState.clickTimeSamsung = responseData.clickTime;
+            activityState.installBeginSamsung = responseData.installBegin;
+            activityState.installReferrerSamsung = responseData.installReferrer;
+
+            writeActivityStateI();
+            return;
+        }
+
         boolean isInstallReferrerXiaomi =
                 responseData.referrerApi != null &&
                         (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_XIAOMI));
@@ -2609,6 +2641,7 @@ public class ActivityHandler implements IActivityHandler {
             activityState.installReferrerXiaomi = responseData.installReferrer;
             activityState.clickTimeServerXiaomi = responseData.clickTimeServer;
             activityState.installBeginServerXiaomi = responseData.installBeginServer;
+            activityState.installVersionXiaomi = responseData.installVersion;
 
             writeActivityStateI();
             return;
