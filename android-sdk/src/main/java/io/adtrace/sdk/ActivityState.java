@@ -55,6 +55,10 @@ public class ActivityState implements Serializable, Cloneable {
             new ObjectStreamField("installReferrerXiaomi", String.class),
             new ObjectStreamField("clickTimeServerXiaomi", long.class),
             new ObjectStreamField("installBeginServerXiaomi", long.class),
+            new ObjectStreamField("installVersionXiaomi", String.class),
+            new ObjectStreamField("clickTimeSamsung", long.class),
+            new ObjectStreamField("installBeginSamsung", long.class),
+            new ObjectStreamField("installReferrerSamsung", String.class),
     };
 
     // persistent data
@@ -102,6 +106,11 @@ public class ActivityState implements Serializable, Cloneable {
     protected String installReferrerXiaomi;
     protected long clickTimeServerXiaomi;
     protected long installBeginServerXiaomi;
+    protected String installVersionXiaomi;
+
+    protected long clickTimeSamsung;
+    protected long installBeginSamsung;
+    protected String installReferrerSamsung;
 
     protected ActivityState() {
         logger = AdTraceFactory.getLogger();
@@ -139,6 +148,10 @@ public class ActivityState implements Serializable, Cloneable {
         installReferrerXiaomi = null;
         clickTimeServerXiaomi = 0;
         installBeginServerXiaomi = 0;
+        installVersionXiaomi = null;
+        clickTimeSamsung = 0;
+        installBeginSamsung = 0;
+        installReferrerSamsung = null;
     }
 
     protected void resetSessionAttributes(long now) {
@@ -214,6 +227,10 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalString(installReferrerXiaomi, otherActivityState.installReferrerXiaomi)) return false;
         if (!Util.equalLong(clickTimeServerXiaomi, otherActivityState.clickTimeServerXiaomi)) return false;
         if (!Util.equalLong(installBeginServerXiaomi, otherActivityState.installBeginServerXiaomi)) return false;
+        if (!Util.equalString(installVersionXiaomi, otherActivityState.installVersionXiaomi)) return false;
+        if (!Util.equalLong(clickTimeSamsung, otherActivityState.clickTimeSamsung)) return false;
+        if (!Util.equalLong(installBeginSamsung, otherActivityState.installBeginSamsung)) return false;
+        if (!Util.equalString(installReferrerSamsung, otherActivityState.installReferrerSamsung)) return false;
         return true;
     }
 
@@ -252,6 +269,10 @@ public class ActivityState implements Serializable, Cloneable {
         hashCode = 37 * hashCode + Util.hashString(installReferrerXiaomi);
         hashCode = 37 * hashCode + Util.hashLong(clickTimeServerXiaomi);
         hashCode = 37 * hashCode + Util.hashLong(installBeginServerXiaomi);
+        hashCode = 37 * hashCode + Util.hashString(installVersionXiaomi);
+        hashCode = 37 * hashCode + Util.hashLong(clickTimeSamsung);
+        hashCode = 37 * hashCode + Util.hashLong(installBeginSamsung);
+        hashCode = 37 * hashCode + Util.hashString(installReferrerSamsung);
         return hashCode;
     }
 
@@ -297,6 +318,11 @@ public class ActivityState implements Serializable, Cloneable {
         installReferrerXiaomi = Util.readStringField(fields, "installReferrerXiaomi", null);
         clickTimeServerXiaomi = Util.readLongField(fields, "clickTimeServerXiaomi", -1l);
         installBeginServerXiaomi = Util.readLongField(fields, "installBeginServerXiaomi", -1l);
+        installVersionXiaomi = Util.readStringField(fields, "installVersionXiaomi", null);
+
+        clickTimeSamsung = Util.readLongField(fields, "clickTimeSamsung", -1l);
+        installBeginSamsung = Util.readLongField(fields, "installBeginSamsung", -1l);
+        installReferrerSamsung = Util.readStringField(fields, "installReferrerSamsung", null);
 
         // create UUID for migrating devices
         if (uuid == null) {
