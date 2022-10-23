@@ -688,7 +688,6 @@ public class PackageBuilder {
                     "fallback to non Google Play and Fire identifiers will take place");
             deviceInfo.reloadNonPlayIds(adtraceConfig);
             PackageBuilder.addString(parameters, "android_id", deviceInfo.androidId);
-
         }
 
         // Rest of the parameters.
@@ -804,6 +803,9 @@ public class PackageBuilder {
         }
         PackageBuilder.addMapJson(parameters, "granular_third_party_sharing_options",
                 adTraceThirdPartySharing.granularOptions);
+
+        PackageBuilder.addMapJson(parameters, "partner_sharing_settings",
+                adTraceThirdPartySharing.partnerSharingSettings);
 
         // Device identifiers.
         deviceInfo.reloadPlayIds(adtraceConfig);
