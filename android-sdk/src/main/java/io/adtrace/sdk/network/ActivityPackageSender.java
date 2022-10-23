@@ -586,7 +586,7 @@ public class ActivityPackageSender implements IActivityPackageSender {
         String signatureHeader = Util.formatString("signature=\"%s\"", signature);
         String secretIdHeader  = Util.formatString("secret_id=\"%s\"", secretId);
         String idHeader        = Util.formatString("headers_id=\"%s\"", headersId);
-        String algorithmHeader = Util.formatString("algorithm=\"%s\"", algorithm != null ? algorithm : "adtrc1");
+        String algorithmHeader = Util.formatString("algorithm=\"%s\"", algorithm != null ? algorithm : "adtrce1");
         String nativeVersionHeader = Util.formatString("native_version=\"%s\"", nativeVersion != null ? nativeVersion : "");
 
         String authorizationHeader = Util.formatString("Signature %s,%s,%s,%s,%s",
