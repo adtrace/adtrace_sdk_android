@@ -1,12 +1,5 @@
 package io.adtrace.sdk;
 
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_URI_AUTHORITY;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_URI_PATH;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_FILE_SYSTEM_PATH;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PATH;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PREFIX;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -25,6 +18,13 @@ import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_URI_AUTHORITY;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_URI_PATH;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_FILE_SYSTEM_PATH;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PATH;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PREFIX;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
