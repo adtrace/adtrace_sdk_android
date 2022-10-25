@@ -1,10 +1,11 @@
 package io.adtrace.apptv;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -13,8 +14,6 @@ import io.adtrace.sdk.AdTrace;
 import io.adtrace.sdk.AdTraceEvent;
 
 public class MainActivity extends AppCompatActivity {
-
-
     private static final String EVENT_TOKEN_SIMPLE = "xyz123";
     private static final String EVENT_TOKEN_REVENUE = "a1b2c3";
     private static final String EVENT_TOKEN_CALLBACK = "x1y2z3";
