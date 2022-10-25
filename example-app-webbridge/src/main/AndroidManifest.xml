@@ -3,7 +3,7 @@
     package="io.adtrace.webbridge">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
     <application
         android:allowBackup="true"
@@ -12,10 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Adtrace_sdk_android"
-        android:networkSecurityConfig="@xml/network_security_config"
-        >
-        <activity
-            android:name=".MainActivity"
+        android:networkSecurityConfig="@xml/network_security_config">
+        <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
