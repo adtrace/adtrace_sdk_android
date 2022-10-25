@@ -59,7 +59,7 @@ public interface Constants {
     String CALLBACK_PARAMETERS = "callback_params";
     String PARTNER_PARAMETERS = "partner_params";
 
-    String FCM_PAYLOAD_KEY = "adjust_purpose";
+    String FCM_PAYLOAD_KEY = "adtrace_purpose";
 
     String FCM_PAYLOAD_VALUE = "uninstall detection";
 
