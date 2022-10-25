@@ -3,26 +3,24 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "io.adtrace.webbridge"
-        minSdk 17
-        targetSdk 32
+        minSdkVersion 17
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
-
-     }
-
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    lintOptions {
-        abortOnError false
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 }
 
@@ -32,8 +30,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation 'com.android.installreferrer:installreferrer:2.2'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'com.android.support:multidex:2.0.1'
 
     implementation project(':android-sdk')
     implementation project(':android-sdk-plugin-webbridge')
