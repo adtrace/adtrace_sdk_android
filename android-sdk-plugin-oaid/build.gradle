@@ -2,6 +2,15 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+repositories {
+    maven {
+        url "https://oss.sonatype.org/content/repositories/staging/"
+    }
+    maven {
+        url "https://developer.huawei.com/repo/"
+    }
+}
+
 android {
     compileSdkVersion rootProject.ext.coreCompileSdkVersion
 
@@ -9,16 +18,15 @@ android {
         minSdkVersion rootProject.ext.coreMinSdkVersion
         targetSdkVersion rootProject.ext.coreTargetSdkVersion
     }
-
-
 }
 
 dependencies {
-    compileOnly files('libs/oaid_sdk_1.1.0.aar')
+    compileOnly files('libs/oaid_sdk_2.0.0.aar')
     // Add SDK via module.
     compileOnly project(':android-sdk')
     // Add SDK via Maven.
     // implementation 'io.adtrace:android-sdk:2.3.0'
+    implementation 'com.huawei.hms:ads-identifier:3.4.56.300'
 }
 
 // read local properties
@@ -157,8 +165,6 @@ model {
     }
     */
 }
-
-
 
 signing {
     sign configurations.archives
