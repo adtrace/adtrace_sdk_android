@@ -160,6 +160,9 @@ model {
         dependsOn project.tasks.signArchives
     }
     */
+    tasks.generatePomFileForMavenAndroidWebBridgeAarPublication {
+        destination = file("${project.buildDir}/generated-pom.xml")
+    }
 }
 
 signing {
