@@ -26,7 +26,7 @@ public class MsaSdkClient {
                             // so to avoid waiting for timeout
                             oaidHolder.offer("");
                         } else {
-                            oaidHolder.offer(idSupplier.getOAID());
+                            oaidInfoHolder.offer(new OaidInfo(idSupplier.getOAID(), !idSupplier.isLimited()));
                         }
                     } catch (Exception e) {
                         logger.error("Fail to add %s", e.getMessage());
