@@ -1,8 +1,4 @@
-
 package io.adtrace.sdk;
-
-import static io.adtrace.sdk.Constants.ENCODING;
-import static io.adtrace.sdk.Constants.SHA256;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -13,13 +9,14 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.LocaleList;
-import android.os.Looper;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+
+import io.adtrace.sdk.scheduler.AsyncTaskExecutor;
+import io.adtrace.sdk.scheduler.SingleThreadFutureScheduler;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -40,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -50,8 +48,8 @@ import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.adtrace.sdk.scheduler.AsyncTaskExecutor;
-import io.adtrace.sdk.scheduler.SingleThreadFutureScheduler;
+import static io.adtrace.sdk.Constants.ENCODING;
+import static io.adtrace.sdk.Constants.SHA256;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -481,6 +479,18 @@ public class Util {
         return true;
     }
 
+    public static boolean isAdTraceUninstallDetectionPayload(Map<String, String> payload) {
+        if (payload == null) {
+            return false;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return payload.size() == 1 &&
+              Objects.equals(payload.get(Constants.FCM_PAYLOAD_KEY), Constants.FCM_PAYLOAD_VALUE);
+        }else{
+            return false;
+        }
+    }
+
     public static Map<String, String> mergeParameters(Map<String, String> target,
                                                       Map<String, String> source,
                                                       String parameterName) {
@@ -749,6 +759,8 @@ public class Util {
             return isEqualHuaweiReferrerAdsDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_HUAWEI_APP_GALLERY)) {
             return isEqualHuaweiReferrerAppGalleryDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_SAMSUNG)) {
+            return isEqualSamsungReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_XIAOMI)) {
             return isEqualXiaomiReferrerDetails(referrerDetails, activityState);
         }
@@ -837,12 +849,20 @@ public class Util {
                 && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerHuaweiAppGallery);
     }
 
+    private static boolean isEqualSamsungReferrerDetails(final ReferrerDetails referrerDetails,
+                                                         final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeSamsung
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginSamsung
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerSamsung);
+    }
+
     private static boolean isEqualXiaomiReferrerDetails(final ReferrerDetails referrerDetails,
                                                         final ActivityState activityState) {
         return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeXiaomi
                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginXiaomi
                && referrerDetails.referrerClickTimestampServerSeconds == activityState.clickTimeServerXiaomi
                && referrerDetails.installBeginTimestampServerSeconds == activityState.installBeginServerXiaomi
-               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerXiaomi);
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerXiaomi)
+               && Util.equalString(referrerDetails.installVersion, activityState.installVersionXiaomi);
     }
 }
