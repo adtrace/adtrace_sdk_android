@@ -35,6 +35,7 @@ import java.util.Properties;
 
 import static io.adtrace.sdk.Constants.ACTIVITY_STATE_FILENAME;
 import static io.adtrace.sdk.Constants.ATTRIBUTION_FILENAME;
+import static io.adtrace.sdk.Constants.REFERRER_API_SAMSUNG;
 import static io.adtrace.sdk.Constants.REFERRER_API_XIAOMI;
 import static io.adtrace.sdk.Constants.SESSION_CALLBACK_PARAMETERS_FILENAME;
 import static io.adtrace.sdk.Constants.SESSION_PARTNER_PARAMETERS_FILENAME;

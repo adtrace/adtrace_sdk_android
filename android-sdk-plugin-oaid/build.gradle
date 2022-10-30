@@ -3,11 +3,10 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 repositories {
+    mavenCentral()
+    google()
     maven {
-        url "https://oss.sonatype.org/content/repositories/staging/"
-    }
-    maven {
-        url "https://developer.huawei.com/repo/"
+        url 'https://developer.huawei.com/repo/'
     }
 }
 
