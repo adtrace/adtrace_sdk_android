@@ -13,8 +13,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class MsaSdkClient {
-    public static OaidInfo getOaidInfo(Context context, final ILogger logger, long maxWaitTimeInMilli) {
-        final BlockingQueue<OaidInfo> oaidInfoHolder = new LinkedBlockingQueue<OaidInfo>(1);
+    public static String getOaid(Context context, final ILogger logger, long maxWaitTimeInMilli) {
+        final BlockingQueue<String> oaidHolder = new LinkedBlockingQueue<String>(1);
 
         try {
             boolean msaInternalLogging = false;
@@ -24,9 +24,9 @@ public class MsaSdkClient {
                     try {
                         if (idSupplier == null || idSupplier.getOAID() == null) {
                             // so to avoid waiting for timeout
-                            oaidInfoHolder.offer(new OaidInfo(null, false));
+                            oaidHolder.offer("");
                         } else {
-                            oaidInfoHolder.offer(new OaidInfo(idSupplier.getOAID(), !idSupplier.isLimited()));
+                            oaidHolder.offer(idSupplier.getOAID());
                         }
                     } catch (Exception e) {
                         logger.error("Fail to add %s", e.getMessage());
@@ -35,10 +35,10 @@ public class MsaSdkClient {
             });
 
             if (!isError(result, logger)) {
-                return oaidInfoHolder.poll(maxWaitTimeInMilli, TimeUnit.MILLISECONDS);
+                return oaidHolder.poll(maxWaitTimeInMilli, TimeUnit.MILLISECONDS);
             }
         } catch (NoClassDefFoundError ex) {
-          logger.error("Couldn't find msa sdk " + ex.getMessage());
+            logger.error("Couldn't find msa sdk " + ex.getMessage());
         } catch (InterruptedException e) {
             logger.error("Waiting to read oaid from callback interrupted: %s",
                     e.getMessage());
