@@ -36,6 +36,7 @@ import java.util.Properties;
 import static io.adtrace.sdk.Constants.ACTIVITY_STATE_FILENAME;
 import static io.adtrace.sdk.Constants.ATTRIBUTION_FILENAME;
 import static io.adtrace.sdk.Constants.REFERRER_API_SAMSUNG;
+import static io.adtrace.sdk.Constants.REFERRER_API_VIVO;
 import static io.adtrace.sdk.Constants.REFERRER_API_XIAOMI;
 import static io.adtrace.sdk.Constants.SESSION_CALLBACK_PARAMETERS_FILENAME;
 import static io.adtrace.sdk.Constants.SESSION_PARTNER_PARAMETERS_FILENAME;
@@ -1258,6 +1259,7 @@ public class ActivityHandler implements IActivityHandler {
             installReferrerHuawei.readReferrer();
             readInstallReferrerSamsung();
             readInstallReferrerXiaomi();
+            readInstallReferrerVivo();
 
             return;
         }
@@ -1284,6 +1286,18 @@ public class ActivityHandler implements IActivityHandler {
                 ReferrerDetails referrerDetails = Reflection.getXiaomiReferrer(getContext(), logger);
                 if (referrerDetails != null) {
                     sendInstallReferrer(referrerDetails, REFERRER_API_XIAOMI);
+                }
+            }
+        });
+    }
+
+    private void readInstallReferrerVivo() {
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                ReferrerDetails referrerDetails = Reflection.getVivoReferrer(getContext(), logger);
+                if (referrerDetails != null) {
+                    sendInstallReferrer(referrerDetails, REFERRER_API_VIVO);
                 }
             }
         });
@@ -1717,6 +1731,7 @@ public class ActivityHandler implements IActivityHandler {
         installReferrerHuawei.readReferrer();
         readInstallReferrerSamsung();
         readInstallReferrerXiaomi();
+        readInstallReferrerVivo();
     }
 
     private void setOfflineModeI(boolean offline) {
@@ -2643,6 +2658,20 @@ public class ActivityHandler implements IActivityHandler {
             activityState.clickTimeServerXiaomi = responseData.clickTimeServer;
             activityState.installBeginServerXiaomi = responseData.installBeginServer;
             activityState.installVersionXiaomi = responseData.installVersion;
+
+            writeActivityStateI();
+            return;
+        }
+
+        boolean isInstallReferrerVivo =
+                responseData.referrerApi != null &&
+                (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_VIVO));
+
+        if (isInstallReferrerVivo) {
+            activityState.clickTimeVivo = responseData.clickTime;
+            activityState.installBeginVivo = responseData.installBegin;
+            activityState.installReferrerVivo = responseData.installReferrer;
+            activityState.installVersionVivo = responseData.installVersion;
 
             writeActivityStateI();
             return;

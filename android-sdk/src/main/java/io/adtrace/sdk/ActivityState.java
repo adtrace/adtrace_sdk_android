@@ -59,6 +59,10 @@ public class ActivityState implements Serializable, Cloneable {
             new ObjectStreamField("clickTimeSamsung", long.class),
             new ObjectStreamField("installBeginSamsung", long.class),
             new ObjectStreamField("installReferrerSamsung", String.class),
+            new ObjectStreamField("clickTimeVivo", long.class),
+            new ObjectStreamField("installBeginVivo", long.class),
+            new ObjectStreamField("installReferrerVivo", String.class),
+            new ObjectStreamField("installVersionVivo", String.class),
     };
 
     // persistent data
@@ -112,6 +116,11 @@ public class ActivityState implements Serializable, Cloneable {
     protected long installBeginSamsung;
     protected String installReferrerSamsung;
 
+    protected long clickTimeVivo;
+    protected long installBeginVivo;
+    protected String installReferrerVivo;
+    protected String installVersionVivo;
+
     protected ActivityState() {
         logger = AdTraceFactory.getLogger();
         // create UUID for new devices
@@ -152,6 +161,10 @@ public class ActivityState implements Serializable, Cloneable {
         clickTimeSamsung = 0;
         installBeginSamsung = 0;
         installReferrerSamsung = null;
+        clickTimeVivo = 0;
+        installBeginVivo = 0;
+        installReferrerVivo = null;
+        installVersionVivo = null;
     }
 
     protected void resetSessionAttributes(long now) {
@@ -231,6 +244,10 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalLong(clickTimeSamsung, otherActivityState.clickTimeSamsung)) return false;
         if (!Util.equalLong(installBeginSamsung, otherActivityState.installBeginSamsung)) return false;
         if (!Util.equalString(installReferrerSamsung, otherActivityState.installReferrerSamsung)) return false;
+        if (!Util.equalLong(clickTimeVivo, otherActivityState.clickTimeVivo)) return false;
+        if (!Util.equalLong(installBeginVivo, otherActivityState.installBeginVivo)) return false;
+        if (!Util.equalString(installReferrerVivo, otherActivityState.installReferrerVivo)) return false;
+        if (!Util.equalString(installVersionVivo, otherActivityState.installVersionVivo)) return false;
         return true;
     }
 
@@ -323,6 +340,11 @@ public class ActivityState implements Serializable, Cloneable {
         clickTimeSamsung = Util.readLongField(fields, "clickTimeSamsung", -1l);
         installBeginSamsung = Util.readLongField(fields, "installBeginSamsung", -1l);
         installReferrerSamsung = Util.readStringField(fields, "installReferrerSamsung", null);
+
+        clickTimeVivo = Util.readLongField(fields, "clickTimeVivo", -1l);
+        installBeginVivo = Util.readLongField(fields, "installBeginVivo", -1l);
+        installReferrerVivo = Util.readStringField(fields, "installReferrerVivo", null);
+        installVersionVivo = Util.readStringField(fields, "installVersionVivo", null);
 
         // create UUID for migrating devices
         if (uuid == null) {
