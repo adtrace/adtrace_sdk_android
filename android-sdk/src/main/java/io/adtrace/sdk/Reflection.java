@@ -93,7 +93,7 @@ public class Reflection {
     public static ReferrerDetails getVivoReferrer(Context context, ILogger logger) {
         ReferrerDetails referrerDetails = null;
         try {
-            referrerDetails = (ReferrerDetails) invokeStaticMethod("com.adjust.sdk.vivo.Util",
+            referrerDetails = (ReferrerDetails) invokeStaticMethod("io.adtrace.sdk.vivo.Util",
                                                                    "getVivoInstallReferrerDetails",
                                                                    new Class[]{Context.class, ILogger.class},
                                                                    context, logger);

@@ -98,9 +98,9 @@ public class AdTrace {
     }
 
     /**
-     * Get information if the payload originates from Adjust.
+     * Get information if the payload originates from AdTrace.
      *
-     * @return boolean indicating whether payload originates from Adjust or not.
+     * @return boolean indicating whether payload originates from AdTrace or not.
      */
     public static boolean isAdTraceUninstallDetectionPayload(Map<String, String> payload) {
         return Util.isAdTraceUninstallDetectionPayload(payload);
