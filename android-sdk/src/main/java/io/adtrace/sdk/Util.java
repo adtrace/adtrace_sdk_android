@@ -765,60 +765,60 @@ public class Util {
         return false;
     }
 
-    public static boolean canReadPlayIds(final AdTraceConfig adtracConfig) {
-        if (adtracConfig.playStoreKidsAppEnabled) {
+    public static boolean canReadPlayIds(final AdTraceConfig adtraceConfig) {
+        if (adtraceConfig.playStoreKidsAppEnabled) {
             return false;
         }
 
-        if (adtracConfig.coppaCompliantEnabled) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static boolean canReadNonPlayIds(final AdTraceConfig adtracConfig) {
-        if (adtracConfig.playStoreKidsAppEnabled) {
-            return false;
-        }
-
-        if (adtracConfig.coppaCompliantEnabled) {
+        if (adtraceConfig.coppaCompliantEnabled) {
             return false;
         }
 
         return true;
     }
 
-    public static Map<String, String> getImeiParameters(final AdTraceConfig adtracConfig, ILogger logger) {
-        if (adtracConfig.coppaCompliantEnabled) {
-            return null;
+    public static boolean canReadNonPlayIds(final AdTraceConfig adtraceConfig) {
+        if (adtraceConfig.playStoreKidsAppEnabled) {
+            return false;
         }
 
-        return Reflection.getImeiParameters(adtracConfig.context, logger);
+        if (adtraceConfig.coppaCompliantEnabled) {
+            return false;
+        }
+
+        return true;
     }
 
-    public static Map<String, String> getOaidParameters(final AdTraceConfig adtracConfig, ILogger logger) {
-        if (adtracConfig.coppaCompliantEnabled) {
+    public static Map<String, String> getImeiParameters(final AdTraceConfig adtraceConfig, ILogger logger) {
+        if (adtraceConfig.coppaCompliantEnabled) {
             return null;
         }
 
-        return Reflection.getOaidParameters(adtracConfig.context, logger);
+        return Reflection.getImeiParameters(adtraceConfig.context, logger);
     }
 
-    public static String getFireAdvertisingId(final AdTraceConfig adtracConfig) {
-        if (adtracConfig.coppaCompliantEnabled) {
+    public static Map<String, String> getOaidParameters(final AdTraceConfig adtraceConfig, ILogger logger) {
+        if (adtraceConfig.coppaCompliantEnabled) {
             return null;
         }
 
-        return getFireAdvertisingId(adtracConfig.context.getContentResolver());
+        return Reflection.getOaidParameters(adtraceConfig.context, logger);
     }
 
-    public static Boolean getFireTrackingEnabled(final AdTraceConfig adtracConfig) {
-        if (adtracConfig.coppaCompliantEnabled) {
+    public static String getFireAdvertisingId(final AdTraceConfig adtraceConfig) {
+        if (adtraceConfig.coppaCompliantEnabled) {
             return null;
         }
 
-        return getFireTrackingEnabled(adtracConfig.context.getContentResolver());
+        return getFireAdvertisingId(adtraceConfig.context.getContentResolver());
+    }
+
+    public static Boolean getFireTrackingEnabled(final AdTraceConfig adtraceConfig) {
+        if (adtraceConfig.coppaCompliantEnabled) {
+            return null;
+        }
+
+        return getFireTrackingEnabled(adtraceConfig.context.getContentResolver());
     }
 
     private static boolean isEqualGoogleReferrerDetails(final ReferrerDetails referrerDetails,

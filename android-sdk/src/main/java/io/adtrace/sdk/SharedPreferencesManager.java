@@ -1,11 +1,11 @@
 package io.adtrace.sdk;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
