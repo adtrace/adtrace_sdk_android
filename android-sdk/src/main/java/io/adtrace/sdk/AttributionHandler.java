@@ -1,15 +1,20 @@
 package io.adtrace.sdk;
 
 import android.net.Uri;
-import org.json.JSONObject;
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
 
 import io.adtrace.sdk.network.IActivityPackageSender;
 import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
 import io.adtrace.sdk.scheduler.ThreadScheduler;
 import io.adtrace.sdk.scheduler.TimerOnce;
+
+import org.json.JSONObject;
+
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
 
 /**
  * AdTrace android SDK (https://adtrace.io)
