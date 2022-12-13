@@ -1,8 +1,5 @@
 package io.adtrace.sdk;
 
-import static io.adtrace.sdk.Constants.ENCODING;
-import static io.adtrace.sdk.Constants.MALFORMED;
-
 import android.net.Uri;
 import android.net.UrlQuerySanitizer;
 
@@ -11,6 +8,9 @@ import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static io.adtrace.sdk.Constants.ENCODING;
+import static io.adtrace.sdk.Constants.MALFORMED;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -25,7 +25,7 @@ public class PackageFactory {
     public static ActivityPackage buildReftagSdkClickPackage(final String rawReferrer,
                                                               final long clickTime,
                                                               final ActivityState activityState,
-                                                              final AdTraceConfig adTraceConfig,
+                                                              final AdTraceConfig adtraceConfig,
                                                               final DeviceInfo deviceInfo,
                                                               final SessionParameters sessionParameters) {
         if (rawReferrer == null || rawReferrer.length() == 0) {
@@ -57,7 +57,7 @@ public class PackageFactory {
         PackageBuilder clickPackageBuilder = queryStringClickPackageBuilder(
                 querySanitizer.getParameterList(),
                 activityState,
-                adTraceConfig,
+                adtraceConfig,
                 deviceInfo,
                 sessionParameters);
 
@@ -77,7 +77,7 @@ public class PackageFactory {
     public static ActivityPackage buildDeeplinkSdkClickPackage(final Uri url,
                                                               final long clickTime,
                                                               final ActivityState activityState,
-                                                              final AdTraceConfig adTraceConfig,
+                                                              final AdTraceConfig adtraceConfig,
                                                               final DeviceInfo deviceInfo,
                                                               final SessionParameters sessionParameters) {
         if (url == null) {
@@ -115,7 +115,7 @@ public class PackageFactory {
         PackageBuilder clickPackageBuilder = queryStringClickPackageBuilder(
                 querySanitizer.getParameterList(),
                 activityState,
-                adTraceConfig,
+                adtraceConfig,
                 deviceInfo,
                 sessionParameters);
 
@@ -134,13 +134,13 @@ public class PackageFactory {
     public static ActivityPackage buildInstallReferrerSdkClickPackage(final ReferrerDetails referrerDetails,
                                                                       final String referrerApi,
                                                                       final ActivityState activityState,
-                                                                      final AdTraceConfig adTraceConfig,
+                                                                      final AdTraceConfig adtraceConfig,
                                                                       final DeviceInfo deviceInfo,
                                                                       final SessionParameters sessionParameters) {
         long now = System.currentTimeMillis();
 
         PackageBuilder clickPackageBuilder = new PackageBuilder(
-                adTraceConfig,
+                adtraceConfig,
                 deviceInfo,
                 activityState,
                 sessionParameters,
@@ -163,7 +163,7 @@ public class PackageFactory {
     public static ActivityPackage buildPreinstallSdkClickPackage(final String preinstallPayload,
                                                                  final String preinstallLocation,
                                                                  final ActivityState activityState,
-                                                                 final AdTraceConfig adTraceConfig,
+                                                                 final AdTraceConfig adtraceConfig,
                                                                  final DeviceInfo deviceInfo,
                                                                  final SessionParameters sessionParameters) {
         if (preinstallPayload == null || preinstallPayload.length() == 0) {
@@ -173,7 +173,7 @@ public class PackageFactory {
         long now = System.currentTimeMillis();
 
         PackageBuilder clickPackageBuilder = new PackageBuilder(
-                adTraceConfig,
+                adtraceConfig,
                 deviceInfo,
                 activityState,
                 sessionParameters,
@@ -190,7 +190,7 @@ public class PackageFactory {
     private static PackageBuilder queryStringClickPackageBuilder(
             final List<UrlQuerySanitizer.ParameterValuePair> queryList,
             final ActivityState activityState,
-            final AdTraceConfig adTraceConfig,
+            final AdTraceConfig adtraceConfig,
             final DeviceInfo deviceInfo,
             final SessionParameters sessionParameters) {
         if (queryList == null) {
@@ -219,7 +219,7 @@ public class PackageFactory {
         }
 
         PackageBuilder builder = new PackageBuilder(
-                adTraceConfig,
+                adtraceConfig,
                 deviceInfo,
                 activityState,
                 sessionParameters,
