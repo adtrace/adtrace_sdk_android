@@ -5,6 +5,8 @@ import static io.adtrace.sdk.AdTraceConfig.DATA_RESIDENCY_TR;
 import static io.adtrace.sdk.AdTraceConfig.DATA_RESIDENCY_US;
 import static io.adtrace.sdk.AdTraceConfig.URL_STRATEGY_CHINA;
 import static io.adtrace.sdk.AdTraceConfig.URL_STRATEGY_INDIA;
+import static io.adtrace.sdk.AdTraceConfig.URL_STRATEGY_CN;
+
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,6 +31,10 @@ public class UrlStrategy {
     private static final String BASE_URL_CHINA = "https://app.adtrace.world";
     private static final String GDPR_URL_CHINA = "https://gdpr.adtrace.world";
     private static final String SUBSCRIPTION_URL_CHINA = "https://subscription.adtrace.world";
+
+    private static final String BASE_URL_CN = "https://app.adtrace.cn";
+    private static final String GDPR_URL_CN = "https://gdpr.adtrace.com";
+    private static final String SUBSCRIPTION_URL_CN = "https://subscription.adtrace.com";
 
     private static final String BASE_URL_EU = "https://app.eu.adtrace.com";
     private static final String GDPR_URL_EU = "https://gdpr.eu.adtrace.com";
@@ -143,6 +149,8 @@ public class UrlStrategy {
             return Arrays.asList(BASE_URL_INDIA, Constants.BASE_URL);
         } else if (URL_STRATEGY_CHINA.equals(urlStrategy)) {
             return Arrays.asList(BASE_URL_CHINA, Constants.BASE_URL);
+        } else if (URL_STRATEGY_CN.equals(urlStrategy)) {
+            return Arrays.asList(BASE_URL_CN, Constants.BASE_URL);
         } else if (DATA_RESIDENCY_EU.equals(urlStrategy)) {
             return Collections.singletonList(BASE_URL_EU);
         } else if (DATA_RESIDENCY_TR.equals(urlStrategy)) {
@@ -159,6 +167,8 @@ public class UrlStrategy {
             return Arrays.asList(GDPR_URL_INDIA, Constants.GDPR_URL);
         } else if (URL_STRATEGY_CHINA.equals(urlStrategy)) {
             return Arrays.asList(GDPR_URL_CHINA, Constants.GDPR_URL);
+        } else if (URL_STRATEGY_CN.equals(urlStrategy)) {
+            return Arrays.asList(GDPR_URL_CN, Constants.GDPR_URL);
         } else if (DATA_RESIDENCY_EU.equals(urlStrategy)) {
             return Collections.singletonList(GDPR_URL_EU);
         } else if (DATA_RESIDENCY_TR.equals(urlStrategy)) {
@@ -175,6 +185,8 @@ public class UrlStrategy {
             return Arrays.asList(SUBSCRIPTION_URL_INDIA, Constants.SUBSCRIPTION_URL);
         } else if (URL_STRATEGY_CHINA.equals(urlStrategy)) {
             return Arrays.asList(SUBSCRIPTION_URL_CHINA, Constants.SUBSCRIPTION_URL);
+        } else if (URL_STRATEGY_CN.equals(urlStrategy)) {
+            return Arrays.asList(SUBSCRIPTION_URL_CN, Constants.SUBSCRIPTION_URL);
         } else if (DATA_RESIDENCY_EU.equals(urlStrategy)) {
             return Collections.singletonList(SUBSCRIPTION_URL_EU);
         } else if (DATA_RESIDENCY_TR.equals(urlStrategy)) {
