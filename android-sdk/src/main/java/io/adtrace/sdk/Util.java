@@ -822,7 +822,7 @@ public class Util {
     }
 
     private static boolean isEqualGoogleReferrerDetails(final ReferrerDetails referrerDetails,
-                                                        final ActivityState activityState) {
+                                                       final ActivityState activityState) {
         return referrerDetails.referrerClickTimestampSeconds == activityState.clickTime
                 && referrerDetails.installBeginTimestampSeconds == activityState.installBegin
                 && referrerDetails.referrerClickTimestampServerSeconds == activityState.clickTimeServer
@@ -842,8 +842,8 @@ public class Util {
     private static boolean isEqualHuaweiReferrerAppGalleryDetails(final ReferrerDetails referrerDetails,
                                                                   final ActivityState activityState) {
         return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeHuawei
-                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginHuawei
-                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerHuaweiAppGallery);
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginHuawei
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerHuaweiAppGallery);
     }
 
     private static boolean isEqualSamsungReferrerDetails(final ReferrerDetails referrerDetails,
