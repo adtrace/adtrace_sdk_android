@@ -1,5 +1,9 @@
 package io.adtrace.sdk;
 
+import io.adtrace.sdk.network.IActivityPackageSender;
+import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
+import io.adtrace.sdk.scheduler.ThreadScheduler;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -8,10 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.adtrace.sdk.network.IActivityPackageSender;
-import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
-import io.adtrace.sdk.scheduler.ThreadScheduler;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
