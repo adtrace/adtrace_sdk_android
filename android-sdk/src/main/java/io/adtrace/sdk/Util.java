@@ -354,46 +354,46 @@ public class Util {
         return equalObject(first, second);
     }
 
-    public static int hashBoolean(Boolean value) {
+    public static int hashBoolean(Boolean value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashLong(Long value) {
+    public static int hashLong(Long value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashDouble(Double value) {
+    public static int hashDouble(Double value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashString(String value) {
+    public static int hashString(String value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashEnum(Enum value) {
+    public static int hashEnum(Enum value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashObject(Object value) {
+    public static int hashObject(Object value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
     public static String sha256(final String text) {
@@ -483,12 +483,8 @@ public class Util {
         if (payload == null) {
             return false;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return payload.size() == 1 &&
-              Objects.equals(payload.get(Constants.FCM_PAYLOAD_KEY), Constants.FCM_PAYLOAD_VALUE);
-        }else{
-            return false;
-        }
+        return payload.size() == 1 &&
+          Objects.equals(payload.get(Constants.FCM_PAYLOAD_KEY), Constants.FCM_PAYLOAD_VALUE);
     }
 
     public static Map<String, String> mergeParameters(Map<String, String> target,
@@ -749,7 +745,6 @@ public class Util {
         }
     }
 
-
     public static boolean isEqualReferrerDetails(final ReferrerDetails referrerDetails,
                                                  final String referrerApi,
                                                  final ActivityState activityState) {
@@ -763,6 +758,8 @@ public class Util {
             return isEqualSamsungReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_XIAOMI)) {
             return isEqualXiaomiReferrerDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_VIVO)) {
+            return isEqualVivoReferrerDetails(referrerDetails, activityState);
         }
 
         return false;
@@ -864,5 +861,13 @@ public class Util {
                && referrerDetails.installBeginTimestampServerSeconds == activityState.installBeginServerXiaomi
                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerXiaomi)
                && Util.equalString(referrerDetails.installVersion, activityState.installVersionXiaomi);
+    }
+
+    private static boolean isEqualVivoReferrerDetails(final ReferrerDetails referrerDetails,
+                                                        final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeVivo
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginVivo
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerVivo)
+               && Util.equalString(referrerDetails.installVersion, activityState.installVersionVivo);
     }
 }
