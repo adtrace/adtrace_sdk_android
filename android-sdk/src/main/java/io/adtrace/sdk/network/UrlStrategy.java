@@ -1,19 +1,18 @@
 package io.adtrace.sdk.network;
 
-import static io.adtrace.sdk.AdTraceConfig.DATA_RESIDENCY_EU;
-import static io.adtrace.sdk.AdTraceConfig.DATA_RESIDENCY_TR;
-import static io.adtrace.sdk.AdTraceConfig.DATA_RESIDENCY_US;
-import static io.adtrace.sdk.AdTraceConfig.URL_STRATEGY_CHINA;
-import static io.adtrace.sdk.AdTraceConfig.URL_STRATEGY_INDIA;
-import static io.adtrace.sdk.AdTraceConfig.URL_STRATEGY_CN;
-
+import io.adtrace.sdk.ActivityKind;
+import io.adtrace.sdk.Constants;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import io.adtrace.sdk.ActivityKind;
-import io.adtrace.sdk.Constants;
+import static io.adtrace.sdk.AdTraceConfig.DATA_RESIDENCY_TR;
+import static io.adtrace.sdk.AdTraceConfig.DATA_RESIDENCY_US;
+import static io.adtrace.sdk.AdTraceConfig.URL_STRATEGY_CHINA;
+import static io.adtrace.sdk.AdTraceConfig.URL_STRATEGY_CN;
+import static io.adtrace.sdk.AdTraceConfig.URL_STRATEGY_INDIA;
+import static io.adtrace.sdk.AdTraceConfig.DATA_RESIDENCY_EU;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -23,7 +22,6 @@ import io.adtrace.sdk.Constants;
  */
 
 public class UrlStrategy {
-    //todo:
     private static final String BASE_URL_INDIA = "https://app.adtrace.net.in";
     private static final String GDPR_URL_INDIA = "https://gdpr.adtrace.net.in";
     private static final String SUBSCRIPTION_URL_INDIA = "https://subscription.adtrace.net.in";

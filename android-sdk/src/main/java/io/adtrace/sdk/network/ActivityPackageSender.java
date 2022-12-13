@@ -1,9 +1,20 @@
 package io.adtrace.sdk.network;
 
-
-
-
 import android.net.Uri;
+
+import io.adtrace.sdk.ActivityKind;
+import io.adtrace.sdk.ActivityPackage;
+import io.adtrace.sdk.AdTraceAttribution;
+import io.adtrace.sdk.AdTraceFactory;
+import io.adtrace.sdk.Constants;
+import io.adtrace.sdk.ILogger;
+import io.adtrace.sdk.ResponseData;
+import io.adtrace.sdk.TrackingState;
+import io.adtrace.sdk.Util;
+import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
+import io.adtrace.sdk.scheduler.ThreadExecutor;
+import io.adtrace.sdk.network.UtilNetworking.IHttpsURLConnectionProvider;
+import io.adtrace.sdk.network.UtilNetworking.IConnectionOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,21 +35,6 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLHandshakeException;
-
-import io.adtrace.sdk.ActivityKind;
-import io.adtrace.sdk.ActivityPackage;
-import io.adtrace.sdk.AdTraceAttribution;
-import io.adtrace.sdk.AdTraceFactory;
-import io.adtrace.sdk.Constants;
-import io.adtrace.sdk.ILogger;
-import io.adtrace.sdk.ResponseData;
-import io.adtrace.sdk.TrackingState;
-import io.adtrace.sdk.Util;
-import io.adtrace.sdk.network.UtilNetworking.IConnectionOptions;
-import io.adtrace.sdk.network.UtilNetworking.IHttpsURLConnectionProvider;
-import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
-import io.adtrace.sdk.scheduler.ThreadExecutor;
-
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -596,7 +592,7 @@ public class ActivityPackageSender implements IActivityPackageSender {
         String signatureHeader = Util.formatString("signature=\"%s\"", signature);
         String secretIdHeader  = Util.formatString("secret_id=\"%s\"", secretId);
         String idHeader        = Util.formatString("headers_id=\"%s\"", headersId);
-        String algorithmHeader = Util.formatString("algorithm=\"%s\"", algorithm != null ? algorithm : "adtrce1");
+        String algorithmHeader = Util.formatString("algorithm=\"%s\"", algorithm != null ? algorithm : "adtrace1");
         String nativeVersionHeader = Util.formatString("native_version=\"%s\"", nativeVersion != null ? nativeVersion : "");
 
         String authorizationHeader = Util.formatString("Signature %s,%s,%s,%s,%s",

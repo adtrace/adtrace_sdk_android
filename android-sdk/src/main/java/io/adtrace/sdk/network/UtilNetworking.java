@@ -1,16 +1,15 @@
 package io.adtrace.sdk.network;
 
+import io.adtrace.sdk.AdTraceFactory;
+import io.adtrace.sdk.Constants;
+import io.adtrace.sdk.ILogger;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import io.adtrace.sdk.AdTraceFactory;
-import io.adtrace.sdk.Constants;
-import io.adtrace.sdk.ILogger;
-
 
 /**
  * AdTrace android SDK (https://adtrace.io)
