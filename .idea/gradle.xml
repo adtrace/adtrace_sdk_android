@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/android-sdk-imei-plugin" />
             <option value="$PROJECT_DIR$/android-sdk-plugin-oaid" />
             <option value="$PROJECT_DIR$/android-sdk-plugin-webbridge" />
+            <option value="$PROJECT_DIR$/android-sdk-samsung-plugin" />
             <option value="$PROJECT_DIR$/example-app-java" />
             <option value="$PROJECT_DIR$/example-app-kotlin" />
             <option value="$PROJECT_DIR$/example-app-tv" />

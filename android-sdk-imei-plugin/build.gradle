@@ -145,14 +145,14 @@ def customizePom(pom) {
 }
 
 model {
-    tasks.generatePomFileForMavenAndroidOaidPublication {
+    tasks.generatePomFileForMavenAndroidImeiPublication {
         destination = file("${project.buildDir}/generated-pom.xml")
     }
     /* TODO check if/how to replace this tasks
-    tasks.publishMavenAndroidOaidPublicationToMavenLocal {
+    tasks.publishMavenAndroidImeiPublicationToMavenLocal {
         dependsOn project.tasks.signArchives
     }
-    tasks.publishMavenAndroidOaidPublicationToMavenRepository {
+    tasks.publishMavenAndroidImeiPublicationToMavenRepository {
         dependsOn project.tasks.signArchives
     }
     */
