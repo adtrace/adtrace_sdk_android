@@ -13,13 +13,14 @@ ext {
     defaultVersionCode = 1
     webbridgeMinSdkVersion = 17
     samsungReferrerMinSdkVersion = 18
+    vivoReferrerMinSdkVersion = 23
 
     // POM.
     adtraceGroupId = 'io.adtrace'
 }
 
 buildscript {
-    ext.kotlin_version = '1.7.20'
+    ext.kotlin_version = '1.6.10'
 
     repositories {
         mavenCentral()
