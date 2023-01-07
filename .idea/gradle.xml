@@ -13,6 +13,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/android-sdk" />
+            <option value="$PROJECT_DIR$/android-sdk-imei-plugin" />
             <option value="$PROJECT_DIR$/android-sdk-plugin-oaid" />
             <option value="$PROJECT_DIR$/android-sdk-plugin-webbridge" />
             <option value="$PROJECT_DIR$/example-app-java" />
