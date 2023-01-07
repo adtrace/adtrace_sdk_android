@@ -2,3 +2,5 @@ include ':android-sdk', ':android-sdk-plugin-oaid', ':android-sdk-plugin-webbrid
 include ':example-app-java', ':example-app-kotlin', ':example-app-tv', ':example-app-webbridge'
 include ':android-sdk-imei-plugin'
 include ':android-sdk-samsung-plugin'
+include ':android-sdk-xiaomi-plugin'
+include ':android-sdk-vivo-plugin'
