@@ -1,16 +1,5 @@
 package io.adtrace.sdk;
 
-import static android.content.res.Configuration.UI_MODE_TYPE_MASK;
-import static android.content.res.Configuration.UI_MODE_TYPE_TELEVISION;
-import static io.adtrace.sdk.Constants.HIGH;
-import static io.adtrace.sdk.Constants.LARGE;
-import static io.adtrace.sdk.Constants.LONG;
-import static io.adtrace.sdk.Constants.LOW;
-import static io.adtrace.sdk.Constants.MEDIUM;
-import static io.adtrace.sdk.Constants.NORMAL;
-import static io.adtrace.sdk.Constants.SMALL;
-import static io.adtrace.sdk.Constants.XLARGE;
-
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -27,6 +16,16 @@ import android.util.DisplayMetrics;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.content.res.Configuration.UI_MODE_TYPE_MASK;
+import static android.content.res.Configuration.UI_MODE_TYPE_TELEVISION;
+import static io.adtrace.sdk.Constants.HIGH;
+import static io.adtrace.sdk.Constants.LARGE;
+import static io.adtrace.sdk.Constants.LONG;
+import static io.adtrace.sdk.Constants.LOW;
+import static io.adtrace.sdk.Constants.MEDIUM;
+import static io.adtrace.sdk.Constants.NORMAL;
+import static io.adtrace.sdk.Constants.SMALL;
+import static io.adtrace.sdk.Constants.XLARGE;
 
 /**
  * AdTrace android SDK (https://adtrace.io)

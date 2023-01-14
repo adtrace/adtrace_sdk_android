@@ -1,12 +1,5 @@
 package io.adtrace.sdk;
 
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_URI_AUTHORITY;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_URI_PATH;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_FILE_SYSTEM_PATH;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PATH;
-import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PREFIX;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -26,13 +19,19 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_URI_AUTHORITY;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_CONTENT_URI_PATH;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_FILE_SYSTEM_PATH;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PATH;
+import static io.adtrace.sdk.Constants.ADTRACE_PREINSTALL_SYSTEM_PROPERTY_PREFIX;
+
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class PreinstallUtil {
 
@@ -273,20 +272,32 @@ public class PreinstallUtil {
                                                                 final String permission,
                                                                 final ILogger logger)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            List<ResolveInfo> providers = context.getPackageManager()
-                                                 .queryIntentContentProviders(
-                                                         new Intent(ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION), 0);
-            List<String> payloads = new ArrayList<String>();
-            for (ResolveInfo provider : providers) {
-                boolean permissionGranted = true;
-                if (permission != null) {
-                    int result = context.getPackageManager().checkPermission(
-                            permission, provider.providerInfo.packageName);
-                    if (result != PackageManager.PERMISSION_GRANTED) {
-                        permissionGranted = false;
-                    }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return null;
+        }
+
+        List<ResolveInfo> providers;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            providers = context.getPackageManager()
+              .queryIntentContentProviders(
+                new Intent(ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION),
+                PackageManager.ResolveInfoFlags.of(0));
+        } else {
+            providers = context.getPackageManager()
+              .queryIntentContentProviders(
+                new Intent(ADTRACE_PREINSTALL_CONTENT_PROVIDER_INTENT_ACTION), 0);
+        }
+
+        List<String> payloads = new ArrayList<String>();
+        for (ResolveInfo provider : providers) {
+            boolean permissionGranted = true;
+            if (permission != null) {
+                int result = context.getPackageManager().checkPermission(
+                        permission, provider.providerInfo.packageName);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    permissionGranted = false;
                 }
+            }
 
                 if (permissionGranted) {
                     String authority = provider.providerInfo.authority;
@@ -301,9 +312,8 @@ public class PreinstallUtil {
                 }
             }
 
-            if (!payloads.isEmpty()) {
-                return payloads;
-            }
+        if (!payloads.isEmpty()) {
+            return payloads;
         }
 
         return null;

@@ -3,8 +3,8 @@ package io.adtrace.sample;
 import android.app.Activity;
 import android.app.Application;
 import android.net.Uri;
-import android.util.Log;
 import android.os.Bundle;
+import android.util.Log;
 
 import io.adtrace.sdk.AdTrace;
 import io.adtrace.sdk.AdTraceAttribution;

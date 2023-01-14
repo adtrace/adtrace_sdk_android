@@ -51,6 +51,7 @@ public class AdTraceConfig {
 
     public static final String URL_STRATEGY_INDIA = "url_strategy_india";
     public static final String URL_STRATEGY_CHINA = "url_strategy_china";
+    public static final String URL_STRATEGY_CN = "url_strategy_cn";
     public static final String DATA_RESIDENCY_EU = "data_residency_eu";
     public static final String DATA_RESIDENCY_TR = "data_residency_tr";
     public static final String DATA_RESIDENCY_US = "data_residency_us";
@@ -213,7 +214,10 @@ public class AdTraceConfig {
         }
         if (!urlStrategy.equals(URL_STRATEGY_INDIA)
                 && !urlStrategy.equals(URL_STRATEGY_CHINA)
-                && !urlStrategy.equals(DATA_RESIDENCY_EU))
+                && !urlStrategy.equals(URL_STRATEGY_CN)
+                && !urlStrategy.equals(DATA_RESIDENCY_EU)
+                && !urlStrategy.equals(DATA_RESIDENCY_TR)
+                && !urlStrategy.equals(DATA_RESIDENCY_US))
         {
             logger.warn("Unrecognised url strategy %s", urlStrategy);
         }

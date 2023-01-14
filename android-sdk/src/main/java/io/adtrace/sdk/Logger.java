@@ -1,13 +1,12 @@
 
-
 package io.adtrace.sdk;
-
-import static io.adtrace.sdk.Constants.LOGTAG;
 
 import android.util.Log;
 
 import java.util.Arrays;
 import java.util.Locale;
+
+import static io.adtrace.sdk.Constants.LOGTAG;
 
 /**
  * AdTrace android SDK (https://adtrace.io)

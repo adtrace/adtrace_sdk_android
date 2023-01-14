@@ -12,8 +12,8 @@ To enable the AdTrace SDK to collect and track OAID, follow these steps. To only
 If you are using Maven, add the following OAID plugin dependency to your `build.gradle` file next to the existing AdTrace SDK dependency:
 
 ```groovy
-implementation 'io.adtrace:android-sdk:2.3.0'
-implementation 'io.adtrace:android-sdk-plugin-oaid:2.3.0'
+implementation 'io.adtrace:android-sdk:2.4.0'
+implementation 'io.adtrace:android-sdk-plugin-oaid:2.4.0'
 ```
 
 You can also add the AdTrace OAID plugin as JAR file, which you can download from our [releases page][releases].

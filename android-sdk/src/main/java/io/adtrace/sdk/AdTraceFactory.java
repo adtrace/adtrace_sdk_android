@@ -2,6 +2,9 @@ package io.adtrace.sdk;
 
 import android.content.Context;
 
+import io.adtrace.sdk.network.IActivityPackageSender;
+import io.adtrace.sdk.network.UtilNetworking;
+
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;

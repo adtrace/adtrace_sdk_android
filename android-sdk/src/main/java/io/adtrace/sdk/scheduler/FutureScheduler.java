@@ -3,7 +3,6 @@ package io.adtrace.sdk.scheduler;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledFuture;
 
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.

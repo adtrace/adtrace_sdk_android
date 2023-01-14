@@ -1,8 +1,4 @@
-
 package io.adtrace.sdk;
-
-import static io.adtrace.sdk.Constants.ENCODING;
-import static io.adtrace.sdk.Constants.SHA256;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -13,13 +9,14 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.LocaleList;
-import android.os.Looper;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+
+import io.adtrace.sdk.scheduler.AsyncTaskExecutor;
+import io.adtrace.sdk.scheduler.SingleThreadFutureScheduler;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -40,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -50,9 +48,8 @@ import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.adtrace.sdk.scheduler.AsyncTaskExecutor;
-import io.adtrace.sdk.scheduler.SingleThreadFutureScheduler;
-
+import static io.adtrace.sdk.Constants.ENCODING;
+import static io.adtrace.sdk.Constants.SHA256;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -60,7 +57,6 @@ import io.adtrace.sdk.scheduler.SingleThreadFutureScheduler;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class Util {
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'Z";
@@ -358,46 +354,46 @@ public class Util {
         return equalObject(first, second);
     }
 
-    public static int hashBoolean(Boolean value) {
+    public static int hashBoolean(Boolean value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashLong(Long value) {
+    public static int hashLong(Long value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashDouble(Double value) {
+    public static int hashDouble(Double value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashString(String value) {
+    public static int hashString(String value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashEnum(Enum value) {
+    public static int hashEnum(Enum value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
-    public static int hashObject(Object value) {
+    public static int hashObject(Object value, int hashCode) {
         if (value == null) {
-            return 0;
+            return 37 * hashCode;
         }
-        return value.hashCode();
+        return 37 * hashCode + value.hashCode();
     }
 
     public static String sha256(final String text) {
@@ -481,6 +477,14 @@ public class Util {
         }
 
         return true;
+    }
+
+    public static boolean isAdTraceUninstallDetectionPayload(Map<String, String> payload) {
+        if (payload == null) {
+            return false;
+        }
+        return payload.size() == 1 &&
+          Objects.equals(payload.get(Constants.FCM_PAYLOAD_KEY), Constants.FCM_PAYLOAD_VALUE);
     }
 
     public static Map<String, String> mergeParameters(Map<String, String> target,
@@ -741,7 +745,6 @@ public class Util {
         }
     }
 
-
     public static boolean isEqualReferrerDetails(final ReferrerDetails referrerDetails,
                                                  final String referrerApi,
                                                  final ActivityState activityState) {
@@ -751,71 +754,75 @@ public class Util {
             return isEqualHuaweiReferrerAdsDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_HUAWEI_APP_GALLERY)) {
             return isEqualHuaweiReferrerAppGalleryDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_SAMSUNG)) {
+            return isEqualSamsungReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_XIAOMI)) {
             return isEqualXiaomiReferrerDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_VIVO)) {
+            return isEqualVivoReferrerDetails(referrerDetails, activityState);
         }
 
         return false;
     }
 
-    public static boolean canReadPlayIds(final AdTraceConfig adtracConfig) {
-        if (adtracConfig.playStoreKidsAppEnabled) {
+    public static boolean canReadPlayIds(final AdTraceConfig adtraceConfig) {
+        if (adtraceConfig.playStoreKidsAppEnabled) {
             return false;
         }
 
-        if (adtracConfig.coppaCompliantEnabled) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static boolean canReadNonPlayIds(final AdTraceConfig adtracConfig) {
-        if (adtracConfig.playStoreKidsAppEnabled) {
-            return false;
-        }
-
-        if (adtracConfig.coppaCompliantEnabled) {
+        if (adtraceConfig.coppaCompliantEnabled) {
             return false;
         }
 
         return true;
     }
 
-    public static Map<String, String> getImeiParameters(final AdTraceConfig adtracConfig, ILogger logger) {
-        if (adtracConfig.coppaCompliantEnabled) {
-            return null;
+    public static boolean canReadNonPlayIds(final AdTraceConfig adtraceConfig) {
+        if (adtraceConfig.playStoreKidsAppEnabled) {
+            return false;
         }
 
-        return Reflection.getImeiParameters(adtracConfig.context, logger);
+        if (adtraceConfig.coppaCompliantEnabled) {
+            return false;
+        }
+
+        return true;
     }
 
-    public static Map<String, String> getOaidParameters(final AdTraceConfig adtracConfig, ILogger logger) {
-        if (adtracConfig.coppaCompliantEnabled) {
+    public static Map<String, String> getImeiParameters(final AdTraceConfig adtraceConfig, ILogger logger) {
+        if (adtraceConfig.coppaCompliantEnabled) {
             return null;
         }
 
-        return Reflection.getOaidParameters(adtracConfig.context, logger);
+        return Reflection.getImeiParameters(adtraceConfig.context, logger);
     }
 
-    public static String getFireAdvertisingId(final AdTraceConfig adtracConfig) {
-        if (adtracConfig.coppaCompliantEnabled) {
+    public static Map<String, String> getOaidParameters(final AdTraceConfig adtraceConfig, ILogger logger) {
+        if (adtraceConfig.coppaCompliantEnabled) {
             return null;
         }
 
-        return getFireAdvertisingId(adtracConfig.context.getContentResolver());
+        return Reflection.getOaidParameters(adtraceConfig.context, logger);
     }
 
-    public static Boolean getFireTrackingEnabled(final AdTraceConfig adtracConfig) {
-        if (adtracConfig.coppaCompliantEnabled) {
+    public static String getFireAdvertisingId(final AdTraceConfig adtraceConfig) {
+        if (adtraceConfig.coppaCompliantEnabled) {
             return null;
         }
 
-        return getFireTrackingEnabled(adtracConfig.context.getContentResolver());
+        return getFireAdvertisingId(adtraceConfig.context.getContentResolver());
+    }
+
+    public static Boolean getFireTrackingEnabled(final AdTraceConfig adtraceConfig) {
+        if (adtraceConfig.coppaCompliantEnabled) {
+            return null;
+        }
+
+        return getFireTrackingEnabled(adtraceConfig.context.getContentResolver());
     }
 
     private static boolean isEqualGoogleReferrerDetails(final ReferrerDetails referrerDetails,
-                                                        final ActivityState activityState) {
+                                                       final ActivityState activityState) {
         return referrerDetails.referrerClickTimestampSeconds == activityState.clickTime
                 && referrerDetails.installBeginTimestampSeconds == activityState.installBegin
                 && referrerDetails.referrerClickTimestampServerSeconds == activityState.clickTimeServer
@@ -835,8 +842,15 @@ public class Util {
     private static boolean isEqualHuaweiReferrerAppGalleryDetails(final ReferrerDetails referrerDetails,
                                                                   final ActivityState activityState) {
         return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeHuawei
-                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginHuawei
-                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerHuaweiAppGallery);
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginHuawei
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerHuaweiAppGallery);
+    }
+
+    private static boolean isEqualSamsungReferrerDetails(final ReferrerDetails referrerDetails,
+                                                         final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeSamsung
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginSamsung
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerSamsung);
     }
 
     private static boolean isEqualXiaomiReferrerDetails(final ReferrerDetails referrerDetails,
@@ -845,6 +859,15 @@ public class Util {
                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginXiaomi
                && referrerDetails.referrerClickTimestampServerSeconds == activityState.clickTimeServerXiaomi
                && referrerDetails.installBeginTimestampServerSeconds == activityState.installBeginServerXiaomi
-               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerXiaomi);
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerXiaomi)
+               && Util.equalString(referrerDetails.installVersion, activityState.installVersionXiaomi);
+    }
+
+    private static boolean isEqualVivoReferrerDetails(final ReferrerDetails referrerDetails,
+                                                        final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeVivo
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginVivo
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerVivo)
+               && Util.equalString(referrerDetails.installVersion, activityState.installVersionVivo);
     }
 }

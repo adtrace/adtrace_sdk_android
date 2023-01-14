@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import org.json.JSONObject;
 
+import java.util.Map;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -32,7 +33,7 @@ public class AdTrace {
      */
     public static synchronized AdTraceInstance getDefaultInstance() {
         @SuppressWarnings("unused")
-        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:AdTrace-android:2.3.0";
+        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:adtrace-android:2.4.0";
 
         if (defaultInstance == null) {
             defaultInstance = new AdTraceInstance();
@@ -97,6 +98,15 @@ public class AdTrace {
     }
 
     /**
+     * Get information if the payload originates from AdTrace.
+     *
+     * @return boolean indicating whether payload originates from AdTrace or not.
+     */
+    public static boolean isAdTraceUninstallDetectionPayload(Map<String, String> payload) {
+        return Util.isAdTraceUninstallDetectionPayload(payload);
+    }
+
+    /**
      * Called to process deep link.
      *
      * @param url Deep link URL to process
@@ -117,7 +127,7 @@ public class AdTrace {
      */
     public static void appWillOpenUrl(Uri url, Context context) {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
-        adTraceInstance.appWillOpenUrl(url, context);
+        adTraceInstance.appWillOpenUrl(url, extractApplicationContext(context));
     }
 
     /**
@@ -128,7 +138,7 @@ public class AdTrace {
      */
     public static void setReferrer(String referrer, Context context) {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
-        adTraceInstance.sendReferrer(referrer, context);
+        adTraceInstance.sendReferrer(referrer, extractApplicationContext(context));
     }
 
     /**
@@ -226,7 +236,7 @@ public class AdTrace {
      */
     public static void setPushToken(final String token, final Context context) {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
-        adTraceInstance.setPushToken(token, context);
+        adTraceInstance.setPushToken(token, extractApplicationContext(context));
     }
 
     /**
@@ -236,7 +246,7 @@ public class AdTrace {
      */
     public static void gdprForgetMe(final Context context) {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
-        adTraceInstance.gdprForgetMe(context);
+        adTraceInstance.gdprForgetMe(extractApplicationContext(context));
     }
 
     /**
@@ -246,7 +256,7 @@ public class AdTrace {
      */
     public static void disableThirdPartySharing(final Context context) {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
-        adTraceInstance.disableThirdPartySharing(context);
+        adTraceInstance.disableThirdPartySharing(extractApplicationContext(context));
     }
 
     public static void trackThirdPartySharing(

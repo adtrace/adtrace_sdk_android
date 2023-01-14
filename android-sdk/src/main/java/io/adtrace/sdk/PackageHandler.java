@@ -1,11 +1,10 @@
-
-
 package io.adtrace.sdk;
 
-import static io.adtrace.sdk.Constants.CALLBACK_PARAMETERS;
-import static io.adtrace.sdk.Constants.PARTNER_PARAMETERS;
-
 import android.content.Context;
+
+import io.adtrace.sdk.network.IActivityPackageSender;
+import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
+import io.adtrace.sdk.scheduler.ThreadScheduler;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -14,10 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.adtrace.sdk.network.IActivityPackageSender;
-import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
-import io.adtrace.sdk.scheduler.ThreadScheduler;
-
+import static io.adtrace.sdk.Constants.CALLBACK_PARAMETERS;
+import static io.adtrace.sdk.Constants.PARTNER_PARAMETERS;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -25,7 +22,6 @@ import io.adtrace.sdk.scheduler.ThreadScheduler;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class PackageHandler implements IPackageHandler,
         IActivityPackageSender.ResponseDataCallbackSubscriber

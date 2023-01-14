@@ -18,6 +18,7 @@ import io.adtrace.sdk.AdTraceEventSuccess;
 import io.adtrace.sdk.AdTraceFactory;
 import io.adtrace.sdk.AdTraceSessionFailure;
 import io.adtrace.sdk.AdTraceSessionSuccess;
+import io.adtrace.sdk.AdTraceTestOptions;
 import io.adtrace.sdk.AdTraceThirdPartySharing;
 import io.adtrace.sdk.LogLevel;
 import io.adtrace.sdk.OnAttributionChangedListener;
@@ -669,6 +670,7 @@ public class AdTraceBridgeInstance {
             Object isEnabledField =
                     jsonAdTraceThirdPartySharing.get("isEnabled");
             Object granularOptionsField = jsonAdTraceThirdPartySharing.get("granularOptions");
+            Object partnerSharingSettingsField = jsonAdTraceThirdPartySharing.get("partnerSharingSettings");
 
             Boolean isEnabled = AdTraceBridgeUtil.fieldToBoolean(isEnabledField);
 
@@ -684,6 +686,22 @@ public class AdTraceBridgeInstance {
                     String key = granularOptions[i + 1];
                     String value = granularOptions[i + 2];
                     adtraceThirdPartySharing.addGranularOption(partnerName, key, value);
+                }
+            }
+
+            // Partner sharing settings
+            String[] partnerSharingSettings =
+                    AdTraceBridgeUtil.jsonArrayToArray((JSONArray)partnerSharingSettingsField);
+            if (partnerSharingSettings != null) {
+                for (int i = 0; i < partnerSharingSettings.length; i += 3) {
+                    String partnerName = partnerSharingSettings[i];
+                    String key = partnerSharingSettings[i + 1];
+                    Boolean value = AdTraceBridgeUtil.fieldToBoolean(partnerSharingSettings[i + 2]);
+                    if (value != null) {
+                        adtraceThirdPartySharing.addPartnerSharingSetting(partnerName, key, value);
+                    } else {
+                        AdTraceFactory.getLogger().error("Cannot add partner sharing setting with non boolean value");
+                    }
                 }
             }
 

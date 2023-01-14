@@ -145,7 +145,6 @@ public class InstallReferrerHuawei {
 //                                "package [%s] and content uri [%s]",
 //                        context.getPackageName(), uri.toString());
 //            }
-
         } catch (Exception e) {
                 logger.debug("InstallReferrerHuawei error [%s]", e.getMessage());
         } finally {

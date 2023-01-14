@@ -7,7 +7,6 @@ package io.adtrace.sdk;
  *                   Copyright © 2022.
  */
 
-
 public interface OnAttributionChangedListener {
     void onAttributionChanged(AdTraceAttribution attribution);
 }

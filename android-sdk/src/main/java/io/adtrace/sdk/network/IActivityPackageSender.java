@@ -1,9 +1,9 @@
 package io.adtrace.sdk.network;
 
-import java.util.Map;
-
 import io.adtrace.sdk.ActivityPackage;
 import io.adtrace.sdk.ResponseData;
+
+import java.util.Map;
 
 /**
  * AdTrace android SDK (https://adtrace.io)

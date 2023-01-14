@@ -1,13 +1,13 @@
 
 package io.adtrace.sdk;
 
-import android.text.TextUtils;
+import java.util.Map;
+import java.util.Date;
+import java.util.HashMap;
 
 import org.json.JSONObject;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import android.text.TextUtils;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -15,7 +15,6 @@ import java.util.Map;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 
 public class PackageBuilder {
     private static ILogger logger = AdTraceFactory.getLogger();
@@ -184,9 +183,9 @@ public class PackageBuilder {
     }
 
     ActivityPackage buildThirdPartySharingPackage(
-            final AdTraceThirdPartySharing adTraceThirdPartySharing)
+            final AdTraceThirdPartySharing adtraceThirdPartySharing)
     {
-        Map<String, String> parameters = getThirdPartySharingParameters(adTraceThirdPartySharing);
+        Map<String, String> parameters = getThirdPartySharingParameters(adtraceThirdPartySharing);
         ActivityPackage activityPackage = getDefaultActivityPackage(ActivityKind.THIRD_PARTY_SHARING);
         activityPackage.setPath("/third_party_sharing");
         activityPackage.setSuffix("");
@@ -225,8 +224,8 @@ public class PackageBuilder {
         return adRevenuePackage;
     }
 
-    ActivityPackage buildAdRevenuePackage(AdTraceAdRevenue adTraceAdRevenue, boolean isInDelay) {
-        Map<String, String> parameters = getAdRevenueParameters(adTraceAdRevenue, isInDelay);
+    ActivityPackage buildAdRevenuePackage(AdTraceAdRevenue adtraceAdRevenue, boolean isInDelay) {
+        Map<String, String> parameters = getAdRevenueParameters(adtraceAdRevenue, isInDelay);
         ActivityPackage adRevenuePackage = getDefaultActivityPackage(ActivityKind.AD_REVENUE);
         adRevenuePackage.setPath("/ad_revenue");
         adRevenuePackage.setSuffix("");
@@ -237,8 +236,8 @@ public class PackageBuilder {
         adRevenuePackage.setParameters(parameters);
 
         if (isInDelay) {
-            adRevenuePackage.setCallbackParameters(adTraceAdRevenue.callbackParameters);
-            adRevenuePackage.setPartnerParameters(adTraceAdRevenue.partnerParameters);
+            adRevenuePackage.setCallbackParameters(adtraceAdRevenue.callbackParameters);
+            adRevenuePackage.setPartnerParameters(adtraceAdRevenue.partnerParameters);
         }
 
         return adRevenuePackage;
@@ -689,7 +688,6 @@ public class PackageBuilder {
                     "fallback to non Google Play and Fire identifiers will take place");
             deviceInfo.reloadNonPlayIds(adtraceConfig);
             PackageBuilder.addString(parameters, "android_id", deviceInfo.androidId);
-
         }
 
         // Rest of the parameters.
@@ -781,7 +779,7 @@ public class PackageBuilder {
     }
 
     private Map<String, String> getThirdPartySharingParameters
-            (final AdTraceThirdPartySharing adTraceThirdPartySharing)
+            (final AdTraceThirdPartySharing adtraceThirdPartySharing)
     {
         Map<String, String> parameters = new HashMap<String, String>();
         Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
@@ -798,13 +796,16 @@ public class PackageBuilder {
         }
 
         // Third Party Sharing
-        if (adTraceThirdPartySharing.isEnabled != null) {
+        if (adtraceThirdPartySharing.isEnabled != null) {
             PackageBuilder.addString(parameters, "sharing",
-                    adTraceThirdPartySharing.isEnabled.booleanValue() ?
+                    adtraceThirdPartySharing.isEnabled.booleanValue() ?
                             "enable" : "disable");
         }
         PackageBuilder.addMapJson(parameters, "granular_third_party_sharing_options",
-                adTraceThirdPartySharing.granularOptions);
+                adtraceThirdPartySharing.granularOptions);
+
+        PackageBuilder.addMapJson(parameters, "partner_sharing_settings",
+                adtraceThirdPartySharing.partnerSharingSettings);
 
         // Device identifiers.
         deviceInfo.reloadPlayIds(adtraceConfig);
@@ -1000,7 +1001,7 @@ public class PackageBuilder {
         return parameters;
     }
 
-    private Map<String, String> getAdRevenueParameters(AdTraceAdRevenue adTraceAdRevenue, boolean isInDelay) {
+    private Map<String, String> getAdRevenueParameters(AdTraceAdRevenue adtraceAdRevenue, boolean isInDelay) {
         Map<String, String> parameters = new HashMap<String, String>();
         Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
 
@@ -1017,8 +1018,8 @@ public class PackageBuilder {
 
         // Callback and partner parameters.
         if (!isInDelay) {
-            PackageBuilder.addMapJson(parameters, "callback_params", Util.mergeParameters(this.sessionParameters.callbackParameters, adTraceAdRevenue.callbackParameters, "Callback"));
-            PackageBuilder.addMapJson(parameters, "partner_params", Util.mergeParameters(this.sessionParameters.partnerParameters, adTraceAdRevenue.partnerParameters, "Partner"));
+            PackageBuilder.addMapJson(parameters, "callback_params", Util.mergeParameters(this.sessionParameters.callbackParameters, adtraceAdRevenue.callbackParameters, "Callback"));
+            PackageBuilder.addMapJson(parameters, "partner_params", Util.mergeParameters(this.sessionParameters.partnerParameters, adtraceAdRevenue.partnerParameters, "Partner"));
         }
 
         // Device identifiers.
@@ -1077,13 +1078,13 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "screen_format", deviceInfo.screenFormat);
         PackageBuilder.addString(parameters, "screen_size", deviceInfo.screenSize);
         PackageBuilder.addString(parameters, "secret_id", adtraceConfig.secretId);
-        PackageBuilder.addString(parameters, "source", adTraceAdRevenue.source);
-        PackageBuilder.addDoubleWithoutRounding(parameters, "revenue", adTraceAdRevenue.revenue);
-        PackageBuilder.addString(parameters, "currency", adTraceAdRevenue.currency);
-        PackageBuilder.addInteger(parameters, "ad_impressions_count", adTraceAdRevenue.adImpressionsCount);
-        PackageBuilder.addString(parameters, "ad_revenue_network", adTraceAdRevenue.adRevenueNetwork);
-        PackageBuilder.addString(parameters, "ad_revenue_unit", adTraceAdRevenue.adRevenueUnit);
-        PackageBuilder.addString(parameters, "ad_revenue_placement", adTraceAdRevenue.adRevenuePlacement);
+        PackageBuilder.addString(parameters, "source", adtraceAdRevenue.source);
+        PackageBuilder.addDoubleWithoutRounding(parameters, "revenue", adtraceAdRevenue.revenue);
+        PackageBuilder.addString(parameters, "currency", adtraceAdRevenue.currency);
+        PackageBuilder.addInteger(parameters, "ad_impressions_count", adtraceAdRevenue.adImpressionsCount);
+        PackageBuilder.addString(parameters, "ad_revenue_network", adtraceAdRevenue.adRevenueNetwork);
+        PackageBuilder.addString(parameters, "ad_revenue_unit", adtraceAdRevenue.adRevenueUnit);
+        PackageBuilder.addString(parameters, "ad_revenue_placement", adtraceAdRevenue.adRevenuePlacement);
         PackageBuilder.addLong(parameters, "session_count", activityStateCopy.sessionCount);
         PackageBuilder.addDuration(parameters, "session_length", activityStateCopy.sessionLength);
         PackageBuilder.addLong(parameters, "subsession_count", activityStateCopy.subsessionCount);

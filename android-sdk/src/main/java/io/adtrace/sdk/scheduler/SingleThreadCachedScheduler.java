@@ -1,13 +1,13 @@
 package io.adtrace.sdk.scheduler;
 
+import io.adtrace.sdk.AdTraceFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import io.adtrace.sdk.AdTraceFactory;
 
 /**
  * AdTrace android SDK (https://adtrace.io)

@@ -111,6 +111,9 @@ public class AdTraceBridgeUtil {
         if (webView == null) {
             return;
         }
+        if (attribution == null) {
+            return;
+        }
 
         webView.post(new Runnable() {
             @Override
@@ -143,6 +146,9 @@ public class AdTraceBridgeUtil {
         if (webView == null) {
             return;
         }
+        if (sessionSuccess == null) {
+            return;
+        }
 
         webView.post(new Runnable() {
             @Override
@@ -165,6 +171,9 @@ public class AdTraceBridgeUtil {
 
     public static void execSessionFailureCallbackCommand(final WebView webView, final String commandName, final AdTraceSessionFailure sessionFailure) {
         if (webView == null) {
+            return;
+        }
+        if (sessionFailure == null) {
             return;
         }
 
@@ -192,6 +201,9 @@ public class AdTraceBridgeUtil {
         if (webView == null) {
             return;
         }
+        if (eventSuccess == null) {
+            return;
+        }
 
         webView.post(new Runnable() {
             @Override
@@ -216,6 +228,9 @@ public class AdTraceBridgeUtil {
 
     public static void execEventFailureCallbackCommand(final WebView webView, final String commandName, final AdTraceEventFailure eventFailure) {
         if (webView == null) {
+            return;
+        }
+        if (eventFailure == null) {
             return;
         }
 

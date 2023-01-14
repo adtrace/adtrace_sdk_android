@@ -1,6 +1,7 @@
 package io.adtrace.sdk;
 
 import android.content.Context;
+
 import java.util.Map;
 
 /**

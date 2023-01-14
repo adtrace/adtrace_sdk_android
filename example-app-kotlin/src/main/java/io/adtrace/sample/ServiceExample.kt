@@ -1,10 +1,12 @@
 package io.adtrace.sample
+
 import android.app.Service
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.IBinder
 import android.os.SystemClock
 import android.util.Log
+
 import io.adtrace.sdk.AdTrace
 import io.adtrace.sdk.AdTraceEvent
 

@@ -1,11 +1,11 @@
 package io.adtrace.sdk;
 
-import static io.adtrace.sdk.Constants.EXTRA_SYSTEM_INSTALLER_REFERRER;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
+import static io.adtrace.sdk.Constants.EXTRA_SYSTEM_INSTALLER_REFERRER;
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.

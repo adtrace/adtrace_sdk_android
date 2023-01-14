@@ -30,5 +30,4 @@ public class ServiceActivity extends AppCompatActivity {
     public void onReturnClick(View v) {
         finish();
     }
-
 }

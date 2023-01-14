@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         AdTraceBridge.registerAndGetInstance(getApplication(), webView);
         try {
             webView.loadUrl("file:///android_asset/AdTraceExample-WebView.html");
+//            webView.loadUrl("https://adtraceweb.ir");
         } catch (Exception e) {
             e.printStackTrace();
         }

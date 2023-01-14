@@ -55,6 +55,14 @@ public class ActivityState implements Serializable, Cloneable {
             new ObjectStreamField("installReferrerXiaomi", String.class),
             new ObjectStreamField("clickTimeServerXiaomi", long.class),
             new ObjectStreamField("installBeginServerXiaomi", long.class),
+            new ObjectStreamField("installVersionXiaomi", String.class),
+            new ObjectStreamField("clickTimeSamsung", long.class),
+            new ObjectStreamField("installBeginSamsung", long.class),
+            new ObjectStreamField("installReferrerSamsung", String.class),
+            new ObjectStreamField("clickTimeVivo", long.class),
+            new ObjectStreamField("installBeginVivo", long.class),
+            new ObjectStreamField("installReferrerVivo", String.class),
+            new ObjectStreamField("installVersionVivo", String.class),
     };
 
     // persistent data
@@ -102,6 +110,16 @@ public class ActivityState implements Serializable, Cloneable {
     protected String installReferrerXiaomi;
     protected long clickTimeServerXiaomi;
     protected long installBeginServerXiaomi;
+    protected String installVersionXiaomi;
+
+    protected long clickTimeSamsung;
+    protected long installBeginSamsung;
+    protected String installReferrerSamsung;
+
+    protected long clickTimeVivo;
+    protected long installBeginVivo;
+    protected String installReferrerVivo;
+    protected String installVersionVivo;
 
     protected ActivityState() {
         logger = AdTraceFactory.getLogger();
@@ -139,6 +157,14 @@ public class ActivityState implements Serializable, Cloneable {
         installReferrerXiaomi = null;
         clickTimeServerXiaomi = 0;
         installBeginServerXiaomi = 0;
+        installVersionXiaomi = null;
+        clickTimeSamsung = 0;
+        installBeginSamsung = 0;
+        installReferrerSamsung = null;
+        clickTimeVivo = 0;
+        installBeginVivo = 0;
+        installReferrerVivo = null;
+        installVersionVivo = null;
     }
 
     protected void resetSessionAttributes(long now) {
@@ -214,44 +240,60 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalString(installReferrerXiaomi, otherActivityState.installReferrerXiaomi)) return false;
         if (!Util.equalLong(clickTimeServerXiaomi, otherActivityState.clickTimeServerXiaomi)) return false;
         if (!Util.equalLong(installBeginServerXiaomi, otherActivityState.installBeginServerXiaomi)) return false;
+        if (!Util.equalString(installVersionXiaomi, otherActivityState.installVersionXiaomi)) return false;
+        if (!Util.equalLong(clickTimeSamsung, otherActivityState.clickTimeSamsung)) return false;
+        if (!Util.equalLong(installBeginSamsung, otherActivityState.installBeginSamsung)) return false;
+        if (!Util.equalString(installReferrerSamsung, otherActivityState.installReferrerSamsung)) return false;
+        if (!Util.equalLong(clickTimeVivo, otherActivityState.clickTimeVivo)) return false;
+        if (!Util.equalLong(installBeginVivo, otherActivityState.installBeginVivo)) return false;
+        if (!Util.equalString(installReferrerVivo, otherActivityState.installReferrerVivo)) return false;
+        if (!Util.equalString(installVersionVivo, otherActivityState.installVersionVivo)) return false;
         return true;
     }
 
     @Override
     public int hashCode() {
         int hashCode = 17;
-        hashCode = 37 * hashCode + Util.hashString(uuid);
-        hashCode = 37 * hashCode + Util.hashBoolean(enabled);
-        hashCode = 37 * hashCode + Util.hashBoolean(isGdprForgotten);
-        hashCode = 37 * hashCode + Util.hashBoolean(isThirdPartySharingDisabled);
-        hashCode = 37 * hashCode + Util.hashBoolean(isThirdPartySharingDisabledForCoppa);
-        hashCode = 37 * hashCode + Util.hashBoolean(askingAttribution);
+        hashCode = Util.hashString(uuid, hashCode);
+        hashCode = Util.hashBoolean(enabled, hashCode);
+        hashCode = Util.hashBoolean(isGdprForgotten, hashCode);
+        hashCode = Util.hashBoolean(isThirdPartySharingDisabled, hashCode);
+        hashCode = Util.hashBoolean(isThirdPartySharingDisabledForCoppa, hashCode);
+        hashCode = Util.hashBoolean(askingAttribution, hashCode);
         hashCode = 37 * hashCode + eventCount;
         hashCode = 37 * hashCode + sessionCount;
         hashCode = 37 * hashCode + subsessionCount;
-        hashCode = 37 * hashCode + Util.hashLong(sessionLength);
-        hashCode = 37 * hashCode + Util.hashLong(timeSpent);
-        hashCode = 37 * hashCode + Util.hashLong(lastInterval);
-        hashCode = 37 * hashCode + Util.hashBoolean(updatePackages);
-        hashCode = 37 * hashCode + Util.hashObject(orderIds);
-        hashCode = 37 * hashCode + Util.hashString(pushToken);
-        hashCode = 37 * hashCode + Util.hashString(adid);
-        hashCode = 37 * hashCode + Util.hashLong(clickTime);
-        hashCode = 37 * hashCode + Util.hashLong(installBegin);
-        hashCode = 37 * hashCode + Util.hashString(installReferrer);
-        hashCode = 37 * hashCode + Util.hashBoolean(googlePlayInstant);
-        hashCode = 37 * hashCode + Util.hashLong(clickTimeServer);
-        hashCode = 37 * hashCode + Util.hashLong(installBeginServer);
-        hashCode = 37 * hashCode + Util.hashString(installVersion);
-        hashCode = 37 * hashCode + Util.hashLong(clickTimeHuawei);
-        hashCode = 37 * hashCode + Util.hashLong(installBeginHuawei);
-        hashCode = 37 * hashCode + Util.hashString(installReferrerHuawei);
-        hashCode = 37 * hashCode + Util.hashString(installReferrerHuaweiAppGallery);
-        hashCode = 37 * hashCode + Util.hashLong(clickTimeXiaomi);
-        hashCode = 37 * hashCode + Util.hashLong(installBeginXiaomi);
-        hashCode = 37 * hashCode + Util.hashString(installReferrerXiaomi);
-        hashCode = 37 * hashCode + Util.hashLong(clickTimeServerXiaomi);
-        hashCode = 37 * hashCode + Util.hashLong(installBeginServerXiaomi);
+        hashCode = Util.hashLong(sessionLength, hashCode);
+        hashCode = Util.hashLong(timeSpent, hashCode);
+        hashCode = Util.hashLong(lastInterval, hashCode);
+        hashCode = Util.hashBoolean(updatePackages, hashCode);
+        hashCode = Util.hashObject(orderIds, hashCode);
+        hashCode = Util.hashString(pushToken, hashCode);
+        hashCode = Util.hashString(adid, hashCode);
+        hashCode = Util.hashLong(clickTime, hashCode);
+        hashCode = Util.hashLong(installBegin, hashCode);
+        hashCode = Util.hashString(installReferrer, hashCode);
+        hashCode = Util.hashBoolean(googlePlayInstant, hashCode);
+        hashCode = Util.hashLong(clickTimeServer, hashCode);
+        hashCode = Util.hashLong(installBeginServer, hashCode);
+        hashCode = Util.hashString(installVersion, hashCode);
+        hashCode = Util.hashLong(clickTimeHuawei, hashCode);
+        hashCode = Util.hashLong(installBeginHuawei, hashCode);
+        hashCode = Util.hashString(installReferrerHuawei, hashCode);
+        hashCode = Util.hashString(installReferrerHuaweiAppGallery, hashCode);
+        hashCode = Util.hashLong(clickTimeXiaomi, hashCode);
+        hashCode = Util.hashLong(installBeginXiaomi, hashCode);
+        hashCode = Util.hashString(installReferrerXiaomi, hashCode);
+        hashCode = Util.hashLong(clickTimeServerXiaomi, hashCode);
+        hashCode = Util.hashLong(installBeginServerXiaomi, hashCode);
+        hashCode = Util.hashString(installVersionXiaomi, hashCode);
+        hashCode = Util.hashLong(clickTimeSamsung, hashCode);
+        hashCode = Util.hashLong(installBeginSamsung, hashCode);
+        hashCode = Util.hashString(installReferrerSamsung, hashCode);
+        hashCode = Util.hashLong(clickTimeVivo, hashCode);
+        hashCode = Util.hashLong(installBeginVivo, hashCode);
+        hashCode = Util.hashString(installReferrerVivo, hashCode);
+        hashCode = Util.hashString(installVersionVivo, hashCode);
         return hashCode;
     }
 
@@ -297,6 +339,16 @@ public class ActivityState implements Serializable, Cloneable {
         installReferrerXiaomi = Util.readStringField(fields, "installReferrerXiaomi", null);
         clickTimeServerXiaomi = Util.readLongField(fields, "clickTimeServerXiaomi", -1l);
         installBeginServerXiaomi = Util.readLongField(fields, "installBeginServerXiaomi", -1l);
+        installVersionXiaomi = Util.readStringField(fields, "installVersionXiaomi", null);
+
+        clickTimeSamsung = Util.readLongField(fields, "clickTimeSamsung", -1l);
+        installBeginSamsung = Util.readLongField(fields, "installBeginSamsung", -1l);
+        installReferrerSamsung = Util.readStringField(fields, "installReferrerSamsung", null);
+
+        clickTimeVivo = Util.readLongField(fields, "clickTimeVivo", -1l);
+        installBeginVivo = Util.readLongField(fields, "installBeginVivo", -1l);
+        installReferrerVivo = Util.readStringField(fields, "installReferrerVivo", null);
+        installVersionVivo = Util.readStringField(fields, "installVersionVivo", null);
 
         // create UUID for migrating devices
         if (uuid == null) {

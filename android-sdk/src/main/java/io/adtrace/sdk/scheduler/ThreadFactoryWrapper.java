@@ -2,11 +2,11 @@ package io.adtrace.sdk.scheduler;
 
 import android.os.Process;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-
 import io.adtrace.sdk.AdTraceFactory;
 import io.adtrace.sdk.Constants;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * AdTrace android SDK (https://adtrace.io)

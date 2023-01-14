@@ -1,11 +1,11 @@
 package io.adtrace.sdk.scheduler;
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import io.adtrace.sdk.AdTraceFactory;
 import io.adtrace.sdk.ILogger;
 import io.adtrace.sdk.Util;
+
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * AdTrace android SDK (https://adtrace.io)

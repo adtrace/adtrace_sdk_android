@@ -1,12 +1,11 @@
 package io.adtrace.sdk;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
 
 /**
  * AdTrace android SDK (https://adtrace.io)
@@ -14,8 +13,6 @@ import org.json.JSONException;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
-
 
 public class SharedPreferencesManager {
     /**
