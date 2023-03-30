@@ -544,6 +544,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "cpu_type", deviceInfo.abi);
         PackageBuilder.addDateInMilliseconds(parameters, "created_at", createdAt);
         PackageBuilder.addString(parameters, "deeplink", deeplink);
+        PackageBuilder.addString(parameters, "default_tracker", adtraceConfig.defaultTracker);
         PackageBuilder.addBoolean(parameters, "device_known", adtraceConfig.deviceKnown);
         PackageBuilder.addBoolean(parameters, "needs_cost", adtraceConfig.needsCost);
         PackageBuilder.addString(parameters, "device_manufacturer", deviceInfo.deviceManufacturer);
