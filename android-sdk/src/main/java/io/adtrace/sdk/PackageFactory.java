@@ -216,6 +216,11 @@ public class PackageFactory {
         if (activityState != null) {
             long lastInterval = now - activityState.lastActivity;
             activityState.lastInterval = lastInterval;
+
+            if (lastInterval>Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOULD){
+                activityState.lastIntervalHardReset = lastInterval;
+            }
+
         }
 
         PackageBuilder builder = new PackageBuilder(

@@ -1227,6 +1227,11 @@ public class ActivityHandler implements IActivityHandler {
         long now = System.currentTimeMillis();
 
         long lastInterval = now - activityState.lastActivity;
+        // lastIntervalHardReset is previous lastInterval and if new interval was more than a minute reset it
+        long lastInvervalHardReset = activityState.lastInterval;
+        if (lastInterval > Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOULD){
+            lastInvervalHardReset = lastInterval;
+        }
 
         if (lastInterval < 0) {
             logger.error(TIME_TRAVEL);
@@ -1308,6 +1313,9 @@ public class ActivityHandler implements IActivityHandler {
 
         activityState.sessionCount++;
         activityState.lastInterval = lastInterval;
+        if (lastInterval>Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOULD){
+            activityState.lastIntervalHardReset = lastInterval;
+        }
 
         transferSessionPackageI(now);
         activityState.resetSessionAttributes(now);
