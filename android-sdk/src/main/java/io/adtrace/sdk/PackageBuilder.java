@@ -416,6 +416,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "fb_id", deviceInfo.fbAttributionId);
         PackageBuilder.addString(parameters, "hardware_name", deviceInfo.hardwareName);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
+        PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastIntervalHardReset);
         PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
         PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
@@ -569,7 +570,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "install_version", installVersion);
         PackageBuilder.addString(parameters, "installed_at", deviceInfo.appInstallTime);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
-        PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastInterval);
+        PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastIntervalHardReset);
         PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
         PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
