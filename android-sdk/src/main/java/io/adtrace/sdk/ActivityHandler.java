@@ -4,7 +4,7 @@ package io.adtrace.sdk;
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2022.
+ * Copyright © 2022.
  */
 
 
@@ -35,6 +35,7 @@ import java.util.Properties;
 
 import static io.adtrace.sdk.Constants.ACTIVITY_STATE_FILENAME;
 import static io.adtrace.sdk.Constants.ATTRIBUTION_FILENAME;
+import static io.adtrace.sdk.Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOLD;
 import static io.adtrace.sdk.Constants.REFERRER_API_SAMSUNG;
 import static io.adtrace.sdk.Constants.REFERRER_API_VIVO;
 import static io.adtrace.sdk.Constants.REFERRER_API_XIAOMI;
@@ -367,18 +368,18 @@ public class ActivityHandler implements IActivityHandler {
         // redirect session responses to attribution handler to check for attribution information
         if (responseData instanceof SessionResponseData) {
             logger.debug("Finished tracking session");
-            attributionHandler.checkSessionResponse((SessionResponseData)responseData);
+            attributionHandler.checkSessionResponse((SessionResponseData) responseData);
             return;
         }
         // redirect sdk click responses to attribution handler to check for attribution information
         if (responseData instanceof SdkClickResponseData) {
             checkForInstallReferrerInfo((SdkClickResponseData) responseData);
-            attributionHandler.checkSdkClickResponse((SdkClickResponseData)responseData);
+            attributionHandler.checkSdkClickResponse((SdkClickResponseData) responseData);
             return;
         }
         // check if it's an event response
         if (responseData instanceof EventResponseData) {
-            launchEventResponseTasks((EventResponseData)responseData);
+            launchEventResponseTasks((EventResponseData) responseData);
             return;
         }
     }
@@ -537,7 +538,7 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public void sendFirstPackages () {
+    public void sendFirstPackages() {
         executor.submit(new Runnable() {
             @Override
             public void run() {
@@ -835,7 +836,7 @@ public class ActivityHandler implements IActivityHandler {
             // since sdk has already started, check if there is a saved push from previous runs
             if (internalState.hasFirstSdkStartOcurred()) {
                 String savedPushToken = SharedPreferencesManager.getDefaultInstance(getContext()).getPushToken();
-                if(savedPushToken!=null)
+                if (savedPushToken != null)
                     setPushToken(savedPushToken, true);
             }
         }
@@ -850,8 +851,7 @@ public class ActivityHandler implements IActivityHandler {
                     disableThirdPartySharing();
                 }
                 for (AdTraceThirdPartySharing adtraceThirdPartySharing :
-                        adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray)
-                {
+                        adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray) {
                     trackThirdPartySharing(adtraceThirdPartySharing);
                 }
                 if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
@@ -889,8 +889,7 @@ public class ActivityHandler implements IActivityHandler {
         // configure delay start timer
         if (internalState.hasFirstSdkStartNotOcurred() &&
                 adtraceConfig.delayStart != null &&
-                adtraceConfig.delayStart > 0.0)
-        {
+                adtraceConfig.delayStart > 0.0) {
             logger.info("Delay start configured");
             internalState.delayStart = true;
             delayStartTimer = new TimerOnce(new Runnable() {
@@ -1104,7 +1103,7 @@ public class ActivityHandler implements IActivityHandler {
     private void readConfigFile(Context context) {
         Properties properties;
 
-        try  {
+        try {
             InputStream inputStream = context.getAssets().open("adtrace_config.properties");
             properties = new Properties();
             properties.load(inputStream);
@@ -1183,8 +1182,7 @@ public class ActivityHandler implements IActivityHandler {
                     disableThirdPartySharingI();
                 }
                 for (AdTraceThirdPartySharing adtraceThirdPartySharing :
-                        adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray)
-                {
+                        adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray) {
                     trackThirdPartySharingI(adtraceThirdPartySharing);
                 }
                 if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
@@ -1227,11 +1225,6 @@ public class ActivityHandler implements IActivityHandler {
         long now = System.currentTimeMillis();
 
         long lastInterval = now - activityState.lastActivity;
-        // lastIntervalHardReset is previous lastInterval and if new interval was more than a minute reset it
-        long lastInvervalHardReset = activityState.lastInterval;
-        if (lastInterval > Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOULD){
-            lastInvervalHardReset = lastInterval;
-        }
 
         if (lastInterval < 0) {
             logger.error(TIME_TRAVEL);
@@ -1313,9 +1306,10 @@ public class ActivityHandler implements IActivityHandler {
 
         activityState.sessionCount++;
         activityState.lastInterval = lastInterval;
-        if (lastInterval>Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOULD){
+
+        // lastIntervalHardReset is previous lastInterval and if new interval was more than a minute reset it
+        if (lastInterval > MIN_LAST_INTERVAL_HARD_RESET_THRESHOLD)
             activityState.lastIntervalHardReset = lastInterval;
-        }
 
         transferSessionPackageI(now);
         activityState.resetSessionAttributes(now);
@@ -1323,7 +1317,9 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void checkAttributionStateI() {
-        if (!checkActivityStateI(activityState)) { return; }
+        if (!checkActivityStateI(activityState)) {
+            return;
+        }
 
         // if it's the first launch
         if (internalState.isFirstLaunch()) {
@@ -1681,8 +1677,7 @@ public class ActivityHandler implements IActivityHandler {
                     disableThirdPartySharingI();
                 }
                 for (AdTraceThirdPartySharing adtraceThirdPartySharing :
-                        adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray)
-                {
+                        adtraceConfig.preLaunchActions.preLaunchAdTraceThirdPartySharingArray) {
                     trackThirdPartySharingI(adtraceThirdPartySharing);
                 }
                 if (adtraceConfig.preLaunchActions.lastMeasurementConsentTracked != null) {
@@ -1768,8 +1763,7 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private boolean hasChangedStateI(boolean previousState, boolean newState,
-                                     String trueMessage, String falseMessage)
-    {
+                                     String trueMessage, String falseMessage) {
         if (previousState != newState) {
             return true;
         }
@@ -1784,8 +1778,7 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void updateStatusI(boolean pausingState, String pausingMessage,
-                               String remainsPausedMessage, String unPausingMessage)
-    {
+                               String remainsPausedMessage, String unPausingMessage) {
         // it is changing from an active state to a pause state
         if (pausingState) {
             logger.info(pausingMessage);
@@ -1915,8 +1908,7 @@ public class ActivityHandler implements IActivityHandler {
         // if event buffering is not enabled
         if (!adtraceConfig.eventBufferingEnabled ||
                 // or if it's the first launch and it hasn't received the session response
-                (internalState.isFirstLaunch() && internalState.hasSessionResponseNotBeenProcessed()))
-        {
+                (internalState.isFirstLaunch() && internalState.hasSessionResponseNotBeenProcessed())) {
             // try to send
             packageHandler.sendFirstPackage();
         }
@@ -1941,15 +1933,21 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private boolean updateActivityStateI(long now) {
-        if (!checkActivityStateI(activityState)) { return false; }
+        if (!checkActivityStateI(activityState)) {
+            return false;
+        }
 
         long lastInterval = now - activityState.lastActivity;
+
+        if (lastInterval>MIN_LAST_INTERVAL_HARD_RESET_THRESHOLD)
+            activityState.lastIntervalHardReset = lastInterval;
 
         // ignore late updates
         if (lastInterval > SESSION_INTERVAL) {
             return false;
         }
         activityState.lastActivity = now;
+
 
         if (lastInterval < 0) {
             logger.error(TIME_TRAVEL);
@@ -2060,7 +2058,7 @@ public class ActivityHandler implements IActivityHandler {
         double delayStartSeconds = adtraceConfig.delayStart != null ? adtraceConfig.delayStart : 0.0;
         long maxDelayStartMilli = AdTraceFactory.getMaxDelayStart();
 
-        long delayStartMilli = (long)(delayStartSeconds * 1000);
+        long delayStartMilli = (long) (delayStartSeconds * 1000);
         if (delayStartMilli > maxDelayStartMilli) {
             double maxDelayStartSeconds = maxDelayStartMilli / 1000;
             String delayStartFormatted = Util.SecondsDisplayFormat.format(delayStartSeconds);
@@ -2230,12 +2228,22 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void setPushTokenI(String token) {
-        if (!checkActivityStateI(activityState)) { return; }
-        if (!isEnabledI()) { return; }
-        if (activityState.isGdprForgotten) { return; }
+        if (!checkActivityStateI(activityState)) {
+            return;
+        }
+        if (!isEnabledI()) {
+            return;
+        }
+        if (activityState.isGdprForgotten) {
+            return;
+        }
 
-        if (token == null) { return; }
-        if (token.equals(activityState.pushToken)) { return; }
+        if (token == null) {
+            return;
+        }
+        if (token.equals(activityState.pushToken)) {
+            return;
+        }
 
         // save new push token
         activityState.pushToken = token;
@@ -2258,9 +2266,15 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void gdprForgetMeI() {
-        if (!checkActivityStateI(activityState)) { return; }
-        if (!isEnabledI()) { return; }
-        if (activityState.isGdprForgotten) { return; }
+        if (!checkActivityStateI(activityState)) {
+            return;
+        }
+        if (!isEnabledI()) {
+            return;
+        }
+        if (activityState.isGdprForgotten) {
+            return;
+        }
 
         activityState.isGdprForgotten = true;
         writeActivityStateI();
@@ -2287,10 +2301,18 @@ public class ActivityHandler implements IActivityHandler {
         SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(getContext());
         sharedPreferencesManager.setDisableThirdPartySharing();
 
-        if (!checkActivityStateI(activityState)) { return; }
-        if (!isEnabledI()) { return; }
-        if (activityState.isGdprForgotten) { return; }
-        if (activityState.isThirdPartySharingDisabled) { return; }
+        if (!checkActivityStateI(activityState)) {
+            return;
+        }
+        if (!isEnabledI()) {
+            return;
+        }
+        if (activityState.isGdprForgotten) {
+            return;
+        }
+        if (activityState.isThirdPartySharingDisabled) {
+            return;
+        }
         if (adtraceConfig.coppaCompliantEnabled) {
             logger.warn("Call to disable third party sharing API ignored, already done when COPPA enabled");
             return;
@@ -2321,8 +2343,12 @@ public class ActivityHandler implements IActivityHandler {
                     adtraceThirdPartySharing);
             return;
         }
-        if (!isEnabledI()) { return; }
-        if (activityState.isGdprForgotten) { return; }
+        if (!isEnabledI()) {
+            return;
+        }
+        if (activityState.isGdprForgotten) {
+            return;
+        }
         if (adtraceConfig.coppaCompliantEnabled) {
             logger.warn("Calling third party sharing API not allowed when COPPA enabled");
             return;
@@ -2348,8 +2374,12 @@ public class ActivityHandler implements IActivityHandler {
             adtraceConfig.preLaunchActions.lastMeasurementConsentTracked = consentMeasurement;
             return;
         }
-        if (!isEnabledI()) { return; }
-        if (activityState.isGdprForgotten) { return; }
+        if (!isEnabledI()) {
+            return;
+        }
+        if (activityState.isGdprForgotten) {
+            return;
+        }
 
         long now = System.currentTimeMillis();
         PackageBuilder packageBuilder = new PackageBuilder(
@@ -2367,9 +2397,15 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void trackAdRevenueI(String source, JSONObject adRevenueJson) {
-        if (!checkActivityStateI(activityState)) { return; }
-        if (!isEnabledI()) { return; }
-        if (activityState.isGdprForgotten) { return; }
+        if (!checkActivityStateI(activityState)) {
+            return;
+        }
+        if (!isEnabledI()) {
+            return;
+        }
+        if (activityState.isGdprForgotten) {
+            return;
+        }
 
         long now = System.currentTimeMillis();
 
@@ -2381,10 +2417,18 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void trackAdRevenueI(AdTraceAdRevenue adtraceAdRevenue) {
-        if (!checkActivityStateI(activityState)) { return; }
-        if (!isEnabledI()) { return; }
-        if (!checkAdTraceAdRevenue(adtraceAdRevenue)) { return; }
-        if (activityState.isGdprForgotten) { return; }
+        if (!checkActivityStateI(activityState)) {
+            return;
+        }
+        if (!isEnabledI()) {
+            return;
+        }
+        if (!checkAdTraceAdRevenue(adtraceAdRevenue)) {
+            return;
+        }
+        if (activityState.isGdprForgotten) {
+            return;
+        }
 
         long now = System.currentTimeMillis();
 
@@ -2396,9 +2440,15 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void trackSubscriptionI(final AdTracePlayStoreSubscription subscription) {
-        if (!checkActivityStateI(activityState)) { return; }
-        if (!isEnabledI()) { return; }
-        if (activityState.isGdprForgotten) { return; }
+        if (!checkActivityStateI(activityState)) {
+            return;
+        }
+        if (!isEnabledI()) {
+            return;
+        }
+        if (activityState.isGdprForgotten) {
+            return;
+        }
 
         long now = System.currentTimeMillis();
 
@@ -2443,7 +2493,7 @@ public class ActivityHandler implements IActivityHandler {
             sessionParameters.callbackParameters = Util.readObject(context,
                     SESSION_CALLBACK_PARAMETERS_FILENAME,
                     SESSION_CALLBACK_PARAMETERS_NAME,
-                    (Class<Map<String,String>>)(Class)Map.class);
+                    (Class<Map<String, String>>) (Class) Map.class);
         } catch (Exception e) {
             logger.error("Failed to read %s file (%s)", SESSION_CALLBACK_PARAMETERS_NAME, e.getMessage());
             sessionParameters.callbackParameters = null;
@@ -2455,7 +2505,7 @@ public class ActivityHandler implements IActivityHandler {
             sessionParameters.partnerParameters = Util.readObject(context,
                     SESSION_PARTNER_PARAMETERS_FILENAME,
                     SESSION_PARTNER_PARAMETERS_NAME,
-                    (Class<Map<String,String>>)(Class)Map.class);
+                    (Class<Map<String, String>>) (Class) Map.class);
         } catch (Exception e) {
             logger.error("Failed to read %s file (%s)", SESSION_PARTNER_PARAMETERS_NAME, e.getMessage());
             sessionParameters.partnerParameters = null;
@@ -2588,8 +2638,8 @@ public class ActivityHandler implements IActivityHandler {
                     !isEnabledI();                  // is disabled
         }
         // other handlers are paused if either:
-        return internalState.isOffline()    ||      // it's offline
-                !isEnabledI()               ||      // is disabled
+        return internalState.isOffline() ||      // it's offline
+                !isEnabledI() ||      // is disabled
                 internalState.isInDelayedStart();   // is in delayed start
     }
 
@@ -2622,7 +2672,7 @@ public class ActivityHandler implements IActivityHandler {
                         (responseData.referrerApi.equalsIgnoreCase(Constants.REFERRER_API_HUAWEI_ADS));
         if (isInstallReferrerHuaweiAds) {
             activityState.clickTimeHuawei = responseData.clickTime;
-            activityState.installBeginHuawei    = responseData.installBegin;
+            activityState.installBeginHuawei = responseData.installBegin;
             activityState.installReferrerHuawei = responseData.installReferrer;
 
             writeActivityStateI();
@@ -2644,7 +2694,7 @@ public class ActivityHandler implements IActivityHandler {
 
         boolean isInstallReferrerSamsung =
                 responseData.referrerApi != null &&
-                (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_SAMSUNG));
+                        (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_SAMSUNG));
 
         if (isInstallReferrerSamsung) {
             activityState.clickTimeSamsung = responseData.clickTime;
@@ -2673,7 +2723,7 @@ public class ActivityHandler implements IActivityHandler {
 
         boolean isInstallReferrerVivo =
                 responseData.referrerApi != null &&
-                (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_VIVO));
+                        (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_VIVO));
 
         if (isInstallReferrerVivo) {
             activityState.clickTimeVivo = responseData.clickTime;
@@ -2731,7 +2781,9 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void resetThirdPartySharingCoppaActivityStateI() {
-        if (activityState == null) { return; }
+        if (activityState == null) {
+            return;
+        }
         if (activityState.isThirdPartySharingDisabledForCoppa) {
             activityState.isThirdPartySharingDisabledForCoppa = false;
             writeActivityStateI();

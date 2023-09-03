@@ -4,7 +4,7 @@ package io.adtrace.sdk;
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2022.
+ * Copyright © 2022.
  */
 
 public interface Constants {
@@ -17,7 +17,7 @@ public interface Constants {
     int SOCKET_TIMEOUT = Constants.ONE_MINUTE;
     int MAX_WAIT_INTERVAL = Constants.ONE_MINUTE;
 
-    int MIN_LAST_INTERVAL_HARD_RESET_THRESHOULD = Constants.ONE_MINUTE;
+    int MIN_LAST_INTERVAL_HARD_RESET_THRESHOLD = Constants.ONE_SECOND * 5;
 
     String BASE_URL = "https://app.adtrace.io";
     String GDPR_URL = "https://gdpr.adtrace.io";

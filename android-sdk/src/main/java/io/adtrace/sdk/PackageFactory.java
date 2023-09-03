@@ -16,18 +16,18 @@ import static io.adtrace.sdk.Constants.MALFORMED;
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- *                   Copyright © 2022.
+ * Copyright © 2022.
  */
 
 public class PackageFactory {
     private static final String ADTRACE_PREFIX = "adtrace_";
 
     public static ActivityPackage buildReftagSdkClickPackage(final String rawReferrer,
-                                                              final long clickTime,
-                                                              final ActivityState activityState,
-                                                              final AdTraceConfig adtraceConfig,
-                                                              final DeviceInfo deviceInfo,
-                                                              final SessionParameters sessionParameters) {
+                                                             final long clickTime,
+                                                             final ActivityState activityState,
+                                                             final AdTraceConfig adtraceConfig,
+                                                             final DeviceInfo deviceInfo,
+                                                             final SessionParameters sessionParameters) {
         if (rawReferrer == null || rawReferrer.length() == 0) {
             return null;
         }
@@ -75,11 +75,11 @@ public class PackageFactory {
     }
 
     public static ActivityPackage buildDeeplinkSdkClickPackage(final Uri url,
-                                                              final long clickTime,
-                                                              final ActivityState activityState,
-                                                              final AdTraceConfig adtraceConfig,
-                                                              final DeviceInfo deviceInfo,
-                                                              final SessionParameters sessionParameters) {
+                                                               final long clickTime,
+                                                               final ActivityState activityState,
+                                                               final AdTraceConfig adtraceConfig,
+                                                               final DeviceInfo deviceInfo,
+                                                               final SessionParameters sessionParameters) {
         if (url == null) {
             return null;
         }
@@ -217,10 +217,8 @@ public class PackageFactory {
             long lastInterval = now - activityState.lastActivity;
             activityState.lastInterval = lastInterval;
 
-            if (lastInterval>Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOULD){
+            if (lastInterval > Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOLD)
                 activityState.lastIntervalHardReset = lastInterval;
-            }
-
         }
 
         PackageBuilder builder = new PackageBuilder(
