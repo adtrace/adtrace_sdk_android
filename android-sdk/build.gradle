@@ -203,9 +203,9 @@ def customizePomForAar(pom) {
 }
 
 model {
-    tasks.generatePomFileForMavenAndroidCorePublication {
-        destination = file("${project.buildDir}/generated-pom.xml")
-    }
+//    tasks.generatePomFileForMavenAndroidCoreJarPublication {
+//        destination = file("${project.buildDir}/generated-pom.xml")
+//    }
     /* TODO check if/how to replace this tasks
     tasks.publishMavenAndroidCorePublicationToMavenLocal {
         dependsOn project.tasks.signArchives
@@ -214,9 +214,9 @@ model {
         dependsOn project.tasks.signArchives
     }
     */
-    tasks.generatePomFileForMavenAndroidCoreAARPublication {
-        destination = file("${project.buildDir}/generated-pom.xml")
-    }
+//    tasks.generatePomFileForMavenAndroidCoreAarPublication {
+//        destination = file("${project.buildDir}/generated-pom.xml")
+//    }
     /* TODO check if/how to replace this tasks
     tasks.publishMavenAndroidCoreAARPublicationToMavenLocal {
         dependsOn project.tasks.signArchives
@@ -227,8 +227,8 @@ model {
     */
 }
 
-signing {
-    sign configurations.archives
-    sign publishing.publications.mavenAndroidCore
-    sign publishing.publications.mavenAndroidCoreAAR
-}
+//signing {
+//    sign configurations.archives
+//    sign publishing.publications.mavenAndroidCore
+//    sign publishing.publications.mavenAndroidCoreAAR
+//}
