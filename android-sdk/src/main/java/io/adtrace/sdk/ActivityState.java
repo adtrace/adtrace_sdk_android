@@ -34,6 +34,7 @@ public class ActivityState implements Serializable, Cloneable {
             new ObjectStreamField("timeSpent", long.class),
             new ObjectStreamField("lastActivity", long.class),
             new ObjectStreamField("lastInterval", long.class),
+            new ObjectStreamField("lastIntervalHardReset", long.class),
             new ObjectStreamField("updatePackages", boolean.class),
             new ObjectStreamField("orderIds", (Class<LinkedList<String>>)(Class) LinkedList.class),
             new ObjectStreamField("pushToken", String.class),
@@ -84,6 +85,8 @@ public class ActivityState implements Serializable, Cloneable {
     protected long lastActivity;    // all times in milliseconds since 1970
 
     protected long lastInterval;
+
+    protected long lastIntervalHardReset;
 
     protected boolean updatePackages;
 
@@ -137,6 +140,7 @@ public class ActivityState implements Serializable, Cloneable {
         timeSpent = -1; // this information will be collected and attached to the next session
         lastActivity = -1;
         lastInterval = -1;
+        lastIntervalHardReset = -1;
         updatePackages = false;
         orderIds = null;
         pushToken = null;
@@ -173,6 +177,7 @@ public class ActivityState implements Serializable, Cloneable {
         timeSpent = 0; // no time spent yet
         lastActivity = now;
         lastInterval = -1;
+        lastIntervalHardReset = -1;
     }
 
     protected void addOrderId(String orderId) {
@@ -220,6 +225,7 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalLong(sessionLength, otherActivityState.sessionLength)) return false;
         if (!Util.equalLong(timeSpent, otherActivityState.timeSpent)) return false;
         if (!Util.equalLong(lastInterval, otherActivityState.lastInterval)) return false;
+        if (!Util.equalLong(lastIntervalHardReset, otherActivityState.lastIntervalHardReset)) return false;
         if (!Util.equalBoolean(updatePackages, otherActivityState.updatePackages)) return false;
         if (!Util.equalObject(orderIds, otherActivityState.orderIds)) return false;
         if (!Util.equalString(pushToken, otherActivityState.pushToken)) return false;
@@ -266,6 +272,7 @@ public class ActivityState implements Serializable, Cloneable {
         hashCode = Util.hashLong(sessionLength, hashCode);
         hashCode = Util.hashLong(timeSpent, hashCode);
         hashCode = Util.hashLong(lastInterval, hashCode);
+        hashCode = Util.hashLong(lastIntervalHardReset, hashCode);
         hashCode = Util.hashBoolean(updatePackages, hashCode);
         hashCode = Util.hashObject(orderIds, hashCode);
         hashCode = Util.hashString(pushToken, hashCode);
@@ -307,6 +314,7 @@ public class ActivityState implements Serializable, Cloneable {
         timeSpent = Util.readLongField(fields, "timeSpent", -1l);
         lastActivity = Util.readLongField(fields, "lastActivity", -1l);
         lastInterval = Util.readLongField(fields, "lastInterval", -1l);
+        lastIntervalHardReset = Util.readLongField(fields, "lastIntervalHardReset", -1l);
 
         // new fields
         uuid = Util.readStringField(fields, "uuid", null);

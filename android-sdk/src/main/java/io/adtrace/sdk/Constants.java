@@ -17,13 +17,15 @@ public interface Constants {
     int SOCKET_TIMEOUT = Constants.ONE_MINUTE;
     int MAX_WAIT_INTERVAL = Constants.ONE_MINUTE;
 
+    int MIN_LAST_INTERVAL_HARD_RESET_THRESHOLD = Constants.ONE_SECOND * 5;
+
     String BASE_URL = "https://app.adtrace.io";
     String GDPR_URL = "https://gdpr.adtrace.io";
     String SUBSCRIPTION_URL = "https://subscription.adtrace.com";
 
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    String CLIENT_SDK = "android2.4.1";
+    String CLIENT_SDK = "android2.4.2";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";

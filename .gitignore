@@ -1,12 +1,7 @@
 *.iml
-.gradle
+/.gradle
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+/.idea
 .DS_Store
 /build
 /captures
@@ -18,3 +13,4 @@ gradle.properties
 /android-sdk-plugin-oaid/gradle.properties
 /android-sdk-plugin-webbridge/gradle.properties
 
+/.idea/

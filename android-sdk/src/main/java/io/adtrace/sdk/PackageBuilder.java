@@ -47,6 +47,10 @@ public class PackageBuilder {
         int subsessionCount = -1;
         long timeSpent = -1;
         long lastInterval = -1;
+
+        // as for retargeting lastInterval is needed and when sending session after install (which happens on first open or long time no activity and return to app)
+        // lastInterval is technically correct but not usefully set as few seconds whhich is not useful for retargeting
+        long lastIntervalHardReset = -1;
         long sessionLength = -1;
         String uuid = null;
         String pushToken = null;
@@ -60,6 +64,7 @@ public class PackageBuilder {
             this.subsessionCount = activityState.subsessionCount;
             this.timeSpent = activityState.timeSpent;
             this.lastInterval = activityState.lastInterval;
+            this.lastIntervalHardReset = activityState.lastIntervalHardReset;
             this.sessionLength = activityState.sessionLength;
             this.uuid = activityState.uuid;
             this.pushToken = activityState.pushToken;
@@ -411,6 +416,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "fb_id", deviceInfo.fbAttributionId);
         PackageBuilder.addString(parameters, "hardware_name", deviceInfo.hardwareName);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
+        PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastIntervalHardReset);
         PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
         PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
@@ -564,7 +570,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "install_version", installVersion);
         PackageBuilder.addString(parameters, "installed_at", deviceInfo.appInstallTime);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
-        PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastInterval);
+        PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastIntervalHardReset);
         PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
         PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
