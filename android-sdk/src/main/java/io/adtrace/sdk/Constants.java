@@ -4,7 +4,7 @@ package io.adtrace.sdk;
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- * Copyright © 2022.
+ *                   Copyright © 2022.
  */
 
 public interface Constants {
@@ -25,7 +25,7 @@ public interface Constants {
 
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    String CLIENT_SDK = "android2.4.1";
+    String CLIENT_SDK = "android2.4.2";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";
