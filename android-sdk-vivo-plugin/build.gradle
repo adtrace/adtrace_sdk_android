@@ -19,7 +19,7 @@ dependencies {
     // Add SDK via module.
     compileOnly project(':android-sdk')
     // Add SDK via Maven.
-    // implementation 'io.adtrace:android-sdk:2.4.1'
+    // implementation 'io.adtrace:android-sdk:2.4.2'
 }
 
 // read local properties

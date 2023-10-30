@@ -195,7 +195,7 @@ def customizePomForAar(pom) {
             developers {
                 developer {
                     name 'Nasser Amini'
-                    email 'namini40@gmail.com'
+                    email 'naser@smartech.ir'
                 }
             }
         }
