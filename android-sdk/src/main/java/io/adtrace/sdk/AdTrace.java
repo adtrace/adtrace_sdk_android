@@ -363,6 +363,17 @@ public class AdTrace {
     }
 
     /**
+     * Verify in app purchase from Google Play.
+     *
+     * @param purchase  AdTracePurchase object to be tracked
+     * @param callback  Callback to obtain verification results
+     */
+    public static void verifyPurchase(final AdTracePurchase purchase, OnPurchaseVerificationFinishedListener callback) {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.verifyPurchase(purchase, callback);
+    }
+
+    /**
      * Used for testing purposes only. Do NOT use this method.
      *
      * @param testOptions AdTrace integration tests options

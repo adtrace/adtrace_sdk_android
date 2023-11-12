@@ -22,6 +22,7 @@ public interface Constants {
     String BASE_URL = "https://app.adtrace.io";
     String GDPR_URL = "https://gdpr.adtrace.io";
     String SUBSCRIPTION_URL = "https://subscription.adtrace.com";
+    String PURCHASE_VERIFICATION_URL = "https://ssrv.adtrace.io";
 
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
@@ -35,6 +36,7 @@ public interface Constants {
     String REFERRER_API_SAMSUNG = "samsung";
     String REFERRER_API_XIAOMI = "xiaomi";
     String REFERRER_API_VIVO = "vivo";
+    String REFERRER_API_META = "meta";
     String DEEPLINK = "deeplink";
     String PUSH = "push";
     String THREAD_PREFIX = "AdTrace-";
