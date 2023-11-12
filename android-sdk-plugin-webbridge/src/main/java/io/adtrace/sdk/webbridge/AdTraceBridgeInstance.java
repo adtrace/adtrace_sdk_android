@@ -177,6 +177,8 @@ public class AdTraceBridgeInstance {
             Object preinstallFilePathField = jsonAdTraceConfig.get("preinstallFilePath");
             Object playStoreKidsAppEnabledField = jsonAdTraceConfig.get("playStoreKidsAppEnabled");
             Object coppaCompliantEnabledField = jsonAdTraceConfig.get("coppaCompliantEnabled");
+            Object finalAttributionEnabledField = jsonAdTraceConfig.get("finalAttributionEnabled");
+            Object fbAppIdField = jsonAdTraceConfig.get("fbAppId");
 
             String appToken = AdTraceBridgeUtil.fieldToString(appTokenField);
             String environment = AdTraceBridgeUtil.fieldToString(environmentField);
@@ -402,6 +404,18 @@ public class AdTraceBridgeInstance {
             Boolean coppaCompliantEnabled = AdTraceBridgeUtil.fieldToBoolean(coppaCompliantEnabledField);
             if (coppaCompliantEnabled != null) {
                 adtraceConfig.setCoppaCompliantEnabled(coppaCompliantEnabled);
+            }
+
+            // Final attribution config
+            Boolean finalAttributionEnabled = AdTraceBridgeUtil.fieldToBoolean(finalAttributionEnabledField);
+            if (finalAttributionEnabled != null) {
+                adtraceConfig.setFinalAttributionEnabled(finalAttributionEnabled);
+            }
+
+            // FB App ID
+            String fbAppId = AdTraceBridgeUtil.fieldToString(fbAppIdField);
+            if (fbAppId != null) {
+                adtraceConfig.setFbAppId(fbAppId);
             }
 
             // Manually call onResume() because web view initialisation will happen a bit delayed.
