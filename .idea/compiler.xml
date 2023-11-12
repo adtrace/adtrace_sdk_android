@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="android.android-sdk-imei-plugin" target="17" />
+      <module name="android.android-sdk-plugin-oaid" target="17" />
+      <module name="android.android-sdk-plugin-webbridge" target="17" />
+      <module name="android.android-sdk-samsung-plugin" target="17" />
+      <module name="android.android-sdk-vivo-plugin" target="17" />
+      <module name="android.android-sdk-xiaomi-plugin" target="17" />
+      <module name="android.example-app-java" target="17" />
+      <module name="android.example-app-kotlin" target="17" />
+      <module name="android.example-app-tv" target="17" />
+      <module name="android.example-app-webbridge" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
