@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +17,6 @@ import io.adtrace.sdk.AdTrace;
 import io.adtrace.sdk.AdTraceEvent;
 
 public class MainActivity extends AppCompatActivity {
-
     private static final String EVENT_TOKEN_SIMPLE = "jmj5me";
     private static final String EVENT_TOKEN_REVENUE = "jmj5me";
     private static final String EVENT_TOKEN_CALLBACK = "jmj5me";
@@ -72,10 +72,6 @@ public class MainActivity extends AppCompatActivity {
     public void onTrackSimpleEventClick(View v) {
         AdTraceEvent event = new AdTraceEvent(EVENT_TOKEN_SIMPLE);
 
-        // Assign custom identifier to event which will be reported in success/failure callbacks.
-        event.setCallbackId("PrettyRandomIdentifier");
-        event.setOrderId("123456");
-
         AdTrace.trackEvent(event);
     }
 
@@ -93,6 +89,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Add callback parameters to this parameter.
         event.addCallbackParameter("key", "value");
+
+        AdTrace.trackEvent(event);
+    }
+
+    public void onTrackPartnerEventClick(View v) {
+        AdTraceEvent event = new AdTraceEvent(EVENT_TOKEN_PARTNER);
+
+        // Add partner parameters to this parameter.
+        event.addPartnerParameter("foo", "bar");
 
         AdTrace.trackEvent(event);
     }

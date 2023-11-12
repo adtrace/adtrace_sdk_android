@@ -83,6 +83,15 @@ class MainActivity : AppCompatActivity() {
         AdTrace.trackEvent(event)
     }
 
+    fun onTrackPartnerEventClick(v:View){
+        val event = AdTraceEvent(EVENT_TOKEN_PARAMS)
+
+        // Add event partner parameters to this event.
+        event.addPartnerParameter("foo", "bar")
+
+        AdTrace.trackEvent(event)
+    }
+
     fun onTrackEventParameterClick(v: View) {
         val event = AdTraceEvent(EVENT_TOKEN_PARAMS)
 
@@ -91,6 +100,8 @@ class MainActivity : AppCompatActivity() {
 
         AdTrace.trackEvent(event)
     }
+
+
 
     fun onEnableDisableOfflineModeClick(v: View) {
         if ((v as Button).text == applicationContext.resources.getString(R.string.txt_enable_offline_mode)) {

@@ -141,8 +141,8 @@ public class GlobalApplication extends Application {
          AdTraceOaid.readOaid();
 
         // Enable Google play kids and COPPA complaint
-//         config.setPlayStoreKidsAppEnabled(true);
-//         config.setCoppaCompliantEnabled(true);
+        // config.setPlayStoreKidsAppEnabled(true);
+        // config.setCoppaCompliantEnabled(true);
 
         // Initialise the adtrace SDK.
         AdTrace.onCreate(config);
@@ -196,5 +196,4 @@ public class GlobalApplication extends Application {
         public void onActivityStarted(Activity activity) {
         }
     }
-    
 }
