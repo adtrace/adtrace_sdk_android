@@ -2,12 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-repositories {
-    maven {
-        url "https://oss.sonatype.org/content/repositories/staging/"
-    }
-}
-
 android {
     compileSdkVersion rootProject.ext.coreCompileSdkVersion
 
@@ -45,7 +39,7 @@ if (localPropsFile.exists()) {
     }
 }
 
-task adtraceImeiAndroidAar (type: Copy) {
+task adtraceImeiAndroidAar(type: Copy) {
     dependsOn 'assembleRelease'
 
     from('build/outputs/aar/')
@@ -80,24 +74,24 @@ artifacts {
 afterEvaluate {
     publishing {
         publications {
-/*
-            mavenAndroidImeiJar(MavenPublication) {
-                customizePomForJar(pom)
-                groupId rootProject.ext.adtraceGroupId
-                artifactId 'adtrace-android-imei'
-                version rootProject.ext.coreVersionName
 
-                artifact adtraceImeiAndroidJar
-                artifact adtraceImeiAndroidSourcesJar
-            }
-*/
+//            mavenAndroidImeiJar(MavenPublication) {
+//                customizePomForJar(pom)
+//                groupId rootProject.ext.adtraceGroupId
+//                artifactId 'adtrace-android-imei'
+//                version rootProject.ext.coreVersionName
+//
+//                artifact adtraceImeiAndroidJar
+//                artifact adtraceImeiAndroidSourcesJar
+//            }
+
             mavenAndroidImeiAar(MavenPublication) {
                 customizePomForAar(pom)
                 groupId rootProject.ext.adtraceGroupId
                 artifactId 'adtrace-android-imei'
                 version rootProject.ext.coreVersionName
 
-                artifact("$buildDir/outputs/aar/sdk-plugin-imei-release.aar") {
+                artifact("$buildDir/outputs/aar/android-sdk-imei-plugin-release.aar") {
                     builtBy tasks.getByPath("adtraceImeiAndroidAar")
                 }
                 artifact adtraceImeiAndroidSourcesJar
@@ -132,6 +126,7 @@ def customizePomForJar(pom) {
             description 'The IMEI plugin for AdTrace SDK Android'
             name 'AdTrace Android SDK IMEI plugin'
             url 'https://github.com/adtrace/adtrace_sdk_android'
+
             organization {
                 name 'adtrace'
                 url 'https://www.adtrace.io'
@@ -167,7 +162,7 @@ def customizePomForAar(pom) {
             description 'The IMEI plugin for AdTrace SDK Android'
             name 'AdTrace Android SDK IMEI plugin'
             url 'https://github.com/adtrace/adtrace_sdk_android'
-            packaging 'aar'
+
             organization {
                 name 'adtrace'
                 url 'https://www.adtrace.io'

@@ -98,7 +98,7 @@ afterEvaluate {
                 artifactId 'adtrace-android-vivo-referrer'
                 version rootProject.ext.coreVersionName
 
-                artifact("$buildDir/outputs/aar/sdk-plugin-vivo-referrer-release.aar") {
+                artifact("$buildDir/outputs/aar/android-sdk-vivo-plugin-release.aar") {
                     builtBy tasks.getByPath("adtraceVivoReferrerPluginAar")
                 }
                 artifact adtraceVivoReferrerPluginSourcesJar
