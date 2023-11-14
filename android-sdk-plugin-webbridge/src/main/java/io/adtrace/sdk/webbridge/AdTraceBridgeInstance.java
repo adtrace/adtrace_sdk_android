@@ -446,6 +446,7 @@ public class AdTraceBridgeInstance {
             Object currencyField = jsonAdTraceEvent.get("currency");
             Object callbackParametersField = jsonAdTraceEvent.get("callbackParameters");
             Object eventParametersField = jsonAdTraceEvent.get("eventParameters");
+            Object partnerParametersField = jsonAdTraceEvent.get("partnerParameters");
             Object orderIdField = jsonAdTraceEvent.get("orderId");
             Object callbackIdField = jsonAdTraceEvent.get("callbackId");
 
@@ -480,6 +481,16 @@ public class AdTraceBridgeInstance {
                     String key = eventParameters[i];
                     String value = eventParameters[i+1];
                     adtraceEvent.addEventParameter(key, value);
+                }
+            }
+
+            // event partner parameters
+            String[] partnerParameters = AdTraceBridgeUtil.jsonArrayToArray((JSONArray)partnerParametersField);
+            if (partnerParameters != null) {
+                for (int i = 0; i < partnerParameters.length; i += 2) {
+                    String key = partnerParameters[i];
+                    String value = partnerParameters[i+1];
+                    adtraceEvent.addPartnerParameter(key, value);
                 }
             }
 
