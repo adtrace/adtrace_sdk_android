@@ -59,7 +59,7 @@
         android:layout_marginTop="5dp"
         android:layout_weight="0.143"
         android:onClick="onTrackPartnerEventClick"
-        android:text="@string/btn_event_parameter" />
+        android:text="@string/btn_partner_event" />
 
     <Button
         android:id="@+id/btnEventParameter"
@@ -72,7 +72,7 @@
         android:layout_marginTop="5dp"
         android:layout_weight="0.143"
         android:onClick="onTrackEventParameterClick"
-        android:text="@string/btn_partner_event" />
+        android:text="@string/btn_event_parameter" />
 
     <Button
         android:id="@+id/btnEnableDisableOfflineMode"
