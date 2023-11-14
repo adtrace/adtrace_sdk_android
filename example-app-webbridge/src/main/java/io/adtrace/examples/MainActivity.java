@@ -1,4 +1,4 @@
-package io.adtrace.webbridge;
+package io.adtrace.examples;
 
 import androidx.appcompat.app.AppCompatActivity;
 

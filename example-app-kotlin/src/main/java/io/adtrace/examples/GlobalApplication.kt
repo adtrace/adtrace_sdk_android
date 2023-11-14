@@ -1,4 +1,4 @@
-package io.adtrace.sample
+package io.adtrace.examples
 
 import android.app.Activity
 import android.app.Application

@@ -1,4 +1,4 @@
-package io.adtrace.apptv;
+package io.adtrace.examples;
 
 import android.content.Intent;
 import android.net.Uri;

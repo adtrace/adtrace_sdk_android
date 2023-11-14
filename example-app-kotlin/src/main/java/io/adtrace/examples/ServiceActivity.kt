@@ -1,4 +1,4 @@
-package io.adtrace.sample
+package io.adtrace.examples
 
 import android.content.Intent
 import android.os.Bundle

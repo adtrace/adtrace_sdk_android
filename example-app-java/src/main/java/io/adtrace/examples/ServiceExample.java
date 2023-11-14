@@ -1,4 +1,4 @@
-package io.adtrace.sample;
+package io.adtrace.examples;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;

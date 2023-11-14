@@ -1,4 +1,4 @@
-package io.adtrace.apptv;
+package io.adtrace.examples;
 
 import android.app.Activity;
 import android.app.Application;
@@ -27,7 +27,7 @@ public class GlobalApplication extends Application {
         super.onCreate();
 
         // Configure adtrace SDK.
-        String appToken = "xyz123xyz123";
+        String appToken = "wzfjavr56krp";
         String environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
 
         AdTraceConfig config = new AdTraceConfig(this, appToken, environment);
@@ -39,8 +39,8 @@ public class GlobalApplication extends Application {
         config.setOnAttributionChangedListener(new OnAttributionChangedListener() {
             @Override
             public void onAttributionChanged(AdTraceAttribution attribution) {
-                Log.d("AdTraceAppTV", "Attribution callback called!");
-                Log.d("AdTraceAppTV", "Attribution: " + attribution.toString());
+                Log.d("example", "Attribution callback called!");
+                Log.d("example", "Attribution: " + attribution.toString());
             }
         });
 
@@ -48,8 +48,8 @@ public class GlobalApplication extends Application {
         config.setOnEventTrackingSucceededListener(new OnEventTrackingSucceededListener() {
             @Override
             public void onFinishedEventTrackingSucceeded(AdTraceEventSuccess eventSuccessResponseData) {
-                Log.d("AdTraceAppTV", "Event success callback called!");
-                Log.d("AdTraceAppTV", "Event success data: " + eventSuccessResponseData.toString());
+                Log.d("example", "Event success callback called!");
+                Log.d("example", "Event success data: " + eventSuccessResponseData.toString());
             }
         });
 
@@ -57,8 +57,8 @@ public class GlobalApplication extends Application {
         config.setOnEventTrackingFailedListener(new OnEventTrackingFailedListener() {
             @Override
             public void onFinishedEventTrackingFailed(AdTraceEventFailure eventFailureResponseData) {
-                Log.d("AdTraceAppTV", "Event failure callback called!");
-                Log.d("AdTraceAppTV", "Event failure data: " + eventFailureResponseData.toString());
+                Log.d("example", "Event failure callback called!");
+                Log.d("example", "Event failure data: " + eventFailureResponseData.toString());
             }
         });
 
@@ -66,8 +66,8 @@ public class GlobalApplication extends Application {
         config.setOnSessionTrackingSucceededListener(new OnSessionTrackingSucceededListener() {
             @Override
             public void onFinishedSessionTrackingSucceeded(AdTraceSessionSuccess sessionSuccessResponseData) {
-                Log.d("AdTraceAppTV", "Session success callback called!");
-                Log.d("AdTraceAppTV", "Session success data: " + sessionSuccessResponseData.toString());
+                Log.d("example", "Session success callback called!");
+                Log.d("example", "Session success data: " + sessionSuccessResponseData.toString());
             }
         });
 
@@ -75,8 +75,8 @@ public class GlobalApplication extends Application {
         config.setOnSessionTrackingFailedListener(new OnSessionTrackingFailedListener() {
             @Override
             public void onFinishedSessionTrackingFailed(AdTraceSessionFailure sessionFailureResponseData) {
-                Log.d("AdTraceAppTV", "Session failure callback called!");
-                Log.d("AdTraceAppTV", "Session failure data: " + sessionFailureResponseData.toString());
+                Log.d("example", "Session failure callback called!");
+                Log.d("example", "Session failure data: " + sessionFailureResponseData.toString());
             }
         });
 
@@ -84,8 +84,8 @@ public class GlobalApplication extends Application {
         config.setOnDeeplinkResponseListener(new OnDeeplinkResponseListener() {
             @Override
             public boolean launchReceivedDeeplink(Uri deeplink) {
-                Log.d("AdTraceAppTV", "Deferred deep link callback called!");
-                Log.d("AdTraceAppTV", "Deep link URL: " + deeplink);
+                Log.d("example", "Deferred deep link callback called!");
+                Log.d("example", "Deep link URL: " + deeplink);
 
                 return true;
             }
@@ -95,7 +95,7 @@ public class GlobalApplication extends Application {
         // config.setDefaultTracker("{YourDefaultTracker}");
 
         // Set process name.
-        // config.setProcessName("io.adtrace.apptv");
+        // config.setProcessName("io.adtrace.sample");
 
         // Allow to send in the background.
         config.setSendInBackground(true);
@@ -105,6 +105,9 @@ public class GlobalApplication extends Application {
 
         // Delay first session.
         // config.setDelayStart(7);
+
+        // Allow tracking preinstall
+        // config.setPreinstallTrackingEnabled(true);
 
         // Add session callback parameters.
         AdTrace.addSessionCallbackParameter("sc_foo", "sc_bar");
@@ -125,6 +128,20 @@ public class GlobalApplication extends Application {
 
         // Remove all session partner parameters.
         AdTrace.resetSessionPartnerParameters();
+
+        // Enable IMEI reading ONLY IF:
+        // - IMEI plugin is added to your app.
+        // - Your app is NOT distributed in Google Play Store.
+        // AdTraceImei.readImei();
+
+        // Enable OAID reading ONLY IF:
+        // - OAID plugin is added to your app.
+        // - Your app is NOT distributed in Google Play Store & supports OAID.
+//         AdTraceOaid.readOaid();
+
+        // Enable Google play kids and COPPA complaint
+        // config.setPlayStoreKidsAppEnabled(true);
+        // config.setCoppaCompliantEnabled(true);
 
         // Initialise the adtrace SDK.
         AdTrace.onCreate(config);
