@@ -33,7 +33,6 @@ import static io.adtrace.sdk.Constants.XLARGE;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 class DeviceInfo {
 
     private static final String OFFICIAL_FACEBOOK_SIGNATURE =
@@ -84,13 +83,17 @@ class DeviceInfo {
     String appInstallTime;
     String appUpdateTime;
     int uiMode;
+    String appSetId;
+    boolean isGooglePlayGamesForPC;
 
-    DeviceInfo(Context context, String sdkPrefix) {
+    DeviceInfo(AdTraceConfig adtraceConfig) {
+        Context context = adtraceConfig.context;
         Resources resources = context.getResources();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
         Configuration configuration = resources.getConfiguration();
         Locale locale = Util.getLocale(configuration);
         int screenLayout = configuration.screenLayout;
+        isGooglePlayGamesForPC = Util.isGooglePlayGamesForPC(context);
 
         packageName = getPackageName(context);
         appVersion = getAppVersion(context);
@@ -107,7 +110,7 @@ class DeviceInfo {
         screenDensity = getScreenDensity(displayMetrics);
         displayWidth = getDisplayWidth(displayMetrics);
         displayHeight = getDisplayHeight(displayMetrics);
-        clientSdk = getClientSdk(sdkPrefix);
+        clientSdk = getClientSdk(adtraceConfig.sdkPrefix);
         fbAttributionId = getFacebookAttributionId(context);
         hardwareName = getHardwareName();
         abi = getABI();
@@ -115,6 +118,9 @@ class DeviceInfo {
         appInstallTime = getAppInstallTime(context);
         appUpdateTime = getAppUpdateTime(context);
         uiMode = getDeviceUiMode(configuration);
+        if (Util.canReadPlayIds(adtraceConfig)) {
+            appSetId = Reflection.getAppSetId(context);
+        }
     }
 
     void reloadPlayIds(final AdTraceConfig adtraceConfig) {
@@ -221,6 +227,10 @@ class DeviceInfo {
     }
 
     private String getDeviceType(Configuration configuration) {
+        if (isGooglePlayGamesForPC) {
+            return "pc";
+        }
+
         int uiMode = configuration.uiMode & UI_MODE_TYPE_MASK;
         if (uiMode == UI_MODE_TYPE_TELEVISION) {
             return "tv";
@@ -244,6 +254,9 @@ class DeviceInfo {
     }
 
     private String getDeviceName() {
+        if (isGooglePlayGamesForPC) {
+            return null;
+        }
         return Build.MODEL;
     }
 
@@ -252,10 +265,16 @@ class DeviceInfo {
     }
 
     private String getOsName() {
+        if (isGooglePlayGamesForPC) {
+            return "windows";
+        }
         return "android";
     }
 
     private String getOsVersion() {
+        if (isGooglePlayGamesForPC) {
+            return null;
+        }
         return Build.VERSION.RELEASE;
     }
 
