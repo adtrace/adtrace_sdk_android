@@ -16,8 +16,11 @@ public class AdTraceEvent {
     String currency;
     Map<String, String> callbackParameters;
     Map<String, String> eventValueParameters;
+    Map<String, String> partnerParameters;
     String orderId;
     String callbackId;
+    String productId;
+    String purchaseToken;
 
     private static ILogger logger = AdTraceFactory.getLogger();
 
@@ -63,6 +66,20 @@ public class AdTraceEvent {
             logger.warn("Key %s was overwritten", key);
         }
     }
+    public void addPartnerParameter(String key, String value) {
+        if (!Util.isValidParameter(key, "key", "Partner")) return;
+        if (!Util.isValidParameter(value, "value", "Partner")) return;
+
+        if (partnerParameters == null) {
+            partnerParameters = new LinkedHashMap<String, String>();
+        }
+
+        String previousValue = partnerParameters.put(key, value);
+
+        if (previousValue != null) {
+            logger.warn("Key %s was overwritten", key);
+        }
+    }
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
@@ -72,8 +89,52 @@ public class AdTraceEvent {
         this.callbackId = callbackId;
     }
 
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public void setPurchaseToken(String purchaseToken) {
+        this.purchaseToken = purchaseToken;
+    }
+
     public boolean isValid() {
         return eventToken != null;
+    }
+
+    public String getEventToken() {
+        return eventToken;
+    }
+
+    public Double getRevenue() {
+        return revenue;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public Map<String, String> getCallbackParameters() {
+        return callbackParameters;
+    }
+
+    public Map<String, String> getPartnerParameters() {
+        return partnerParameters;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public String getCallbackId() {
+        return callbackId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public String getPurchaseToken() {
+        return purchaseToken;
     }
 
     private static boolean checkEventToken(String eventToken, ILogger logger) {
