@@ -63,7 +63,7 @@ task adtraceOaidAndroidJar(type: Jar) {
     dependsOn 'packageReleaseAssets'
     dependsOn 'compileReleaseJavaWithJavac'
 
-    from('build/intermediates/library_assets/release/packageReleaseAssets/out/') {
+    from('build/intermediates/library_assets/release/out/') {
         into('assets')
     }
     from('build/intermediates/javac/release/classes/')

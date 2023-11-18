@@ -49,10 +49,9 @@ task adtraceWebBridgeAndroidAar (type: Copy) {
     dependsOn 'assembleRelease'
 
     from('build/outputs/aar/')
-    include 'sdk-webbridge-release.aar'
+    include 'android-sdk-plugin-webbridge-release.aar'
     destinationDir file('build/libs/')
-    rename 'sdk-webbridge-release.aar', "${project.name}.aar"
-
+    rename 'android-sdk-plugin-webbridge-release.aar', "${project.name}.aar"
 }
 
 task adtraceWebBridgeAndroidJar(type: Jar) {
@@ -97,7 +96,7 @@ afterEvaluate {
                 artifactId 'adtrace-android-webbridge'
                 version rootProject.ext.coreVersionName
 
-                artifact("$buildDir/outputs/aar/android-sdk-plugin-webbridge-release.aar") {
+                artifact("$buildDir/libs/android-sdk-plugin-webbridge.aar") {
                     builtBy tasks.getByPath("adtraceWebBridgeAndroidAar")
                 }
                 artifact adtraceWebBridgeAndroidSourcesJar
@@ -117,7 +116,7 @@ afterEvaluate {
         }
     }
     signing {
-//    sign publishing.publications.mavenAndroidWebBridgeJar
+//        sign publishing.publications.mavenAndroidWebBridgeJar
         sign publishing.publications.mavenAndroidWebBridgeAar
     }
 }
@@ -132,6 +131,7 @@ def customizePomForJar(pom) {
             description 'The WebBridge plugin for AdTrace SDK Android'
             name 'AdTrace Android SDK WebBridge plugin'
             url 'https://github.com/adtrace/adtrace_sdk_android'
+
             organization {
                 name 'adtrace'
                 url 'https://www.adtrace.io'
@@ -168,6 +168,7 @@ def customizePomForAar(pom) {
             description 'The WebBridge plugin for AdTrace SDK Android'
             name 'AdTrace Android SDK WebBridge plugin'
             url 'https://github.com/adtrace/adtrace_sdk_android'
+            packaging 'aar'
             organization {
                 name 'adtrace'
                 url 'https://www.adtrace.io'
@@ -197,14 +198,14 @@ model {
 //    tasks.generatePomFileForMavenAndroidWebBridgeJarPublication {
 //        destination = file("${project.buildDir}/generated-pom.xml")
 //    }
+//    tasks.publishMavenAndroidWebBridgePublicationToMavenLocal {
+//        dependsOn project.tasks.signArchives
+//    }
     /* TODO check if/how to replace this tasks
-    tasks.publishMavenAndroidWebBridgePublicationToMavenLocal {
-        dependsOn project.tasks.signArchives
-    }
-    tasks.publishMavenAndroidWebBridgePublicationToMavenRepository {
-        dependsOn project.tasks.signArchives
-    }
-    */
+tasks.publishMavenAndroidWebBridgePublicationToMavenRepository {
+    dependsOn project.tasks.signArchives
+}
+*/
     tasks.generatePomFileForMavenAndroidWebBridgeAarPublication {
         destination = file("${project.buildDir}/generated-pom.xml")
     }
