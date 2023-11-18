@@ -2,15 +2,26 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+repositories {
+    maven {
+        url "https://oss.sonatype.org/content/repositories/staging/"
+    }
+}
+
 android {
     compileSdkVersion rootProject.ext.coreCompileSdkVersion
 
+    publishing {
+        multipleVariants {
+            allVariants()
+            withJavadocJar()
+        }
+    }
     defaultConfig {
-        minSdkVersion rootProject.ext.coreMinSdkVersion
+        minSdkVersion rootProject.ext.vivoReferrerMinSdkVersion
         targetSdkVersion rootProject.ext.coreTargetSdkVersion
     }
-
-
+    namespace 'io.adtrace.sdk.vivo'
 }
 
 dependencies {
@@ -19,7 +30,7 @@ dependencies {
     // Add SDK via module.
     compileOnly project(':android-sdk')
     // Add SDK via Maven.
-    // implementation 'io.adtrace:android-sdk:2.4.2'
+    // implementation 'io.adtrace:android-sdk:2.5.0'
 }
 
 // read local properties
@@ -34,17 +45,17 @@ if (localPropsFile.exists()) {
     }
 }
 
-task adtraceVivoAndroidAar (type: Copy) {
+task adtraceVivoReferrerPluginAar(type: Copy) {
     dependsOn 'assembleRelease'
 
     from('build/outputs/aar/')
-    include 'sdk-plugin-vivo-release.aar'
+    include 'sdk-plugin-vivo-referrer-release.aar'
     destinationDir file('build/libs/')
-    rename 'sdk-plugin-vivo-release.aar', "${project.name}.aar"
+    rename 'sdk-plugin-vivo-referrer-release.aar', "${project.name}.aar"
 
 }
 
-task adtraceVivoAndroidJar(type: Jar) {
+task adtraceVivoReferrerPluginJar(type: Jar) {
     dependsOn 'packageReleaseAssets'
     dependsOn 'compileReleaseJavaWithJavac'
 
@@ -53,73 +64,112 @@ task adtraceVivoAndroidJar(type: Jar) {
     }
     from('build/intermediates/javac/release/classes/')
 
-    archiveName "${project.name}.jar"
+    archiveFileName = project.provider { "${project.name}.jar" }
 }
 
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    android.libraryVariants.all { variant ->
-        if (variant.name == 'release') {
-            classpath += variant.javaCompileProvider.get().classpath
-        }
-    }
-}
 
-task adtraceVivoAndroidJavadocsJar(type: Jar) {
-    dependsOn 'androidJavadocs'
-    classifier = 'javadoc'
-    from androidJavadocs.destinationDir
-}
-
-task adtraceVivoAndroidSourcesJar(type: Jar) {
-    classifier = 'sources'
+task adtraceVivoReferrerPluginSourcesJar(type: Jar) {
+    setArchiveClassifier('sources')
     from android.sourceSets.main.java.srcDirs
 }
 
 artifacts {
-    archives adtraceVivoAndroidJar
-    archives adtraceVivoAndroidJavadocsJar
-    archives adtraceVivoAndroidSourcesJar
+    archives adtraceVivoReferrerPluginJar
+    archives adtraceVivoReferrerPluginSourcesJar
 }
-publishing {
-    publications {
-        mavenAndroidVivo(MavenPublication) {
-            customizePom(pom)
-            groupId rootProject.ext.adtraceGroupId
-            artifactId 'android-sdk-plugin-vivo'
-            version rootProject.ext.coreVersionName
 
-            artifact adtraceVivoAndroidJar
-            artifact adtraceVivoAndroidJavadocsJar
-            artifact adtraceVivoAndroidSourcesJar
+afterEvaluate {
+    publishing {
+        publications {
+/*
+            mavenAndroidVivoReferrerJar(MavenPublication) {
+                customizePomForJar(pom)
+                groupId rootProject.ext.adtraceGroupId
+                artifactId 'adtrace-android-vivo-referrer'
+                version rootProject.ext.coreVersionName
+
+                artifact adtraceVivoReferrerPluginJar
+                artifact adtraceVivoReferrerPluginSourcesJar
+            }
+*/
+            mavenAndroidVivoReferrerAar(MavenPublication) {
+                customizePomForAar(pom)
+                groupId rootProject.ext.adtraceGroupId
+                artifactId 'adtrace-android-vivo-referrer'
+                version rootProject.ext.coreVersionName
+
+                artifact("$buildDir/outputs/aar/android-sdk-vivo-plugin-release.aar") {
+                    builtBy tasks.getByPath("adtraceVivoReferrerPluginAar")
+                }
+                artifact adtraceVivoReferrerPluginSourcesJar
+            }
         }
-    }
 
-    repositories {
-        maven {
-            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            if (project.hasProperty("sonatypeUsername")) {
-                credentials {
-                    username sonatypeUsername
-                    password sonatypePassword
+        repositories {
+            maven {
+                url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                if (project.hasProperty("sonatypeUsername")) {
+                    credentials {
+                        username sonatypeUsername
+                        password sonatypePassword
+                    }
                 }
             }
         }
     }
+    signing {
+//        sign publishing.publications.mavenAndroidVivoReferrerJar
+        sign publishing.publications.mavenAndroidVivoReferrerAar
+    }
 }
 
-
-def customizePom(pom) {
+def customizePomForJar(pom) {
     pom.withXml {
         def root = asNode()
 
         // Add all items necessary for maven central publication.
         root.children().last() + {
             resolveStrategy = Closure.DELEGATE_FIRST
-            description 'The AdTrace SDK for Android'
-            name 'AdTrace Android SDK'
+            description 'The Vivo Referrer plugin for AdTrace SDK Android'
+            name 'AdTrace Android SDK Vivo Referrer plugin'
             url 'https://github.com/adtrace/adtrace_sdk_android'
+
+            organization {
+                name 'adtrace'
+                url 'https://www.adtrace.io'
+            }
+            licenses {
+                license {
+                    name 'MIT License'
+                    url 'http://www.opensource.org/licenses/mit-license.php'
+                }
+            }
+            scm {
+                url 'git@github.com:adtrace/adtrace_sdk_android.git'
+                connection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+                developerConnection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+            }
+            developers {
+                developer {
+                    name 'Nasser Amini'
+                    email 'namini40@gmail.com'
+                }
+            }
+        }
+    }
+}
+
+def customizePomForAar(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // Add all items necessary for maven central publication.
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+            description 'The Vivo Referrer plugin for AdTrace SDK Android'
+            name 'AdTrace Android SDK Vivo Referrer plugin'
+            url 'https://github.com/adtrace/adtrace_sdk_android'
+
             organization {
                 name 'adtrace'
                 url 'https://www.adtrace.io'
@@ -146,19 +196,20 @@ def customizePom(pom) {
 }
 
 model {
-    tasks.generatePomFileForMavenAndroidVivoPublication {
-        destination = file("${project.buildDir}/generated-pom.xml")
-    }
+//    tasks.generatePomFileForMavenAndroidVivoReferrerJarPublication {
+//        destination = file("${project.buildDir}/generated-pom.xml")
+//    }
     /* TODO check if/how to replace this tasks
-    tasks.publishMavenAndroidVivoPublicationToMavenLocal {
+    tasks.publishMavenAndroidVivoReferrerPublicationToMavenLocal {
         dependsOn project.tasks.signArchives
     }
-    tasks.publishMavenAndroidVivoPublicationToMavenRepository {
+    tasks.publishMavenAndroidVivoReferrerPublicationToMavenRepository {
         dependsOn project.tasks.signArchives
     }
     */
+    tasks.generatePomFileForMavenAndroidVivoReferrerAarPublication {
+        destination = file("${project.buildDir}/generated-pom.xml")
+    }
 }
 
-signing {
-    sign publishing.publications.mavenAndroidVivo
-}
+
