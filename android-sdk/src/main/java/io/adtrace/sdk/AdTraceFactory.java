@@ -25,6 +25,7 @@ public class AdTraceFactory {
     private static IActivityHandler activityHandler = null;
     private static ILogger logger = null;
     private static ISdkClickHandler sdkClickHandler = null;
+    private static IPurchaseVerificationHandler purchaseVerificationHandler = null;
 
     private static long timerInterval = -1;
     private static long timerStart = -1;
@@ -37,6 +38,7 @@ public class AdTraceFactory {
     private static String baseUrl = null;
     private static String gdprUrl = null;
     private static String subscriptionUrl = null;
+    private static String purchaseVerificationUrl = null;
     private static UtilNetworking.IConnectionOptions connectionOptions = null;
     private static UtilNetworking.IHttpsURLConnectionProvider httpsURLConnectionProvider = null;
     private static boolean tryInstallReferrer = true;
@@ -165,6 +167,21 @@ public class AdTraceFactory {
         return sdkClickHandler;
     }
 
+    public static IPurchaseVerificationHandler getPurchaseVerificationHandler(
+            IActivityHandler activityHandler,
+            boolean startsSending,
+            IActivityPackageSender packageHandlerActivityPackageSender)
+    {
+        if (purchaseVerificationHandler == null) {
+            return new PurchaseVerificationHandler(activityHandler,
+                    startsSending,
+                    packageHandlerActivityPackageSender);
+        }
+
+        purchaseVerificationHandler.init(activityHandler, startsSending, packageHandlerActivityPackageSender);
+        return purchaseVerificationHandler;
+    }
+
     public static long getMaxDelayStart() {
         if (maxDelayStart == -1) {
             return Constants.ONE_SECOND * 10; // 10 seconds
@@ -182,6 +199,10 @@ public class AdTraceFactory {
 
     public static String getSubscriptionUrl() {
         return AdTraceFactory.subscriptionUrl;
+    }
+
+    public static String getPurchaseVerificationUrl() {
+        return AdTraceFactory.purchaseVerificationUrl;
     }
 
     public static UtilNetworking.IConnectionOptions getConnectionOptions() {
@@ -258,6 +279,10 @@ public class AdTraceFactory {
         AdTraceFactory.subscriptionUrl = subscriptionUrl;
     }
 
+    public static void setPurchaseVerificationUrl(String purchaseVerificationUrl) {
+        AdTraceFactory.purchaseVerificationUrl = purchaseVerificationUrl;
+    }
+
     public static void setConnectionOptions(UtilNetworking.IConnectionOptions connectionOptions) {
         AdTraceFactory.connectionOptions = connectionOptions;
     }
@@ -323,6 +348,7 @@ public class AdTraceFactory {
         baseUrl = Constants.BASE_URL;
         gdprUrl = Constants.GDPR_URL;
         subscriptionUrl = Constants.SUBSCRIPTION_URL;
+        purchaseVerificationUrl = Constants.PURCHASE_VERIFICATION_URL;
         connectionOptions = null;
         httpsURLConnectionProvider = null;
         tryInstallReferrer = true;

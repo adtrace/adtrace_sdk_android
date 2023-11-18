@@ -11,7 +11,6 @@ import org.json.JSONObject;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2021.
  */
-
 public interface IActivityHandler {
     void init(AdTraceConfig config);
 
@@ -38,6 +37,8 @@ public interface IActivityHandler {
     void launchSdkClickResponseTasks(SdkClickResponseData sdkClickResponseData);
 
     void launchAttributionResponseTasks(AttributionResponseData attributionResponseData);
+
+    void launchPurchaseVerificationResponseTasks(PurchaseVerificationResponseData purchaseVerificationResponseData);
 
     void sendReftagReferrer();
 
@@ -80,6 +81,8 @@ public interface IActivityHandler {
     void trackAdRevenue(AdTraceAdRevenue adTraceAdRevenue);
 
     void trackPlayStoreSubscription(AdTracePlayStoreSubscription subscription);
+
+    void verifyPurchase(AdTracePurchase purchase, OnPurchaseVerificationFinishedListener callback);
 
     void gotOptOutResponse();
 

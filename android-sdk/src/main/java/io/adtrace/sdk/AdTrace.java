@@ -33,7 +33,7 @@ public class AdTrace {
      */
     public static synchronized AdTraceInstance getDefaultInstance() {
         @SuppressWarnings("unused")
-        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:adtrace-android:2.4.2";
+        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:adtrace-android:2.5.0";
 
         if (defaultInstance == null) {
             defaultInstance = new AdTraceInstance();
@@ -360,6 +360,17 @@ public class AdTrace {
     public static String getSdkVersion() {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
         return adTraceInstance.getSdkVersion();
+    }
+
+    /**
+     * Verify in app purchase from Google Play.
+     *
+     * @param purchase  AdTracePurchase object to be tracked
+     * @param callback  Callback to obtain verification results
+     */
+    public static void verifyPurchase(final AdTracePurchase purchase, OnPurchaseVerificationFinishedListener callback) {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.verifyPurchase(purchase, callback);
     }
 
     /**

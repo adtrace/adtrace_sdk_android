@@ -17,13 +17,16 @@ public interface Constants {
     int SOCKET_TIMEOUT = Constants.ONE_MINUTE;
     int MAX_WAIT_INTERVAL = Constants.ONE_MINUTE;
 
+    int MIN_LAST_INTERVAL_HARD_RESET_THRESHOLD = Constants.ONE_SECOND * 5;
+
     String BASE_URL = "https://app.adtrace.io";
     String GDPR_URL = "https://gdpr.adtrace.io";
     String SUBSCRIPTION_URL = "https://subscription.adtrace.com";
+    String PURCHASE_VERIFICATION_URL = "https://ssrv.adtrace.io";
 
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    String CLIENT_SDK = "android2.4.2";
+    String CLIENT_SDK = "android2.5.0";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";
@@ -33,6 +36,7 @@ public interface Constants {
     String REFERRER_API_SAMSUNG = "samsung";
     String REFERRER_API_XIAOMI = "xiaomi";
     String REFERRER_API_VIVO = "vivo";
+    String REFERRER_API_META = "meta";
     String DEEPLINK = "deeplink";
     String PUSH = "push";
     String THREAD_PREFIX = "AdTrace-";

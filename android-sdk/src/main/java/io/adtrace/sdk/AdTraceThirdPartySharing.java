@@ -58,4 +58,16 @@ public class AdTraceThirdPartySharing {
 
         partnerSharingSetting.put(key, value);
     }
+
+    public Boolean getEnabled() {
+        return isEnabled;
+    }
+
+    public Map<String, Map<String, String>> getGranularOptions() {
+        return granularOptions;
+    }
+
+    public Map<String, Map<String, Boolean>> getPartnerSharingSettings() {
+        return partnerSharingSettings;
+    }
 }
