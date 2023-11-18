@@ -2,23 +2,36 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+repositories {
+    maven {
+        url "https://oss.sonatype.org/content/repositories/staging/"
+    }
+}
+
 android {
     compileSdkVersion rootProject.ext.coreCompileSdkVersion
+
+    publishing {
+        multipleVariants {
+            allVariants()
+            withJavadocJar()
+        }
+    }
 
     defaultConfig {
         minSdkVersion rootProject.ext.coreMinSdkVersion
         targetSdkVersion rootProject.ext.coreTargetSdkVersion
     }
-
-
+    namespace 'io.adtrace.sdk.xiaomi'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     // Add SDK via module.
     compileOnly project(':android-sdk')
     // Add SDK via Maven.
-    // implementation 'io.adtrace:android-sdk:2.4.2'
+    // implementation 'io.adtrace:android-sdk:2.5.0'
 
     // Add xiaomi referrer lib via Maven.
     implementation 'com.miui.referrer:homereferrer:1.0.0.6'
@@ -36,17 +49,17 @@ if (localPropsFile.exists()) {
     }
 }
 
-task adtraceXiaomiAndroidAar (type: Copy) {
+task adtraceXiaomiReferrerPluginAar(type: Copy) {
     dependsOn 'assembleRelease'
 
     from('build/outputs/aar/')
-    include 'sdk-plugin-xiaomi-release.aar'
+    include 'sdk-plugin-xiaomi-referrer-release.aar'
     destinationDir file('build/libs/')
-    rename 'sdk-plugin-xiaomi-release.aar', "${project.name}.aar"
+    rename 'sdk-plugin-xiaomi-referrer-release.aar', "${project.name}.aar"
 
 }
 
-task adtraceXiaomiAndroidJar(type: Jar) {
+task adtraceXiaomiReferrerPluginJar(type: Jar) {
     dependsOn 'packageReleaseAssets'
     dependsOn 'compileReleaseJavaWithJavac'
 
@@ -55,73 +68,110 @@ task adtraceXiaomiAndroidJar(type: Jar) {
     }
     from('build/intermediates/javac/release/classes/')
 
-    archiveName "${project.name}.jar"
+    archiveFileName = project.provider { "${project.name}.jar" }
 }
 
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    android.libraryVariants.all { variant ->
-        if (variant.name == 'release') {
-            classpath += variant.javaCompileProvider.get().classpath
-        }
-    }
-}
-
-task adtraceXiaomiAndroidJavadocsJar(type: Jar) {
-    dependsOn 'androidJavadocs'
-    classifier = 'javadoc'
-    from androidJavadocs.destinationDir
-}
-
-task adtraceXiaomiAndroidSourcesJar(type: Jar) {
-    classifier = 'sources'
+task adtraceXiaomiReferrerPluginSourcesJar(type: Jar) {
+    setArchiveClassifier('sources')
     from android.sourceSets.main.java.srcDirs
 }
 
 artifacts {
-    archives adtraceXiaomiAndroidJar
-    archives adtraceXiaomiAndroidJavadocsJar
-    archives adtraceXiaomiAndroidSourcesJar
+    archives adtraceXiaomiReferrerPluginJar
+    archives adtraceXiaomiReferrerPluginSourcesJar
 }
-publishing {
-    publications {
-        mavenAndroidXiaomi(MavenPublication) {
-            customizePom(pom)
-            groupId rootProject.ext.adtraceGroupId
-            artifactId 'android-sdk-plugin-xiaomi'
-            version rootProject.ext.coreVersionName
+afterEvaluate {
+    publishing {
+        publications {
+/*
+            mavenAndroidXiaomiReferrerJar(MavenPublication) {
+                customizePomForJar(pom)
+                groupId rootProject.ext.adtraceGroupId
+                artifactId 'adtrace-android-xiaomi-referrer'
+                version rootProject.ext.coreVersionName
 
-            artifact adtraceXiaomiAndroidJar
-            artifact adtraceXiaomiAndroidJavadocsJar
-            artifact adtraceXiaomiAndroidSourcesJar
+                artifact adtraceXiaomiReferrerPluginJar
+                artifact adtraceXiaomiReferrerPluginSourcesJar
+            }
+*/
+            mavenAndroidXiaomiReferrerAar(MavenPublication) {
+                customizePomForAar(pom)
+                groupId rootProject.ext.adtraceGroupId
+                artifactId 'adtrace-android-xiaomi-referrer'
+                version rootProject.ext.coreVersionName
+
+                artifact("$buildDir/outputs/aar/android-sdk-xiaomi-plugin-release.aar") {
+                    builtBy tasks.getByPath("adtraceXiaomiReferrerPluginAar")
+                }
+                artifact adtraceXiaomiReferrerPluginSourcesJar
+            }
         }
-    }
 
-    repositories {
-        maven {
-            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            if (project.hasProperty("sonatypeUsername")) {
-                credentials {
-                    username sonatypeUsername
-                    password sonatypePassword
+        repositories {
+            maven {
+                url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                if (project.hasProperty("sonatypeUsername")) {
+                    credentials {
+                        username sonatypeUsername
+                        password sonatypePassword
+                    }
                 }
             }
         }
     }
+    signing {
+//        sign publishing.publications.mavenAndroidXiaomiReferrerJar
+        sign publishing.publications.mavenAndroidXiaomiReferrerAar
+    }
 }
 
-
-def customizePom(pom) {
+def customizePomForJar(pom) {
     pom.withXml {
         def root = asNode()
 
         // Add all items necessary for maven central publication.
         root.children().last() + {
             resolveStrategy = Closure.DELEGATE_FIRST
-            description 'The AdTrace SDK for Android'
-            name 'AdTrace Android SDK'
+            description 'The Samsung Referrer plugin for AdTrace SDK Android'
+            name 'AdTrace Android SDK Xiaomi Referrer plugin'
             url 'https://github.com/adtrace/adtrace_sdk_android'
+
+            organization {
+                name 'adtrace'
+                url 'https://www.adtrace.io'
+            }
+            licenses {
+                license {
+                    name 'MIT License'
+                    url 'http://www.opensource.org/licenses/mit-license.php'
+                }
+            }
+            scm {
+                url 'git@github.com:adtrace/adtrace_sdk_android.git'
+                connection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+                developerConnection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+            }
+            developers {
+                developer {
+                    name 'Nasser Amini'
+                    email 'namini40@gmail.com'
+                }
+            }
+        }
+    }
+}
+
+def customizePomForAar(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // Add all items necessary for maven central publication.
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+            description 'The Xiaomi Referrer plugin for AdTrace SDK Android'
+            name 'AdTrace Android SDK Xiaomi Referrer plugin'
+            url 'https://github.com/adtrace/adtrace_sdk_android'
+
             organization {
                 name 'adtrace'
                 url 'https://www.adtrace.io'
@@ -148,20 +198,20 @@ def customizePom(pom) {
 }
 
 model {
-    tasks.generatePomFileForMavenAndroidXiaomiPublication {
-        destination = file("${project.buildDir}/generated-pom.xml")
-    }
+//    tasks.generatePomFileForMavenAndroidXiaomiReferrerJarPublication {
+//        destination = file("${project.buildDir}/generated-pom.xml")
+//    }
     /* TODO check if/how to replace this tasks
-    tasks.publishMavenAndroidXiaomiPublicationToMavenLocal {
+    tasks.publishMavenAndroidXiaomiReferrerPublicationToMavenLocal {
         dependsOn project.tasks.signArchives
     }
-    tasks.publishMavenAndroidXiaomiPublicationToMavenRepository {
+    tasks.publishMavenAndroidXiaomiReferrerPublicationToMavenRepository {
         dependsOn project.tasks.signArchives
     }
     */
+    tasks.generatePomFileForMavenAndroidXiaomiReferrerAarPublication {
+        destination = file("${project.buildDir}/generated-pom.xml")
+    }
 }
 
-signing {
-    sign configurations.archives
-    sign publishing.publications.mavenAndroidXiaomi
-}
+

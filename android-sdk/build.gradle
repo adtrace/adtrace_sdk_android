@@ -5,6 +5,13 @@ apply plugin: 'signing'
 android {
     compileSdkVersion rootProject.ext.coreCompileSdkVersion
 
+    publishing {
+        multipleVariants {
+            allVariants()
+            withJavadocJar()
+        }
+    }
+
     defaultConfig {
         minSdkVersion rootProject.ext.coreMinSdkVersion
         targetSdkVersion rootProject.ext.coreTargetSdkVersion
@@ -13,10 +20,11 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'io.adtrace.sdk'
 }
 
 // read local properties
@@ -39,100 +47,88 @@ task adtraceCoreAarRelease(type: Copy) {
     dependsOn 'assembleRelease'
 
     from('build/outputs/aar/')
-    include 'sdk-release.aar'
+    include 'android-sdk-release.aar'
     destinationDir file('build/libs/')
-    rename 'sdk-release.aar', 'android-sdk-release.aar'
+    rename 'android-sdk-release.aar', 'adtrace-sdk-release.aar'
 }
 
 task adtraceCoreAarDebug(type: Copy) {
     dependsOn 'assembleDebug'
 
     from('build/outputs/aar/')
-    include 'sdk-debug.aar'
+    include 'android-sdk-debug.aar'
     destinationDir file('build/libs/')
-    rename 'sdk-debug.aar', 'android-sdk-debug.aar'
+    rename 'android-sdk-debug.aar', 'adtrace-sdk-debug.aar'
 }
 
 task adtraceCoreJarRelease(type: Jar) {
     dependsOn 'compileReleaseJavaWithJavac'
     from('build/intermediates/javac/release/classes/')
-    archiveName "android-sdk-release.jar"
+    archiveFileName  = project.provider {"adtrace-sdk-release.jar"}
 }
 
 task adtraceCoreJarDebug(type: Jar) {
     dependsOn 'compileDebugJavaWithJavac'
     from('build/intermediates/javac/debug/classes/')
-    archiveName "android-sdk-debug.jar"
-}
-
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    // JDK 1.8 is more strict then 1.7. Have JDK 1.8 behave like 1.7 for javadoc generation.
-    if (org.gradle.internal.jvm.Jvm.current().getJavaVersion() == JavaVersion.VERSION_1_8) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-    }
-}
-
-task adtraceCoreAndroidJavadocsJar(type: Jar) {
-    dependsOn 'androidJavadocs'
-    classifier = 'javadoc'
-    from androidJavadocs.destinationDir
+    archiveFileName  = project.provider {"adtrace-sdk-debug.jar"}
 }
 
 task adtraceCoreAndroidSourcesJar(type: Jar) {
-    classifier = 'sources'
+    setArchiveClassifier('sources')
     from android.sourceSets.main.java.srcDirs
 }
 
 artifacts {
     archives adtraceCoreJarRelease
-    archives adtraceCoreAndroidJavadocsJar
     archives adtraceCoreAndroidSourcesJar
 }
+afterEvaluate {
+    publishing {
+        publications {
+//        mavenAndroidCoreJar(MavenPublication) {
+//            customizePomForJar(pom)
+//            groupId rootProject.ext.adtraceGroupId
+//            artifactId 'adtrace-android'
+//            version rootProject.ext.coreVersionName
+//
+//            artifact adtraceCoreJarRelease
+//            artifact adtraceCoreAndroidJavadocsJar
+//            artifact adtraceCoreAndroidSourcesJar
+//        }
 
-publishing {
-    publications {
-        mavenAndroidCore(MavenPublication) {
-            customizePom(pom)
-            groupId rootProject.ext.adtraceGroupId
-            artifactId 'android-sdk'
-            version rootProject.ext.coreVersionName
+            mavenAndroidCoreAar(MavenPublication) {
+                customizePomForAar(pom)
+                groupId rootProject.ext.adtraceGroupId
+                artifactId 'adtrace-android'
+                version rootProject.ext.coreVersionName
 
-            artifact adtraceCoreJarRelease
-            artifact adtraceCoreAndroidJavadocsJar
-            artifact adtraceCoreAndroidSourcesJar
-        }
-
-        mavenAndroidCoreAAR(MavenPublication) {
-            customizePomForAar(pom)
-            groupId rootProject.ext.adtraceGroupId
-            artifactId 'android-sdk'
-            version rootProject.ext.coreVersionName
-
-            artifact("$buildDir/outputs/aar/android-sdk-release.aar"){
-                builtBy tasks.getByPath("adtraceCoreAarRelease")
+                artifact("$buildDir/outputs/aar/android-sdk-release.aar") {
+                    builtBy tasks.getByPath("adtraceCoreAarRelease")
+                }
+//                artifact adtraceCoreAndroidJavadocsJar
+                artifact adtraceCoreAndroidSourcesJar
             }
-            artifact adtraceCoreAndroidJavadocsJar
-            artifact adtraceCoreAndroidSourcesJar
+
         }
 
-    }
-
-    repositories {
-        maven {
-            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            if (project.hasProperty("sonatypeUsername")) {
-                credentials {
-                    username sonatypeUsername
-                    password sonatypePassword
+        repositories {
+            maven {
+                url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                if (project.hasProperty("sonatypeUsername")) {
+                    credentials {
+                        username sonatypeUsername
+                        password sonatypePassword
+                    }
                 }
             }
         }
     }
+    signing {
+        sign publishing.publications.mavenAndroidCoreAar
+    }
 }
 
-def customizePom(pom) {
+def customizePomForJar(pom) {
     pom.withXml {
         // Add all items necessary for maven central publication.
         asNode().children().last() + {
@@ -195,7 +191,7 @@ def customizePomForAar(pom) {
             developers {
                 developer {
                     name 'Nasser Amini'
-                    email 'naser@smartech.ir'
+                    email 'namini40@gmail.com'
                 }
             }
         }
@@ -203,9 +199,9 @@ def customizePomForAar(pom) {
 }
 
 model {
-    tasks.generatePomFileForMavenAndroidCorePublication {
-        destination = file("${project.buildDir}/generated-pom.xml")
-    }
+//    tasks.generatePomFileForMavenAndroidCoreJarPublication {
+//        destination = file("${project.buildDir}/generated-pom.xml")
+//    }
     /* TODO check if/how to replace this tasks
     tasks.publishMavenAndroidCorePublicationToMavenLocal {
         dependsOn project.tasks.signArchives
@@ -214,7 +210,7 @@ model {
         dependsOn project.tasks.signArchives
     }
     */
-    tasks.generatePomFileForMavenAndroidCoreAARPublication {
+    tasks.generatePomFileForMavenAndroidCoreAarPublication {
         destination = file("${project.buildDir}/generated-pom.xml")
     }
     /* TODO check if/how to replace this tasks
@@ -227,8 +223,7 @@ model {
     */
 }
 
-signing {
-    sign configurations.archives
-    sign publishing.publications.mavenAndroidCore
-    sign publishing.publications.mavenAndroidCoreAAR
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
