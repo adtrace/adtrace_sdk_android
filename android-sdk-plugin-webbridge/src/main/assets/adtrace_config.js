@@ -55,6 +55,8 @@ function AdTraceConfig(appToken, environment, legacy) {
     this.preinstallFilePath = null;
     this.playStoreKidsAppEnabled = null;
     this.coppaCompliantEnabled = null;
+    this.finalAttributionEnabled = null;
+    this.fbAppId = null;
 }
 
 AdTraceConfig.EnvironmentSandbox = 'sandbox';
@@ -256,4 +258,12 @@ AdTraceConfig.prototype.setPlayStoreKidsAppEnabled = function(isEnabled) {
 
 AdTraceConfig.prototype.setCoppaCompliantEnabled = function(isEnabled) {
     this.coppaCompliantEnabled = isEnabled;
+};
+
+AdTraceConfig.prototype.setFinalAttributionEnabled = function(isEnabled) {
+    this.finalAttributionEnabled = isEnabled;
+};
+
+AdTraceConfig.prototype.setFbAppId = function(fbAppId) {
+    this.fbAppId = fbAppId;
 };

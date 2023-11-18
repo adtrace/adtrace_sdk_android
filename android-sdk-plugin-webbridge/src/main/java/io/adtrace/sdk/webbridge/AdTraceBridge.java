@@ -9,7 +9,6 @@ import android.app.Application;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 public class AdTraceBridge {
     private static AdTraceBridgeInstance defaultInstance;
 
