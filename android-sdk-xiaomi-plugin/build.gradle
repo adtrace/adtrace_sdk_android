@@ -97,7 +97,7 @@ afterEvaluate {
             mavenAndroidXiaomiReferrerAar(MavenPublication) {
                 customizePomForAar(pom)
                 groupId rootProject.ext.adtraceGroupId
-                artifactId 'adtrace-android-xiaomi-referrer'
+                artifactId rootProject.ext.xiaomiReferrerSdkArtifactId
                 version rootProject.ext.coreVersionName
 
                 artifact("$buildDir/outputs/aar/android-sdk-xiaomi-plugin-release.aar") {

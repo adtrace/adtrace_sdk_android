@@ -98,7 +98,7 @@ afterEvaluate {
             mavenAndroidOaidAar(MavenPublication) {
                 customizePomForAar(pom)
                 groupId rootProject.ext.adtraceGroupId
-                artifactId 'adtrace-android-oaid'
+                artifactId rootProject.ext.oaidSdkArtifactId
                 version rootProject.ext.coreVersionName
 
                 artifact("$buildDir/outputs/aar/android-sdk-plugin-oaid-release.aar") {

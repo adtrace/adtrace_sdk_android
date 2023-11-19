@@ -99,7 +99,7 @@ afterEvaluate {
             mavenAndroidCoreAar(MavenPublication) {
                 customizePomForAar(pom)
                 groupId rootProject.ext.adtraceGroupId
-                artifactId 'adtrace-android'
+                artifactId rootProject.ext.coreSdkArtifactId
                 version rootProject.ext.coreVersionName
 
                 artifact("$buildDir/outputs/aar/android-sdk-release.aar") {

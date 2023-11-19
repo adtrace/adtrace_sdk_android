@@ -93,7 +93,7 @@ afterEvaluate {
             mavenAndroidWebBridgeAar(MavenPublication) {
                 customizePomForAar(pom)
                 groupId rootProject.ext.adtraceGroupId
-                artifactId 'adtrace-android-webbridge'
+                artifactId rootProject.ext.webbridgeSdkArtifactId
                 version rootProject.ext.coreVersionName
 
                 artifact("$buildDir/libs/android-sdk-plugin-webbridge.aar") {
