@@ -88,7 +88,7 @@ afterEvaluate {
             mavenAndroidImeiAar(MavenPublication) {
                 customizePomForAar(pom)
                 groupId rootProject.ext.adtraceGroupId
-                artifactId 'adtrace-android-imei'
+                artifactId rootProject.ext.imeiSdkArtifactId
                 version rootProject.ext.coreVersionName
 
                 artifact("$buildDir/outputs/aar/android-sdk-imei-plugin-release.aar") {

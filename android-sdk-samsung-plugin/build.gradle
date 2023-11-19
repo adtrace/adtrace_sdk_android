@@ -95,7 +95,7 @@ afterEvaluate {
             mavenAndroidSamsungReferrerAar(MavenPublication) {
                 customizePomForAar(pom)
                 groupId rootProject.ext.adtraceGroupId
-                artifactId 'adtrace-android-samsung-referrer'
+                artifactId rootProject.ext.samsungReferrerSdkArtifactId
                 version rootProject.ext.coreVersionName
 
                 artifact("$buildDir/outputs/aar/android-sdk-samsung-plugin-release.aar") {

@@ -95,7 +95,7 @@ afterEvaluate {
             mavenAndroidVivoReferrerAar(MavenPublication) {
                 customizePomForAar(pom)
                 groupId rootProject.ext.adtraceGroupId
-                artifactId 'adtrace-android-vivo-referrer'
+                artifactId rootProject.ext.vivoReferrerSdkArtifactId
                 version rootProject.ext.coreVersionName
 
                 artifact("$buildDir/outputs/aar/android-sdk-vivo-plugin-release.aar") {
