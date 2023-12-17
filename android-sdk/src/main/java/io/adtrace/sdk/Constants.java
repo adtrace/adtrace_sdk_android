@@ -4,7 +4,7 @@ package io.adtrace.sdk;
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
- * Copyright © 2022.
+ *                   Copyright © 2022.
  */
 
 public interface Constants {
@@ -22,10 +22,11 @@ public interface Constants {
     String BASE_URL = "https://app.adtrace.io";
     String GDPR_URL = "https://gdpr.adtrace.io";
     String SUBSCRIPTION_URL = "https://subscription.adtrace.com";
+    String PURCHASE_VERIFICATION_URL = "https://ssrv.adtrace.io";
 
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    String CLIENT_SDK = "android2.4.1";
+    String CLIENT_SDK = "android2.5.1";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";
@@ -35,6 +36,7 @@ public interface Constants {
     String REFERRER_API_SAMSUNG = "samsung";
     String REFERRER_API_XIAOMI = "xiaomi";
     String REFERRER_API_VIVO = "vivo";
+    String REFERRER_API_META = "meta";
     String DEEPLINK = "deeplink";
     String PUSH = "push";
     String THREAD_PREFIX = "AdTrace-";

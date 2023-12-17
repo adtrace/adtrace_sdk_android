@@ -4,7 +4,8 @@
     <string name="btn_simple_event">Track simple event</string>
     <string name="btn_revenue_event">Track revenue event</string>
     <string name="btn_callback_event">Track callback event</string>
-    <string name="btn_event_parameter">Track event parameter</string>
+    <string name="btn_partner_event">Track partner event</string>
+    <string name="btn_event_parameter">Track event with Parameters</string>
     <string name="btn_is_sdk_enabled">Is SDK enabled?</string>
     <string name="btn_service_activity">Service Activity</string>
     <string name="btn_return">Return</string>

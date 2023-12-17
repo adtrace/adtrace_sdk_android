@@ -33,7 +33,7 @@ public class AdTrace {
      */
     public static synchronized AdTraceInstance getDefaultInstance() {
         @SuppressWarnings("unused")
-        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:adtrace-android:2.4.1";
+        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:adtrace-android:2.5.1";
 
         if (defaultInstance == null) {
             defaultInstance = new AdTraceInstance();
@@ -326,7 +326,7 @@ public class AdTrace {
     public static String getAmazonAdId(final Context context) {
         Context appContext = extractApplicationContext(context);
         if (appContext != null) {
-            return Util.getFireAdvertisingId(appContext.getContentResolver());
+            return DeviceInfo.getFireAdvertisingIdBypassConditions(appContext.getContentResolver());
         }
 
         return null;
@@ -360,6 +360,17 @@ public class AdTrace {
     public static String getSdkVersion() {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
         return adTraceInstance.getSdkVersion();
+    }
+
+    /**
+     * Verify in app purchase from Google Play.
+     *
+     * @param purchase  AdTracePurchase object to be tracked
+     * @param callback  Callback to obtain verification results
+     */
+    public static void verifyPurchase(final AdTracePurchase purchase, OnPurchaseVerificationFinishedListener callback) {
+        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
+        adTraceInstance.verifyPurchase(purchase, callback);
     }
 
     /**

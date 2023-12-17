@@ -1,19 +1,14 @@
 package io.adtrace.sdk;
 
-import android.content.ContentResolver;
+import static io.adtrace.sdk.Constants.ENCODING;
+import static io.adtrace.sdk.Constants.SHA256;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.LocaleList;
-import android.provider.Settings.Secure;
-import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 
 import io.adtrace.sdk.scheduler.AsyncTaskExecutor;
 import io.adtrace.sdk.scheduler.SingleThreadFutureScheduler;
@@ -48,16 +43,12 @@ import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static io.adtrace.sdk.Constants.ENCODING;
-import static io.adtrace.sdk.Constants.SHA256;
-
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 public class Util {
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'Z";
     private static final String fieldReadErrorMessage = "Unable to read '%s' field in migration device with message (%s)";
@@ -526,127 +517,6 @@ public class Util {
         return null;
     }
 
-    public static String getFireAdvertisingId(ContentResolver contentResolver) {
-        if (contentResolver == null) {
-            return null;
-        }
-        try {
-            // get advertising
-            return Secure.getString(contentResolver, "advertising_id");
-        } catch (Exception ex) {
-            // not supported
-        }
-        return null;
-    }
-
-    public static Boolean getFireTrackingEnabled(ContentResolver contentResolver) {
-        try {
-            // get user's tracking preference
-            return Secure.getInt(contentResolver, "limit_ad_tracking") == 0;
-        } catch (Exception ex) {
-            // not supported
-        }
-        return null;
-    }
-
-    public static int getConnectivityType(Context context) {
-        try {
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            if (cm == null) {
-                return -1;
-            }
-
-            // for api 22 or lower, still need to get raw type
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                return activeNetwork.getType();
-            }
-
-            // .getActiveNetwork() is only available from api 23
-            Network activeNetwork = cm.getActiveNetwork();
-            if (activeNetwork == null) {
-                return -1;
-            }
-
-            NetworkCapabilities activeNetworkCapabilities = cm.getNetworkCapabilities(activeNetwork);
-            if (activeNetworkCapabilities == null) {
-                return -1;
-            }
-
-            // check each network capability available from api 23
-            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                return NetworkCapabilities.TRANSPORT_WIFI;
-            }
-            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                return NetworkCapabilities.TRANSPORT_CELLULAR;
-            }
-            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                return NetworkCapabilities.TRANSPORT_ETHERNET;
-            }
-            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
-                return NetworkCapabilities.TRANSPORT_VPN;
-            }
-            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)) {
-                return NetworkCapabilities.TRANSPORT_BLUETOOTH;
-            }
-
-            // only after api 26, that more transport capabilities were added
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                return -1;
-            }
-
-            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI_AWARE)) {
-                return NetworkCapabilities.TRANSPORT_WIFI_AWARE;
-            }
-
-            // and then after api 27, that more transport capabilities were added
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) {
-                return -1;
-            }
-
-            if (activeNetworkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_LOWPAN)) {
-                return NetworkCapabilities.TRANSPORT_LOWPAN;
-            }
-        } catch (Exception e) {
-            getLogger().warn("Couldn't read connectivity type (%s)", e.getMessage());
-        }
-
-        return -1;
-    }
-
-    public static String getMcc(Context context) {
-        try {
-            TelephonyManager tel = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            String networkOperator = tel.getNetworkOperator();
-
-            if (TextUtils.isEmpty(networkOperator)) {
-                AdTraceFactory.getLogger().warn("Couldn't receive networkOperator string to read MCC");
-                return null;
-            }
-            return networkOperator.substring(0, 3);
-        } catch (Exception ex) {
-            AdTraceFactory.getLogger().warn("Couldn't return mcc");
-            return null;
-        }
-    }
-
-    public static String getMnc(Context context) {
-        try {
-            TelephonyManager tel = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            String networkOperator = tel.getNetworkOperator();
-
-            if (TextUtils.isEmpty(networkOperator)) {
-                AdTraceFactory.getLogger().warn("Couldn't receive networkOperator string to read MNC");
-                return null;
-            }
-            return networkOperator.substring(3);
-        } catch (Exception ex) {
-            AdTraceFactory.getLogger().warn("Couldn't return mnc");
-            return null;
-        }
-    }
-
     public static String formatString(String format, Object... args) {
         return String.format(Locale.US, format, args);
     }
@@ -760,6 +630,8 @@ public class Util {
             return isEqualXiaomiReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_VIVO)) {
             return isEqualVivoReferrerDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_META)) {
+            return isEqualMetaReferrerDetails(referrerDetails, activityState);
         }
 
         return false;
@@ -789,36 +661,13 @@ public class Util {
         return true;
     }
 
-    public static Map<String, String> getImeiParameters(final AdTraceConfig adtraceConfig, ILogger logger) {
-        if (adtraceConfig.coppaCompliantEnabled) {
-            return null;
-        }
 
-        return Reflection.getImeiParameters(adtraceConfig.context, logger);
-    }
 
-    public static Map<String, String> getOaidParameters(final AdTraceConfig adtraceConfig, ILogger logger) {
-        if (adtraceConfig.coppaCompliantEnabled) {
-            return null;
-        }
 
-        return Reflection.getOaidParameters(adtraceConfig.context, logger);
-    }
 
-    public static String getFireAdvertisingId(final AdTraceConfig adtraceConfig) {
-        if (adtraceConfig.coppaCompliantEnabled) {
-            return null;
-        }
-
-        return getFireAdvertisingId(adtraceConfig.context.getContentResolver());
-    }
-
-    public static Boolean getFireTrackingEnabled(final AdTraceConfig adtraceConfig) {
-        if (adtraceConfig.coppaCompliantEnabled) {
-            return null;
-        }
-
-        return getFireTrackingEnabled(adtraceConfig.context.getContentResolver());
+    public static boolean isGooglePlayGamesForPC(final Context context) {
+        PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature("com.google.android.play.feature.HPE_EXPERIENCE");
     }
 
     private static boolean isEqualGoogleReferrerDetails(final ReferrerDetails referrerDetails,
@@ -869,5 +718,12 @@ public class Util {
                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginVivo
                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerVivo)
                && Util.equalString(referrerDetails.installVersion, activityState.installVersionVivo);
+    }
+
+    private static boolean isEqualMetaReferrerDetails(final ReferrerDetails referrerDetails,
+                                                      final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeMeta
+                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerMeta)
+                && Util.equalBoolean(referrerDetails.isClick, activityState.isClickMeta);
     }
 }

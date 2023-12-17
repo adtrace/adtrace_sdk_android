@@ -55,6 +55,9 @@ function AdTraceConfig(appToken, environment, legacy) {
     this.preinstallFilePath = null;
     this.playStoreKidsAppEnabled = null;
     this.coppaCompliantEnabled = null;
+    this.finalAttributionEnabled = null;
+    this.fbAppId = null;
+    this.readDeviceInfoOnceEnabled = null;
 }
 
 AdTraceConfig.EnvironmentSandbox = 'sandbox';
@@ -62,6 +65,8 @@ AdTraceConfig.EnvironmentProduction = 'production';
 
 AdTraceConfig.UrlStrategyIndia = "url_strategy_india";
 AdTraceConfig.UrlStrategyChina = "url_strategy_china";
+AdTraceConfig.UrlStrategyCn = "url_strategy_cn";
+AdTraceConfig.UrlStrategyCnOnly = "url_strategy_cn_only";
 AdTraceConfig.DataResidencyEU = "data_residency_eu";
 AdTraceConfig.DataResidencyTR = "data_residency_tr";
 AdTraceConfig.DataResidencyUS = "data_residency_us";
@@ -256,4 +261,16 @@ AdTraceConfig.prototype.setPlayStoreKidsAppEnabled = function(isEnabled) {
 
 AdTraceConfig.prototype.setCoppaCompliantEnabled = function(isEnabled) {
     this.coppaCompliantEnabled = isEnabled;
+};
+
+AdTraceConfig.prototype.setFinalAttributionEnabled = function(isEnabled) {
+    this.finalAttributionEnabled = isEnabled;
+};
+
+AdTraceConfig.prototype.setFbAppId = function(fbAppId) {
+    this.fbAppId = fbAppId;
+};
+
+AdjustConfig.prototype.setReadDeviceInfoOnceEnabled = function(isEnabled) {
+    this.readDeviceInfoOnceEnabled = isEnabled;
 };

@@ -2,6 +2,7 @@ package io.adtrace.sdk;
 
 import android.content.Context;
 
+
 /**
  * AdTrace android SDK (https://adtrace.io)
  * Created by Nasser Amini (github.com/namini40) on April 2022.
@@ -13,6 +14,7 @@ public class AdTraceConfig {
     String basePath;
     String gdprPath;
     String subscriptionPath;
+    String purchaseVerificationPath;
     Context context;
     String appToken;
     String environment;
@@ -45,6 +47,9 @@ public class AdTraceConfig {
     String preinstallFilePath;
     boolean playStoreKidsAppEnabled;
     boolean coppaCompliantEnabled;
+    boolean finalAttributionEnabled;
+    String fbAppId;
+    boolean readDeviceInfoOnceEnabled;
 
     public static final String ENVIRONMENT_SANDBOX = "sandbox";
     public static final String ENVIRONMENT_PRODUCTION = "production";
@@ -52,6 +57,7 @@ public class AdTraceConfig {
     public static final String URL_STRATEGY_INDIA = "url_strategy_india";
     public static final String URL_STRATEGY_CHINA = "url_strategy_china";
     public static final String URL_STRATEGY_CN = "url_strategy_cn";
+    public static final String URL_STRATEGY_CN_ONLY = "url_strategy_cn_only";
     public static final String DATA_RESIDENCY_EU = "data_residency_eu";
     public static final String DATA_RESIDENCY_TR = "data_residency_tr";
     public static final String DATA_RESIDENCY_US = "data_residency_us";
@@ -64,6 +70,8 @@ public class AdTraceConfig {
     public static final String AD_REVENUE_UNITY = "unity_sdk";
     public static final String AD_REVENUE_HELIUM_CHARTBOOST = "helium_chartboost_sdk";
     public static final String AD_REVENUE_SOURCE_PUBLISHER = "publisher_sdk";
+    public static final String AD_REVENUE_TOPON = "topon_sdk";
+    public static final String AD_REVENUE_ADX = "adx_sdk";
 
     public AdTraceConfig(Context context, String appToken, String environment) {
         init(context, appToken, environment, false);
@@ -198,6 +206,13 @@ public class AdTraceConfig {
         this.coppaCompliantEnabled = coppaCompliantEnabled;
     }
 
+    public void setFinalAttributionEnabled(boolean finalAttributionEnabled) {
+        this.finalAttributionEnabled = finalAttributionEnabled;
+    }
+
+    public void setFbAppId(String fbAppId) {
+        this.fbAppId = fbAppId;
+    }
 
     public boolean isValid() {
         if (!checkAppToken(appToken)) return false;
@@ -215,6 +230,7 @@ public class AdTraceConfig {
         if (!urlStrategy.equals(URL_STRATEGY_INDIA)
                 && !urlStrategy.equals(URL_STRATEGY_CHINA)
                 && !urlStrategy.equals(URL_STRATEGY_CN)
+                && !urlStrategy.equals(URL_STRATEGY_CN_ONLY)
                 && !urlStrategy.equals(DATA_RESIDENCY_EU)
                 && !urlStrategy.equals(DATA_RESIDENCY_TR)
                 && !urlStrategy.equals(DATA_RESIDENCY_US))
@@ -222,6 +238,166 @@ public class AdTraceConfig {
             logger.warn("Unrecognised url strategy %s", urlStrategy);
         }
         this.urlStrategy = urlStrategy;
+    }
+
+    public void setReadDeviceInfoOnceEnabled(boolean readDeviceInfoOnceEnabled) {
+        this.readDeviceInfoOnceEnabled = readDeviceInfoOnceEnabled;
+    }
+
+    public String getBasePath() {
+        return basePath;
+    }
+
+    public String getGdprPath() {
+        return gdprPath;
+    }
+
+    public String getSubscriptionPath() {
+        return subscriptionPath;
+    }
+
+    public String getPurchaseVerificationPath() {
+        return purchaseVerificationPath;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public String getAppToken() {
+        return appToken;
+    }
+
+    public String getEnvironment() {
+        return environment;
+    }
+
+    public String getProcessName() {
+        return processName;
+    }
+
+    public String getSdkPrefix() {
+        return sdkPrefix;
+    }
+
+    public boolean isEventBufferingEnabled() {
+        return eventBufferingEnabled;
+    }
+
+    public String getDefaultTracker() {
+        return defaultTracker;
+    }
+
+    public OnAttributionChangedListener getOnAttributionChangedListener() {
+        return onAttributionChangedListener;
+    }
+
+    public Boolean getDeviceKnown() {
+        return deviceKnown;
+    }
+
+    public Class getDeepLinkComponent() {
+        return deepLinkComponent;
+    }
+
+    public OnEventTrackingSucceededListener getOnEventTrackingSucceededListener() {
+        return onEventTrackingSucceededListener;
+    }
+
+    public OnEventTrackingFailedListener getOnEventTrackingFailedListener() {
+        return onEventTrackingFailedListener;
+    }
+
+    public OnSessionTrackingSucceededListener getOnSessionTrackingSucceededListener() {
+        return onSessionTrackingSucceededListener;
+    }
+
+    public OnSessionTrackingFailedListener getOnSessionTrackingFailedListener() {
+        return onSessionTrackingFailedListener;
+    }
+
+    public OnDeeplinkResponseListener getOnDeeplinkResponseListener() {
+        return onDeeplinkResponseListener;
+    }
+
+    public boolean isSendInBackground() {
+        return sendInBackground;
+    }
+
+    public Double getDelayStart() {
+        return delayStart;
+    }
+
+    public AdTraceInstance.PreLaunchActions getPreLaunchActions() {
+        return preLaunchActions;
+    }
+
+    public ILogger getLogger() {
+        return logger;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public String getPushToken() {
+        return pushToken;
+    }
+
+    public Boolean getStartEnabled() {
+        return startEnabled;
+    }
+
+    public boolean isStartOffline() {
+        return startOffline;
+    }
+
+    public String getSecretId() {
+        return secretId;
+    }
+
+    public String getAppSecret() {
+        return appSecret;
+    }
+
+    public String getExternalDeviceId() {
+        return externalDeviceId;
+    }
+
+    public boolean isPreinstallTrackingEnabled() {
+        return preinstallTrackingEnabled;
+    }
+
+    public Boolean getNeedsCost() {
+        return needsCost;
+    }
+
+    public String getUrlStrategy() {
+        return urlStrategy;
+    }
+
+    public String getPreinstallFilePath() {
+        return preinstallFilePath;
+    }
+
+    public boolean isPlayStoreKidsAppEnabled() {
+        return playStoreKidsAppEnabled;
+    }
+
+    public boolean isCoppaCompliantEnabled() {
+        return coppaCompliantEnabled;
+    }
+
+    public boolean isFinalAttributionEnabled() {
+        return finalAttributionEnabled;
+    }
+
+    public String getFbAppId() {
+        return fbAppId;
+    }
+
+    public boolean isReadDeviceInfoOnceEnabled() {
+        return readDeviceInfoOnceEnabled;
     }
 
     private void setLogLevel(LogLevel logLevel, String environment) {

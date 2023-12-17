@@ -177,6 +177,9 @@ public class AdTraceBridgeInstance {
             Object preinstallFilePathField = jsonAdTraceConfig.get("preinstallFilePath");
             Object playStoreKidsAppEnabledField = jsonAdTraceConfig.get("playStoreKidsAppEnabled");
             Object coppaCompliantEnabledField = jsonAdTraceConfig.get("coppaCompliantEnabled");
+            Object finalAttributionEnabledField = jsonAdTraceConfig.get("finalAttributionEnabled");
+            Object fbAppIdField = jsonAdTraceConfig.get("fbAppId");
+            Object readDeviceInfoOnceEnabledField = jsonAdTraceConfig.get("readDeviceInfoOnceEnabled");
 
             String appToken = AdTraceBridgeUtil.fieldToString(appTokenField);
             String environment = AdTraceBridgeUtil.fieldToString(environmentField);
@@ -404,6 +407,24 @@ public class AdTraceBridgeInstance {
                 adtraceConfig.setCoppaCompliantEnabled(coppaCompliantEnabled);
             }
 
+            // Final attribution config
+            Boolean finalAttributionEnabled = AdTraceBridgeUtil.fieldToBoolean(finalAttributionEnabledField);
+            if (finalAttributionEnabled != null) {
+                adtraceConfig.setFinalAttributionEnabled(finalAttributionEnabled);
+            }
+
+            // FB App ID
+            String fbAppId = AdTraceBridgeUtil.fieldToString(fbAppIdField);
+            if (fbAppId != null) {
+                adtraceConfig.setFbAppId(fbAppId);
+            }
+
+            // read device info once
+            Boolean readDeviceInfoOnceEnabled = AdTraceBridgeUtil.fieldToBoolean(readDeviceInfoOnceEnabledField);
+            if (readDeviceInfoOnceEnabled != null) {
+                adtraceConfig.setReadDeviceInfoOnceEnabled(readDeviceInfoOnceEnabled);
+            }
+
             // Manually call onResume() because web view initialisation will happen a bit delayed.
             // With this delay, it will miss lifecycle callback onResume() initial firing.
             AdTrace.onCreate(adtraceConfig);
@@ -432,6 +453,7 @@ public class AdTraceBridgeInstance {
             Object currencyField = jsonAdTraceEvent.get("currency");
             Object callbackParametersField = jsonAdTraceEvent.get("callbackParameters");
             Object eventParametersField = jsonAdTraceEvent.get("eventParameters");
+            Object partnerParametersField = jsonAdTraceEvent.get("partnerParameters");
             Object orderIdField = jsonAdTraceEvent.get("orderId");
             Object callbackIdField = jsonAdTraceEvent.get("callbackId");
 
@@ -459,13 +481,23 @@ public class AdTraceBridgeInstance {
                 }
             }
 
-            // event parameters
+            // Value parameters
             String[] eventParameters = AdTraceBridgeUtil.jsonArrayToArray((JSONArray)eventParametersField);
             if (eventParameters != null) {
                 for (int i = 0; i < eventParameters.length; i += 2) {
                     String key = eventParameters[i];
                     String value = eventParameters[i+1];
                     adtraceEvent.addEventParameter(key, value);
+                }
+            }
+
+            // Partner parameters
+            String[] partnerParameters = AdTraceBridgeUtil.jsonArrayToArray((JSONArray)partnerParametersField);
+            if (partnerParameters != null) {
+                for (int i = 0; i < partnerParameters.length; i += 2) {
+                    String key = partnerParameters[i];
+                    String value = partnerParameters[i+1];
+                    adtraceEvent.addPartnerParameter(key, value);
                 }
             }
 

@@ -101,7 +101,7 @@
                     AdTrace.trackEvent(adtraceEvent);
                 }
 
-                var btnTrackEventParameter = document.getElementById('btnEventParameter')
+                var btnTrackEventParameter = document.getElementById('btnTrackEventParameter')
                 btnTrackEventParameter.onclick = function(e) {
                     e.preventDefault()
                     var adtraceEvent = new AdTraceEvent('abc123');
@@ -109,6 +109,13 @@
                     adtraceEvent.addEventParameter('x', 'y');
                     adtraceEvent.addEventParameter('foo', 'foot');
                     adtraceEvent.addEventParameter('x', 'z');
+                    AdTrace.trackEvent(adtraceEvent);
+                }
+                var btnTrackPartnerEvent = document.getElementById('btnTrackPartnerEvent')
+                btnTrackPartnerEvent.onclick = function(e) {
+                    e.preventDefault()
+                    var adtraceEvent = new AdTraceEvent('abc123');
+                    adtraceEvent.addPartnerParameter('foo1', 'bar1');
                     AdTrace.trackEvent(adtraceEvent);
                 }
 
@@ -162,7 +169,10 @@
         <button id='btnTrackCallbackEvent'>Track Callback event</button>
     </div>
     <div style="width:400px;height:35px;text-align:center;">
-        <button id='btnTrackEventParameter'>Track event Parameter</button>
+        <button id='btnTrackPartnerEvent'>Track Partner event</button>
+    </div>
+    <div style="width:400px;height:35px;text-align:center;">
+        <button id='btnTrackEventParameter'>Track event with Parameter</button>
     </div>
     <div style="width:400px;height:35px;text-align:center;">
         <button id='btnEnableOfflineMode'>Enable Offline mode</button>

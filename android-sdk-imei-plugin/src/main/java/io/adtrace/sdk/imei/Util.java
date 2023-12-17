@@ -1,15 +1,13 @@
 package io.adtrace.sdk.imei;
 
-
-import static io.adtrace.sdk.imei.TelephonyIdsUtil.injectImei;
-
 import android.content.Context;
 
+import io.adtrace.sdk.ILogger;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import io.adtrace.sdk.ILogger;
+import static io.adtrace.sdk.imei.TelephonyIdsUtil.injectImei;
 
 public class Util {
     public static Map<String, String> getImeiParameters(Context context, ILogger logger) {

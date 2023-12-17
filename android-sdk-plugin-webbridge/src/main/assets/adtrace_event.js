@@ -4,6 +4,7 @@ function AdTraceEvent(eventToken) {
     this.currency = null;
     this.callbackParameters = [];
     this.eventParameters = [];
+    this.partnerParameters = [];
     this.orderId = null;
     this.callbackId = null;
 }
@@ -21,6 +22,11 @@ AdTraceEvent.prototype.addCallbackParameter = function(key, value) {
 AdTraceEvent.prototype.addEventParameter = function(key, value) {
     this.eventParameters.push(key);
     this.eventParameters.push(value);
+};
+
+AdTraceEvent.prototype.addPartnerParameter = function(key, value) {
+    this.partnerParameters.push(key);
+    this.partnerParameters.push(value);
 };
 
 AdTraceEvent.prototype.setOrderId = function(orderId) {

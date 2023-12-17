@@ -49,6 +49,19 @@
         android:text="@string/btn_callback_event" />
 
     <Button
+        android:id="@+id/btnPartnerEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="0.143"
+        android:onClick="onTrackPartnerEventClick"
+        android:text="@string/btn_partner_event" />
+
+    <Button
         android:id="@+id/btnEventParameter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

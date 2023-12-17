@@ -16,6 +16,8 @@
 #   public *;
 #}
 -keep public class io.adtrace.sdk.** { *; }
+-keep class io.adtrace.sdk.DeviceInfo**
+-keepclassmembers class io.adtrace.sdk.DeviceInfo** {*;}
 -keep class com.google.android.gms.common.ConnectionResult {
     int SUCCESS;
 }

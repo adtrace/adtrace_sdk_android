@@ -16,5 +16,6 @@ public class SdkClickResponseData extends ResponseData {
     long installBeginServer;
     String installVersion;
     Boolean googlePlayInstant;
+    Boolean isClick;
     String referrerApi;
 }
