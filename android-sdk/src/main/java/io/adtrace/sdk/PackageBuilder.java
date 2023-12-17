@@ -280,17 +280,17 @@ public class PackageBuilder {
 
     private Map<String, String> getSessionParameters(boolean isInDelay) {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Callback and partner parameters.
@@ -306,8 +306,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -323,7 +323,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "app_token", adtraceConfig.appToken);
         PackageBuilder.addString(parameters, "app_version", deviceInfo.appVersion);
         PackageBuilder.addBoolean(parameters, "attribution_deeplink", true);
-        PackageBuilder.addLong(parameters, "connectivity_type", Util.getConnectivityType(adtraceConfig.context));
+        PackageBuilder.addLong(parameters, "connectivity_type", deviceInfo.connectivityType);
         PackageBuilder.addString(parameters, "country", deviceInfo.country);
         PackageBuilder.addString(parameters, "cpu_type", deviceInfo.abi);
         PackageBuilder.addDateInMilliseconds(parameters, "created_at", createdAt);
@@ -344,8 +344,8 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "installed_at", deviceInfo.appInstallTime);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
         PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastInterval);
-        PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
-        PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
+        PackageBuilder.addString(parameters, "mcc", deviceInfo.mcc);
+        PackageBuilder.addString(parameters, "mnc", deviceInfo.mnc);
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
         PackageBuilder.addString(parameters, "os_build", deviceInfo.buildName);
         PackageBuilder.addString(parameters, "os_name", deviceInfo.osName);
@@ -373,17 +373,17 @@ public class PackageBuilder {
 
     public Map<String, String> getEventParameters(AdTraceEvent event, boolean isInDelay) {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Callback and partner parameters.
@@ -400,8 +400,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -417,7 +417,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "app_token", adtraceConfig.appToken);
         PackageBuilder.addString(parameters, "app_version", deviceInfo.appVersion);
         PackageBuilder.addBoolean(parameters, "attribution_deeplink", true);
-        PackageBuilder.addLong(parameters, "connectivity_type", Util.getConnectivityType(adtraceConfig.context));
+        PackageBuilder.addLong(parameters, "connectivity_type", deviceInfo.connectivityType);
         PackageBuilder.addString(parameters, "country", deviceInfo.country);
         PackageBuilder.addString(parameters, "cpu_type", deviceInfo.abi);
         PackageBuilder.addDateInMilliseconds(parameters, "created_at", createdAt);
@@ -440,8 +440,8 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "hardware_name", deviceInfo.hardwareName);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
         PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastIntervalHardReset);
-        PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
-        PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
+        PackageBuilder.addString(parameters, "mcc", deviceInfo.mcc);
+        PackageBuilder.addString(parameters, "mnc", deviceInfo.mnc);
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
         PackageBuilder.addString(parameters, "os_build", deviceInfo.buildName);
         PackageBuilder.addString(parameters, "os_name", deviceInfo.osName);
@@ -472,17 +472,17 @@ public class PackageBuilder {
 
     private Map<String, String> getInfoParameters(String source) {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Device identifiers.
@@ -492,8 +492,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -529,17 +529,17 @@ public class PackageBuilder {
 
     private Map<String, String> getClickParameters(String source) {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Device identifiers.
@@ -549,8 +549,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -578,7 +578,7 @@ public class PackageBuilder {
         PackageBuilder.addDateInMilliseconds(parameters, "click_time", clickTimeInMilliseconds);
         PackageBuilder.addDateInSeconds(parameters, "click_time", clickTimeInSeconds);
         PackageBuilder.addDateInSeconds(parameters, "click_time_server", clickTimeServerInSeconds);
-        PackageBuilder.addLong(parameters, "connectivity_type", Util.getConnectivityType(adtraceConfig.context));
+        PackageBuilder.addLong(parameters, "connectivity_type", deviceInfo.connectivityType);
         PackageBuilder.addString(parameters, "country", deviceInfo.country);
         PackageBuilder.addString(parameters, "cpu_type", deviceInfo.abi);
         PackageBuilder.addDateInMilliseconds(parameters, "created_at", createdAt);
@@ -605,8 +605,8 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "installed_at", deviceInfo.appInstallTime);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
         PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastIntervalHardReset);
-        PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
-        PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
+        PackageBuilder.addString(parameters, "mcc", deviceInfo.mcc);
+        PackageBuilder.addString(parameters, "mnc", deviceInfo.mnc);
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
         PackageBuilder.addString(parameters, "os_build", deviceInfo.buildName);
         PackageBuilder.addString(parameters, "os_name", deviceInfo.osName);
@@ -643,17 +643,17 @@ public class PackageBuilder {
 
     private Map<String, String> getAttributionParameters(String initiatedBy) {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Device identifiers.
@@ -663,8 +663,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -708,17 +708,17 @@ public class PackageBuilder {
 
     private Map<String, String> getGdprParameters() {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Device identifiers.
@@ -728,8 +728,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -772,17 +772,17 @@ public class PackageBuilder {
 
     private Map<String, String> getDisableThirdPartySharingParameters() {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Device identifiers.
@@ -792,8 +792,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -838,17 +838,17 @@ public class PackageBuilder {
             (final AdTraceThirdPartySharing adtraceThirdPartySharing)
     {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Third Party Sharing
@@ -870,8 +870,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -915,17 +915,17 @@ public class PackageBuilder {
             final boolean consentMeasurement)
     {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Measurement Consent
@@ -939,8 +939,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -982,17 +982,17 @@ public class PackageBuilder {
 
     private Map<String, String> getAdRevenueParameters(String source, JSONObject adRevenueJson) {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Device identifiers.
@@ -1002,8 +1002,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -1019,7 +1019,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "app_token", adtraceConfig.appToken);
         PackageBuilder.addString(parameters, "app_version", deviceInfo.appVersion);
         PackageBuilder.addBoolean(parameters, "attribution_deeplink", true);
-        PackageBuilder.addLong(parameters, "connectivity_type", Util.getConnectivityType(adtraceConfig.context));
+        PackageBuilder.addLong(parameters, "connectivity_type", deviceInfo.connectivityType);
         PackageBuilder.addString(parameters, "country", deviceInfo.country);
         PackageBuilder.addString(parameters, "cpu_type", deviceInfo.abi);
         PackageBuilder.addDateInMilliseconds(parameters, "created_at", createdAt);
@@ -1040,8 +1040,8 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "installed_at", deviceInfo.appInstallTime);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
         PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastInterval);
-        PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
-        PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
+        PackageBuilder.addString(parameters, "mcc", deviceInfo.mcc);
+        PackageBuilder.addString(parameters, "mnc", deviceInfo.mnc);
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
         PackageBuilder.addString(parameters, "os_build", deviceInfo.buildName);
         PackageBuilder.addString(parameters, "os_name", deviceInfo.osName);
@@ -1071,17 +1071,17 @@ public class PackageBuilder {
 
     private Map<String, String> getAdRevenueParameters(AdTraceAdRevenue adtraceAdRevenue, boolean isInDelay) {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Callback and partner parameters.
@@ -1097,8 +1097,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -1114,7 +1114,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "app_token", adtraceConfig.appToken);
         PackageBuilder.addString(parameters, "app_version", deviceInfo.appVersion);
         PackageBuilder.addBoolean(parameters, "attribution_deeplink", true);
-        PackageBuilder.addLong(parameters, "connectivity_type", Util.getConnectivityType(adtraceConfig.context));
+        PackageBuilder.addLong(parameters, "connectivity_type", deviceInfo.connectivityType);
         PackageBuilder.addString(parameters, "country", deviceInfo.country);
         PackageBuilder.addString(parameters, "cpu_type", deviceInfo.abi);
         PackageBuilder.addDateInMilliseconds(parameters, "created_at", createdAt);
@@ -1135,8 +1135,8 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "installed_at", deviceInfo.appInstallTime);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
         PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastInterval);
-        PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
-        PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
+        PackageBuilder.addString(parameters, "mcc", deviceInfo.mcc);
+        PackageBuilder.addString(parameters, "mnc", deviceInfo.mnc);
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
         PackageBuilder.addString(parameters, "os_build", deviceInfo.buildName);
         PackageBuilder.addString(parameters, "os_name", deviceInfo.osName);
@@ -1171,17 +1171,17 @@ public class PackageBuilder {
 
     private Map<String, String> getSubscriptionParameters(AdTracePlayStoreSubscription subscription, boolean isInDelay) {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Device identifiers.
@@ -1191,8 +1191,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
         PackageBuilder.addString(parameters, "google_app_set_id", deviceInfo.appSetId);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
@@ -1214,7 +1214,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "app_token", adtraceConfig.appToken);
         PackageBuilder.addString(parameters, "app_version", deviceInfo.appVersion);
         PackageBuilder.addBoolean(parameters, "attribution_deeplink", true);
-        PackageBuilder.addLong(parameters, "connectivity_type", Util.getConnectivityType(adtraceConfig.context));
+        PackageBuilder.addLong(parameters, "connectivity_type", deviceInfo.connectivityType);
         PackageBuilder.addString(parameters, "country", deviceInfo.country);
         PackageBuilder.addString(parameters, "cpu_type", deviceInfo.abi);
         PackageBuilder.addDateInMilliseconds(parameters, "created_at", createdAt);
@@ -1235,8 +1235,8 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "installed_at", deviceInfo.appInstallTime);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
         PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastInterval);
-        PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
-        PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
+        PackageBuilder.addString(parameters, "mcc", deviceInfo.mcc);
+        PackageBuilder.addString(parameters, "mnc", deviceInfo.mnc);
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
         PackageBuilder.addString(parameters, "os_build", deviceInfo.buildName);
         PackageBuilder.addString(parameters, "os_name", deviceInfo.osName);
@@ -1274,17 +1274,17 @@ public class PackageBuilder {
 
     private Map<String, String> getVerificationParameters(AdTracePurchase purchase) {
         Map<String, String> parameters = new HashMap<String, String>();
-        Map<String, String> imeiParameters = Util.getImeiParameters(adtraceConfig, logger);
+
+        deviceInfo.reloadOtherDeviceInfoParams(adtraceConfig, logger);
 
         // Check if plugin is used and if yes, add read parameters.
-        if (imeiParameters != null) {
-            parameters.putAll(imeiParameters);
+        if (deviceInfo.imeiParameters != null) {
+            parameters.putAll(deviceInfo.imeiParameters);
         }
 
         // Check if oaid plugin is used and if yes, add the parameter
-        Map<String, String> oaidParameters = Util.getOaidParameters(adtraceConfig, logger);
-        if (oaidParameters != null) {
-            parameters.putAll(oaidParameters);
+        if (deviceInfo.oaidParameters != null) {
+            parameters.putAll(deviceInfo.oaidParameters);
         }
 
         // Device identifiers.
@@ -1294,8 +1294,8 @@ public class PackageBuilder {
         PackageBuilder.addLong(parameters, "gps_adid_attempt", deviceInfo.playAdIdAttempt);
         PackageBuilder.addString(parameters, "gps_adid_src", deviceInfo.playAdIdSource);
         PackageBuilder.addBoolean(parameters, "tracking_enabled", deviceInfo.isTrackingEnabled);
-        PackageBuilder.addString(parameters, "fire_adid", Util.getFireAdvertisingId(adtraceConfig));
-        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", Util.getFireTrackingEnabled(adtraceConfig));
+        PackageBuilder.addString(parameters, "fire_adid", deviceInfo.fireAdId);
+        PackageBuilder.addBoolean(parameters, "fire_tracking_enabled", deviceInfo.fireTrackingEnabled);
 
         if (!containsPlayIds(parameters) && !containsFireIds(parameters)) {
             logger.warn("Google Advertising ID or Fire Advertising ID not detected, " +
@@ -1310,7 +1310,7 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "app_token", adtraceConfig.appToken);
         PackageBuilder.addString(parameters, "app_version", deviceInfo.appVersion);
         PackageBuilder.addBoolean(parameters, "attribution_deeplink", true);
-        PackageBuilder.addLong(parameters, "connectivity_type", Util.getConnectivityType(adtraceConfig.context));
+        PackageBuilder.addLong(parameters, "connectivity_type", deviceInfo.connectivityType);
         PackageBuilder.addString(parameters, "country", deviceInfo.country);
         PackageBuilder.addString(parameters, "cpu_type", deviceInfo.abi);
         PackageBuilder.addDateInMilliseconds(parameters, "created_at", createdAt);
@@ -1331,8 +1331,8 @@ public class PackageBuilder {
         PackageBuilder.addString(parameters, "installed_at", deviceInfo.appInstallTime);
         PackageBuilder.addString(parameters, "language", deviceInfo.language);
         PackageBuilder.addDuration(parameters, "last_interval", activityStateCopy.lastInterval);
-        PackageBuilder.addString(parameters, "mcc", Util.getMcc(adtraceConfig.context));
-        PackageBuilder.addString(parameters, "mnc", Util.getMnc(adtraceConfig.context));
+        PackageBuilder.addString(parameters, "mcc", deviceInfo.mcc);
+        PackageBuilder.addString(parameters, "mnc", deviceInfo.mnc);
         PackageBuilder.addBoolean(parameters, "needs_response_details", true);
         PackageBuilder.addString(parameters, "os_build", deviceInfo.buildName);
         PackageBuilder.addString(parameters, "os_name", deviceInfo.osName);

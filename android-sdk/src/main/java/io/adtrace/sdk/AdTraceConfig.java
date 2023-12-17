@@ -49,6 +49,7 @@ public class AdTraceConfig {
     boolean coppaCompliantEnabled;
     boolean finalAttributionEnabled;
     String fbAppId;
+    boolean readDeviceInfoOnceEnabled;
 
     public static final String ENVIRONMENT_SANDBOX = "sandbox";
     public static final String ENVIRONMENT_PRODUCTION = "production";
@@ -239,6 +240,10 @@ public class AdTraceConfig {
         this.urlStrategy = urlStrategy;
     }
 
+    public void setReadDeviceInfoOnceEnabled(boolean readDeviceInfoOnceEnabled) {
+        this.readDeviceInfoOnceEnabled = readDeviceInfoOnceEnabled;
+    }
+
     public String getBasePath() {
         return basePath;
     }
@@ -389,6 +394,10 @@ public class AdTraceConfig {
 
     public String getFbAppId() {
         return fbAppId;
+    }
+
+    public boolean isReadDeviceInfoOnceEnabled() {
+        return readDeviceInfoOnceEnabled;
     }
 
     private void setLogLevel(LogLevel logLevel, String environment) {
