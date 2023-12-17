@@ -326,7 +326,7 @@ public class AdTrace {
     public static String getAmazonAdId(final Context context) {
         Context appContext = extractApplicationContext(context);
         if (appContext != null) {
-            return Util.getFireAdvertisingId(appContext.getContentResolver());
+            return DeviceInfo.getFireAdvertisingIdBypassConditions(appContext.getContentResolver());
         }
 
         return null;
