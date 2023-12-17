@@ -1,5 +1,11 @@
-## 2.5.0
-- 
+## Version 2.5.1
+### Added:
+- Added `setReadDeviceInfoOnceEnabled(boolean)` method to `AdTraceConfig` to indicate if device info to be read only once.
+- new URL strategy.
+
+---
+
+## Version 2.5.0
 ### Added:
 - data residency support 
 - Updated Samsung Install Referrer library version to 3.0.1.
@@ -13,5 +19,5 @@
 - support for Meta install referrer.
 - support for Google Play Games on PC.
 - Getters for certain public classes.
-- `setReadDeviceInfoOnceEnabled(boolean)` method to `AdTraceConfig` to indicate if device info to be read only once.
+
 
