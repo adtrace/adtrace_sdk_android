@@ -179,6 +179,7 @@ public class AdTraceBridgeInstance {
             Object coppaCompliantEnabledField = jsonAdTraceConfig.get("coppaCompliantEnabled");
             Object finalAttributionEnabledField = jsonAdTraceConfig.get("finalAttributionEnabled");
             Object fbAppIdField = jsonAdTraceConfig.get("fbAppId");
+            Object readDeviceInfoOnceEnabledField = jsonAdTraceConfig.get("readDeviceInfoOnceEnabled");
 
             String appToken = AdTraceBridgeUtil.fieldToString(appTokenField);
             String environment = AdTraceBridgeUtil.fieldToString(environmentField);
@@ -418,6 +419,12 @@ public class AdTraceBridgeInstance {
                 adtraceConfig.setFbAppId(fbAppId);
             }
 
+            // read device info once
+            Boolean readDeviceInfoOnceEnabled = AdTraceBridgeUtil.fieldToBoolean(readDeviceInfoOnceEnabledField);
+            if (readDeviceInfoOnceEnabled != null) {
+                adtraceConfig.setReadDeviceInfoOnceEnabled(readDeviceInfoOnceEnabled);
+            }
+
             // Manually call onResume() because web view initialisation will happen a bit delayed.
             // With this delay, it will miss lifecycle callback onResume() initial firing.
             AdTrace.onCreate(adtraceConfig);
@@ -474,7 +481,7 @@ public class AdTraceBridgeInstance {
                 }
             }
 
-            // event parameters
+            // Value parameters
             String[] eventParameters = AdTraceBridgeUtil.jsonArrayToArray((JSONArray)eventParametersField);
             if (eventParameters != null) {
                 for (int i = 0; i < eventParameters.length; i += 2) {
@@ -484,7 +491,7 @@ public class AdTraceBridgeInstance {
                 }
             }
 
-            // event partner parameters
+            // Partner parameters
             String[] partnerParameters = AdTraceBridgeUtil.jsonArrayToArray((JSONArray)partnerParametersField);
             if (partnerParameters != null) {
                 for (int i = 0; i < partnerParameters.length; i += 2) {

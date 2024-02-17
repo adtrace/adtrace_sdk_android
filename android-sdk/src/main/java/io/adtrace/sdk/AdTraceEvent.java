@@ -121,6 +121,8 @@ public class AdTraceEvent {
         return partnerParameters;
     }
 
+    public Map<String,String> getEventValueParameters(){return eventValueParameters;}
+
     public String getOrderId() {
         return orderId;
     }
