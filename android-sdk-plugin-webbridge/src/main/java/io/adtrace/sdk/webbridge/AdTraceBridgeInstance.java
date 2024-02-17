@@ -481,7 +481,7 @@ public class AdTraceBridgeInstance {
                 }
             }
 
-            // event parameters
+            // Value parameters
             String[] eventParameters = AdTraceBridgeUtil.jsonArrayToArray((JSONArray)eventParametersField);
             if (eventParameters != null) {
                 for (int i = 0; i < eventParameters.length; i += 2) {
@@ -491,7 +491,7 @@ public class AdTraceBridgeInstance {
                 }
             }
 
-            // event partner parameters
+            // Partner parameters
             String[] partnerParameters = AdTraceBridgeUtil.jsonArrayToArray((JSONArray)partnerParametersField);
             if (partnerParameters != null) {
                 for (int i = 0; i < partnerParameters.length; i += 2) {
