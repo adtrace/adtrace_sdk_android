@@ -179,6 +179,7 @@ public class AdTraceBridgeInstance {
             Object coppaCompliantEnabledField = jsonAdTraceConfig.get("coppaCompliantEnabled");
             Object finalAttributionEnabledField = jsonAdTraceConfig.get("finalAttributionEnabled");
             Object fbAppIdField = jsonAdTraceConfig.get("fbAppId");
+            Object readDeviceInfoOnceEnabledField = jsonAdTraceConfig.get("readDeviceInfoOnceEnabled");
 
             String appToken = AdTraceBridgeUtil.fieldToString(appTokenField);
             String environment = AdTraceBridgeUtil.fieldToString(environmentField);
@@ -416,6 +417,12 @@ public class AdTraceBridgeInstance {
             String fbAppId = AdTraceBridgeUtil.fieldToString(fbAppIdField);
             if (fbAppId != null) {
                 adtraceConfig.setFbAppId(fbAppId);
+            }
+
+            // read device info once
+            Boolean readDeviceInfoOnceEnabled = AdTraceBridgeUtil.fieldToBoolean(readDeviceInfoOnceEnabledField);
+            if (readDeviceInfoOnceEnabled != null) {
+                adtraceConfig.setReadDeviceInfoOnceEnabled(readDeviceInfoOnceEnabled);
             }
 
             // Manually call onResume() because web view initialisation will happen a bit delayed.

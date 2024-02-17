@@ -57,6 +57,7 @@ function AdTraceConfig(appToken, environment, legacy) {
     this.coppaCompliantEnabled = null;
     this.finalAttributionEnabled = null;
     this.fbAppId = null;
+    this.readDeviceInfoOnceEnabled = null;
 }
 
 AdTraceConfig.EnvironmentSandbox = 'sandbox';
@@ -266,4 +267,8 @@ AdTraceConfig.prototype.setFinalAttributionEnabled = function(isEnabled) {
 
 AdTraceConfig.prototype.setFbAppId = function(fbAppId) {
     this.fbAppId = fbAppId;
+};
+
+AdjustConfig.prototype.setReadDeviceInfoOnceEnabled = function(isEnabled) {
+    this.readDeviceInfoOnceEnabled = isEnabled;
 };
