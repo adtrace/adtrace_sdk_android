@@ -65,6 +65,8 @@ AdTraceConfig.EnvironmentProduction = 'production';
 
 AdTraceConfig.UrlStrategyIndia = "url_strategy_india";
 AdTraceConfig.UrlStrategyChina = "url_strategy_china";
+AdTraceConfig.UrlStrategyCn = "url_strategy_cn";
+AdTraceConfig.UrlStrategyCnOnly = "url_strategy_cn_only";
 AdTraceConfig.DataResidencyEU = "data_residency_eu";
 AdTraceConfig.DataResidencyTR = "data_residency_tr";
 AdTraceConfig.DataResidencyUS = "data_residency_us";
