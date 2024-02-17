@@ -47,6 +47,7 @@ public class ActivityPackageSender implements IActivityPackageSender {
     private String basePath;
     private String gdprPath;
     private String subscriptionPath;
+    private String purchaseVerificationPath;
     private String clientSdk;
 
     private ILogger logger;
@@ -59,25 +60,24 @@ public class ActivityPackageSender implements IActivityPackageSender {
                                  final String basePath,
                                  final String gdprPath,
                                  final String subscriptionPath,
+                                 final String purchaseVerificationPath,
                                  final String clientSdk)
     {
         this.basePath = basePath;
         this.gdprPath = gdprPath;
         this.subscriptionPath = subscriptionPath;
+        this.purchaseVerificationPath = purchaseVerificationPath;
         this.clientSdk = clientSdk;
 
         logger = AdTraceFactory.getLogger();
-
         executor = new SingleThreadCachedScheduler("ActivityPackageSender");
-
         urlStrategy = new UrlStrategy(
                 AdTraceFactory.getBaseUrl(),
                 AdTraceFactory.getGdprUrl(),
                 AdTraceFactory.getSubscriptionUrl(),
+                AdTraceFactory.getPurchaseVerificationUrl(),
                 adtraceUrlStrategy);
-
         httpsURLConnectionProvider = AdTraceFactory.getHttpsURLConnectionProvider();
-
         connectionOptions = AdTraceFactory.getConnectionOptions();
     }
 
@@ -147,8 +147,6 @@ public class ActivityPackageSender implements IActivityPackageSender {
                     responseData.activityPackage.getActivityKind() == ActivityKind.ATTRIBUTION;
             final String urlString;
             if (shouldUseGET) {
-                extractEventCallbackId(activityPackageParameters);
-
                 urlString = generateUrlStringForGET(activityPackage.getActivityKind(),
                                                     activityPackage.getPath(),
                                                     activityPackageParameters,
@@ -172,8 +170,6 @@ public class ActivityPackageSender implements IActivityPackageSender {
             if (shouldUseGET) {
                 dataOutputStream = configConnectionForGET(connection);
             } else {
-                extractEventCallbackId(activityPackageParameters);
-
                 dataOutputStream = configConnectionForPOST(connection,
                                                            activityPackageParameters,
                                                            sendingParameters);
@@ -327,6 +323,8 @@ public class ActivityPackageSender implements IActivityPackageSender {
             return gdprPath != null ? targetUrl + gdprPath : targetUrl;
         } else if (activityKind == ActivityKind.SUBSCRIPTION) {
             return subscriptionPath != null ? targetUrl + subscriptionPath : targetUrl;
+        } else if (activityKind == ActivityKind.PURCHASE_VERIFICATION) {
+            return purchaseVerificationPath != null ? targetUrl + purchaseVerificationPath : targetUrl;
         } else {
             return basePath != null ? targetUrl + basePath : targetUrl;
         }
@@ -534,14 +532,21 @@ public class ActivityPackageSender implements IActivityPackageSender {
                                                       final ActivityKind activityKind) {
         String activityKindString = activityKind.toString();
 
+        String adtSigningId = extractAdtSigningId(parameters);
         String secretId = extractSecretId(parameters);
         String headersId = extractHeadersId(parameters);
         String signature = extractSignature(parameters);
         String algorithm = extractAlgorithm(parameters);
         String nativeVersion = extractNativeVersion(parameters);
 
-        String authorizationHeader = buildAuthorizationHeaderV2(signature, secretId,
+        String authorizationHeader = buildAuthorizationHeaderV2WithAdtSigningId(signature, adtSigningId,
                 headersId, algorithm, nativeVersion);
+        if (authorizationHeader != null) {
+            return authorizationHeader;
+        }
+
+        authorizationHeader = buildAuthorizationHeaderV2WithSecretId(signature, secretId, headersId,
+                algorithm, nativeVersion);
         if (authorizationHeader != null) {
             return authorizationHeader;
         }
@@ -579,11 +584,35 @@ public class ActivityPackageSender implements IActivityPackageSender {
         return authorizationHeader;
     }
 
-    private String buildAuthorizationHeaderV2(final String signature,
-                                              final String secretId,
-                                              final String headersId,
-                                              final String algorithm,
-                                              final String nativeVersion)
+    private String buildAuthorizationHeaderV2WithAdtSigningId(final String signature,
+                                                              final String adtSigningId,
+                                                              final String headersId,
+                                                              final String algorithm,
+                                                              final String nativeVersion)
+    {
+        if (adtSigningId == null || signature == null || headersId == null) {
+            return null;
+        }
+
+        String signatureHeader = Util.formatString("signature=\"%s\"", signature);
+        String adtSigningIdHeader  = Util.formatString("adt_signing_id=\"%s\"", adtSigningId);
+        String idHeader        = Util.formatString("headers_id=\"%s\"", headersId);
+        String algorithmHeader = Util.formatString("algorithm=\"%s\"", algorithm != null ? algorithm : "adtrace1");
+        String nativeVersionHeader = Util.formatString("native_version=\"%s\"", nativeVersion != null ? nativeVersion : "");
+
+        String authorizationHeader = Util.formatString("Signature %s,%s,%s,%s,%s",
+                signatureHeader, adtSigningIdHeader, algorithmHeader, idHeader, nativeVersionHeader);
+
+        logger.verbose("authorizationHeader: %s", authorizationHeader);
+
+        return authorizationHeader;
+    }
+
+    private String buildAuthorizationHeaderV2WithSecretId(final String signature,
+                                                          final String secretId,
+                                                          final String headersId,
+                                                          final String algorithm,
+                                                          final String nativeVersion)
     {
         if (secretId == null || signature == null || headersId == null) {
             return null;
@@ -704,7 +733,9 @@ public class ActivityPackageSender implements IActivityPackageSender {
         return parameters.remove("headers_id");
     }
 
-    private static void extractEventCallbackId(final Map<String, String> parameters) {
-        parameters.remove("event_callback_id");
+    private static String extractAdtSigningId(final Map<String, String> parameters) {
+        return parameters.remove("adt_signing_id");
     }
+
+
 }

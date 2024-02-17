@@ -46,6 +46,9 @@ public class ActivityPackage implements Serializable {
     private Map<String, String> callbackParameters;
     private Map<String, String> partnerParameters;
 
+    // callbacks
+    private OnPurchaseVerificationFinishedListener purchaseVerificationCallback;
+
     private int retries;
     private long clickTimeInMilliseconds;
     private long clickTimeInSeconds;
@@ -54,6 +57,7 @@ public class ActivityPackage implements Serializable {
     private long installBeginTimeServerInSeconds;
     private String installVersion;
     private Boolean googlePlayInstant;
+    private Boolean isClick;
 
     public String getPath() {
         return path;
@@ -163,6 +167,22 @@ public class ActivityPackage implements Serializable {
         this.googlePlayInstant = googlePlayInstant;
     }
 
+    public Boolean getIsClick() {
+        return this.isClick;
+    }
+
+    public void setIsClick(Boolean isClick) {
+        this.isClick = isClick;
+    }
+
+    public OnPurchaseVerificationFinishedListener getPurchaseVerificationCallback() {
+        return this.purchaseVerificationCallback;
+    }
+
+    public void setPurchaseVerificationCallback(final OnPurchaseVerificationFinishedListener callback) {
+        this.purchaseVerificationCallback = callback;
+    }
+
     public Map<String, String> getCallbackParameters() {
         return callbackParameters;
     }
@@ -187,7 +207,7 @@ public class ActivityPackage implements Serializable {
         if (parameters != null) {
             builder.append("Parameters:");
             SortedMap<String,String> sortedParameters = new TreeMap<String,String>(parameters);
-            List<String> stringsToExclude = Arrays.asList("app_secret", "secret_id", "event_callback_id");
+            List<String> stringsToExclude = Arrays.asList("app_secret", "secret_id", "adt_signing_id");
             for (Map.Entry<String,String> entry : sortedParameters.entrySet() ) {
                 String key = entry.getKey();
                 if (stringsToExclude.contains(key)) {

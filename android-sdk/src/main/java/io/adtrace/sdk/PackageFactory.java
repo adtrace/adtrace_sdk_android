@@ -23,11 +23,11 @@ public class PackageFactory {
     private static final String ADTRACE_PREFIX = "adtrace_";
 
     public static ActivityPackage buildReftagSdkClickPackage(final String rawReferrer,
-                                                              final long clickTime,
-                                                              final ActivityState activityState,
-                                                              final AdTraceConfig adtraceConfig,
-                                                              final DeviceInfo deviceInfo,
-                                                              final SessionParameters sessionParameters) {
+                                                             final long clickTime,
+                                                             final ActivityState activityState,
+                                                             final AdTraceConfig adtraceConfig,
+                                                             final DeviceInfo deviceInfo,
+                                                             final SessionParameters sessionParameters) {
         if (rawReferrer == null || rawReferrer.length() == 0) {
             return null;
         }
@@ -75,11 +75,11 @@ public class PackageFactory {
     }
 
     public static ActivityPackage buildDeeplinkSdkClickPackage(final Uri url,
-                                                              final long clickTime,
-                                                              final ActivityState activityState,
-                                                              final AdTraceConfig adtraceConfig,
-                                                              final DeviceInfo deviceInfo,
-                                                              final SessionParameters sessionParameters) {
+                                                               final long clickTime,
+                                                               final ActivityState activityState,
+                                                               final AdTraceConfig adtraceConfig,
+                                                               final DeviceInfo deviceInfo,
+                                                               final SessionParameters sessionParameters) {
         if (url == null) {
             return null;
         }
@@ -153,6 +153,7 @@ public class PackageFactory {
         clickPackageBuilder.installBeginTimeServerInSeconds = referrerDetails.installBeginTimestampServerSeconds;
         clickPackageBuilder.installVersion = referrerDetails.installVersion;
         clickPackageBuilder.googlePlayInstant = referrerDetails.googlePlayInstant;
+        clickPackageBuilder.isClick = referrerDetails.isClick;
         clickPackageBuilder.referrerApi = referrerApi;
 
         ActivityPackage clickPackage = clickPackageBuilder.buildClickPackage(Constants.INSTALL_REFERRER);
@@ -216,6 +217,9 @@ public class PackageFactory {
         if (activityState != null) {
             long lastInterval = now - activityState.lastActivity;
             activityState.lastInterval = lastInterval;
+
+            if (lastInterval > Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOLD)
+                activityState.lastIntervalHardReset = lastInterval;
         }
 
         PackageBuilder builder = new PackageBuilder(

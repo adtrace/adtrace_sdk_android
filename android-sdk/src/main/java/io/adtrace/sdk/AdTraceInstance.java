@@ -66,6 +66,11 @@ public class AdTraceInstance {
     private String subscriptionPath;
 
     /**
+     * Path for purchase verification package.
+     */
+    private String purchaseVerificationPath;
+
+    /**
      * Called upon SDK initialisation.
      *
      * @param adTraceConfig AdTraceConfig object used for SDK initialisation
@@ -91,6 +96,7 @@ public class AdTraceInstance {
         adTraceConfig.basePath = this.basePath;
         adTraceConfig.gdprPath = this.gdprPath;
         adTraceConfig.subscriptionPath = this.subscriptionPath;
+        adTraceConfig.purchaseVerificationPath = this.purchaseVerificationPath;
 
         activityHandler = AdTraceFactory.getActivityHandler(adTraceConfig);
         setSendingReferrersAsNotSent(adTraceConfig.context);
@@ -653,6 +659,26 @@ public class AdTraceInstance {
     }
 
     /**
+     * Verify in app purchase from Google Play.
+     *
+     * @param purchase  AdTracePurchase object to be verified
+     * @param callback  Callback to be pinged with the verification results
+     */
+    public void verifyPurchase(AdTracePurchase purchase, OnPurchaseVerificationFinishedListener callback) {
+        if (!checkActivityHandler("verifyPurchase")) {
+            if (callback != null) {
+                AdTracePurchaseVerificationResult result = new AdTracePurchaseVerificationResult(
+                        "not_verified",
+                        100,
+                        "SDK needs to be initialized before making purchase verification request");
+                callback.onVerificationFinished(result);
+            }
+            return;
+        }
+        activityHandler.verifyPurchase(purchase, callback);
+    }
+
+    /**
      * Used for testing purposes only. Do NOT use this method.
      *
      * @param testOptions AdTrace integration tests options
@@ -667,6 +693,9 @@ public class AdTraceInstance {
         if (testOptions.subscriptionPath != null) {
             this.subscriptionPath = testOptions.subscriptionPath;
         }
+        if (testOptions.purchaseVerificationPath != null) {
+            this.purchaseVerificationPath = testOptions.purchaseVerificationPath;
+        }
         if (testOptions.baseUrl != null) {
             AdTraceFactory.setBaseUrl(testOptions.baseUrl);
         }
@@ -675,6 +704,9 @@ public class AdTraceInstance {
         }
         if (testOptions.subscriptionUrl != null) {
             AdTraceFactory.setSubscriptionUrl(testOptions.subscriptionUrl);
+        }
+        if (testOptions.purchaseVerificationUrl != null) {
+            AdTraceFactory.setPurchaseVerificationUrl(testOptions.purchaseVerificationUrl);
         }
         if (testOptions.timerIntervalInMilliseconds != null) {
             AdTraceFactory.setTimerInterval(testOptions.timerIntervalInMilliseconds);

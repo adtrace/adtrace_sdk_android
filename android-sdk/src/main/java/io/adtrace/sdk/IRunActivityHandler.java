@@ -6,7 +6,6 @@ package io.adtrace.sdk;
  * Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2022.
  */
-
 public interface IRunActivityHandler {
     void run(ActivityHandler activityHandler);
 }

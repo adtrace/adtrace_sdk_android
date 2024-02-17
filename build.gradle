@@ -9,7 +9,7 @@ ext {
     coreMinSdkVersion = 9
     coreCompileSdkVersion = 33
     coreTargetSdkVersion = 33
-    coreVersionName = '2.4.2'
+    coreVersionName = '2.5.0'
     defaultVersionCode = 1
     webbridgeMinSdkVersion = 17
     samsungReferrerMinSdkVersion = 18
@@ -17,17 +17,25 @@ ext {
 
     // POM.
     adtraceGroupId = 'io.adtrace'
+
+    coreSdkArtifactId = 'android-sdk'
+    imeiSdkArtifactId = 'android-sdk-plugin-imei'
+    oaidSdkArtifactId = 'android-sdk-plugin-oaid'
+    webbridgeSdkArtifactId = 'android-sdk-plugin-webbridge'
+    samsungReferrerSdkArtifactId = 'android-sdk-plugin-samsung'
+    vivoReferrerSdkArtifactId = 'android-sdk-plugin-vivo'
+    xiaomiReferrerSdkArtifactId = 'android-sdk-plugin-xiaomi'
 }
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.7.10'
 
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:8.1.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files.

@@ -13,3 +13,4 @@ gradle.properties
 /android-sdk-plugin-oaid/gradle.properties
 /android-sdk-plugin-webbridge/gradle.properties
 
+/.idea/
