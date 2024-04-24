@@ -1,3 +1,8 @@
+## Version 2.5.2
+### Added:
+- Added `setAppVersionAppTokenChanged` to `AdTraceConfig`
+---
+
 ## Version 2.5.1
 ### Added:
 - Added `setReadDeviceInfoOnceEnabled(boolean)` method to `AdTraceConfig` to indicate if device info to be read only once.
