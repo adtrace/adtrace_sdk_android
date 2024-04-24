@@ -733,6 +733,15 @@ public class ActivityHandler implements IActivityHandler {
         });
     }
 
+    private void resetSdk4appTokenChanged() {
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                resetSdk4appTokenChangedI();
+            }
+        });
+    }
+
     @Override
     public Context getContext() {
         return adtraceConfig.context;
@@ -819,6 +828,8 @@ public class ActivityHandler implements IActivityHandler {
         readConfigFile(adtraceConfig.context);
 
         deviceInfo = new DeviceInfo(adtraceConfig);
+
+        resetSdk4appTokenChanged();
 
         if (adtraceConfig.eventBufferingEnabled) {
             logger.info("Event buffering is enabled");
@@ -2577,6 +2588,45 @@ public class ActivityHandler implements IActivityHandler {
 
         packageHandler.flush();
         setEnabledI(false);
+    }
+
+    private void resetSdk4appTokenChangedI() {
+        if (adtraceConfig.appVersionAppTokenChanged != null) {
+            logger.info("AppVersionForAppTokenChanged is set to AdTrace Config!", adtraceConfig.appVersionAppTokenChanged);
+
+            // check isSdkReset4AppTokenChange flag
+            SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getDefaultInstance(adtraceConfig.context);
+            logger.verbose("Checking for SDK reset Flag, if it is done before!");
+
+            if (!sharedPreferencesManager.getSdkReset4AppTokenChange()) {
+                logger.verbose("Comparing AppVersionForAppTokenChanged with CurrentAppVersion");
+                String currentAppVersion = deviceInfo.appVersion;
+
+                // get current app version and see if it is higher than appVersionAppTokenChanged
+                if (Util.isAppVersionAppTokenChangedHigherThanCurrent(currentAppVersion, adtraceConfig.appVersionAppTokenChanged)) {
+                    logger.warn("CurrentAppVersion (%s) is HIGHER than AppVersionForAppTokenChanged (%s), trying to reset SDK!",
+                            currentAppVersion, adtraceConfig.appVersionAppTokenChanged);
+                    try {
+
+                        // reset sdk install
+                        internalState.firstSdkStart = false;
+                        logger.verbose("Reset SDK done successfully!");
+
+                        // set isSdkReset4AppTokenChange to true in shared prefs, as it is already done once
+                        sharedPreferencesManager.setSdkReset4AppTokenChange(true);
+                    }catch (Exception e){
+                        logger.error("failed to reset SDK",e.getMessage());
+                    }
+
+                } else {
+                    logger.warn("CurrentAppVersion (%s) is LOWER than AppVersionForAppTokenChanged (%s), passing on without an action!",
+                            currentAppVersion, adtraceConfig.appVersionAppTokenChanged);
+                }
+            } else {
+                logger.verbose("SDK reset Flag exists, passing on without an action!");
+            }
+        }
+        return;
     }
 
     private void readActivityStateI(Context context) {

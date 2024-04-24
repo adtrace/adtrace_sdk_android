@@ -50,6 +50,7 @@ public class SharedPreferencesManager {
     private static final String PREFS_KEY_PREINSTALL_SYSTEM_INSTALLER_REFERRER
             = "preinstall_system_installer_referrer";
 
+    private static final String PREF_KEY_IS_SDK_RESET_4_APP_TOKEN_CHANGED = "isSdkReset4AppTokenChange";
     /**
      * Index for raw referrer string content in saved JSONArray object.
      */
@@ -421,6 +422,14 @@ public class SharedPreferencesManager {
      */
     public synchronized long getPreinstallPayloadReadStatus() {
         return getLong(PREFS_KEY_PREINSTALL_PAYLOAD_READ_STATUS, 0);
+    }
+
+    public synchronized void setSdkReset4AppTokenChange(boolean isSdkReset4AppTokenChange){
+        saveBoolean(PREF_KEY_IS_SDK_RESET_4_APP_TOKEN_CHANGED,isSdkReset4AppTokenChange);
+    }
+
+    public synchronized boolean getSdkReset4AppTokenChange(){
+        return getBoolean(PREF_KEY_IS_SDK_RESET_4_APP_TOKEN_CHANGED,false);
     }
 
     /**
