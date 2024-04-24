@@ -51,6 +51,9 @@ public class AdTraceConfig {
     String fbAppId;
     boolean readDeviceInfoOnceEnabled;
 
+    String appVersionAppTokenChanged;
+    private boolean isSdkReset4AppTokenChange;
+
     public static final String ENVIRONMENT_SANDBOX = "sandbox";
     public static final String ENVIRONMENT_PRODUCTION = "production";
 
@@ -175,6 +178,36 @@ public class AdTraceConfig {
     public void setAppSecret(long secretId, long info1, long info2, long info3, long info4) {
         this.secretId = Util.formatString("%d", secretId);
         this.appSecret = Util.formatString("%d%d%d%d", info1, info2, info3, info4);
+    }
+
+    /**
+     *
+     * MAKE SURE to understand what are you doing. these feature will <span style="color:#ee3333">SERIOUSLY AFFECTS SDK FUNCTIONALITIES</span> thus YOUR DATA.
+     * <br/>
+     * <span style="color:#cccd58">recommended format: X.Y.Z ( as integers)</span>
+     * <br/>
+     * <br/>
+     * <p>if app token is changed from a specific version of the application and users use new app token,
+     * AdTrace functionalities will face severe problem. to fix that you need to do this steps.
+     * <br/>
+     * </br/>
+     * 1. use the permanent AppToken from now on and DO NOT change it.
+     * <br/>
+     * 2. specify the app version which app token is changed (see following)
+     * </p>
+     * <br/>
+     * <p>
+     * |(app version / AdTrace App Token)|
+     * <br/>
+     * |(v1/appToken1)|(v2/appToken1)|(v3/appToken2)|(v4/appToken2)|...
+     * </p>
+     * <br/>
+     * the {@code  appVersionAppTokenChanged} will be {@code v3} in this example
+     *
+     * @param appVersionAppTokenChanged the first version which app token changed.
+     */
+    public void setAppVersionAppTokenChanged(String appVersionAppTokenChanged) {
+        this.appVersionAppTokenChanged = appVersionAppTokenChanged;
     }
 
     @Deprecated

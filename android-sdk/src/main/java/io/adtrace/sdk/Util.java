@@ -726,4 +726,82 @@ public class Util {
                 && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerMeta)
                 && Util.equalBoolean(referrerDetails.isClick, activityState.isClickMeta);
     }
+
+    public static boolean isAppVersionAppTokenChangedHigherThanCurrent(String appVersionAppTokenChanged, String currentAppVersion) {
+        return compareAppVersion(appVersionAppTokenChanged, currentAppVersion) > 0;
+    }
+
+    private static int compareAppVersion(String givenVersion, String currentVersion) {
+        // null check
+        if (givenVersion == null && currentVersion == null) {
+            return 0; // Both versions are null,so considered equal
+        } else if (currentVersion == null) {
+            return 1; // Current version is null, so it's considered lower
+        } else if (givenVersion == null) {
+            return -1; // Given version is null, so it's considered lower
+        }
+
+        // empty check
+        if (givenVersion.isEmpty() && currentVersion.isEmpty()) {
+            return 0; // Both versions are empty,so considered equal
+        } else if (currentVersion.isEmpty()) {
+            return 1; // Current version is empty, so it's considered lower
+        } else if (givenVersion.isEmpty()) {
+            return -1; // Given version is empty, so it's considered lower
+        }
+
+        // exact strings, no need to process
+        if (givenVersion.equals(currentVersion)) {
+            return 0;
+        }
+
+        try {
+
+            // Define a regular expression to match the app version format
+            String appVersionRegex = "(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?(?:-(\\w+))?";
+            Pattern pattern = Pattern.compile(appVersionRegex);
+            Matcher givenMatcher = pattern.matcher(givenVersion);
+            Matcher currentMatcher = pattern.matcher(currentVersion);
+
+            // Check if both versions match the regex pattern
+            if (givenMatcher.matches() && currentMatcher.matches()) {
+                // Compare major versions
+                int givenMajor = Integer.parseInt(givenMatcher.group(1));
+                int currentMajor = Integer.parseInt(currentMatcher.group(1));
+                if (givenMajor != currentMajor) {
+                    return Integer.compare(givenMajor, currentMajor);
+                }
+
+                // Compare minor versions
+                int givenMinor = givenMatcher.group(2) != null ? Integer.parseInt(givenMatcher.group(2)) : 0;
+                int currentMinor = currentMatcher.group(2) != null ? Integer.parseInt(currentMatcher.group(2)) : 0;
+                if (givenMinor != currentMinor) {
+                    return Integer.compare(givenMinor, currentMinor);
+                }
+
+                // Compare patch versions
+                int givenPatch = givenMatcher.group(3) != null ? Integer.parseInt(givenMatcher.group(3)) : 0;
+                int currentPatch = currentMatcher.group(3) != null ? Integer.parseInt(currentMatcher.group(3)) : 0;
+                if (givenPatch != currentPatch) {
+                    return Integer.compare(givenPatch, currentPatch);
+                }
+
+                // Compare pre-release identifiers
+                String givenPreRelease = givenMatcher.group(4) != null ? givenMatcher.group(4) : "";
+                String currentPreRelease = currentMatcher.group(4) != null ? currentMatcher.group(4) : "";
+                return givenPreRelease.compareTo(currentPreRelease) > 0 ? 1 : -1;
+            } else if (givenMatcher.matches()) {
+                // Given version matches the regex pattern but current version does not
+                return 1; // Given version is considered higher
+            } else if (currentMatcher.matches()) {
+                // Current version matches the regex pattern but given version does not
+                return -1; // Current version is considered higher
+            } else {
+                // Neither version matches the regex pattern, compare them as strings
+                return givenVersion.compareTo(currentVersion) > 0 ? 1 : -1;
+            }
+        } catch (Exception e) {
+            return 0; // return equal in case of error
+        }
+    }
 }
