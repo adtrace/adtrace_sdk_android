@@ -61,7 +61,9 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
 
 ### Additional features
 
-- [Push token (uninstall tracking)](#af-push-token)
+- [Uninstall tracking](#af-uninstall-tracking)
+  - [Push token (uninstall tracking)](#af-push-token)
+  - [Ready to measure uninstall and reinstall](#af-uninstall-active)
 - [Attribution callback](#af-attribution-callback)
 - [Session and event callbacks](#af-session-event-callbacks)
 - [User attribution](#af-user-attribution)
@@ -1196,9 +1198,58 @@ In this example, this will prevent the AdTrace SDK from sending the initial inst
 
 Once you have integrated the AdTrace SDK into your project, you can take advantage of the following features:
 
-### <a id="af-push-token"></a>Push token
+### <a id="af-uninstall-tracking"></a>Uninstall tracking
 
-Push tokens are used for Audience Builder and client callbacks; they are also required for uninstall and reinstall tracking.
+[Firebase Cloud Messaging Legacy APIs is deprecated and will be removed in June 2024](https://firebase.google.com/docs/cloud-messaging/migrate-v1). in order to enable AdTrace to actively measure uninstalls, you need to Migrate to HTTP V1. in order to do that apply following steps and upload the **JSON** file containing required information to AdTrace panel.
+
+
+#### Connect Google FCM to Adtrace
+Configuring silent push notifications through Google's Firebase Cloud Messaging (FCM) API allows you to measure uninstalls and reinstalls.
+Adtrace requires an FCM HTTP v1 API private key to connect to Google FCM.
+
+
+##### **1. Create a custom role for Adtrace Uninstall and Reinstall Measurement**
+
+1. Access your <a href={androidLinks.googleCloudConsole} target="_blank">Google Cloud Console</a>.
+2. Select the Google Cloud project associated with your Firebase project.
+3. Search for **IAM & Admin**.
+4. From the side menu, select **Roles**.
+5. Select **+ Create Role**.
+6. Enter the following details:
+    1. **Title**: Adtrace Uninstall
+    2. **ID**: adtrace_uninstall
+    3. **Role launch stage**: General Availability
+7. Select **+ Add Permissions**.
+8. In the **Enter property name or value** field, enter`cloudmessaging.messages.create` and select it from the
+search results.
+9. Check the `cloudmessaging.messages.create` option andselect **Add**.
+10. Select **Create**.
+
+##### **2. Create a service account**
+
+1. From the side menu, select **Service Accounts**.
+2. Select **+ Create Service Account**.
+3. In the **Service account name** field, enter `AdtraceUninstall Service Account`.
+4. Select **Create and Continue**.
+5. Select the **Select a role** dropdown. Enter `AdtraceUninstall` and select it from the search results.
+6. Select **Continue**.
+7. Select **Done**.
+
+
+##### **3. Generate and download the private key**
+
+1. Select the newly created service account. The format looks like this: `adtrace-uninstall-service-account@test3-55065.iam.gserviceaccount.com`.
+2. Select the **Keys** tab.
+3. Select **Add Key** > **Create new key**.
+4. Select **JSON** and then **Create**.
+
+Finally, the private key is downloaded as a **JSON** file to your computer and upload it on AdTrace panel.
+
+
+
+#### <a id="af-push-token"></a>Push token
+
+Push tokens are used for uninstall and reinstall tracking.
 
 To send us the push notification token, add the following call to AdTrace once you have obtained your token (or whenever its value changes):
 
@@ -1238,11 +1289,12 @@ AdTrace.setPushToken(pushNotificationsToken);
 </tr>    
 </table>
 
-#### <a id="af-uninstall-tracking"></a>Uninstall tracking
 
-in order to measure uninstalls of your app you need to pass Firebase **Server Key** and **Sender ID** to our [dashboard]. after that we can track each user if they uninstalled your app. the process includes sending a silent push notification (background notification without title and body). **MAKE SURE** to handle it properly.
+#### <a id="af-uninstall-active"></a>Ready to measure uninstall and reinstall
+After these steps your uninstall and reinstall measurements will be done automatically. 
 
-there are multiple ways to handle this but a simple way would be as follows:
+
+Note that a **Silent Push Notification** will be sent to your device everyday. there are multiple ways to handle this but a simple way would be as follows:
 
 ```java
 @Override
@@ -1255,6 +1307,7 @@ public void onMessageReceived(RemoteMessage remoteMessage) {
     }
  }
 ```
+
 
 ### <a id="af-attribution-callback"></a>Attribution callback
 
