@@ -1210,7 +1210,7 @@ Adtrace requires an FCM HTTP v1 API private key to connect to Google FCM.
 
 ##### **1. Create a custom role for Adtrace Uninstall and Reinstall Measurement**
 
-1. Access your <a href={androidLinks.googleCloudConsole} target="_blank">Google Cloud Console</a>.
+1. Access your [Google Cloud Console](https://console.cloud.google.com).
 2. Select the Google Cloud project associated with your Firebase project.
 3. Search for **IAM & Admin**.
 4. From the side menu, select **Roles**.
