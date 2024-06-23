@@ -1,6 +1,6 @@
 ## Version 2.6.0
 ### Added:
-- new URL strategies and data residencies
+- new URL strategies and data residency
 
 ### Removed:
 - older URL strategies and data residencies
