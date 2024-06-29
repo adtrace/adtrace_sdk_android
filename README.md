@@ -1222,7 +1222,7 @@ Adtrace requires an FCM HTTP v1 API private key to connect to Google FCM.
 7. Select **+ Add Permissions**.
 8. In the **Enter property name or value** field, enter`cloudmessaging.messages.create` and select it from the
 search results.
-9. Check the `cloudmessaging.messages.create` option andselect **Add**.
+9. Check the `cloudmessaging.messages.create` option and select **Add**.
 10. Select **Create**.
 
 ##### **2. Create a service account**
@@ -1245,6 +1245,22 @@ search results.
 
 Finally, the private key is downloaded as a **JSON** file to your computer and upload it on AdTrace panel.
 
+final json file is similar to the following:
+```json
+{
+  "type": "service_account",
+  "project_id": "app_name",
+  "private_key_id": "some_private_key",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAI-some-other-characters-1aFkXHP5t/xo7Q==\n-----END PRIVATE KEY-----\n",
+  "client_email": "adtrace-uninstall-service-acco@app_name.iam.gserviceaccount.com",
+  "client_id": "6152715792181423123124",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/adtrace-uninstall-service-acco@app_name.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+```
 
 
 #### <a id="af-push-token"></a>Push token
