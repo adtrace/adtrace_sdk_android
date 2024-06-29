@@ -211,7 +211,7 @@ var AdTrace = {
         if (this.adtraceConfig) {
             return this.adtraceConfig.getSdkPrefix();
         } else {
-            return 'web-bridge2.5.2';
+            return 'web-bridge2.6.0';
         }
     },
 
