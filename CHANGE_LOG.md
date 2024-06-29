@@ -1,3 +1,10 @@
+## Version 2.6.0
+### Added:
+- new URL strategies and data residency
+
+### Removed:
+- older URL strategies and data residencies
+
 ## Version 2.5.2
 ### Added:
 - Added `setAppVersionAppTokenChanged` to `AdTraceConfig`

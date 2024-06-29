@@ -2522,9 +2522,7 @@ public class ActivityHandler implements IActivityHandler {
         }
         // from this moment on we know that we can ping client callback in case of error
         if (adtraceConfig.urlStrategy != null &&
-                (adtraceConfig.urlStrategy.equals(AdTraceConfig.DATA_RESIDENCY_EU) ||
-                        adtraceConfig.urlStrategy.equals(AdTraceConfig.DATA_RESIDENCY_US) ||
-                                adtraceConfig.urlStrategy.equals(AdTraceConfig.DATA_RESIDENCY_TR))) {
+                adtraceConfig.urlStrategy.equals(AdTraceConfig.DATA_RESIDENCY_IR)) {
             logger.warn("Purchase verification not available for data residency users right now");
             return;
         }
