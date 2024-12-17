@@ -3,6 +3,7 @@ package io.adtrace.sdk;
 import static io.adtrace.sdk.Constants.ONE_SECOND;
 
 import android.content.Context;
+import android.os.Build;
 
 import io.adtrace.sdk.scheduler.SingleThreadCachedScheduler;
 import io.adtrace.sdk.scheduler.ThreadExecutor;
@@ -378,7 +379,11 @@ public class InstallReferrer implements InvocationHandler {
             /** Install Referrer API not supported by the installed Play Store app. */
             case STATUS_FEATURE_NOT_SUPPORTED:
                 // API not available on the current Play Store app
-                logger.debug("Install Referrer API not supported by the installed Play Store app. Closing connection");
+                logger.debug("Install Referrer API not supported by the installed Play Store app.");
+                // manually sending referrer on failed
+                referrerCallback.onInstallReferrerRead(new ReferrerDetails("None",-1,false),
+                        Constants.REFERRER_API_GOOGLE);
+                logger.debug("Sending Install Referrer as None Manually to track install anyway,Closing connection");
                 break;
             /** Could not initiate connection to the Install Referrer service. */
             case STATUS_SERVICE_UNAVAILABLE:
