@@ -1,3 +1,7 @@
+## Version 2.6.1
+### Added:
+- Fixed: tracking install issue on some devices
+
 ## Version 2.6.0
 ### Added:
 - new URL strategies and data residency
