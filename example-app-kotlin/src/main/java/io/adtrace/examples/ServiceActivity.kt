@@ -1,29 +1,33 @@
 package io.adtrace.examples
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
-
+import androidx.appcompat.app.AppCompatActivity
 import io.adtrace.sdk.AdTrace
 
+/** Demo activity showing deep-link handling in a secondary screen. */
 class ServiceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_service)
-
-        val intent = intent
-        val data = intent.data
-        AdTrace.appWillOpenUrl(data, applicationContext)
+        handleDeepLink(intent)
     }
 
-    fun onServiceClick(v: View) {
-        val intent = Intent(this, ServiceExample::class.java)
-        startService(intent)
+    private fun handleDeepLink(intent: Intent?) {
+        val uri: Uri? = intent?.data
+        if (uri != null) {
+            AdTrace.appWillOpenUrl(uri, applicationContext)
+        }
     }
 
-    fun onReturnClick(v: View) {
+    fun onServiceClick(@Suppress("UNUSED_PARAMETER") v: View) {
+        startService(Intent(this, ServiceExample::class.java))
+    }
+
+    fun onReturnClick(@Suppress("UNUSED_PARAMETER") v: View) {
         finish()
     }
 }
