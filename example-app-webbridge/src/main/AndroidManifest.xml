@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Step 2a: Required permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
@@ -14,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- Native launcher (optional pattern for this example) -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -23,6 +25,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Step 2b / Step 3: Activity that owns the WebView + AdTraceBridge -->
         <activity
             android:name=".WebViewActivity"
             android:exported="false"

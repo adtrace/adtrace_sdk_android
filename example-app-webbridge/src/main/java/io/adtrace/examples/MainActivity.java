@@ -7,10 +7,12 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- * Native entry screen for the WebBridge example.
+ * Native launcher screen (same pattern as other AdTrace example apps).
  *
- * Opens {@link WebViewActivity}, where the AdTrace JavaScript bridge runs
- * inside a WebView loaded from assets.
+ * Not required for WebBridge integration — opens {@link WebViewActivity}
+ * where the actual AdTrace bridge setup happens.
+ *
+ * See example-app-webbridge/README.md for the full integration guide.
  */
 public class MainActivity extends AppCompatActivity {
 

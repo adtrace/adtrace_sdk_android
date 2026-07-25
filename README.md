@@ -96,7 +96,8 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
 There are Android example apps inside the [`example-app-java`](example-app-java)
 (see its [Java integration guide](example-app-java/README.md)),
 [`example-app-kotlin`](example-app-kotlin) (see its [Kotlin integration guide](example-app-kotlin/README.md)),
-[`example-app-webbridge`](example-app-webbridge), and [`example-app-tv`](example-app-tv) directories.
+[`example-app-webbridge`](example-app-webbridge) (see its [WebBridge integration guide](example-app-webbridge/README.md)),
+and [`example-app-tv`](example-app-tv) directories.
 Open the project root in Android Studio to see how the AdTrace SDK can be integrated.
 
 ### <a id="qs-getting-started"></a>Getting started
