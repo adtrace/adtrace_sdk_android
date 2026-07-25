@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onTrackPartnerEventClick(View v) {
-        AdTraceEvent event = new AdTraceEvent(AdTraceConstants.EVENT_TOKEN_PARAMS);
+        AdTraceEvent event = new AdTraceEvent(AdTraceConstants.EVENT_TOKEN_PARTNER);
         event.addPartnerParameter("foo", "bar");
         AdTrace.trackEvent(event);
     }

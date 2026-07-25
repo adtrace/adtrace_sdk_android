@@ -10,7 +10,7 @@ import io.adtrace.sdk.AdTraceConfig
 object AdTraceConstants {
 
     /** Your app token from https://panel.adtrace.io */
-    const val APP_TOKEN = "xyz123abc456"
+    const val APP_TOKEN = "humkdip1g0yl"
 
     /**
      * Use [AdTraceConfig.ENVIRONMENT_SANDBOX] while developing and testing.
@@ -18,10 +18,11 @@ object AdTraceConstants {
      */
     const val ENVIRONMENT = AdTraceConfig.ENVIRONMENT_SANDBOX
 
-    // Event tokens — create matching events in your AdTrace dashboard
-    const val EVENT_TOKEN_SIMPLE = "xyz123"
-    const val EVENT_TOKEN_REVENUE = "a1b2c3"
-    const val EVENT_TOKEN_CALLBACK = "x1y2z3"
-    const val EVENT_TOKEN_PARAMS = "abc123"
-    const val EVENT_TOKEN_BACKGROUND = "x1y2z3"
+    // Event tokens from the AdTrace dashboard
+    const val EVENT_TOKEN_SIMPLE = "p6j3p7"
+    const val EVENT_TOKEN_REVENUE = "ijdu0k"
+    const val EVENT_TOKEN_CALLBACK = "0issyz"
+    const val EVENT_TOKEN_PARTNER = "905cgb"
+    const val EVENT_TOKEN_PARAMS = "llo5i9"
+    const val EVENT_TOKEN_BACKGROUND = "2bvv6z"
 }

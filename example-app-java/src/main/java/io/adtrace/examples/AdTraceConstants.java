@@ -13,7 +13,7 @@ public final class AdTraceConstants {
     }
 
     /** Your app token from https://panel.adtrace.io */
-    public static final String APP_TOKEN = "wzfjavr56krp";
+    public static final String APP_TOKEN = "humkdip1g0yl";
 
     /**
      * Use {@link AdTraceConfig#ENVIRONMENT_SANDBOX} while developing and testing.
@@ -21,10 +21,11 @@ public final class AdTraceConstants {
      */
     public static final String ENVIRONMENT = AdTraceConfig.ENVIRONMENT_SANDBOX;
 
-    // Event tokens — create matching events in your AdTrace dashboard
-    public static final String EVENT_TOKEN_SIMPLE = "jmj5me";
-    public static final String EVENT_TOKEN_REVENUE = "jmj5me";
-    public static final String EVENT_TOKEN_CALLBACK = "jmj5me";
-    public static final String EVENT_TOKEN_PARAMS = "abc123";
-    public static final String EVENT_TOKEN_BACKGROUND = "xyz123";
+    // Event tokens from the AdTrace dashboard
+    public static final String EVENT_TOKEN_SIMPLE = "p6j3p7";
+    public static final String EVENT_TOKEN_REVENUE = "ijdu0k";
+    public static final String EVENT_TOKEN_CALLBACK = "0issyz";
+    public static final String EVENT_TOKEN_PARTNER = "905cgb";
+    public static final String EVENT_TOKEN_PARAMS = "llo5i9";
+    public static final String EVENT_TOKEN_BACKGROUND = "2bvv6z";
 }

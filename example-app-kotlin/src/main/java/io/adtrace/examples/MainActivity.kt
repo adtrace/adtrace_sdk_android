@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onTrackPartnerEventClick(@Suppress("UNUSED_PARAMETER") v: View) {
-        val event = AdTraceEvent(AdTraceConstants.EVENT_TOKEN_PARAMS)
+        val event = AdTraceEvent(AdTraceConstants.EVENT_TOKEN_PARTNER)
         event.addPartnerParameter("foo", "bar")
         AdTrace.trackEvent(event)
     }
