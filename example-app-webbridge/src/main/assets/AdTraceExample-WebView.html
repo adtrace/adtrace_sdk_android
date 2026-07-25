@@ -60,7 +60,7 @@
                 alert('Deferred deeplink content:\n' + deferredDeeplink);
             }
 
-            var adtraceConfig = new AdTraceConfig('wzfjavr56krp', AdTraceConfig.EnvironmentSandbox);
+            var adtraceConfig = new AdTraceConfig('humkdip1g0yl', AdTraceConfig.EnvironmentSandbox);
             adtraceConfig.setLogLevel(AdTraceConfig.LogLevelVerbose);
             // adtraceConfig.setOpenDeferredDeeplink(true);
             // adtraceConfig.setSendInBackground(true);
@@ -79,14 +79,14 @@
                 var btnTrackSimpleEvent = document.getElementById('btnTrackSimpleEvent')
                 btnTrackSimpleEvent.onclick = function(e) {
                     e.preventDefault();
-                    var adtraceEvent = new AdTraceEvent('jmj5me');
+                    var adtraceEvent = new AdTraceEvent('p6j3p7');
                     AdTrace.trackEvent(adtraceEvent);
                 }
 
                 var btnTrackRevenueEvent = document.getElementById('btnTrackRevenueEvent')
                 btnTrackRevenueEvent.onclick = function(e) {
                     e.preventDefault()
-                    var adtraceEvent = new AdTraceEvent('a1b2c3');
+                    var adtraceEvent = new AdTraceEvent('ijdu0k');
                     adtraceEvent.setRevenue(52000.0, 'IRR');
                     AdTrace.trackEvent(adtraceEvent);
                 }
@@ -94,7 +94,7 @@
                 var btnTrackCallbackEvent = document.getElementById('btnTrackCallbackEvent')
                 btnTrackCallbackEvent.onclick = function(e) {
                     e.preventDefault();
-                    var adtraceEvent = new AdTraceEvent('xyz123');
+                    var adtraceEvent = new AdTraceEvent('0issyz');
                     adtraceEvent.addCallbackParameter('key', 'value');
                     adtraceEvent.addCallbackParameter('x', 'y');
                     adtraceEvent.addCallbackParameter('key', 'lock');
@@ -104,7 +104,7 @@
                 var btnTrackEventParameter = document.getElementById('btnTrackEventParameter')
                 btnTrackEventParameter.onclick = function(e) {
                     e.preventDefault()
-                    var adtraceEvent = new AdTraceEvent('abc123');
+                    var adtraceEvent = new AdTraceEvent('llo5i9');
                     adtraceEvent.addEventParameter('foo', 'bar');
                     adtraceEvent.addEventParameter('x', 'y');
                     adtraceEvent.addEventParameter('foo', 'foot');
@@ -114,7 +114,7 @@
                 var btnTrackPartnerEvent = document.getElementById('btnTrackPartnerEvent')
                 btnTrackPartnerEvent.onclick = function(e) {
                     e.preventDefault()
-                    var adtraceEvent = new AdTraceEvent('abc123');
+                    var adtraceEvent = new AdTraceEvent('905cgb');
                     adtraceEvent.addPartnerParameter('foo1', 'bar1');
                     AdTrace.trackEvent(adtraceEvent);
                 }
