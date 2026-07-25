@@ -93,10 +93,11 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
 
 ### <a id="qs-example-apps"></a>Example apps
 
-There are Android example apps inside the [`example-app-java`](example-java)  
-, [`example-app-kotlin`](example-kotlin) and [`example-app-keyboard`](example-keyboard)
-directories, as well as example app that uses web views inside  
-the [`example-webbridge`](example-webbridge) directory and Android TV example app inside the [`example-app-tv`](example-tv) directory. You can open the Android project to see these examples on how the AdTrace SDK can be integrated.
+There are Android example apps inside the [`example-app-java`](example-app-java)
+(see its [Java integration guide](example-app-java/README.md)),
+[`example-app-kotlin`](example-app-kotlin) (see its [Kotlin integration guide](example-app-kotlin/README.md)),
+[`example-app-webbridge`](example-app-webbridge), and [`example-app-tv`](example-app-tv) directories.
+Open the project root in Android Studio to see how the AdTrace SDK can be integrated.
 
 ### <a id="qs-getting-started"></a>Getting started
 
@@ -1967,10 +1968,10 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 [adtrace.io]: https://adtrace.io
 [en-readme]: README.md
 [fa-readme]: doc/persian/README.md
-[example-java]: AdTrace/example-app-java
-[example-kotlin]: AdTrace/example-app-kotlin
-[example-tv]: AdTrace/example-app-tv
-[example-webbridge]: AdTrace/example-app-webbridge
+[example-app-java]: example-app-java
+[example-app-kotlin]: example-app-kotlin
+[example-app-tv]: example-app-tv
+[example-app-webbridge]: example-app-webbridge
 [referrer]: doc/english/multiple-receivers.md
 [google-ad-id]: https://support.google.com/googleplay/android-developer/answer/6048248?hl=en
 [new-referrer-api]: https://developer.android.com/google/play/installreferrer/library.html

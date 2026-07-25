@@ -20,4 +20,8 @@
     <string name="txt_disable_offline_mode">Disable offline mode</string>
     <string name="txt_sdk_is_enabled">AdTrace SDK is ENABLED!</string>
     <string name="txt_sdk_is_disabled">AdTrace SDK is DISABLED!</string>
+
+    <string name="txt_sdk_log_title">AdTrace SDK log (same as Logcat tag: AdTrace)</string>
+    <string name="txt_sdk_log_placeholder">Waiting for SDK activity…\nTrack an event or relaunch the app to see request payloads here.</string>
+    <string name="btn_clear_logs">Clear</string>
 </resources>

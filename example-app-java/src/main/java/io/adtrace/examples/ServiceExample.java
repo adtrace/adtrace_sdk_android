@@ -1,7 +1,7 @@
 package io.adtrace.examples;
+
 import android.app.Service;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
@@ -9,64 +9,37 @@ import android.util.Log;
 import io.adtrace.sdk.AdTrace;
 import io.adtrace.sdk.AdTraceEvent;
 
-public class ServiceExample extends Service{
-    private static final String EVENT_TOKEN_BACKGROUND = "xyz123";
+/**
+ * Demo: track an AdTrace event from a background Service.
+ *
+ * In production, prefer WorkManager or a HandlerThread instead of raw threads.
+ */
+public class ServiceExample extends Service {
 
-    private static boolean flip = true;
-
-    public ServiceExample() {
-        super();
-        Log.d("example", "ServiceExample constructor");
-    }
+    private static final String LOG_TAG = "AdTraceExample";
+    private static boolean sdkEnabledToggle = true;
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d("example", "ServiceExample onBind");
-
         return null;
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.d("example", "ServiceExample onCreate");
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int startDefaultOption = super.onStartCommand(intent, flags, startId);
-        Log.d("example", "ServiceExample onStartCommand");
+        Log.d(LOG_TAG, "Service started — toggling SDK enabled state for demo");
+        AdTrace.setEnabled(!sdkEnabledToggle);
+        sdkEnabledToggle = !sdkEnabledToggle;
 
-        if (flip) {
-            AdTrace.setEnabled(false);
-            flip = false;
-        } else {
-            AdTrace.setEnabled(true);
-            flip = true;
-        }
-
-        new AsyncTask<Void, Void, Void>() {
+        new Thread(new Runnable() {
             @Override
-            protected Void doInBackground(Void... params) {
-                Log.d("example", "ServiceExample background sleeping");
+            public void run() {
                 SystemClock.sleep(3000);
-                Log.d("example", "ServiceExample background awake");
-
-                AdTraceEvent event = new AdTraceEvent(EVENT_TOKEN_BACKGROUND);
+                AdTraceEvent event = new AdTraceEvent(AdTraceConstants.EVENT_TOKEN_BACKGROUND);
                 AdTrace.trackEvent(event);
-
-                Log.d("example", "ServiceExample background event tracked");
-
-                return null;
+                Log.d(LOG_TAG, "Background event tracked");
             }
-        }.execute();
+        }).start();
 
         return START_NOT_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("example", "ServiceExample onDestroy");
     }
 }
