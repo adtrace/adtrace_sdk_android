@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">AdTraceWebBridge</string>
+    <string name="app_name">AdTrace WebBridge Example</string>
+
+    <string name="txt_webbridge_title">AdTrace WebView Bridge</string>
+    <string name="txt_webbridge_description">This example shows how to use the AdTrace SDK inside a WebView via the JavaScript bridge plugin.\n\nTap the button below to open the demo page (assets/AdTraceExample-WebView.html).</string>
+    <string name="btn_show_webview">Show WebView</string>
+    <string name="txt_webview_title">WebView demo</string>
 </resources>
