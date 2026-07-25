@@ -1,36 +1,59 @@
-# AdTrace WebBridge Integration Example
+> **Full technical guide (two cases):** [TECHNICAL.md](TECHNICAL.md)
+> - **Case A** — WebBridge-only (no native events; JS calls `AdTrace.onCreate`)
+> - **Case B** — Hybrid (native events + Web Bridge)
 
-Minimal, runnable example of using the **AdTrace Android SDK inside a WebView** via the JavaScript bridge plugin.
+**This sample’s launcher has both buttons.** Pick one per app process; force-stop to switch.
 
-Use this folder as a reference when embedding AdTrace in HTML/JS loaded by a WebView. Each integration step maps to a specific file below.
+Looking for native Kotlin / Java? See [`example-app-kotlin`](../example-app-kotlin/README.md) and [`example-app-java`](../example-app-java/README.md).
 
-> Looking for native Kotlin / Java? See [`example-app-kotlin`](../example-app-kotlin/README.md) and [`example-app-java`](../example-app-java/README.md).
+## How to demo both scenarios
+
+| Button on home screen | What happens |
+|----------------------|--------------|
+| **Open Case A (JS onCreate)** | Opens WebView only. HTML calls `AdTrace.onCreate`, then you track from JS. |
+| **Open Case B (native event + WebView)** | Native `AdTrace.onCreate` + native simple event, then WebView. HTML tracks without `onCreate`. |
+
+```
+MainActivity
+  ├─ Case A ─► WebViewActivity ─► AdTraceExample-CaseA-WebBridgeOnly.html
+  │                                  HTML: AdTrace.onCreate (SDK init) + trackEvent
+  │
+  └─ Case B ─► native onCreate + trackEvent ─► WebViewActivity
+                                               ─► AdTraceExample-CaseB-Hybrid.html
+                                                  HTML: trackEvent only (no onCreate)
+```
+
+**Constraint:** the SDK initializes once per process. After you open Case A or B, the other button asks you to force-stop and relaunch.
 
 ## How this example is structured
 
 ```
-MainActivity (native launcher)
-    └─ "Show WebView" button
-         └─ WebViewActivity
-              ├─ AdTraceBridge.registerAndGetInstance(...)   ← native side
-              └─ loads AdTraceExample-WebView.html
-                   ├─ adtrace_constants.js                   ← tokens
-                   ├─ adtrace.js / adtrace_config.js / ...   ← from webbridge plugin
-                   └─ AdTrace.onCreate / trackEvent          ← JS side
+MainActivity          ← choose Case A or Case B
+AdTraceDemoSession    ← locks mode + lazy native init for Case B
+WebViewActivity       ← AdTraceBridge + loads the matching HTML file
+assets/
+  AdTraceExample-CaseA-WebBridgeOnly.html  ← Case A (JS SDK init)
+  AdTraceExample-CaseB-Hybrid.html         ← Case B (no JS init)
+  adtrace_constants.js
 ```
 
 ## Integration checklist
 
-| Step | What to do | File in this example |
-|------|------------|----------------------|
-| 1 | Add core SDK + webbridge plugin dependencies | [`build.gradle`](build.gradle) |
-| 2 | Declare permissions and activities | [`AndroidManifest.xml`](src/main/AndroidManifest.xml) |
-| 3 | Open a WebView and register `AdTraceBridge` | [`WebViewActivity.java`](src/main/java/io/adtrace/examples/WebViewActivity.java) |
-| 4 | Include AdTrace JS files in your HTML | [`AdTraceExample-WebView.html`](src/main/assets/AdTraceExample-WebView.html) |
-| 5 | Set your app token and environment | [`adtrace_constants.js`](src/main/assets/adtrace_constants.js) |
-| 6 | Initialize the SDK and track events in JavaScript | [`AdTraceExample-WebView.html`](src/main/assets/AdTraceExample-WebView.html) |
+| Step | What to do | File |
+|------|------------|------|
+| 1 | Dependencies | [`build.gradle`](build.gradle) |
+| 2 | Manifest + empty `GlobalApplication` | [`AndroidManifest.xml`](src/main/AndroidManifest.xml) |
+| 3 | Choose scenario on launcher | [`MainActivity.java`](src/main/java/io/adtrace/examples/MainActivity.java) |
+| 4 | Case B native bootstrap | [`AdTraceDemoSession.java`](src/main/java/io/adtrace/examples/AdTraceDemoSession.java) |
+| 5 | Register bridge + pick HTML | [`WebViewActivity.java`](src/main/java/io/adtrace/examples/WebViewActivity.java) |
+| 6 | Tokens | [`AdTraceConstants.java`](src/main/java/io/adtrace/examples/AdTraceConstants.java) / [`adtrace_constants.js`](src/main/assets/adtrace_constants.js) |
+| 7a | Case A page (JS init) | [`AdTraceExample-CaseA-WebBridgeOnly.html`](src/main/assets/AdTraceExample-CaseA-WebBridgeOnly.html) |
+| 7b | Case B page (no JS init) | [`AdTraceExample-CaseB-Hybrid.html`](src/main/assets/AdTraceExample-CaseB-Hybrid.html) |
 
-[`MainActivity.java`](src/main/java/io/adtrace/examples/MainActivity.java) is only a native entry screen (same pattern as the other example apps). It is **not** required for WebBridge integration.
+> **`AdTrace.onCreate` = SDK initialization (start AdTrace).**  
+> Call it once: from JS in Case A, or from native in Case B — never both.
+
+Full Case A / Case B docs: [TECHNICAL.md](TECHNICAL.md).
 
 ## Step 1 — Dependencies
 
@@ -90,7 +113,8 @@ webView.setWebViewClient(new WebViewClient());
 // Connect native SDK ↔ JavaScript
 AdTraceBridge.registerAndGetInstance(getApplication(), webView);
 
-webView.loadUrl("file:///android_asset/AdTraceExample-WebView.html");
+webView.loadUrl("file:///android_asset/AdTraceExample-CaseA-WebBridgeOnly.html");
+// Case B: AdTraceExample-CaseB-Hybrid.html
 // or: webView.loadUrl("https://your.cdn.com/page.html");
 ```
 
@@ -120,33 +144,29 @@ If your HTML is hosted remotely, copy the JS files from the webbridge plugin ass
 
 ## Step 5 — App token
 
-Edit [`adtrace_constants.js`](src/main/assets/adtrace_constants.js):
+Native: [`AdTraceConstants.java`](src/main/java/io/adtrace/examples/AdTraceConstants.java)  
+JS: [`adtrace_constants.js`](src/main/assets/adtrace_constants.js)
+
+Keep both files in sync.
+
+## Step 6 — JS: init vs track only
+
+**`AdTrace.onCreate(config)` = SDK initialization (start AdTrace).** Call it once.
+
+| Case | Page | Init? |
+|------|------|-------|
+| A | [`AdTraceExample-CaseA-WebBridgeOnly.html`](src/main/assets/AdTraceExample-CaseA-WebBridgeOnly.html) | Yes — `AdTrace.onCreate` in HTML |
+| B | [`AdTraceExample-CaseB-Hybrid.html`](src/main/assets/AdTraceExample-CaseB-Hybrid.html) | No — native already inited; only `trackEvent` |
 
 ```javascript
-var AdTraceExampleConstants = {
-    APP_TOKEN: '{YourAppToken}',
-    ENVIRONMENT: AdTraceConfig.EnvironmentSandbox,
-    EVENT_TOKEN_SIMPLE: 'p6j3p7',
-    // ...
-};
-```
-
-## Step 6 — Initialize and track events (JavaScript)
-
-```javascript
-var config = new AdTraceConfig(
-    AdTraceExampleConstants.APP_TOKEN,
-    AdTraceExampleConstants.ENVIRONMENT
-);
-config.setLogLevel(AdTraceConfig.LogLevelVerbose);
+// Case A only — SDK init from JS:
+var config = new AdTraceConfig(token, AdTraceConfig.EnvironmentSandbox);
 AdTrace.onCreate(config);
 
-// Track an event
+// Both cases — track:
 var event = new AdTraceEvent(AdTraceExampleConstants.EVENT_TOKEN_SIMPLE);
 AdTrace.trackEvent(event);
 ```
-
-Full demo page: [`AdTraceExample-WebView.html`](src/main/assets/AdTraceExample-WebView.html)
 
 ## Run this example
 
@@ -154,28 +174,33 @@ Full demo page: [`AdTraceExample-WebView.html`](src/main/assets/AdTraceExample-W
 ./gradlew :example-app-webbridge:installDebug
 ```
 
-1. App opens on the native launcher (`MainActivity`)
-2. Tap **Show WebView**
-3. Use the HTML buttons to track events / toggle SDK state
+1. Open the app → choose **Case A** or **Case B**
+2. Use HTML buttons to track events
+3. To try the other case: force-stop the app, then relaunch
 4. Filter Logcat by tag `AdTrace`
 
 ## Project structure
 
 ```
 example-app-webbridge/
-├── README.md                          ← You are here
-├── build.gradle                       ← Step 1: dependencies
+├── README.md
+├── TECHNICAL.md
+├── build.gradle
 └── src/main/
-    ├── AndroidManifest.xml            ← Step 2: permissions & activities
+    ├── AndroidManifest.xml
     ├── java/io/adtrace/examples/
-    │   ├── MainActivity.java          ← Native launcher (Show WebView)
-    │   └── WebViewActivity.java       ← Step 3: AdTraceBridge + WebView
+    │   ├── GlobalApplication.java      ← empty (init is lazy / per case)
+    │   ├── AdTraceDemoSession.java     ← Case B native init + mode lock
+    │   ├── AdTraceConstants.java
+    │   ├── MainActivity.java           ← two case buttons
+    │   └── WebViewActivity.java        ← loads Case A or Case B HTML
     ├── res/layout/
-    │   ├── activity_main.xml          ← Launcher UI
-    │   └── activity_webview.xml       ← Full-screen WebView
+    │   ├── activity_main.xml
+    │   └── activity_webview.xml
     └── assets/
-        ├── adtrace_constants.js       ← Step 5: app & event tokens
-        └── AdTraceExample-WebView.html ← Steps 4 & 6: JS init + events
+        ├── adtrace_constants.js
+        ├── AdTraceExample-CaseA-WebBridgeOnly.html  ← JS SDK init
+        └── AdTraceExample-CaseB-Hybrid.html         ← no JS init
 ```
 
 ## Tokens (same as Java / Kotlin examples)
@@ -191,4 +216,6 @@ example-app-webbridge/
 
 ## Full SDK documentation
 
-Native integration details (ProGuard, OAID, uninstall tracking, etc.) are in the [root README](../README.md).
+- **Two-case technical reference:** [TECHNICAL.md](TECHNICAL.md)
+- Native SDK details: [root README](../README.md)
+- Native examples: [Kotlin](../example-app-kotlin/README.md) · [Java](../example-app-java/README.md)

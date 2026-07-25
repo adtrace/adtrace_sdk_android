@@ -1,8 +1,23 @@
 <resources>
     <string name="app_name">AdTrace WebBridge Example</string>
 
-    <string name="txt_webbridge_title">AdTrace WebView Bridge</string>
-    <string name="txt_webbridge_description">This example shows how to use the AdTrace SDK inside a WebView via the JavaScript bridge plugin.\n\nTap the button below to open the demo page (assets/AdTraceExample-WebView.html).</string>
-    <string name="btn_show_webview">Show WebView</string>
+    <string name="txt_webbridge_title">AdTrace WebView Bridge — two scenarios</string>
+    <string name="txt_webbridge_description">One demo, two integration paths. The SDK can only be initialized once per app launch — pick Case A or Case B. To try the other, force-stop the app and open it again.</string>
+
+    <string name="txt_mode_not_chosen">Active mode: none yet — choose a case below.</string>
+    <string name="txt_mode_locked_a">Active mode: Case A (WebBridge-only). Restart the app to try Case B.</string>
+    <string name="txt_mode_locked_b">Active mode: Case B (hybrid). Restart the app to try Case A.</string>
+    <string name="txt_restart_to_switch_mode">SDK already started in the other mode. Force-stop this app, then relaunch to switch cases.</string>
+
+    <string name="txt_case_a_title">Case A — WebBridge only</string>
+    <string name="txt_case_a_description">No native events. Native code only registers the bridge. HTML calls AdTrace.onCreate, then trackEvent.</string>
+    <string name="btn_case_a">Open Case A (JS onCreate)</string>
+
+    <string name="txt_case_b_title">Case B — Hybrid (native + Web Bridge)</string>
+    <string name="txt_case_b_description">Starts SDK on the native side, tracks a native simple event, then opens WebView. HTML tracks more events without calling onCreate again.</string>
+    <string name="btn_case_b">Open Case B (native event + WebView)</string>
+
     <string name="txt_webview_title">WebView demo</string>
+    <string name="txt_webview_title_case_a">Case A — JS init</string>
+    <string name="txt_webview_title_case_b">Case B — hybrid</string>
 </resources>

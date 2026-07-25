@@ -2,109 +2,51 @@
 <html>
 <head>
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>AdTrace WebBridge Demo</title>
+    <title>Case B — Hybrid native + WebBridge</title>
     <style type="text/css">
         html { font-family: Helvetica, Arial, sans-serif; color: #222; }
         h1 { color: steelblue; font-size: 20px; margin: 16px 8px; text-align: center; }
         p.hint { font-size: 12px; color: #555; margin: 0 12px 16px; text-align: center; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; margin: 0 12px 8px; background: #E8F5E9; color: #2E7D32; }
         .row { width: 100%; max-width: 400px; margin: 0 auto 8px; text-align: center; }
         button { margin: 0 3px 6px; font-size: 13px; padding: 8px 12px; min-width: 220px; }
+        pre.steps { font-size: 11px; background: #f5f5f5; padding: 10px; margin: 0 12px 16px; overflow-x: auto; text-align: left; }
     </style>
 
-    <!-- Step 4: AdTrace JS bridge files (shipped by android-sdk-plugin-webbridge) -->
+    <!-- AdTrace JS bridge (from android-sdk-plugin-webbridge assets) -->
     <script type="text/javascript" src="adtrace_event.js"></script>
     <script type="text/javascript" src="adtrace_third_party_sharing.js"></script>
     <script type="text/javascript" src="adtrace_config.js"></script>
     <script type="text/javascript" src="adtrace.js"></script>
-
-    <!-- Step 5: App token & event tokens (edit this file for your dashboard values) -->
     <script type="text/javascript" src="adtrace_constants.js"></script>
 </head>
 <body>
-<h1>AdTrace Web View SDK Demo</h1>
-<p class="hint">SDK is initialized below. Use the buttons to track events via the JS bridge.</p>
+<h1>Case B — Hybrid</h1>
+<p class="badge">Native events + Web Bridge</p>
+<p class="hint">
+    Use this file when Android native code already initialized AdTrace
+    (<code>AdTrace.onCreate</code> / SDK init on native side) and may have tracked events.
+    This page only talks to the same running SDK through the bridge.
+</p>
+<pre class="steps">What already happened on Android (before this page):
+1. Native AdTrace.onCreate(config)   ← SDK INIT (native)
+2. Native AdTrace.trackEvent(...)    ← e.g. Case B button
+3. AdTraceBridge.registerAndGetInstance(app, webView)
+
+What this page does:
+4. AdTrace.trackEvent(event)         ← JS bridge only
+   DO NOT call AdTrace.onCreate here (would log "already initialized")</pre>
 
 <script type="text/javascript">
     window.onerror = function (err) {
-        console.log('WebBridge page error: ' + err);
+        console.log('Case B page error: ' + err);
     };
 
-    // --- Optional callbacks (Step 6 / advanced) ---
+    // ---------- NO SDK INIT HERE ----------
+    // Native side already called AdTrace.onCreate (SDK init).
+    // AdTrace.onCreate == initialize the SDK — call it only once per process.
 
-    function attributionCallback(attribution) {
-        alert(
-            'Tracker token = ' + attribution.trackerToken + '\n' +
-            'Tracker name = ' + attribution.trackerName + '\n' +
-            'Network = ' + attribution.network + '\n' +
-            'Campaign = ' + attribution.campaign + '\n' +
-            'Adgroup = ' + attribution.adgroup + '\n' +
-            'Creative = ' + attribution.creative + '\n' +
-            'Click label = ' + attribution.clickLabel
-        );
-    }
-
-    function eventSuccessCallback(eventSuccess) {
-        alert(
-            'Message = ' + eventSuccess.message + '\n' +
-            'Timestamp = ' + eventSuccess.timestamp + '\n' +
-            'Adid = ' + eventSuccess.adid + '\n' +
-            'Event token = ' + eventSuccess.eventToken
-        );
-    }
-
-    function eventFailureCallback(eventFailure) {
-        alert(
-            'Message = ' + eventFailure.message + '\n' +
-            'Timestamp = ' + eventFailure.timestamp + '\n' +
-            'Adid = ' + eventFailure.adid + '\n' +
-            'Event token = ' + eventFailure.eventToken + '\n' +
-            'Will retry = ' + eventFailure.willRetry
-        );
-    }
-
-    function sessionSuccessCallback(sessionSuccess) {
-        alert(
-            'Message = ' + sessionSuccess.message + '\n' +
-            'Timestamp = ' + sessionSuccess.timestamp + '\n' +
-            'Adid = ' + sessionSuccess.adid
-        );
-    }
-
-    function sessionFailureCallback(sessionFailure) {
-        alert(
-            'Message = ' + sessionFailure.message + '\n' +
-            'Timestamp = ' + sessionFailure.timestamp + '\n' +
-            'Adid = ' + sessionFailure.adid + '\n' +
-            'Will retry = ' + sessionFailure.willRetry
-        );
-    }
-
-    function deferredDeeplinkCallback(deferredDeeplink) {
-        alert('Deferred deeplink content:\n' + deferredDeeplink);
-    }
-
-    // --- Step 6a: Initialize AdTrace from JavaScript ---
-
-    var adtraceConfig = new AdTraceConfig(
-        AdTraceExampleConstants.APP_TOKEN,
-        AdTraceExampleConstants.ENVIRONMENT
-    );
-    adtraceConfig.setLogLevel(AdTraceConfig.LogLevelVerbose);
-    // adtraceConfig.setOpenDeferredDeeplink(true);
-    // adtraceConfig.setSendInBackground(true);
-    // adtraceConfig.setEventBufferingEnabled(false);
-
-    adtraceConfig.setAttributionCallback(attributionCallback);
-    adtraceConfig.setEventSuccessCallback(eventSuccessCallback);
-    adtraceConfig.setEventFailureCallback(eventFailureCallback);
-    adtraceConfig.setSessionSuccessCallback(sessionSuccessCallback);
-    adtraceConfig.setSessionFailureCallback(sessionFailureCallback);
-    adtraceConfig.setDeferredDeeplinkCallback(deferredDeeplinkCallback);
-
-    AdTrace.onCreate(adtraceConfig);
-
-    // --- Step 6b: Wire UI buttons to AdTrace APIs ---
-
+    // ---------- Event buttons (same SDK via bridge) ----------
     window.onload = function () {
         document.getElementById('btnTrackSimpleEvent').onclick = function (e) {
             e.preventDefault();
@@ -123,7 +65,6 @@
             e.preventDefault();
             var event = new AdTraceEvent(AdTraceExampleConstants.EVENT_TOKEN_CALLBACK);
             event.addCallbackParameter('key', 'value');
-            event.addCallbackParameter('x', 'y');
             AdTrace.trackEvent(event);
         };
 
@@ -138,7 +79,6 @@
             e.preventDefault();
             var event = new AdTraceEvent(AdTraceExampleConstants.EVENT_TOKEN_PARAMS);
             event.addEventParameter('foo', 'bar');
-            event.addEventParameter('x', 'y');
             AdTrace.trackEvent(event);
         };
 

@@ -10,36 +10,42 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.adtrace.sdk.webbridge.AdTraceBridge;
 
 /**
- * Step 3 — Host a WebView and register the AdTrace JavaScript bridge.
+ * Hosts the WebView + {@link AdTraceBridge}.
  *
- * Flow:
- * 1. Enable JavaScript on the WebView
- * 2. Call {@link AdTraceBridge#registerAndGetInstance} so JS can reach the native SDK
- * 3. Load your HTML page (local asset or remote URL)
- * 4. Call {@link AdTraceBridge#unregister()} in {@link #onDestroy()}
- *
- * See example-app-webbridge/README.md for the full integration guide.
+ * Loads a <b>separate HTML file per case</b> (clearer for developers / AI):
+ * <ul>
+ *   <li>Case A → {@code AdTraceExample-CaseA-WebBridgeOnly.html} (JS SDK init)</li>
+ *   <li>Case B → {@code AdTraceExample-CaseB-Hybrid.html} (no JS init)</li>
+ * </ul>
  */
 public class WebViewActivity extends AppCompatActivity {
+
+    private static final String ASSET_CASE_A =
+            "file:///android_asset/AdTraceExample-CaseA-WebBridgeOnly.html";
+    private static final String ASSET_CASE_B =
+            "file:///android_asset/AdTraceExample-CaseB-Hybrid.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
-        setTitle(R.string.txt_webview_title);
+
+        String mode = getIntent().getStringExtra(AdTraceDemoSession.EXTRA_MODE);
+        if (mode == null) {
+            mode = AdTraceDemoSession.MODE_CASE_B;
+        }
+
+        boolean caseA = AdTraceDemoSession.MODE_CASE_A.equals(mode);
+        setTitle(caseA ? R.string.txt_webview_title_case_a : R.string.txt_webview_title_case_b);
 
         WebView webView = findViewById(R.id.webView);
-
-        // Required: JS must be enabled for the AdTrace bridge
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new WebViewClient());
 
-        // Step 3: Connect native AdTrace SDK ↔ JavaScript interface
         AdTraceBridge.registerAndGetInstance(getApplication(), webView);
 
-        // Steps 4–6 live in the HTML/JS loaded below
-        webView.loadUrl("file:///android_asset/AdTraceExample-WebView.html");
+        webView.loadUrl(caseA ? ASSET_CASE_A : ASSET_CASE_B);
     }
 
     @Override
