@@ -317,7 +317,7 @@ public class PackageHandler implements IPackageHandler,
         packageQueue.clear();
         writePackageQueueI();
     }
-
+    @SuppressWarnings("unchecked")
     private void readPackageQueueI() {
         try {
             packageQueue = Util.readObject(context,
