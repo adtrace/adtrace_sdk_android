@@ -46,10 +46,6 @@
         <li><a href="#qs-integ-basic-setup-web">Web View SDK</a></li>  
       </ul>  
       <li><a href="#qs-integ-session-tracking">ردیابی session (Session Tracking)</a></li>  
-      <ul>  
-        <li><a href="#qs-integ-session-tracking-api14"> API بالاتر از 14</a></li>  
-        <li><a href="#qs-integ-session-tracking-api9">API بین 9 و 13</a></li>  
-      </ul>  
       <li><a href="#qs-sdk-signature">امضا (SDK Signature)</a></li>                   
       <li><a href="#qs-adtrace-logging">لاگ ادتریس</a></li>  
       <li><a href="#qs-build-the-app">ساخت اپلیکیشن</a></li>  
@@ -500,18 +496,7 @@ let environment = AdTraceConfig.EnvironmentProduction;
 ### <div id="qs-integ-session-tracking" dir="rtl" align='right'>ردیابی نشست (Session Tracking)</div>
 
 <div dir="rtl" align='right'>  
-<strong>نکته مهم:</strong> این مرحله <strong>اهمیت بالایی</strong> دارد . از <strong>پیاده سازی صحیح آن  مطمئن شوید.</strong>  
-</div>  
-
-### <div id="qs-integ-session-tracking-api14" dir="rtl" align='right'>API بالاتر از 14</div>
-
-<div dir="rtl" align='right'>  
-<ul>  
-<li>یک کلاس private  در کلاس <code>Application</code>  خود بسازید به صورتی که <code>ActivityLifecycleCallbacks</code> را <code>implement</code> کند. اگر با خطای دسترسی مواجه شدید، بدین معناست که API اپلیکیشن شما زیر 14 است و باید از <a href="#qs-integ-session-tracking-api9">این دستورالعمل</a> استفاده کنید.</li>  
-<br/>  
-<li>داخل متد <code>onActivityResumed(Activity activity)</code> دستور <code>()AdTrace.onResume</code> را اضافه کنید. و داخل متد <code>onActivityPaused(Activity activity)</code> دستور <code>()AdTrace.onPause</code> را قرار دهید.</li>  
-<li>درون متد <code>()onCreate</code> درمحلی که ادتریس پیاده سازی شده است، یک <code>Object</code> از این کلاس را به متد <code>registerActivityLifecycleCallbacks</code>وارد کنید.</li>  
-</ul>  
+ردیابی نشست به‌صورت <strong>خودکار</strong> توسط SDK انجام می‌شود (همان روش Adjust v5). SDK از طریق <code>SystemLifecycleContentProvider</code> در مانیفست خودش، <code>ActivityLifecycleCallbacks</code> را ثبت می‌کند. فقط کافی است <code>AdTrace.onCreate(config)</code> را صدا بزنید — نیازی به <code>registerActivityLifecycleCallbacks</code> یا فراخوانی دستی <code>onResume</code> / <code>onPause</code> در اپلیکیشن عادی نیست.  
 </div>  
 <br/>  
 
@@ -528,69 +513,13 @@ public class GlobalApplication extends Application {
 		 String environment = AdTraceConfig.ENVIRONMENT_SANDBOX; 
 		 AdTraceConfig config = new AdTraceConfig(this, appToken, environment);
 		 AdTrace.onCreate(config);
-		 
-		 registerActivityLifecycleCallbacks(new AdTraceLifecycleCallbacks());
-		 //...
-		  }  
-		  
-	 private static final class AdTraceLifecycleCallbacks implements ActivityLifecycleCallbacks 
-	 {
-		 @Override 
-		 public void onActivityResumed(Activity activity) { 
-			 AdTrace.onResume(); 
-			}  
-		 @Override 
-		 public void onActivityPaused(Activity activity) { 
-			 AdTrace.onPause(); 
-			 }  
-		 //... 
-		 }
-	}  
+		 // ردیابی نشست خودکار است
+	 }  
+}  
 ```  
 
-### <div id="qs-integ-session-tracking-api9" dir="rtl" align='right'>API بین 9 و 13</div>
-
 <div dir="rtl" align='right'>  
-اگر <code>minSdkVersion</code> اپلیکیشن شما داخل gradle بین 9 و 13 باشد، درنظر داشته باشید که برای طولانی مدت بهتر است به 14 ارتقا پیدا کند تا تعامل بهتری با ادتریس داشته باشد.  
-</div>  
-<br/>  
-<div dir="rtl" align='right'>  
-برایsession tracking باید دو متد از ادتریس را در هنگامی که Activity متوقف میشود و یا ادامه پیدا میکند فراخوانی شود. در غیراین صورت SDK ممکن است ابتدا یا پایان session را از دست بدهد. برای این کار شما باید <strong>موارد زیر را برای هر Activity اپلیکیشن اجرا کنید:</strong>  
-</div>  
-
-<div dir="rtl" align='right'>  
-<ul>  
-<li>فایل activity تان را باز کنید</li>  
-<li>در متد <code>onResume</code> دستور <code>()AdTrace.onResume</code> را اضافه کنید. در صورت نیاز متد را ایجاد کنید. </li>  
-<li>در متد <code>onPause</code> دستور <code>()AdTrace.onPause</code> را اضافه کنید. در صورت نیاز متد را ایجاد کنید. </li>  
-<ul>
-</div>  
-
-<div dir="rtl" align='right'>  
-بعد از موارد بالا، Activity مورد نظر باید شبیه همچینن چیزی شود:  
-</div>  
-<br/>  
-
-```java  
-import io.adtrace.sdk.AdTrace;  
-// ...  
-public class YourActivity extends Activity {
-
-	protected void onResume() { 
-		 super.onResume(); 
-		 AdTrace.onResume(); 
-		 } 
-	protected void onPause() { 
-		super.onPause(); 
-		AdTrace.onPause(); 
-		} 
-		// ...
-	}  
-```  
-
-<br/>  
-<div dir="rtl" align='right'>  
-فراموش نکنید که این مراحل را برای <strong>هر Activity</strong> اجرا کنید.  
+متدهای <code>AdTrace.onResume()</code> و <code>AdTrace.onPause()</code> برای موارد خاص (مثل سرویس کیبورد) همچنان در دسترس هستند.  
 </div>  
 
 ### <div id="qs-sdk-signature" dir="rtl" align='right'>امضا (SDK Signature)</div>
