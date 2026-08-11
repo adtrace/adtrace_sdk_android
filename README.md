@@ -29,8 +29,6 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
     - [Native App SDK](#qs-basic-setup-native)
     - [Web Views SDK](#qs-basic-setup-web)
   - [Session tracking](#qs-session-tracking)
-    - [API level 14 and higher](#qs-session-tracking-api-14)
-    - [API level between 9 and 13](#qs-session-tracking-api-9)
   - [SDK signature](#qs-sdk-signature)
   - [AdTrace logging](#qs-adtrace-logging)
   - [Build your app](#qs-build-the-app)
@@ -383,16 +381,9 @@ We use this environment to distinguish between real traffic and test traffic fro
 
 ### <a id="qs-session-tracking"></a>Session tracking
 
-**Note**: This step is **very important**. Please **make sure that you implement it properly in your app**. Completing this step correctly ensures that the AdTrace SDK can properly track sessions in your app.
+Session tracking is handled **automatically** by the AdTrace SDK (same approach as Adjust v5).
 
-#### <a id="qs-session-tracking-api-14"></a>API level 14 and higher
-
-- Add a private class that implements the `ActivityLifecycleCallbacks` interface. If you don't have access to this interface, your app is targeting an Android API level lower than 14. You will
-  have to manually update each activity by following these [instructions](#qs-session-tracking-api-9).
-  If you have `AdTrace.onResume` and `AdTrace.onPause` calls on each of your app's activities, you should remove them.
-- Edit the `onActivityResumed(Activity activity)` method and add a call to `AdTrace.onResume()`.  
-  Edit the `onActivityPaused(Activity activity)` method and add a call to `AdTrace.onPause()`.
-- Add the `onCreate()` method with the AdTrace SDK is configured and call `registerActivityLifecycleCallbacks` with an instance of the created `ActivityLifecycleCallbacks` class.
+The SDK registers `ActivityLifecycleCallbacks` early via `SystemLifecycleContentProvider` in the SDK manifest. You only need to call `AdTrace.onCreate(config)` — do **not** register your own lifecycle callbacks or call `AdTrace.onResume()` / `AdTrace.onPause()` in a normal app.
 
 ```java
 import io.adtrace.sdk.AdTrace;
@@ -405,53 +396,12 @@ public class GlobalApplication extends Application {
         String environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
         AdTraceConfig config = new AdTraceConfig(this, appToken, environment);
         AdTrace.onCreate(config);
-
-        registerActivityLifecycleCallbacks(new AdTraceLifecycleCallbacks());
-        //...
-    }
-    private static final class AdTraceLifecycleCallbacks implements ActivityLifecycleCallbacks {
-        @Override public void onActivityResumed(Activity activity) {
-            AdTrace.onResume();
-        }
-        @Override public void onActivityPaused(Activity activity) {
-            AdTrace.onPause();
-        }
-        //...
+        // Session tracking is automatic — no registerActivityLifecycleCallbacks needed
     }
 }
 ```
 
-#### <a id="qs-session-tracking-api-9"></a>API level between 9 and 13
-
-If your app `minSdkVersion` in gradle is between `9` and `13`, consider updating it to at least `14` to simplify the integration process. Consult the official Android [dashboard](android-dashboard)
-to find out the latest market share of the major versions.
-
-To provide proper session tracking, certain AdTrace SDK methods are called every time an activity resumes or pauses (otherwise the SDK might miss a session start or end). In order to do so, follow these steps **for each Activity** of your app:
-
-- In your Activity's `onResume` method, call `AdTrace.onResume()`. Create the method if needed.
-- In your Activity's `onPause` method, call `AdTrace.onPause()`. Create the method if needed.
-
-After these steps, your activity should look like this:
-
-```java
-import io.adtrace.sdk.AdTrace;
-
-// ...
-public class YourActivity extends Activity {
-    protected void onResume() {
-        super.onResume();
-        AdTrace.onResume();
-    }
-
-    protected void onPause() {
-        super.onPause();
-        AdTrace.onPause();
-    }
-    // ...
-}
-```
-
-Repeat these steps for **every Activity** in your app. Don't forget to repeat these steps whenever you create a new activity in the future. Depending on your coding style, you might want to implement this in a common superclass of all your activities.
+`AdTrace.onResume()` / `AdTrace.onPause()` remain available for special cases (for example input-method / keyboard services) where the system does not deliver normal Activity lifecycle events.
 
 ### <a id="qs-sdk-signature"></a>SDK signature
 

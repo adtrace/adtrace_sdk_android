@@ -8,4 +8,10 @@
     <queries>
         <package android:name="com.instagram.android" />
     </queries>
+    <application>
+        <provider
+            android:name="io.adtrace.sdk.SystemLifecycleContentProvider"
+            android:authorities="${applicationId}.adtrace-lifecycle-provider"
+            android:exported="false" />
+    </application>
 </manifest>
