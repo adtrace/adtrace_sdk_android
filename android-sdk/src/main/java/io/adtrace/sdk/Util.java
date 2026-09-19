@@ -633,6 +633,8 @@ public class Util {
             return isEqualXiaomiReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_VIVO)) {
             return isEqualVivoReferrerDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_MYKET)) {
+            return isEqualMyketReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_META)) {
             return isEqualMetaReferrerDetails(referrerDetails, activityState);
         }
@@ -721,6 +723,13 @@ public class Util {
                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginVivo
                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerVivo)
                && Util.equalString(referrerDetails.installVersion, activityState.installVersionVivo);
+    }
+
+    private static boolean isEqualMyketReferrerDetails(final ReferrerDetails referrerDetails,
+                                                       final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeMyket
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginMyket
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerMyket);
     }
 
     private static boolean isEqualMetaReferrerDetails(final ReferrerDetails referrerDetails,

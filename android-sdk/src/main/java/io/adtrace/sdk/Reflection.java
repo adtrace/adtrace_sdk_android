@@ -105,6 +105,19 @@ public class Reflection {
         return referrerDetails;
     }
 
+    public static ReferrerDetails getMyketReferrer(Context context, ILogger logger) {
+        ReferrerDetails referrerDetails = null;
+        try {
+            referrerDetails = (ReferrerDetails) invokeStaticMethod("io.adtrace.sdk.myket.Util",
+                                                                   "getMyketInstallReferrerDetails",
+                                                                   new Class[]{Context.class, ILogger.class},
+                                                                   context, logger);
+        } catch (Exception e) {
+            logger.info("invoke getMyketInstallReferrerDetails : " + e.getMessage());
+        }
+        return referrerDetails;
+    }
+
     public static String getAppSetId(Context context) {
         try {
             Object appSetIdClientObject =
