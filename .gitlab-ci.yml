@@ -52,8 +52,11 @@ variables:
       echo "Using Android SDK at: $SDK_DIR"
       echo "sdk.dir=$SDK_DIR" > local.properties
       if [ -z "${NEXUS_USERNAME:-}" ] || [ -z "${NEXUS_PASSWORD:-}" ]; then
-        echo "ERROR: NEXUS_USERNAME / NEXUS_PASSWORD must be set (Masked+Protected CI variables)."
-        echo "Used only to resolve AGP/build deps via repo.smartech.ir — not required for SDK consumers."
+        echo "ERROR: NEXUS_USERNAME / NEXUS_PASSWORD are empty in this job."
+        echo "1) GitLab → Settings → CI/CD → Variables: add both keys (exact names)."
+        echo "2) If variables are Protected, also protect tags (Settings → Repository → Protected tags, e.g. v*)."
+        echo "   Protected vars are NOT injected on unprotected tags — they look empty."
+        echo "3) Username should be sdk_developer (from ~/.gradle/gradle.properties wrapperUser)."
         exit 1
       fi
       export NEXUS_USERNAME
