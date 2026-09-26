@@ -12,6 +12,8 @@ required_vars=(
   SONATYPE_PASSWORD
   SIGNING_KEY
   SIGNING_PASSWORD
+  NEXUS_USERNAME
+  NEXUS_PASSWORD
 )
 
 for var in "${required_vars[@]}"; do
@@ -24,10 +26,15 @@ done
 
 # Never print secret values. Confirm presence only.
 echo "Sonatype user: ${SONATYPE_USERNAME}"
+echo "Nexus user:    ${NEXUS_USERNAME}"
 echo "Signing key:   present ($(wc -c <<<"${SIGNING_KEY}" | tr -d ' ') bytes armored)"
 echo "Signing pass:  present"
 
 # Map to Gradle project properties without writing secrets to disk.
+export NEXUS_USERNAME
+export NEXUS_PASSWORD
+export ORG_GRADLE_PROJECT_nexusUsername="${NEXUS_USERNAME}"
+export ORG_GRADLE_PROJECT_nexusPassword="${NEXUS_PASSWORD}"
 export ORG_GRADLE_PROJECT_sonatypeUsername="${SONATYPE_USERNAME}"
 export ORG_GRADLE_PROJECT_sonatypePassword="${SONATYPE_PASSWORD}"
 export ORG_GRADLE_PROJECT_signingKey="${SIGNING_KEY}"

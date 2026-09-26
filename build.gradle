@@ -26,6 +26,47 @@ ext {
     vivoReferrerSdkArtifactId = 'android-sdk-plugin-vivo'
     xiaomiReferrerSdkArtifactId = 'android-sdk-plugin-xiaomi'
     myketReferrerSdkArtifactId = 'android-sdk-plugin-myket'
+
+    // Build-time only (CI). Does NOT affect SDK consumers / published POMs.
+    smartechNexusUrl = 'https://repo.smartech.ir/repository/maven-sdk-group/'
+}
+
+/**
+ * Optional Smartech Nexus for resolving build deps (AGP, etc.) when Google is filtered.
+ * Credentials (first match wins):
+ *   1) env NEXUS_USERNAME / NEXUS_PASSWORD (CI)
+ *   2) -PnexusUsername / -PnexusPassword
+ *   3) smartechRepoUsername / smartechRepoPassword (~/.gradle/gradle.properties)
+ *   4) systemProp.gradle.wrapperUser / wrapperPassword (~/.gradle/gradle.properties)
+ * SDK users never need this — they get artifacts from Maven Central.
+ */
+ext.resolveSmartechNexusCredentials = {
+    def user = System.getenv('NEXUS_USERNAME')
+            ?: rootProject.findProperty('nexusUsername')
+            ?: rootProject.findProperty('smartechRepoUsername')
+            ?: System.getProperty('gradle.wrapperUser')
+    def pass = System.getenv('NEXUS_PASSWORD')
+            ?: rootProject.findProperty('nexusPassword')
+            ?: rootProject.findProperty('smartechRepoPassword')
+            ?: System.getProperty('gradle.wrapperPassword')
+    if (user == null || pass == null || user.toString().trim().isEmpty() || pass.toString().trim().isEmpty()) {
+        return null
+    }
+    return [user: user.toString(), pass: pass.toString()]
+}
+
+ext.addSmartechNexusIfConfigured = { RepositoryHandler repos ->
+    def creds = rootProject.ext.resolveSmartechNexusCredentials()
+    if (creds == null) {
+        return
+    }
+    repos.maven {
+        url rootProject.ext.smartechNexusUrl
+        credentials {
+            username = creds.user
+            password = creds.pass
+        }
+    }
 }
 
 buildscript {
@@ -34,6 +75,18 @@ buildscript {
         kotlin_version = '2.0.21'
     }
     repositories {
+        // Prefer Nexus when credentials exist (env or systemProp from ~/.gradle/gradle.properties).
+        def nexusUser = System.getenv('NEXUS_USERNAME') ?: System.getProperty('gradle.wrapperUser')
+        def nexusPass = System.getenv('NEXUS_PASSWORD') ?: System.getProperty('gradle.wrapperPassword')
+        if (nexusUser && nexusPass) {
+            maven {
+                url 'https://repo.smartech.ir/repository/maven-sdk-group/'
+                credentials {
+                    username = nexusUser
+                    password = nexusPass
+                }
+            }
+        }
         mavenCentral()
         google()
     }
@@ -46,6 +99,7 @@ buildscript {
 
 allprojects {
     repositories {
+        rootProject.ext.addSmartechNexusIfConfigured(it)
         mavenCentral()
         google()
         maven { url "https://maven.myket.ir" }

@@ -2,6 +2,18 @@
 
 Publish is triggered by a **version tag**. Secrets never live in git.
 
+## Effect on SDK users
+
+**None.** Smartech Nexus is used only while **this repo builds/publishes** in CI (to download AGP and other build tools when Google is filtered).
+
+App developers still use:
+
+```gradle
+implementation 'io.adtrace:android-sdk:3.0.0'
+```
+
+from **Maven Central** (plus `maven.myket.ir` only if they add the Myket plugin). They do **not** need `repo.smartech.ir`.
+
 ## One-time GitLab setup (secure)
 
 In **GitLab → Settings → CI/CD → Variables**, add:
@@ -12,12 +24,17 @@ In **GitLab → Settings → CI/CD → Variables**, add:
 | `SONATYPE_PASSWORD` | Password or token | **Masked**, **Protected** |
 | `SIGNING_KEY` | Full ASCII-armored private key (`-----BEGIN PGP PRIVATE KEY BLOCK-----` …) | **Protected** (Masked if GitLab allows the length) |
 | `SIGNING_PASSWORD` | PGP passphrase | **Masked**, **Protected** |
+| `NEXUS_USERNAME` | Smartech Nexus user — use service account `sdk_developer` (same as `systemProp.gradle.wrapperUser` in `~/.gradle/gradle.properties`) | **Masked**, **Protected** |
+| `NEXUS_PASSWORD` | Matching password from `systemProp.gradle.wrapperPassword` in `~/.gradle/gradle.properties` (copy locally; never commit) | **Masked**, **Protected** |
+
+Local builds also pick up `smartechRepoUsername` / `smartechRepoPassword` or `gradle.wrapperUser` / `gradle.wrapperPassword` from your global Gradle config automatically.
 
 Also:
 
 1. Protect the release branch (`stage` / `main`) and allow only maintainers to push tags.
 2. **Protect tags** matching `v*` (or `*`) so Protected variables are injected.
 3. Do **not** put credentials in `gradle.properties`, `local.properties`, or CI YAML.
+4. Ask DevOps to confirm `maven-sdk-group` proxies **Google Maven** (so AGP can be cached/fetched).
 
 ### Export your signing key (local machine)
 
