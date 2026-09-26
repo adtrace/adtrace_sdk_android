@@ -6,6 +6,8 @@
 #   SONATYPE_PASSWORD   — Maven Central / OSSRH password or token
 #   SIGNING_KEY         — ASCII-armored private PGP key (Type: Variable, masked if possible)
 #   SIGNING_PASSWORD    — PGP key passphrase
+#   NEXUS_USERNAME      — Smartech Nexus (repo.smartech.ir) — build deps only
+#   NEXUS_PASSWORD      — Smartech Nexus password
 #
 # Release flow (after version bump is merged):
 #   git tag v3.0.0 && git push origin v3.0.0
@@ -29,7 +31,6 @@ default:
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g"
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
-  # Avoid apt interactive prompts if the image runs apt later
   DEBIAN_FRONTEND: noninteractive
 
 # Image already contains Android SDK (no download from dl.google.com in CI).
@@ -50,6 +51,14 @@ variables:
       export ANDROID_HOME="$SDK_DIR"
       echo "Using Android SDK at: $SDK_DIR"
       echo "sdk.dir=$SDK_DIR" > local.properties
+      if [ -z "${NEXUS_USERNAME:-}" ] || [ -z "${NEXUS_PASSWORD:-}" ]; then
+        echo "ERROR: NEXUS_USERNAME / NEXUS_PASSWORD must be set (Masked+Protected CI variables)."
+        echo "Used only to resolve AGP/build deps via repo.smartech.ir — not required for SDK consumers."
+        exit 1
+      fi
+      export NEXUS_USERNAME
+      export NEXUS_PASSWORD
+      echo "Nexus user: ${NEXUS_USERNAME}"
     - chmod +x gradlew scripts/ci/*.sh
     - java -version
     - ./gradlew --version

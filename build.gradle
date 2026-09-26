@@ -26,6 +26,29 @@ ext {
     vivoReferrerSdkArtifactId = 'android-sdk-plugin-vivo'
     xiaomiReferrerSdkArtifactId = 'android-sdk-plugin-xiaomi'
     myketReferrerSdkArtifactId = 'android-sdk-plugin-myket'
+
+    // Build-time only (CI). Does NOT affect SDK consumers / published POMs.
+    smartechNexusUrl = 'https://repo.smartech.ir/repository/maven-sdk-group/'
+}
+
+/**
+ * Optional Smartech Nexus for resolving build deps (AGP, etc.) when Google is filtered.
+ * Enabled only when NEXUS_USERNAME + NEXUS_PASSWORD (or -PnexusUsername/Password) are set.
+ * SDK users never need this — they get artifacts from Maven Central.
+ */
+ext.addSmartechNexusIfConfigured = { RepositoryHandler repos ->
+    def user = rootProject.findProperty('nexusUsername') ?: System.getenv('NEXUS_USERNAME')
+    def pass = rootProject.findProperty('nexusPassword') ?: System.getenv('NEXUS_PASSWORD')
+    if (user == null || pass == null || user.toString().trim().isEmpty() || pass.toString().trim().isEmpty()) {
+        return
+    }
+    repos.maven {
+        url rootProject.ext.smartechNexusUrl
+        credentials {
+            username = user.toString()
+            password = pass.toString()
+        }
+    }
 }
 
 buildscript {
@@ -34,6 +57,18 @@ buildscript {
         kotlin_version = '2.0.21'
     }
     repositories {
+        // Prefer Nexus in CI when credentials exist (buildscript cannot call root ext yet).
+        def nexusUser = System.getenv('NEXUS_USERNAME')
+        def nexusPass = System.getenv('NEXUS_PASSWORD')
+        if (nexusUser && nexusPass) {
+            maven {
+                url 'https://repo.smartech.ir/repository/maven-sdk-group/'
+                credentials {
+                    username = nexusUser
+                    password = nexusPass
+                }
+            }
+        }
         mavenCentral()
         google()
     }
@@ -46,6 +81,7 @@ buildscript {
 
 allprojects {
     repositories {
+        rootProject.ext.addSmartechNexusIfConfigured(it)
         mavenCentral()
         google()
         maven { url "https://maven.myket.ir" }
