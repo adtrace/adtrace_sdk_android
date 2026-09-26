@@ -1,7 +1,14 @@
+## Version 3.0.0
+### Added:
+- Added optional Myket Install Referrer plugin (`android-sdk-plugin-myket`) for install attribution via Myket store (same flow as Google / Samsung / Xiaomi / Vivo; sends `referrer_api=myket`).
+- Automatic session tracking via `SystemLifecycle` / `SystemLifecycleContentProvider` (no app-side `ActivityLifecycleCallbacks` or `AdTrace.onResume()` / `AdTrace.onPause()` needed in normal apps).
+
+### Changed:
+- Bumped core SDK and all plugins to `3.0.0` (`android-sdk`, webbridge, oaid, imei, samsung, xiaomi, vivo, myket).
+
 ## Version 2.6.1
 ### Added:
 - Fixed: tracking install issue on some devices
-- Added optional Myket Install Referrer plugin (`android-sdk-plugin-myket`) for install attribution via Myket store (same flow as Google / Samsung / Xiaomi / Vivo; sends `referrer_api=myket`).
 
 ## Version 2.6.0
 ### Added:
