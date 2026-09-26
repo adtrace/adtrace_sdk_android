@@ -28,28 +28,31 @@ default:
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g"
-  # Do not dump Gradle env (could leak ORG_GRADLE_PROJECT_* secrets into logs)
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+  # Avoid apt interactive prompts if the image runs apt later
+  DEBIAN_FRONTEND: noninteractive
 
+# Image already contains Android SDK (no download from dl.google.com in CI).
 .jdk_android:
-  image: eclipse-temurin:17-jdk
+  image: mobiledevops/android-sdk-image:34.0.1
   before_script:
-    - apt-get update -qq && apt-get install -y -qq wget unzip > /dev/null
-    # Android SDK command-line tools (needed for AGP assemble)
-    - mkdir -p "${ANDROID_SDK_ROOT:-$CI_PROJECT_DIR/android-sdk-ci}"
-    - export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-$CI_PROJECT_DIR/android-sdk-ci}"
-    - export ANDROID_HOME="$ANDROID_SDK_ROOT"
     - |
-      if [ ! -d "$ANDROID_SDK_ROOT/cmdline-tools/latest" ]; then
-        mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdtools.zip
-        unzip -q /tmp/cmdtools.zip -d "$ANDROID_SDK_ROOT/cmdline-tools"
-        mv "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools" "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+      set -e
+      if [ -n "${ANDROID_SDK_ROOT:-}" ]; then
+        SDK_DIR="$ANDROID_SDK_ROOT"
+      elif [ -n "${ANDROID_HOME:-}" ]; then
+        SDK_DIR="$ANDROID_HOME"
+      else
+        echo "ERROR: ANDROID_SDK_ROOT / ANDROID_HOME not set in image"
+        exit 1
       fi
-    - 'yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true'
-    - '"$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platforms;android-34" "build-tools;34.0.0" > /dev/null'
-    - 'echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties'
+      export ANDROID_SDK_ROOT="$SDK_DIR"
+      export ANDROID_HOME="$SDK_DIR"
+      echo "Using Android SDK at: $SDK_DIR"
+      echo "sdk.dir=$SDK_DIR" > local.properties
     - chmod +x gradlew scripts/ci/*.sh
+    - java -version
+    - ./gradlew --version
 
 verify_release:
   extends: .jdk_android
@@ -77,7 +80,6 @@ publish_maven:
     - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+([.-][A-Za-z0-9]+)?$/
       when: manual
       allow_failure: false
-  # Only run on protected tags so Protected CI variables are available
   environment:
     name: maven-central
     action: prepare
