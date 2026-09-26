@@ -24,8 +24,10 @@ In **GitLab → Settings → CI/CD → Variables**, add:
 | `SONATYPE_PASSWORD` | Password or token | **Masked**, **Protected** |
 | `SIGNING_KEY` | Full ASCII-armored private key (`-----BEGIN PGP PRIVATE KEY BLOCK-----` …) | **Protected** (Masked if GitLab allows the length) |
 | `SIGNING_PASSWORD` | PGP passphrase | **Masked**, **Protected** |
-| `NEXUS_USERNAME` | Smartech Nexus user (`repo.smartech.ir`) | **Masked**, **Protected** |
-| `NEXUS_PASSWORD` | Smartech Nexus password | **Masked**, **Protected** |
+| `NEXUS_USERNAME` | Smartech Nexus user — use service account `sdk_developer` (same as `systemProp.gradle.wrapperUser` in `~/.gradle/gradle.properties`) | **Masked**, **Protected** |
+| `NEXUS_PASSWORD` | Matching password from `systemProp.gradle.wrapperPassword` in `~/.gradle/gradle.properties` (copy locally; never commit) | **Masked**, **Protected** |
+
+Local builds also pick up `smartechRepoUsername` / `smartechRepoPassword` or `gradle.wrapperUser` / `gradle.wrapperPassword` from your global Gradle config automatically.
 
 Also:
 
