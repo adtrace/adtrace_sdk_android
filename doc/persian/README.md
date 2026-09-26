@@ -339,7 +339,7 @@ repositories {
 <br/>
 
 ```gradle
-implementation 'io.adtrace:android-sdk-plugin-myket:2.6.1'
+implementation 'io.adtrace:android-sdk-plugin-myket:3.0.0'
 ```
 
 <br/>
