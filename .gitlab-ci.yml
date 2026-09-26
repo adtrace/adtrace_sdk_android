@@ -8,7 +8,7 @@
 #   SIGNING_PASSWORD    — PGP key passphrase
 #
 # Release flow (after version bump is merged):
-#   git tag v2.6.1 && git push origin v2.6.1
+#   git tag v3.0.0 && git push origin v3.0.0
 #   → verify_release runs automatically
 #   → publish_maven waits for manual Play in GitLab UI
 
