@@ -38,6 +38,7 @@ import static io.adtrace.sdk.Constants.ACTIVITY_STATE_FILENAME;
 import static io.adtrace.sdk.Constants.ATTRIBUTION_FILENAME;
 import static io.adtrace.sdk.Constants.REFERRER_API_META;
 import static io.adtrace.sdk.Constants.MIN_LAST_INTERVAL_HARD_RESET_THRESHOLD;
+import static io.adtrace.sdk.Constants.REFERRER_API_MYKET;
 import static io.adtrace.sdk.Constants.REFERRER_API_SAMSUNG;
 import static io.adtrace.sdk.Constants.REFERRER_API_VIVO;
 import static io.adtrace.sdk.Constants.REFERRER_API_XIAOMI;
@@ -1379,6 +1380,7 @@ public class ActivityHandler implements IActivityHandler, SystemLifecycleCallbac
             readInstallReferrerSamsung();
             readInstallReferrerXiaomi();
             readInstallReferrerVivo();
+            readInstallReferrerMyket();
 
             return;
         }
@@ -1417,6 +1419,18 @@ public class ActivityHandler implements IActivityHandler, SystemLifecycleCallbac
                 ReferrerDetails referrerDetails = Reflection.getVivoReferrer(getContext(), logger);
                 if (referrerDetails != null) {
                     sendInstallReferrer(referrerDetails, REFERRER_API_VIVO);
+                }
+            }
+        });
+    }
+
+    private void readInstallReferrerMyket() {
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                ReferrerDetails referrerDetails = Reflection.getMyketReferrer(getContext(), logger);
+                if (referrerDetails != null) {
+                    sendInstallReferrer(referrerDetails, REFERRER_API_MYKET);
                 }
             }
         });
@@ -1886,6 +1900,7 @@ public class ActivityHandler implements IActivityHandler, SystemLifecycleCallbac
         readInstallReferrerSamsung();
         readInstallReferrerXiaomi();
         readInstallReferrerVivo();
+        readInstallReferrerMyket();
     }
 
     private void setOfflineModeI(boolean offline) {
@@ -3003,6 +3018,19 @@ public class ActivityHandler implements IActivityHandler, SystemLifecycleCallbac
             activityState.installBeginVivo = responseData.installBegin;
             activityState.installReferrerVivo = responseData.installReferrer;
             activityState.installVersionVivo = responseData.installVersion;
+
+            writeActivityStateI();
+            return;
+        }
+
+        boolean isInstallReferrerMyket =
+                responseData.referrerApi != null &&
+                        (responseData.referrerApi.equalsIgnoreCase(REFERRER_API_MYKET));
+
+        if (isInstallReferrerMyket) {
+            activityState.clickTimeMyket = responseData.clickTime;
+            activityState.installBeginMyket = responseData.installBegin;
+            activityState.installReferrerMyket = responseData.installReferrer;
 
             writeActivityStateI();
             return;

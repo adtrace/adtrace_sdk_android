@@ -24,6 +24,7 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
     - [Google Play Referrer API](#qs-gpr-api)
     - [Google Play Store intent](#qs-gps-intent)
     - [Huawei Referrer API](#qs-huawei-referrer-api)
+    - [Myket Install Referrer](#qs-myket-referrer-api)
 - [Integrate the SDK into your app](#qs-integrate-sdk)
   - [Basic setup](#qs-basic-setup)
     - [Native App SDK](#qs-basic-setup-native)
@@ -242,6 +243,38 @@ If you are using a different broadcast receiver for the `INSTALL_REFERRER` inten
 #### <a id="qs-huawei-referrer-api"></a>Huawei Referrer API
 
 As of v2.0.1, the AdTrace SDK supports install tracking on Huawei devices with Huawei App Gallery version 10.4 and higher. No additional integration steps are needed to start using the Huawei Referrer API. for more information read [OAID Documentation](doc/english/oaid.md).
+
+#### <a id="qs-myket-referrer-api"></a>Myket Install Referrer
+
+To attribute installs from [Myket](https://myket.ir), add the optional Myket Install Referrer plugin (same pattern as Google Play / Samsung / Xiaomi / Vivo).
+
+1. Add the Myket Maven repository:
+
+```gradle
+repositories {
+    maven { url "https://maven.myket.ir" }
+}
+```
+
+2. Add the plugin dependency:
+
+```gradle
+implementation 'io.adtrace:android-sdk-plugin-myket:2.6.1'
+```
+
+The plugin depends on `ir.myket:referrersdk` and merges the required Myket permission / package visibility. When the plugin is present, AdTrace reads the Myket install referrer automatically on first session and sends it as an `sdk_click` with `referrer_api=myket`.
+
+Optional:
+
+```java
+// Disable Myket referrer reads
+AdTraceMyketReferrer.doNotReadMyketReferrer();
+
+// Re-enable
+AdTraceMyketReferrer.readMyketReferrer(context);
+```
+
+ProGuard rules for the Myket AIDL binder are shipped with the plugin. See also the [Myket sample](https://github.com/myketstore/referrer-sample).
 
 ### <a id="qs-integrate-sdk"></a>Integrate the SDK into your app
 

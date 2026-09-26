@@ -30,9 +30,10 @@
       <li><a href="#qs-proguard-settings">تنظیمات Proguard</a></li>  
       <li><a href="#qs-ir">تنظیمات Install referrer</a>  
           <ul>  
-            <li><a href="#qs-ir-gpr-api">Google Play Referrer API</a></li>  
-            <li><a href="#qs-ir-gps-intent">Google Play Store intent</a></li>  
-            <li><a href="#qs-huawei-referrer-api">Huawei Referrer API</a></li>  
+            <li><a href="#qs-ir-gpr-api">Google Play Referrer API</a></li>
+            <li><a href="#qs-ir-gps-intent">Google Play Store intent</a></li>
+            <li><a href="#qs-huawei-referrer-api">Huawei Referrer API</a></li>
+            <li><a href="#qs-myket-referrer-api">Myket Install Referrer</a></li>
         </ul>  
       </li>  
     </ul>  
@@ -316,6 +317,53 @@ implementation 'com.android.installreferrer:installreferrer:2.2'
 <div dir="rtl" align='right'>  
 از نسخه 2.0.1 به بعد SDK ادتریس دستگاه های Huawei را پشتیبانی می کند. نسخه   Huawei App Gallery باید از 10.4 و بالاتر باشد. با اضافه کردن پلاگین مخصوص این امکان فراهم شده و نیازی به اعمال تنظیمات دیگری نیست.  
 </div>  
+
+#### <div id="qs-myket-referrer-api" dir="rtl" align='right'>Myket Install Referrer</div>
+
+<div dir="rtl" align='right'>
+برای اتریبیوشن نصب از طریق <a href="https://myket.ir">مایکت</a>، پلاگین اختیاری Myket Install Referrer را اضافه کنید (مشابه Google Play / Samsung / Xiaomi / Vivo).
+</div>
+<br/>
+
+<div dir="rtl" align='right'>۱. ریپازیتوری Maven مایکت را اضافه کنید:</div>
+<br/>
+
+```gradle
+repositories {
+    maven { url "https://maven.myket.ir" }
+}
+```
+
+<br/>
+<div dir="rtl" align='right'>۲. وابستگی پلاگین را اضافه کنید:</div>
+<br/>
+
+```gradle
+implementation 'io.adtrace:android-sdk-plugin-myket:2.6.1'
+```
+
+<br/>
+<div dir="rtl" align='right'>
+پلاگین به <code>ir.myket:referrersdk</code> وابسته است و permission و package visibility لازم را از AAR مایکت merge می کند. با وجود پلاگین، ادتریس در اولین session به صورت خودکار referrer مایکت را می خواند و با <code>referrer_api=myket</code> به صورت <code>sdk_click</code> ارسال می کند.
+</div>
+<br/>
+
+<div dir="rtl" align='right'>اختیاری:</div>
+<br/>
+
+```java
+// غیرفعال کردن خواندن referrer مایکت
+AdTraceMyketReferrer.doNotReadMyketReferrer();
+
+// فعال کردن مجدد
+AdTraceMyketReferrer.readMyketReferrer(context);
+```
+
+<br/>
+<div dir="rtl" align='right'>
+قوانین ProGuard مربوط به AIDL مایکت همراه پلاگین ارائه شده است. نمونه مایکت:
+<a href="https://github.com/myketstore/referrer-sample">myketstore/referrer-sample</a>
+</div>
 
 ### <div id="qs-integ-sdk" dir="rtl" align='right'>پیاده سازی SDK داخل اپلیکیشن</div>
 
