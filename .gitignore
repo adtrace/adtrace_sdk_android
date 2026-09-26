@@ -12,3 +12,10 @@ gradle.properties
 /android-sdk/gradle.properties
 /android-sdk-plugin-oaid/gradle.properties
 /android-sdk-plugin-webbridge/gradle.properties
+
+# Signing / publish secrets (never commit)
+*.gpg
+secring.*
+*.secret
+.signing/
+android-sdk-ci/
