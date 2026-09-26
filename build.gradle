@@ -56,3 +56,19 @@ allprojects {
         }
     }
 }
+
+// CI / local publish: use in-memory PGP key from Gradle props (never commit the key).
+// Set via CI: ORG_GRADLE_PROJECT_signingKey + ORG_GRADLE_PROJECT_signingPassword
+gradle.projectsEvaluated {
+    subprojects.each { sub ->
+        if (!sub.plugins.hasPlugin('signing')) {
+            return
+        }
+        def signingKey = sub.findProperty('signingKey')
+        if (signingKey == null || signingKey.toString().trim().isEmpty()) {
+            return
+        }
+        def signingPassword = (sub.findProperty('signingPassword') ?: '').toString()
+        sub.signing.useInMemoryPgpKeys(signingKey.toString(), signingPassword)
+    }
+}
