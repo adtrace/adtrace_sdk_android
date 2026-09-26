@@ -1,10 +1,7 @@
 package io.adtrace.sdk.webbridge;
 
-import android.annotation.TargetApi;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.app.Activity;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.app.Application;
@@ -65,36 +62,6 @@ public class AdTraceBridgeInstance {
     AdTraceBridgeInstance(Application application, WebView webView) {
         this.application = application;
         setWebView(webView);
-    }
-
-    // Automatically subscribe to Android lifecycle callbacks to properly handle session tracking.
-    // This requires user to have minimal supported API level set to 14.
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    private static final class AdTraceLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
-        @Override
-        public void onActivityResumed(Activity activity) {
-            AdTrace.onResume();
-        }
-
-        @Override
-        public void onActivityPaused(Activity activity) {
-            AdTrace.onPause();
-        }
-
-        @Override
-        public void onActivityStopped(Activity activity) {}
-
-        @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
-
-        @Override
-        public void onActivityDestroyed(Activity activity) {}
-
-        @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
-
-        @Override
-        public void onActivityStarted(Activity activity) {}
     }
 
     private boolean isInitialized() {
@@ -425,15 +392,11 @@ public class AdTraceBridgeInstance {
                 adtraceConfig.setReadDeviceInfoOnceEnabled(readDeviceInfoOnceEnabled);
             }
 
-            // Manually call onResume() because web view initialisation will happen a bit delayed.
-            // With this delay, it will miss lifecycle callback onResume() initial firing.
+            // Initialise the AdTrace SDK. Session tracking is handled automatically
+            // by SystemLifecycleContentProvider / SystemLifecycle (Adjust v5 style).
             AdTrace.onCreate(adtraceConfig);
-            AdTrace.onResume();
 
             isInitialized = true;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                application.registerActivityLifecycleCallbacks(new AdTraceLifecycleCallbacks());
-            }
         } catch (Exception e) {
             AdTraceFactory.getLogger().error("AdTraceBridgeInstance onCreate: %s", e.getMessage());
         }

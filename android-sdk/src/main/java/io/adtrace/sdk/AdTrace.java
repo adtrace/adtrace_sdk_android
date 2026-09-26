@@ -220,17 +220,6 @@ public class AdTrace {
     /**
      * Called to set user's push notifications token.
      *
-     * @param token Push notifications token
-     * @deprecated use {@link #setPushToken(String, Context)} instead.
-     */
-    public static void setPushToken(String token) {
-        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
-        adTraceInstance.setPushToken(token);
-    }
-
-    /**
-     * Called to set user's push notifications token.
-     *
      * @param token   Push notifications token
      * @param context Application context
      */

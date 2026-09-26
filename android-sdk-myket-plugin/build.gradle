@@ -1,0 +1,133 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+repositories {
+    maven {
+        url "https://maven.myket.ir"
+    }
+}
+
+android {
+    compileSdkVersion rootProject.ext.coreCompileSdkVersion
+    publishing {
+        multipleVariants {
+            allVariants()
+            withJavadocJar()
+        }
+    }
+    defaultConfig {
+        minSdkVersion rootProject.ext.coreMinSdkVersion
+        targetSdkVersion rootProject.ext.coreTargetSdkVersion
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+    namespace 'io.adtrace.sdk.myket'
+}
+
+dependencies {
+    compileOnly project(':android-sdk')
+    implementation 'ir.myket:referrersdk:1.0.3'
+}
+
+File localPropsFile = project.rootProject.file('local.properties')
+if (localPropsFile.exists()) {
+    Properties p = new Properties()
+    new FileInputStream(localPropsFile).withCloseable { is ->
+        p.load(is)
+    }
+    p.each { name, value ->
+        ext[name] = value
+    }
+}
+
+task adtraceMyketReferrerPluginAar(type: Copy) {
+    dependsOn 'assembleRelease'
+
+    from('build/outputs/aar/')
+    include 'android-sdk-myket-plugin-release.aar'
+    destinationDir file('build/libs/')
+    rename 'android-sdk-myket-plugin-release.aar', "${project.name}.aar"
+}
+
+task adtraceMyketReferrerPluginSourcesJar(type: Jar) {
+    setArchiveClassifier('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives adtraceMyketReferrerPluginSourcesJar
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            mavenAndroidMyketReferrerAar(MavenPublication) {
+                customizePomForAar(pom)
+                groupId rootProject.ext.adtraceGroupId
+                artifactId rootProject.ext.myketReferrerSdkArtifactId
+                version rootProject.ext.coreVersionName
+
+                artifact("$buildDir/outputs/aar/android-sdk-myket-plugin-release.aar") {
+                    builtBy tasks.getByPath("adtraceMyketReferrerPluginAar")
+                }
+                artifact adtraceMyketReferrerPluginSourcesJar
+            }
+        }
+
+        repositories {
+            maven {
+                url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                if (project.hasProperty("sonatypeUsername")) {
+                    credentials {
+                        username sonatypeUsername
+                        password sonatypePassword
+                    }
+                }
+            }
+        }
+    }
+    signing {
+        sign publishing.publications.mavenAndroidMyketReferrerAar
+    }
+}
+
+def customizePomForAar(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+            description 'The Myket Install Referrer plugin for AdTrace SDK Android'
+            name 'AdTrace Android SDK Myket Referrer plugin'
+            url 'https://github.com/adtrace/adtrace_sdk_android'
+
+            organization {
+                name 'adtrace'
+                url 'https://www.adtrace.io'
+            }
+            licenses {
+                license {
+                    name 'MIT License'
+                    url 'http://www.opensource.org/licenses/mit-license.php'
+                }
+            }
+            scm {
+                url 'git@github.com:adtrace/adtrace_sdk_android.git'
+                connection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+                developerConnection 'scm:git:git@github.com:adtrace/adtrace_sdk_android.git'
+            }
+            developers {
+                developer {
+                    name 'Smartech'
+                    email 'sdk@adtrace.io'
+                }
+            }
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenAndroidMyketReferrerAarPublication {
+        destination = file("${project.buildDir}/generated-pom.xml")
+    }
+}

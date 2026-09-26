@@ -1,6 +1,7 @@
 ## Version 2.6.1
 ### Added:
 - Fixed: tracking install issue on some devices
+- Added optional Myket Install Referrer plugin (`android-sdk-plugin-myket`) for install attribution via Myket store (same flow as Google / Samsung / Xiaomi / Vivo; sends `referrer_api=myket`).
 
 ## Version 2.6.0
 ### Added:

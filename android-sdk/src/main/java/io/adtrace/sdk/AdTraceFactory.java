@@ -42,6 +42,7 @@ public class AdTraceFactory {
     private static UtilNetworking.IConnectionOptions connectionOptions = null;
     private static UtilNetworking.IHttpsURLConnectionProvider httpsURLConnectionProvider = null;
     private static boolean tryInstallReferrer = true;
+    private static boolean ignoreSystemLifecycleBootstrap = false;
 
     public static class URLGetConnection {
         HttpsURLConnection httpsURLConnection;
@@ -295,6 +296,16 @@ public class AdTraceFactory {
 
     public static void setTryInstallReferrer(boolean tryInstallReferrer) {
         AdTraceFactory.tryInstallReferrer = tryInstallReferrer;
+    }
+
+    public static void setIgnoreSystemLifecycleBootstrap(
+            final boolean ignoreSystemLifecycleBootstrap)
+    {
+        AdTraceFactory.ignoreSystemLifecycleBootstrap = ignoreSystemLifecycleBootstrap;
+    }
+
+    public static boolean isSystemLifecycleBootstrapIgnored() {
+        return AdTraceFactory.ignoreSystemLifecycleBootstrap;
     }
 
     public static void enableSigning() {

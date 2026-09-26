@@ -19,7 +19,7 @@ public class Reflection {
     public static Object getAdvertisingInfoObject(Context context) throws Exception {
         return invokeStaticMethod("com.google.android.gms.ads.identifier.AdvertisingIdClient", "getAdvertisingIdInfo", new Class[]{Context.class}, context);
     }
-
+    @SuppressWarnings("unchecked")
     static Map<String, String> getImeiParameters(Context context, ILogger logger) {
         Object nonPlayParameters = null;
         try {
@@ -33,6 +33,7 @@ public class Reflection {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     static Map<String, String> getOaidParameters(Context context, ILogger logger) {
         Object oaidParameters = null;
         try {
@@ -104,6 +105,19 @@ public class Reflection {
         return referrerDetails;
     }
 
+    public static ReferrerDetails getMyketReferrer(Context context, ILogger logger) {
+        ReferrerDetails referrerDetails = null;
+        try {
+            referrerDetails = (ReferrerDetails) invokeStaticMethod("io.adtrace.sdk.myket.Util",
+                                                                   "getMyketInstallReferrerDetails",
+                                                                   new Class[]{Context.class, ILogger.class},
+                                                                   context, logger);
+        } catch (Exception e) {
+            logger.info("invoke getMyketInstallReferrerDetails : " + e.getMessage());
+        }
+        return referrerDetails;
+    }
+
     public static String getAppSetId(Context context) {
         try {
             Object appSetIdClientObject =
@@ -147,9 +161,10 @@ public class Reflection {
         return instance;
     }
 
+    @SuppressWarnings("unchecked")
     public static Object createDefaultInstance(Class classObject) {
         try {
-            Object instance = classObject.newInstance();
+            Object instance = classObject.getDeclaredConstructor().newInstance();
             return instance;
         } catch (Throwable t) {
             return null;

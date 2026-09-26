@@ -733,5 +733,9 @@ public class AdTraceInstance {
         if (testOptions.disableSigning != null && testOptions.disableSigning) {
             AdTraceFactory.disableSigning();
         }
+        if (testOptions.ignoreSystemLifecycleBootstrap != null) {
+            AdTraceFactory.setIgnoreSystemLifecycleBootstrap(
+                    testOptions.ignoreSystemLifecycleBootstrap.booleanValue());
+        }
     }
 }

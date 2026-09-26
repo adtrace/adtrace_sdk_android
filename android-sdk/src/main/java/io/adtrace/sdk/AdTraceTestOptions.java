@@ -28,4 +28,5 @@ public class AdTraceTestOptions {
     public Boolean noBackoffWait;
     public Boolean enableSigning;
     public Boolean disableSigning;
+    public Boolean ignoreSystemLifecycleBootstrap = true;
 }

@@ -411,6 +411,7 @@ class DeviceInfo {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private String getFacebookAttributionId(final Context context) {
         try {
             @SuppressLint("PackageManagerGetSignatures")
@@ -531,6 +532,8 @@ class DeviceInfo {
             }
             return null;
         }
+
+        @SuppressWarnings("deprecation")
         private static int getConnectivityType(final Context context, final ILogger logger) {
             try {
                 ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

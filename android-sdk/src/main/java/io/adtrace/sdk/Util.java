@@ -274,7 +274,8 @@ public class Util {
     public static String readStringField(ObjectInputStream.GetField fields, String name, String defaultValue) {
         return readObjectField(fields, name, defaultValue);
     }
-
+    
+    @SuppressWarnings("unchecked")
     public static <T> T readObjectField(ObjectInputStream.GetField fields, String name, T defaultValue) {
         try {
             return (T) fields.get(name, defaultValue);
@@ -417,6 +418,7 @@ public class Util {
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     public static String getCpuAbi() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return Build.CPU_ABI;
@@ -502,6 +504,7 @@ public class Util {
         return mergedParameters;
     }
 
+    @SuppressWarnings("deprecation")
     public static Locale getLocale(Configuration configuration) {
         // Configuration.getLocales() added as of API 24.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -630,6 +633,8 @@ public class Util {
             return isEqualXiaomiReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_VIVO)) {
             return isEqualVivoReferrerDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_MYKET)) {
+            return isEqualMyketReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_META)) {
             return isEqualMetaReferrerDetails(referrerDetails, activityState);
         }
@@ -718,6 +723,13 @@ public class Util {
                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginVivo
                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerVivo)
                && Util.equalString(referrerDetails.installVersion, activityState.installVersionVivo);
+    }
+
+    private static boolean isEqualMyketReferrerDetails(final ReferrerDetails referrerDetails,
+                                                       final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeMyket
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginMyket
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerMyket);
     }
 
     private static boolean isEqualMetaReferrerDetails(final ReferrerDetails referrerDetails,

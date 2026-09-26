@@ -21,6 +21,8 @@ public class ActivityState implements Serializable, Cloneable {
     private static final long serialVersionUID = 9039439291143138148L;
     private static final int ORDER_ID_MAXCOUNT = 10;
     private transient ILogger logger;
+
+    @SuppressWarnings("unchecked")
     private static final ObjectStreamField[] serialPersistentFields = {
             new ObjectStreamField("uuid", String.class),
             new ObjectStreamField("enabled", boolean.class),
@@ -64,6 +66,9 @@ public class ActivityState implements Serializable, Cloneable {
             new ObjectStreamField("installBeginVivo", long.class),
             new ObjectStreamField("installReferrerVivo", String.class),
             new ObjectStreamField("installVersionVivo", String.class),
+            new ObjectStreamField("clickTimeMyket", long.class),
+            new ObjectStreamField("installBeginMyket", long.class),
+            new ObjectStreamField("installReferrerMyket", String.class),
             new ObjectStreamField("installReferrerMeta", String.class),
             new ObjectStreamField("clickTimeMeta", long.class),
             new ObjectStreamField("isClickMeta", Boolean.class),
@@ -127,6 +132,10 @@ public class ActivityState implements Serializable, Cloneable {
     protected String installReferrerVivo;
     protected String installVersionVivo;
 
+    protected long clickTimeMyket;
+    protected long installBeginMyket;
+    protected String installReferrerMyket;
+
     protected String installReferrerMeta;
     protected long clickTimeMeta;
     protected Boolean isClickMeta;
@@ -176,6 +185,9 @@ public class ActivityState implements Serializable, Cloneable {
         installBeginVivo = 0;
         installReferrerVivo = null;
         installVersionVivo = null;
+        clickTimeMyket = 0;
+        installBeginMyket = 0;
+        installReferrerMyket = null;
         installReferrerMeta = null;
         clickTimeMeta = 0;
         isClickMeta = null;
@@ -264,6 +276,9 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalLong(installBeginVivo, otherActivityState.installBeginVivo)) return false;
         if (!Util.equalString(installReferrerVivo, otherActivityState.installReferrerVivo)) return false;
         if (!Util.equalString(installVersionVivo, otherActivityState.installVersionVivo)) return false;
+        if (!Util.equalLong(clickTimeMyket, otherActivityState.clickTimeMyket)) return false;
+        if (!Util.equalLong(installBeginMyket, otherActivityState.installBeginMyket)) return false;
+        if (!Util.equalString(installReferrerMyket, otherActivityState.installReferrerMyket)) return false;
         if (!Util.equalString(installReferrerMeta, otherActivityState.installReferrerMeta)) return false;
         if (!Util.equalLong(clickTimeMeta, otherActivityState.clickTimeMeta)) return false;
         if (!Util.equalBoolean(isClickMeta, otherActivityState.isClickMeta)) return false;
@@ -314,6 +329,9 @@ public class ActivityState implements Serializable, Cloneable {
         hashCode = Util.hashLong(installBeginVivo, hashCode);
         hashCode = Util.hashString(installReferrerVivo, hashCode);
         hashCode = Util.hashString(installVersionVivo, hashCode);
+        hashCode = Util.hashLong(clickTimeMyket, hashCode);
+        hashCode = Util.hashLong(installBeginMyket, hashCode);
+        hashCode = Util.hashString(installReferrerMyket, hashCode);
         hashCode = Util.hashString(installReferrerMeta, hashCode);
         hashCode = Util.hashLong(clickTimeMeta, hashCode);
         hashCode = Util.hashBoolean(isClickMeta, hashCode);
@@ -373,6 +391,10 @@ public class ActivityState implements Serializable, Cloneable {
         installBeginVivo = Util.readLongField(fields, "installBeginVivo", -1l);
         installReferrerVivo = Util.readStringField(fields, "installReferrerVivo", null);
         installVersionVivo = Util.readStringField(fields, "installVersionVivo", null);
+
+        clickTimeMyket = Util.readLongField(fields, "clickTimeMyket", -1l);
+        installBeginMyket = Util.readLongField(fields, "installBeginMyket", -1l);
+        installReferrerMyket = Util.readStringField(fields, "installReferrerMyket", null);
 
         installReferrerMeta = Util.readStringField(fields, "installReferrerMeta", null);
         clickTimeMeta = Util.readLongField(fields, "clickTimeMeta", -1l);
