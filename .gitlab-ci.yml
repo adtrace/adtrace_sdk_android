@@ -1,0 +1,83 @@
+# Tag-triggered Maven Central publish (manual gate — no accidental release).
+# Secrets must live in GitLab CI/CD Variables only (never in this repo).
+#
+# Required protected+masked variables (Settings → CI/CD → Variables):
+#   SONATYPE_USERNAME   — Maven Central / OSSRH username (e.g. sdk@adtrace.io)
+#   SONATYPE_PASSWORD   — Maven Central / OSSRH password or token
+#   SIGNING_KEY         — ASCII-armored private PGP key (Type: Variable, masked if possible)
+#   SIGNING_PASSWORD    — PGP key passphrase
+#
+# Release flow (after version bump is merged):
+#   git tag v2.6.1 && git push origin v2.6.1
+#   → verify_release runs automatically
+#   → publish_maven waits for manual Play in GitLab UI
+
+stages:
+  - verify
+  - release
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+([.-][A-Za-z0-9]+)?$/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - when: never
+
+default:
+  interruptible: true
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g"
+  # Do not dump Gradle env (could leak ORG_GRADLE_PROJECT_* secrets into logs)
+  GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+
+.jdk_android:
+  image: eclipse-temurin:17-jdk
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq wget unzip > /dev/null
+    # Android SDK command-line tools (needed for AGP assemble)
+    - mkdir -p "${ANDROID_SDK_ROOT:-$CI_PROJECT_DIR/android-sdk-ci}"
+    - export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-$CI_PROJECT_DIR/android-sdk-ci}"
+    - export ANDROID_HOME="$ANDROID_SDK_ROOT"
+    - |
+      if [ ! -d "$ANDROID_SDK_ROOT/cmdline-tools/latest" ]; then
+        mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdtools.zip
+        unzip -q /tmp/cmdtools.zip -d "$ANDROID_SDK_ROOT/cmdline-tools"
+        mv "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools" "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+      fi
+    - yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+    - "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platforms;android-34" "build-tools;34.0.0" > /dev/null
+    - echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+    - chmod +x gradlew scripts/ci/*.sh
+
+verify_release:
+  extends: .jdk_android
+  stage: verify
+  script:
+    - ./scripts/ci/verify-tag-version.sh
+    - ./gradlew --no-daemon :android-sdk:assembleRelease :android-sdk-myket-plugin:assembleRelease
+  artifacts:
+    paths:
+      - android-sdk/build/outputs/aar/
+      - android-sdk-myket-plugin/build/outputs/aar/
+    expire_in: 7 days
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+([.-][A-Za-z0-9]+)?$/
+
+# Manual confirmation required — tagging alone does not publish.
+publish_maven:
+  extends: .jdk_android
+  stage: release
+  needs:
+    - verify_release
+  script:
+    - ./scripts/ci/publish-to-maven.sh
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+([.-][A-Za-z0-9]+)?$/
+      when: manual
+      allow_failure: false
+  # Only run on protected tags so Protected CI variables are available
+  environment:
+    name: maven-central
+    action: prepare
