@@ -6,13 +6,13 @@ subprojects {
 
 ext {
     // Android config.
-    coreMinSdkVersion = 9
+    coreMinSdkVersion = 21
     coreCompileSdkVersion = 34
     coreTargetSdkVersion = 34
-    coreVersionName = '2.6.0'
+    coreVersionName = '3.0.0'
     defaultVersionCode = 1
-    webbridgeMinSdkVersion = 17
-    samsungReferrerMinSdkVersion = 18
+    webbridgeMinSdkVersion = 21
+    samsungReferrerMinSdkVersion = 21
     vivoReferrerMinSdkVersion = 23
 
     // POM.
@@ -25,27 +25,30 @@ ext {
     samsungReferrerSdkArtifactId = 'android-sdk-plugin-samsung'
     vivoReferrerSdkArtifactId = 'android-sdk-plugin-vivo'
     xiaomiReferrerSdkArtifactId = 'android-sdk-plugin-xiaomi'
+    myketReferrerSdkArtifactId = 'android-sdk-plugin-myket'
 }
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
-
+    ext {
+        agp_version = '9.2.1'
+        kotlin_version = '2.0.21'
+    }
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.4'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files.
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" }
+        classpath "com.android.tools.build:gradle:$agp_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
+
 
 allprojects {
     repositories {
         mavenCentral()
         google()
+        maven { url "https://maven.myket.ir" }
     }
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {

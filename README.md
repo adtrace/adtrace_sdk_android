@@ -24,13 +24,12 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
     - [Google Play Referrer API](#qs-gpr-api)
     - [Google Play Store intent](#qs-gps-intent)
     - [Huawei Referrer API](#qs-huawei-referrer-api)
+    - [Myket Install Referrer](#qs-myket-referrer-api)
 - [Integrate the SDK into your app](#qs-integrate-sdk)
   - [Basic setup](#qs-basic-setup)
     - [Native App SDK](#qs-basic-setup-native)
     - [Web Views SDK](#qs-basic-setup-web)
   - [Session tracking](#qs-session-tracking)
-    - [API level 14 and higher](#qs-session-tracking-api-14)
-    - [API level between 9 and 13](#qs-session-tracking-api-9)
   - [SDK signature](#qs-sdk-signature)
   - [AdTrace logging](#qs-adtrace-logging)
   - [Build your app](#qs-build-the-app)
@@ -107,14 +106,14 @@ These are the minimum required steps to integrate the AdTrace SDK in your Androi
 If you are using Maven, add the following to your `build.gradle` file:
 
 ```java
-implementation 'io.adtrace:android-sdk:2.6.0'
+implementation 'io.adtrace:android-sdk:3.0.0'
 implementation 'com.android.installreferrer:installreferrer:2.2'
 ```
 
 If you would prefer to use the AdTrace SDK inside web views in your app, please include this additional dependency as well:
 
 ```java
-implementation 'io.adtrace:android-sdk-plugin-webbridge:2.6.0'
+implementation 'io.adtrace:android-sdk-plugin-webbridge:3.0.0'
 ```
 
 **Note**: The minimum supported Android API level for the web view extension is 17 (Jelly Bean).
@@ -244,6 +243,38 @@ If you are using a different broadcast receiver for the `INSTALL_REFERRER` inten
 #### <a id="qs-huawei-referrer-api"></a>Huawei Referrer API
 
 As of v2.0.1, the AdTrace SDK supports install tracking on Huawei devices with Huawei App Gallery version 10.4 and higher. No additional integration steps are needed to start using the Huawei Referrer API. for more information read [OAID Documentation](doc/english/oaid.md).
+
+#### <a id="qs-myket-referrer-api"></a>Myket Install Referrer
+
+To attribute installs from [Myket](https://myket.ir), add the optional Myket Install Referrer plugin (same pattern as Google Play / Samsung / Xiaomi / Vivo).
+
+1. Add the Myket Maven repository:
+
+```gradle
+repositories {
+    maven { url "https://maven.myket.ir" }
+}
+```
+
+2. Add the plugin dependency:
+
+```gradle
+implementation 'io.adtrace:android-sdk-plugin-myket:3.0.0'
+```
+
+The plugin depends on `ir.myket:referrersdk` and merges the required Myket permission / package visibility. When the plugin is present, AdTrace reads the Myket install referrer automatically on first session and sends it as an `sdk_click` with `referrer_api=myket`.
+
+Optional:
+
+```java
+// Disable Myket referrer reads
+AdTraceMyketReferrer.doNotReadMyketReferrer();
+
+// Re-enable
+AdTraceMyketReferrer.readMyketReferrer(context);
+```
+
+ProGuard rules for the Myket AIDL binder are shipped with the plugin. See also the [Myket sample](https://github.com/myketstore/referrer-sample).
 
 ### <a id="qs-integrate-sdk"></a>Integrate the SDK into your app
 
@@ -383,16 +414,9 @@ We use this environment to distinguish between real traffic and test traffic fro
 
 ### <a id="qs-session-tracking"></a>Session tracking
 
-**Note**: This step is **very important**. Please **make sure that you implement it properly in your app**. Completing this step correctly ensures that the AdTrace SDK can properly track sessions in your app.
+Session tracking is handled **automatically** by the AdTrace SDK (same approach as Adjust v5).
 
-#### <a id="qs-session-tracking-api-14"></a>API level 14 and higher
-
-- Add a private class that implements the `ActivityLifecycleCallbacks` interface. If you don't have access to this interface, your app is targeting an Android API level lower than 14. You will
-  have to manually update each activity by following these [instructions](#qs-session-tracking-api-9).
-  If you have `AdTrace.onResume` and `AdTrace.onPause` calls on each of your app's activities, you should remove them.
-- Edit the `onActivityResumed(Activity activity)` method and add a call to `AdTrace.onResume()`.  
-  Edit the `onActivityPaused(Activity activity)` method and add a call to `AdTrace.onPause()`.
-- Add the `onCreate()` method with the AdTrace SDK is configured and call `registerActivityLifecycleCallbacks` with an instance of the created `ActivityLifecycleCallbacks` class.
+The SDK registers `ActivityLifecycleCallbacks` early via `SystemLifecycleContentProvider` in the SDK manifest. You only need to call `AdTrace.onCreate(config)` — do **not** register your own lifecycle callbacks or call `AdTrace.onResume()` / `AdTrace.onPause()` in a normal app.
 
 ```java
 import io.adtrace.sdk.AdTrace;
@@ -405,53 +429,12 @@ public class GlobalApplication extends Application {
         String environment = AdTraceConfig.ENVIRONMENT_SANDBOX;
         AdTraceConfig config = new AdTraceConfig(this, appToken, environment);
         AdTrace.onCreate(config);
-
-        registerActivityLifecycleCallbacks(new AdTraceLifecycleCallbacks());
-        //...
-    }
-    private static final class AdTraceLifecycleCallbacks implements ActivityLifecycleCallbacks {
-        @Override public void onActivityResumed(Activity activity) {
-            AdTrace.onResume();
-        }
-        @Override public void onActivityPaused(Activity activity) {
-            AdTrace.onPause();
-        }
-        //...
+        // Session tracking is automatic — no registerActivityLifecycleCallbacks needed
     }
 }
 ```
 
-#### <a id="qs-session-tracking-api-9"></a>API level between 9 and 13
-
-If your app `minSdkVersion` in gradle is between `9` and `13`, consider updating it to at least `14` to simplify the integration process. Consult the official Android [dashboard](android-dashboard)
-to find out the latest market share of the major versions.
-
-To provide proper session tracking, certain AdTrace SDK methods are called every time an activity resumes or pauses (otherwise the SDK might miss a session start or end). In order to do so, follow these steps **for each Activity** of your app:
-
-- In your Activity's `onResume` method, call `AdTrace.onResume()`. Create the method if needed.
-- In your Activity's `onPause` method, call `AdTrace.onPause()`. Create the method if needed.
-
-After these steps, your activity should look like this:
-
-```java
-import io.adtrace.sdk.AdTrace;
-
-// ...
-public class YourActivity extends Activity {
-    protected void onResume() {
-        super.onResume();
-        AdTrace.onResume();
-    }
-
-    protected void onPause() {
-        super.onPause();
-        AdTrace.onPause();
-    }
-    // ...
-}
-```
-
-Repeat these steps for **every Activity** in your app. Don't forget to repeat these steps whenever you create a new activity in the future. Depending on your coding style, you might want to implement this in a common superclass of all your activities.
+`AdTrace.onResume()` / `AdTrace.onPause()` remain available for special cases (for example input-method / keyboard services) where the system does not deliver normal Activity lifecycle events.
 
 ### <a id="qs-sdk-signature"></a>SDK signature
 
@@ -1905,7 +1888,7 @@ And a click package added to the SDK's package handler:
 
 ```
 V/AdTrace: Path:      /sdk_click
- ClientSdk: android2.6.0
+ ClientSdk: android3.0.0
  Parameters:
 	 app_token        adt1exadt1ex
 	 click_time       yyyy-MM-dd'T'HH:mm:ss.SSS'Z'Z
@@ -1962,7 +1945,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 
 [multi-process-apps]: doc/english/multi-process-app.md
 [multiple-receivers]: doc/english/multiple-receivers.md
-[native-code]: https://github.com/namini40/adtrace-NDK-example
 [dashboard]: https://panel.adtrace.io/
 [adtrace.io]: https://adtrace.io
 [en-readme]: README.md

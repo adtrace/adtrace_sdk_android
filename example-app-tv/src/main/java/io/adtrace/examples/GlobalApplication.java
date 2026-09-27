@@ -1,9 +1,7 @@
 package io.adtrace.examples;
 
-import android.app.Activity;
 import android.app.Application;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 
 import io.adtrace.sdk.AdTrace;
@@ -132,10 +130,6 @@ public class GlobalApplication extends Application {
         // Abort delay for the first session introduced with setDelayStart method.
         // AdTrace.sendFirstPackages();
 
-        // Register onResume and onPause events of all activities
-        // for applications with minSdkVersion >= 14.
-        registerActivityLifecycleCallbacks(new AdTraceLifecycleCallbacks());
-
         // Put the SDK in offline mode.
         // AdTrace.setOfflineMode(true);
 
@@ -144,38 +138,5 @@ public class GlobalApplication extends Application {
 
         // Send push notification token.
         // AdTrace.setPushToken("token");
-    }
-
-    // You can use this class if your app is for Android 4.0 or higher
-    private static final class AdTraceLifecycleCallbacks implements ActivityLifecycleCallbacks {
-        @Override
-        public void onActivityResumed(Activity activity) {
-            AdTrace.onResume();
-        }
-
-        @Override
-        public void onActivityPaused(Activity activity) {
-            AdTrace.onPause();
-        }
-
-        @Override
-        public void onActivityStopped(Activity activity) {
-        }
-
-        @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        }
-
-        @Override
-        public void onActivityDestroyed(Activity activity) {
-        }
-
-        @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        }
-
-        @Override
-        public void onActivityStarted(Activity activity) {
-        }
     }
 }

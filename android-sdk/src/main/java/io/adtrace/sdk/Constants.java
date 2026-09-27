@@ -26,7 +26,7 @@ public interface Constants {
 
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    String CLIENT_SDK = "android2.6.0";
+    String CLIENT_SDK = "android3.0.0";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";
@@ -36,6 +36,7 @@ public interface Constants {
     String REFERRER_API_SAMSUNG = "samsung";
     String REFERRER_API_XIAOMI = "xiaomi";
     String REFERRER_API_VIVO = "vivo";
+    String REFERRER_API_MYKET = "myket";
     String REFERRER_API_META = "meta";
     String DEEPLINK = "deeplink";
     String PUSH = "push";

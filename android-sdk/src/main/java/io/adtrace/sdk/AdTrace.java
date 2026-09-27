@@ -33,7 +33,7 @@ public class AdTrace {
      */
     public static synchronized AdTraceInstance getDefaultInstance() {
         @SuppressWarnings("unused")
-        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:adtrace-android:2.6.0";
+        String VERSION = "!SDK-VERSION-STRING!:io.adtrace.sdk:adtrace-android:3.0.0";
 
         if (defaultInstance == null) {
             defaultInstance = new AdTraceInstance();
@@ -215,17 +215,6 @@ public class AdTrace {
     public static void resetSessionPartnerParameters() {
         AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
         adTraceInstance.resetSessionPartnerParameters();
-    }
-
-    /**
-     * Called to set user's push notifications token.
-     *
-     * @param token Push notifications token
-     * @deprecated use {@link #setPushToken(String, Context)} instead.
-     */
-    public static void setPushToken(String token) {
-        AdTraceInstance adTraceInstance = AdTrace.getDefaultInstance();
-        adTraceInstance.setPushToken(token);
     }
 
     /**

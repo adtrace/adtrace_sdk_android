@@ -268,6 +268,6 @@ AdTraceConfig.prototype.setFbAppId = function(fbAppId) {
     this.fbAppId = fbAppId;
 };
 
-AdjustConfig.prototype.setReadDeviceInfoOnceEnabled = function(isEnabled) {
+AdTraceConfig.prototype.setReadDeviceInfoOnceEnabled = function(isEnabled) {
     this.readDeviceInfoOnceEnabled = isEnabled;
 };

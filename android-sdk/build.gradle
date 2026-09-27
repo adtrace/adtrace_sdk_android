@@ -16,6 +16,9 @@ android {
         minSdkVersion rootProject.ext.coreMinSdkVersion
         targetSdkVersion rootProject.ext.coreTargetSdkVersion
         consumerProguardFiles 'adtrace-proguard-rules.txt'
+        aarMetadata {
+            minCompileSdk = 1
+        }
     }
 
     buildTypes {
@@ -41,6 +44,17 @@ if (localPropsFile.exists()) {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    /*
+ * according to https://developer.android.com/studio/write/annotations
+ *  If you use annotations in your own library module,
+ *  the annotations are included as part of the Android Archive (AAR) artifact
+ *  in XML format in the annotations.zip file.
+ *  Adding the androidx.annotation dependency doesn't introduce a dependency
+ *  for any downstream users of your library.
+ */
+    implementation 'androidx.annotation:annotation:1.8.0'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 task adtraceCoreAarRelease(type: Copy) {
@@ -113,7 +127,7 @@ afterEvaluate {
 
         repositories {
             maven {
-                url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                url "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
                 if (project.hasProperty("sonatypeUsername")) {
                     credentials {
                         username sonatypeUsername
@@ -153,8 +167,8 @@ def customizePomForJar(pom) {
             }
             developers {
                 developer {
-                    name 'Nasser Amini'
-                    email 'namini40@gmail.com'
+                    name 'Smartech'
+                    email 'sdk@adtrace.io'
                 }
             }
         }
@@ -190,8 +204,8 @@ def customizePomForAar(pom) {
             }
             developers {
                 developer {
-                    name 'Nasser Amini'
-                    email 'namini40@gmail.com'
+                    name 'Smartech'
+                    email 'sdk@adtrace.io'
                 }
             }
         }
