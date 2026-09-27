@@ -1945,7 +1945,6 @@ If you want to trigger an event when the app is launched, use the `onCreate` met
 
 [multi-process-apps]: doc/english/multi-process-app.md
 [multiple-receivers]: doc/english/multiple-receivers.md
-[native-code]: https://github.com/namini40/adtrace-NDK-example
 [dashboard]: https://panel.adtrace.io/
 [adtrace.io]: https://adtrace.io
 [en-readme]: README.md

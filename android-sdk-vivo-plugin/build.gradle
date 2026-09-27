@@ -107,7 +107,7 @@ afterEvaluate {
 
         repositories {
             maven {
-                url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                url "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
                 if (project.hasProperty("sonatypeUsername")) {
                     credentials {
                         username sonatypeUsername
@@ -151,8 +151,8 @@ def customizePomForJar(pom) {
             }
             developers {
                 developer {
-                    name 'Nasser Amini'
-                    email 'namini40@gmail.com'
+                    name 'Adtrace technical team'
+                    email 'sdk@adtrace.io'
                 }
             }
         }
@@ -188,7 +188,7 @@ def customizePomForAar(pom) {
             developers {
                 developer {
                     name 'Nasser Amini'
-                    email 'namini40@gmail.com'
+                    email 'sdk@adtrace.io'
                 }
             }
         }
