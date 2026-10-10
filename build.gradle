@@ -9,7 +9,7 @@ ext {
     coreMinSdkVersion = 21
     coreCompileSdkVersion = 34
     coreTargetSdkVersion = 34
-    coreVersionName = '3.0.0'
+    coreVersionName = '3.0.1'
     defaultVersionCode = 1
     webbridgeMinSdkVersion = 21
     samsungReferrerMinSdkVersion = 21
@@ -26,6 +26,7 @@ ext {
     vivoReferrerSdkArtifactId = 'android-sdk-plugin-vivo'
     xiaomiReferrerSdkArtifactId = 'android-sdk-plugin-xiaomi'
     myketReferrerSdkArtifactId = 'android-sdk-plugin-myket'
+    cafeBazaarReferrerSdkArtifactId = 'android-sdk-plugin-cafebazaar'
 }
 
 buildscript {
@@ -49,6 +50,7 @@ allprojects {
         mavenCentral()
         google()
         maven { url "https://maven.myket.ir" }
+        maven { url "https://jitpack.io" }
     }
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
