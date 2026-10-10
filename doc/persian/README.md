@@ -340,7 +340,7 @@ repositories {
 <br/>
 
 ```gradle
-implementation 'io.adtrace:android-sdk-plugin-myket:3.0.0'
+implementation 'io.adtrace:android-sdk-plugin-myket:3.0.1'
 ```
 
 <br/>
@@ -387,7 +387,7 @@ repositories {
 <br/>
 
 ```gradle
-implementation 'io.adtrace:android-sdk-plugin-cafebazaar:3.0.0'
+implementation 'io.adtrace:android-sdk-plugin-cafebazaar:3.0.1'
 ```
 
 <br/>
