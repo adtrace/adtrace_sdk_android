@@ -25,6 +25,7 @@ This is the Android SDK of AdTrace™. You can read more about AdTrace™ at [ad
     - [Google Play Store intent](#qs-gps-intent)
     - [Huawei Referrer API](#qs-huawei-referrer-api)
     - [Myket Install Referrer](#qs-myket-referrer-api)
+    - [Cafe Bazaar Install Referrer](#qs-cafebazaar-referrer-api)
 - [Integrate the SDK into your app](#qs-integrate-sdk)
   - [Basic setup](#qs-basic-setup)
     - [Native App SDK](#qs-basic-setup-native)
@@ -275,6 +276,38 @@ AdTraceMyketReferrer.readMyketReferrer(context);
 ```
 
 ProGuard rules for the Myket AIDL binder are shipped with the plugin. See also the [Myket sample](https://github.com/myketstore/referrer-sample).
+
+#### <a id="qs-cafebazaar-referrer-api"></a>Cafe Bazaar Install Referrer
+
+To attribute installs from [Cafe Bazaar](https://cafebazaar.ir), add the optional Cafe Bazaar Install Referrer plugin (same pattern as Google Play / Samsung / Xiaomi / Vivo / Myket).
+
+1. Add the JitPack Maven repository:
+
+```gradle
+repositories {
+    maven { url "https://jitpack.io" }
+}
+```
+
+2. Add the plugin dependency:
+
+```gradle
+implementation 'io.adtrace:android-sdk-plugin-cafebazaar:3.0.0'
+```
+
+The plugin depends on [`com.github.cafebazaar:referrersdk`](https://github.com/cafebazaar/ReferrerSDK) and merges the required Cafe Bazaar permission / package visibility. When the plugin is present, AdTrace reads the Cafe Bazaar install referrer automatically on first session and sends it as an `sdk_click` with `referrer_api=cafebazaar`.
+
+Optional:
+
+```java
+// Disable Cafe Bazaar referrer reads
+AdTraceCafeBazaarReferrer.doNotReadCafeBazaarReferrer();
+
+// Re-enable
+AdTraceCafeBazaarReferrer.readCafeBazaarReferrer(context);
+```
+
+ProGuard rules for the Cafe Bazaar Referrer SDK are shipped with the plugin. See also the [Cafe Bazaar ReferrerSDK](https://github.com/cafebazaar/ReferrerSDK).
 
 ### <a id="qs-integrate-sdk"></a>Integrate the SDK into your app
 
