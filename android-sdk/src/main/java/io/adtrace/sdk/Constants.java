@@ -26,7 +26,7 @@ public interface Constants {
 
     String SCHEME = "https";
     String AUTHORITY = "app.adtrace.io";
-    String CLIENT_SDK = "android3.0.0";
+    String CLIENT_SDK = "android3.0.1";
     String LOGTAG = "AdTrace";
     String REFTAG = "reftag";
     String INSTALL_REFERRER = "install_referrer";
