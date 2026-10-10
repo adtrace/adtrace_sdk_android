@@ -1,3 +1,7 @@
+## Unreleased
+### Added:
+- Added optional Cafe Bazaar Install Referrer plugin (`android-sdk-plugin-cafebazaar`) for install attribution via Cafe Bazaar store (same flow as Google / Samsung / Xiaomi / Vivo / Myket; sends `referrer_api=cafebazaar`). Uses [cafebazaar/ReferrerSDK](https://github.com/cafebazaar/ReferrerSDK) via JitPack.
+
 ## Version 3.0.0
 ### Added:
 - Added optional Myket Install Referrer plugin (`android-sdk-plugin-myket`) for install attribution via Myket store (same flow as Google / Samsung / Xiaomi / Vivo; sends `referrer_api=myket`).

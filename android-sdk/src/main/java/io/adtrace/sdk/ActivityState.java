@@ -69,6 +69,10 @@ public class ActivityState implements Serializable, Cloneable {
             new ObjectStreamField("clickTimeMyket", long.class),
             new ObjectStreamField("installBeginMyket", long.class),
             new ObjectStreamField("installReferrerMyket", String.class),
+            new ObjectStreamField("clickTimeCafeBazaar", long.class),
+            new ObjectStreamField("installBeginCafeBazaar", long.class),
+            new ObjectStreamField("installReferrerCafeBazaar", String.class),
+            new ObjectStreamField("installVersionCafeBazaar", String.class),
             new ObjectStreamField("installReferrerMeta", String.class),
             new ObjectStreamField("clickTimeMeta", long.class),
             new ObjectStreamField("isClickMeta", Boolean.class),
@@ -136,6 +140,11 @@ public class ActivityState implements Serializable, Cloneable {
     protected long installBeginMyket;
     protected String installReferrerMyket;
 
+    protected long clickTimeCafeBazaar;
+    protected long installBeginCafeBazaar;
+    protected String installReferrerCafeBazaar;
+    protected String installVersionCafeBazaar;
+
     protected String installReferrerMeta;
     protected long clickTimeMeta;
     protected Boolean isClickMeta;
@@ -188,6 +197,10 @@ public class ActivityState implements Serializable, Cloneable {
         clickTimeMyket = 0;
         installBeginMyket = 0;
         installReferrerMyket = null;
+        clickTimeCafeBazaar = 0;
+        installBeginCafeBazaar = 0;
+        installReferrerCafeBazaar = null;
+        installVersionCafeBazaar = null;
         installReferrerMeta = null;
         clickTimeMeta = 0;
         isClickMeta = null;
@@ -279,6 +292,10 @@ public class ActivityState implements Serializable, Cloneable {
         if (!Util.equalLong(clickTimeMyket, otherActivityState.clickTimeMyket)) return false;
         if (!Util.equalLong(installBeginMyket, otherActivityState.installBeginMyket)) return false;
         if (!Util.equalString(installReferrerMyket, otherActivityState.installReferrerMyket)) return false;
+        if (!Util.equalLong(clickTimeCafeBazaar, otherActivityState.clickTimeCafeBazaar)) return false;
+        if (!Util.equalLong(installBeginCafeBazaar, otherActivityState.installBeginCafeBazaar)) return false;
+        if (!Util.equalString(installReferrerCafeBazaar, otherActivityState.installReferrerCafeBazaar)) return false;
+        if (!Util.equalString(installVersionCafeBazaar, otherActivityState.installVersionCafeBazaar)) return false;
         if (!Util.equalString(installReferrerMeta, otherActivityState.installReferrerMeta)) return false;
         if (!Util.equalLong(clickTimeMeta, otherActivityState.clickTimeMeta)) return false;
         if (!Util.equalBoolean(isClickMeta, otherActivityState.isClickMeta)) return false;
@@ -332,6 +349,10 @@ public class ActivityState implements Serializable, Cloneable {
         hashCode = Util.hashLong(clickTimeMyket, hashCode);
         hashCode = Util.hashLong(installBeginMyket, hashCode);
         hashCode = Util.hashString(installReferrerMyket, hashCode);
+        hashCode = Util.hashLong(clickTimeCafeBazaar, hashCode);
+        hashCode = Util.hashLong(installBeginCafeBazaar, hashCode);
+        hashCode = Util.hashString(installReferrerCafeBazaar, hashCode);
+        hashCode = Util.hashString(installVersionCafeBazaar, hashCode);
         hashCode = Util.hashString(installReferrerMeta, hashCode);
         hashCode = Util.hashLong(clickTimeMeta, hashCode);
         hashCode = Util.hashBoolean(isClickMeta, hashCode);
@@ -395,6 +416,11 @@ public class ActivityState implements Serializable, Cloneable {
         clickTimeMyket = Util.readLongField(fields, "clickTimeMyket", -1l);
         installBeginMyket = Util.readLongField(fields, "installBeginMyket", -1l);
         installReferrerMyket = Util.readStringField(fields, "installReferrerMyket", null);
+
+        clickTimeCafeBazaar = Util.readLongField(fields, "clickTimeCafeBazaar", -1l);
+        installBeginCafeBazaar = Util.readLongField(fields, "installBeginCafeBazaar", -1l);
+        installReferrerCafeBazaar = Util.readStringField(fields, "installReferrerCafeBazaar", null);
+        installVersionCafeBazaar = Util.readStringField(fields, "installVersionCafeBazaar", null);
 
         installReferrerMeta = Util.readStringField(fields, "installReferrerMeta", null);
         clickTimeMeta = Util.readLongField(fields, "clickTimeMeta", -1l);

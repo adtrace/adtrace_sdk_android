@@ -118,6 +118,19 @@ public class Reflection {
         return referrerDetails;
     }
 
+    public static ReferrerDetails getCafeBazaarReferrer(Context context, ILogger logger) {
+        ReferrerDetails referrerDetails = null;
+        try {
+            referrerDetails = (ReferrerDetails) invokeStaticMethod("io.adtrace.sdk.cafebazaar.Util",
+                                                                   "getCafeBazaarInstallReferrerDetails",
+                                                                   new Class[]{Context.class, ILogger.class},
+                                                                   context, logger);
+        } catch (Exception e) {
+            logger.info("invoke getCafeBazaarInstallReferrerDetails : " + e.getMessage());
+        }
+        return referrerDetails;
+    }
+
     public static String getAppSetId(Context context) {
         try {
             Object appSetIdClientObject =

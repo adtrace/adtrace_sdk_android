@@ -635,6 +635,8 @@ public class Util {
             return isEqualVivoReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_MYKET)) {
             return isEqualMyketReferrerDetails(referrerDetails, activityState);
+        } else if (referrerApi.equals(Constants.REFERRER_API_CAFEBAZAAR)) {
+            return isEqualCafeBazaarReferrerDetails(referrerDetails, activityState);
         } else if (referrerApi.equals(Constants.REFERRER_API_META)) {
             return isEqualMetaReferrerDetails(referrerDetails, activityState);
         }
@@ -730,6 +732,14 @@ public class Util {
         return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeMyket
                && referrerDetails.installBeginTimestampSeconds == activityState.installBeginMyket
                && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerMyket);
+    }
+
+    private static boolean isEqualCafeBazaarReferrerDetails(final ReferrerDetails referrerDetails,
+                                                            final ActivityState activityState) {
+        return referrerDetails.referrerClickTimestampSeconds == activityState.clickTimeCafeBazaar
+               && referrerDetails.installBeginTimestampSeconds == activityState.installBeginCafeBazaar
+               && Util.equalString(referrerDetails.installReferrer, activityState.installReferrerCafeBazaar)
+               && Util.equalString(referrerDetails.installVersion, activityState.installVersionCafeBazaar);
     }
 
     private static boolean isEqualMetaReferrerDetails(final ReferrerDetails referrerDetails,

@@ -37,6 +37,7 @@ public interface Constants {
     String REFERRER_API_XIAOMI = "xiaomi";
     String REFERRER_API_VIVO = "vivo";
     String REFERRER_API_MYKET = "myket";
+    String REFERRER_API_CAFEBAZAAR = "cafebazaar";
     String REFERRER_API_META = "meta";
     String DEEPLINK = "deeplink";
     String PUSH = "push";
