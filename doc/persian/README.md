@@ -34,6 +34,7 @@
             <li><a href="#qs-ir-gps-intent">Google Play Store intent</a></li>
             <li><a href="#qs-huawei-referrer-api">Huawei Referrer API</a></li>
             <li><a href="#qs-myket-referrer-api">Myket Install Referrer</a></li>
+            <li><a href="#qs-cafebazaar-referrer-api">Cafe Bazaar Install Referrer</a></li>
         </ul>  
       </li>  
     </ul>  
@@ -363,6 +364,53 @@ AdTraceMyketReferrer.readMyketReferrer(context);
 <div dir="rtl" align='right'>
 قوانین ProGuard مربوط به AIDL مایکت همراه پلاگین ارائه شده است. نمونه مایکت:
 <a href="https://github.com/myketstore/referrer-sample">myketstore/referrer-sample</a>
+</div>
+
+#### <div id="qs-cafebazaar-referrer-api" dir="rtl" align='right'>Cafe Bazaar Install Referrer</div>
+
+<div dir="rtl" align='right'>
+برای اتریبیوشن نصب از طریق <a href="https://cafebazaar.ir">کافه بازار</a>، پلاگین اختیاری Cafe Bazaar Install Referrer را اضافه کنید (مشابه Google Play / Samsung / Xiaomi / Vivo / Myket).
+</div>
+<br/>
+
+<div dir="rtl" align='right'>۱. ریپازیتوری JitPack را اضافه کنید:</div>
+<br/>
+
+```gradle
+repositories {
+    maven { url "https://jitpack.io" }
+}
+```
+
+<br/>
+<div dir="rtl" align='right'>۲. وابستگی پلاگین را اضافه کنید:</div>
+<br/>
+
+```gradle
+implementation 'io.adtrace:android-sdk-plugin-cafebazaar:3.0.0'
+```
+
+<br/>
+<div dir="rtl" align='right'>
+پلاگین به <a href="https://github.com/cafebazaar/ReferrerSDK"><code>com.github.cafebazaar:referrersdk</code></a> وابسته است و permission و package visibility لازم را از آن AAR merge می کند. با وجود پلاگین، ادتریس در اولین session به صورت خودکار referrer کافه بازار را می خواند و با <code>referrer_api=cafebazaar</code> به صورت <code>sdk_click</code> ارسال می کند.
+</div>
+<br/>
+
+<div dir="rtl" align='right'>اختیاری:</div>
+<br/>
+
+```java
+// غیرفعال کردن خواندن referrer کافه بازار
+AdTraceCafeBazaarReferrer.doNotReadCafeBazaarReferrer();
+
+// فعال کردن مجدد
+AdTraceCafeBazaarReferrer.readCafeBazaarReferrer(context);
+```
+
+<br/>
+<div dir="rtl" align='right'>
+قوانین ProGuard مربوط به Cafe Bazaar Referrer SDK همراه پلاگین ارائه شده است. مستندات:
+<a href="https://github.com/cafebazaar/ReferrerSDK">cafebazaar/ReferrerSDK</a>
 </div>
 
 ### <div id="qs-integ-sdk" dir="rtl" align='right'>پیاده سازی SDK داخل اپلیکیشن</div>
